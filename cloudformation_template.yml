@@ -1,0 +1,45 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: React Web app hosted on S3
+
+# Parameters to be used through out the template
+Parameters:
+  Stage:
+    Type: String
+    Default: dev
+  AppName: 
+    Type: String
+    Default: poppyland-journal
+
+Resources:
+  DeployBucket:
+    Type: 'AWS::S3::Bucket'
+    Properties:
+      BucketName: !Join ['-', [!Ref AppName, !Ref 'AWS::AccountId', 'website', !Ref Stage]]
+      WebsiteConfiguration:
+        IndexDocument: index.html
+      AccessControl: PublicReadWrite
+      CorsConfiguration:
+        CorsRules:
+        - AllowedOrigins: ['*']
+          AllowedMethods: [GET]
+
+  # Bucket policy that hosts the website
+  DeploymentBucketPolicy: 
+    Type: AWS::S3::BucketPolicy
+    Properties: 
+      Bucket: !Ref DeployBucket
+      PolicyDocument: 
+        Statement: 
+          - 
+            Action: 
+              - "s3:GetObject"
+            Effect: "Allow"
+            Resource: 
+              Fn::Join: 
+                - ""
+                - 
+                  - "arn:aws:s3:::"
+                  - 
+                    Ref: DeployBucket
+                  - "/*"
+            Principal: "*"
