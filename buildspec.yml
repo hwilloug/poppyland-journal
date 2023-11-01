@@ -14,6 +14,6 @@ phases:
       - npm run build
 artifacts:
   files:
-    - "*"
-    - "**/*"
-  base_directory: "frontend/build/"
+    - "frontend/build/*"
+    - "frontend/build/**/*"
+  base_directory: "frontend/build"
