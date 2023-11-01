@@ -15,8 +15,8 @@ Resources:
     Type: 'AWS::S3::Bucket'
     Properties:
       BucketName: !Join ['-', [!Ref AppName, !Ref 'AWS::AccountId', 'website', !Ref Stage]]
-      WebsiteConfiguration:
-        IndexDocument: index.html
+      # WebsiteConfiguration:
+      #   IndexDocument: index.html
       AccessControl: PublicReadWrite
       CorsConfiguration:
         CorsRules:
