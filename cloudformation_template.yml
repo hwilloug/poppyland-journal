@@ -1,7 +1,6 @@
 AWSTemplateFormatVersion: 2010-09-09
 Description: React Web app hosted on S3
 
-# Parameters to be used through out the template
 Parameters:
   Stage:
     Type: String
@@ -11,17 +10,18 @@ Parameters:
     Default: poppyland-journal
 
 Resources:
+  # Bucket that hosts the website
   DeployBucket:
     Type: 'AWS::S3::Bucket'
     Properties:
       BucketName: !Join ['-', [!Ref AppName, !Ref 'AWS::AccountId', !Ref Stage]]
-      # WebsiteConfiguration:
-      #   IndexDocument: index.html
+      WebsiteConfiguration:
+        IndexDocument: index.html
       AccessControl: PublicReadWrite
-      # CorsConfiguration:
-      #   CorsRules:
-      #   - AllowedOrigins: ['*']
-      #     AllowedMethods: [GET]
+      CorsConfiguration:
+        CorsRules:
+        - AllowedOrigins: ['*']
+          AllowedMethods: [GET]
 
   # Bucket policy that hosts the website
   DeploymentBucketPolicy: 
