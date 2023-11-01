@@ -14,7 +14,7 @@ Resources:
   DeployBucket:
     Type: 'AWS::S3::Bucket'
     Properties:
-      BucketName: !Join ['-', [!Ref AppName, !Ref 'AWS::AccountId', !Ref Stage]]
+      BucketName: !Ref AppName
       WebsiteConfiguration:
         IndexDocument: index.html
       AccessControl: PublicReadWrite
