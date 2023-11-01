@@ -17,7 +17,7 @@ Resources:
       BucketName: !Ref AppName
       WebsiteConfiguration:
         IndexDocument: index.html
-      AccessControl: PublicReadWrite
+      AccessControl: PublicRead
       CorsConfiguration:
         CorsRules:
         - AllowedOrigins: ['*']
