@@ -33,7 +33,7 @@ Resources:
             Principal:
               Service: cloudfront.amazonaws.com
             Action: s3:GetObject
-            Resource: !Sub "arn:aws:s3:::${AppName}-web-app-s3-bucket/*"
+            Resource: !Sub "arn:aws:s3:::${AppName}/*"
             Condition:
               StringEquals:
                 AWS:SourceArn: !Sub arn:aws:cloudfront::${AWS::AccountId}:distribution/${CloudFrontDistribution}
