@@ -87,7 +87,7 @@ Resources:
           - Effect: Allow
             Principal:
               Service:
-                - lambda.amazon.com
+                - lambda.amazonaws.com
             Action:
               - "sts:AssumeRole"
       Policies:
