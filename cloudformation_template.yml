@@ -88,8 +88,8 @@ Resources:
             Principal:
               Service:
                 - lambda.amazon.com
-              Action:
-                - "sts:AssumeRole"
+            Action:
+              - "sts:AssumeRole"
       Policies:
         - PolicyName: !Sub "${AppName}-invalidation-lambda-codepipeline-policy"
           PolicyDocument:
@@ -97,8 +97,8 @@ Resources:
             Statement:
               - Effect: Allow
                 Action:
-                  - codepipeline:PutJobFailureResult
-                  - codepipeline:PutJobSuccessResult
+                  - "codepipeline:PutJobFailureResult"
+                  - "codepipeline:PutJobSuccessResult"
                 Resource: "*"
         - PolicyName: !Sub "${AppName}-invalidation-lambda-cloudfront-policy"
           PolicyDocument:
@@ -106,7 +106,7 @@ Resources:
             Statement:
               - Effect: Allow
                 Action:
-                  - cloudfront:CreateInvalidation
+                  - "cloudfront:CreateInvalidation"
                 Resource: !Ref CloudFrontDistribution
 
   InvalidationLambda:
