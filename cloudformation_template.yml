@@ -97,9 +97,8 @@ Resources:
             Statement:
               - Effect: Allow
                 Action:
-                  - "codepipeline:PutJobFailureResult"
-                  - "codepipeline:PutJobSuccessResult"
-                  - "cloudfront:CreateInvalidation"
+                  - codepipeline:PutJobFailureResult
+                  - codepipeline:PutJobSuccessResult
                 Resource: "*"
         - PolicyName: !Sub "${AppName}-invalidation-lambda-cloudfront-policy"
           PolicyDocument:
@@ -107,7 +106,7 @@ Resources:
             Statement:
               - Effect: Allow
                 Action:
-                  - "cloudfront:CreateInvalidation"
+                  - cloudfront:CreateInvalidation
                 Resource: !Ref CloudFrontDistribution
 
   InvalidationLambda:
