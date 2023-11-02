@@ -10,10 +10,11 @@ Parameters:
     Default: poppyland-journal
 
 Resources:
+  # Frontend
   WebAppS3Bucket:
     Type: 'AWS::S3::Bucket'
     Properties:
-      BucketName: !Ref AppName
+      BucketName: !Sub "${AppName}-frontend"
       PublicAccessBlockConfiguration:
         BlockPublicAcls: true
         BlockPublicPolicy: true
@@ -75,6 +76,56 @@ Resources:
         OriginAccessControlOriginType: s3
         SigningBehavior: always
         SigningProtocol: sigv4
+
+  InvalidationLambdaRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: invalidation-lambda-role
+      AssumeRolePolicyDocument: 
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazon.com
+              Action:
+                - "sts:AssumeRole"
+      Policies:
+        - PolicyName: !Sub "${AppName}-invalidation-lambda-codepipeline-policy"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action: [
+                  "codepipeline:PutJobFailureResult",
+                  "codepipeline:PutJobSuccessResult",
+                  "cloudfront:CreateInvalidation"
+                ]
+                Resource: "*"
+        - PolicyName: !Sub "${AppName}-invalidation-lambda-cloudfront-policy"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action: [
+                  "cloudfront:CreateInvalidation"
+                ]
+                Resource: !Ref CloudFrontDistribution
+
+  InvalidationLambda:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: !Sub "${AppName}-cloudfront-invalidation"
+      Runtime: python3.8
+      Role: !Ref InvalidationLambdaRole
+      Code:
+        ZipFile:
+          Fn::Join:
+          - "
+
+            "
+          -
+            - "%%{backend/lambda/invalidation.py}%%"
 
 Outputs:
   WebAppDomain:
