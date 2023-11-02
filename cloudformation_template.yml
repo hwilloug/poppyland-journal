@@ -100,7 +100,7 @@ Resources:
                   - "codepipeline:PutJobFailureResult"
                   - "codepipeline:PutJobSuccessResult"
                   - "cloudfront:CreateInvalidation"
-ß                Resource: "*"
+                Resource: "*"
         - PolicyName: !Sub "${AppName}-invalidation-lambda-cloudfront-policy"
           PolicyDocument:
             Version: "2012-10-17"
