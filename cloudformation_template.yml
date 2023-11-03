@@ -34,7 +34,7 @@ Resources:
             Principal:
               Service: cloudfront.amazonaws.com
             Action: s3:GetObject
-            Resource: !Sub "arn:aws:s3:::${AppName}/*"
+            Resource: !Sub "arn:aws:s3:::${AppName}-frontend/*"
             Condition:
               StringEquals:
                 AWS:SourceArn: !Sub arn:aws:cloudfront::${AWS::AccountId}:distribution/${CloudFrontDistribution}
@@ -76,53 +76,6 @@ Resources:
         OriginAccessControlOriginType: s3
         SigningBehavior: always
         SigningProtocol: sigv4
-
-  InvalidationLambdaRole:
-    Type: AWS::IAM::Role
-    Properties:
-      RoleName: invalidation-lambda-role
-      AssumeRolePolicyDocument: 
-        Version: "2012-10-17"
-        Statement:
-          - Effect: Allow
-            Principal:
-              Service:
-                - lambda.amazonaws.com
-            Action:
-              - "sts:AssumeRole"
-      Policies:
-        - PolicyName: !Sub "${AppName}-invalidation-lambda-codepipeline-policy"
-          PolicyDocument:
-            Version: "2012-10-17"
-            Statement:
-              - Effect: Allow
-                Action:
-                  - "codepipeline:PutJobFailureResult"
-                  - "codepipeline:PutJobSuccessResult"
-                Resource: "*"
-        - PolicyName: !Sub "${AppName}-invalidation-lambda-cloudfront-policy"
-          PolicyDocument:
-            Version: "2012-10-17"
-            Statement:
-              - Effect: Allow
-                Action:
-                  - "cloudfront:CreateInvalidation"
-                Resource: !Sub "arn:aws:cloudfront::${AWS::AccountId}:distribution/${CloudFrontDistribution}"
-
-  InvalidationLambda:
-    Type: AWS::Lambda::Function
-    Properties:
-      FunctionName: !Sub "${AppName}-cloudfront-invalidation"
-      Runtime: python3.8
-      Role: !Ref InvalidationLambdaRole
-      Code:
-        ZipFile:
-          Fn::Join:
-          - "
-
-            "
-          -
-            - "%%{backend/lambda/invalidation.py}%%"
 
 Outputs:
   WebAppDomain:
