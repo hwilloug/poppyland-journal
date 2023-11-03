@@ -13,7 +13,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { TimePicker, renderTimeViewClock } from '@mui/x-date-pickers';
 import { Dayjs } from 'dayjs'
-import { MenuItem, Select } from '@mui/material'
+import { MenuItem, Select, Checkbox } from '@mui/material'
 
 
 
@@ -38,6 +38,9 @@ const SleepQualityContainer = styled.div`
     gap: 20px;
     align-items: center;
     margin-top: 10px;
+`
+
+const MentalHealthContainer = styled.div`
 `
 
 const NewEntryPage: React.FunctionComponent = () => {
@@ -131,6 +134,22 @@ const NewEntryPage: React.FunctionComponent = () => {
                         <MenuItem value="Bad">Bad</MenuItem>
                     </Select>
                 </SleepQualityContainer>
+
+                <SectionHeader>Mental Health</SectionHeader>
+                <MentalHealthContainer>
+                    <Checkbox label="Anxiety" />
+                    <Checkbox label="Depression" />
+                    <Checkbox label="Mania" />
+                    <Checkbox label="Hyper-fixation" />
+                    <Checkbox label="Irritability" />
+                    <Checkbox label="Paranoia" />
+                    <Checkbox label="Low Appetite" />
+                    <Checkbox label="Pressured Speech" />
+                    <Checkbox label="Sociability Up" />
+                    <Checkbox label="Sociability Down" />
+                    <Checkbox label="Libido Up" />
+                    <Checkbox label="Libido Down" />
+                </MentalHealthContainer>
 
                 <SectionHeader>Entry</SectionHeader>
                 <MarkdownComponent view='edit' value={entryContent} onChange={setEntryContent} />
