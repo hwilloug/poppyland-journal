@@ -107,8 +107,7 @@ Resources:
               - Effect: Allow
                 Action:
                   - "cloudfront:CreateInvalidation"
-                Resource: !GetAtt CloudFrontDistribution.Arn
-    DependsOn: CloudFrontDistribution
+                Resource: !Sub "arn:aws:cloudfront::${AWS::AccountId}:distribution/${CloudFrontDistribution}"
 
   InvalidationLambda:
     Type: AWS::Lambda::Function
