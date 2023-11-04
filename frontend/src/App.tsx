@@ -6,7 +6,7 @@ import {
 import './App.css'
 import HomePage from './pages/HomePage';
 import styled from '@emotion/styled';
-import NewEntryPage from './pages/NewEntryPage';
+import TodaysEntryPage from './pages/TodaysEntryPage';
 import PreviousEntriesPage from './pages/PreviousEntriesPage';
 
 const router = createBrowserRouter([
@@ -15,11 +15,11 @@ const router = createBrowserRouter([
     element: <HomePage />,
   },
   {
-    path: "/new-entry",
-    element: <NewEntryPage />
+    path: "/today",
+    element: <TodaysEntryPage />
   },
   {
-    path: "/previous-entries",
+    path: "/previous",
     element: <PreviousEntriesPage />
   }
 ]);

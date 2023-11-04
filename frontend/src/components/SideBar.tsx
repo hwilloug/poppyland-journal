@@ -4,6 +4,7 @@ import { NavLink } from 'react-router-dom';
 
 const Container = styled.div`
     width: 25%;
+    flex-shrink: 0;
     border-right: 1px solid black;
     min-height: 100vh;
     padding: 20px;
@@ -30,10 +31,10 @@ const SideBarComponent: React.FunctionComponent = () => {
                     <NavLink to="/">Home</NavLink>
                 </NavItem>
                 <NavItem>
-                    <NavLink to="/new-entry">New Entry</NavLink>
+                    <NavLink to="/today">Today's Entry</NavLink>
                 </NavItem>
                 <NavItem>
-                    <NavLink to="/previous-entries">Previous Entries</NavLink>
+                    <NavLink to="/previous">Previous Entries</NavLink>
                 </NavItem>
             </NavContainer>
             

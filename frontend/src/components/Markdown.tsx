@@ -16,7 +16,8 @@ const MarkdownComponent: React.FunctionComponent<MarkdownComponentProps> = ({ va
         <MDEditor
           value={value}
           // @ts-ignore
-          onChange={onChange} 
+          onChange={onChange}
+          height={500}
           previewOptions={{
             rehypePlugins: [[rehypeSanitize]]
           }}
