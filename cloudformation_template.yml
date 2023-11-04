@@ -159,10 +159,19 @@ Resources:
                       jobId=job_id,
                   )
 
+  Route53Record:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      Name: journal.poppyland.dev
+      HostedZoneId: Z06420282IBWLWB0CK5TG
+      Type: A
+      AliasTarget:
+        DNSName: !GetAtt CloudFrontDistribution.DomainName
+        EvaluateTargetHealth: false
+        HostedZoneId: Z06420282IBWLWB0CK5TG
+
 Outputs:
   WebAppDomain:
-    Value: !GetAtt CloudFrontDistribution.DomainName
-  CloudFrontDistributionId:
-    Value: !GetAtt CloudFrontDistribution.Id
+    Value: journal.poppyland.dev
   WebAppS3BucketName:
     Value: !Ref WebAppS3Bucket
