@@ -8,6 +8,12 @@ Parameters:
   AppName: 
     Type: String
     Default: poppyland-journal
+  Domain:
+    Type: String
+    Default: journal.poppyland.dev
+  HostedZoneId:
+    Type: String
+    Default: Z06420282IBWLWB0CK5TG
 
 Resources:
   # Frontend
@@ -50,7 +56,7 @@ Resources:
             S3OriginConfig: {}
         Enabled: "true"
         Aliases:
-          - journal.poppyland.dev
+          - !Ref Domain
         ViewerCertificate:
           AcmCertificateArn: arn:aws:acm:us-east-1:132507767948:certificate/6edda0a3-7cf2-4588-a19a-b80feb554c1a
           MinimumProtocolVersion: TLSv1
@@ -168,8 +174,8 @@ Resources:
   Route53Record:
     Type: AWS::Route53::RecordSet
     Properties:
-      Name: journal.poppyland.dev
-      HostedZoneId: Z06420282IBWLWB0CK5TG
+      Name: !Ref Domain
+      HostedZoneId: !Ref HostedZoneId
       Type: A
       AliasTarget:
         DNSName: !GetAtt CloudFrontDistribution.DomainName
@@ -260,6 +266,62 @@ Resources:
                   }
               )
 
+  LambdaInvokePermissions:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !Ref PutEntryLambda
+      Action: "lambda:InvokeFunction"
+      Principal: apigateway.amazonaws.com
+
+  JournalApiGatweay:
+    Type: AWS::ApiGatewayV2::Api
+    Properties:
+      Name: !Sub ${AppName}-api-gateway
+      ProtocolType: HTTP
+
+  JournalApiStage:
+    Type: AWS::ApiGatewayV2::Stage
+    Properties:
+      ApiId: !Ref JournalApiGatweay
+      StageName: api
+      Description: Live API Stage
+      AutoDeploy: true
+
+  JournalApiDomainName:
+    Type: AWS::ApiGatewayV2::DomainName
+    Properties:
+      DomainName: !Ref Domain
+      DomainNameConfigurations:
+        - EndpointType: REGIONAL
+          CertificateArn: arn:aws:acm:us-east-1:132507767948:certificate/6edda0a3-7cf2-4588-a19a-b80feb554c1a
+
+  JournalApiBasePathMapping:
+    Type: AWS::ApiGatewayV2::ApiMapping
+    Properties:
+      DomainName: !Ref Domain
+      ApiId: !Ref JournalApiGatweay
+      Stage: !Ref JournalApiStage
+
+  PostIntegration:
+    Type: AWS::ApiGatewayV2::Integration
+    Properties:
+      ApiId: !Ref JournalApiGatweay
+      Description: Lambda proxy integration
+      IntegrationType: AWS_PROXY
+      IntegrationMethod: POST
+      PayloadFormatVersion: "2.0"
+      IntegrationUri: !Sub 'arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${PutEntryLambda.Arn}/invocations'
+
+  PostRoute:
+    Type: AWS::ApiGatewayV2::Route
+    Properties:
+      ApiId: !Ref JournalApiGatweay
+      RouteKey: "POST /entry"
+      AuthorizationType: AWS_IAM
+      Target: !Join
+        - /
+        - - integrations
+          - !Ref PostIntegration
 
 
 Outputs:
