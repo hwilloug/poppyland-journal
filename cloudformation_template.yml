@@ -196,6 +196,72 @@ Resources:
           AttributeName: "Date"
           KeyType: "RANGE"
 
+  JournalLambdaRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: journal-lambda-role
+      AssumeRolePolicyDocument: 
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Action:
+              - "sts:AssumeRole"
+      Policies:
+        - PolicyName: journal-lambda-policy
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Sid: LambdaDynamoDBAccess
+                Action:
+                  - "dynamodb:BatchGetItem"
+                  - "dynamodb:BatchWriteItem"
+                  - "dynamodb:DeleteItem"
+                  - "dynamodb:GetItem"
+                  - "dynamodb:PutItem"
+                  - "dynamodb:Query"
+                  - "dynamodb:Scan"
+                  - "dynamodb:UpdateItem"
+                Resource: !GetAtt EntryTable.Arn
+
+  PutEntryLambda:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: !Sub "${AppName}-put-entry"
+      Runtime: python3.8
+      Handler: index.lambda_handler
+      Role: !GetAtt JournalLambdaRole.Arn
+      Code:
+        ZipFile: |
+          import json
+          import boto3
+          import base64
+
+          dynamodb = boto3.client("dynamodb")
+
+          def lambda_handler(event, context):
+              payload = base64.b64decode(event['body'])
+              payload = json.loads(payload)
+              dynamodb.put_item(
+                  TableName='JournalEntry', 
+                  Item={
+                      'UserId': {'S': payload['user_id']},
+                      'Date': {'S': payload['date']},
+                      'Mood': {'N': payload['mood']},
+                      'BedTime': {'S': payload['bed_time']},
+                      'WakeUpTime': {'S': payload['wake_up_time']},
+                      'HoursSleep': {'N': payload['hours_sleep']},
+                      'SleepQuality': {'S': payload['sleep_quality']},
+                      'MentalHealth': {'L': payload['mental_health']},
+                      'EntryContent': {'S': payload['entry_content']},
+                  }
+              )
+
+
+
 Outputs:
   WebAppDomain:
     Value: journal.poppyland.dev
