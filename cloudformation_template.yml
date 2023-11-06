@@ -49,6 +49,12 @@ Resources:
             OriginAccessControlId: !GetAtt WebAppOriginAccessControl.Id
             S3OriginConfig: {}
         Enabled: "true"
+        Aliases:
+          - journal.poppyland.dev
+        ViewerCertificate:
+          AcmCertificateArn: arn:aws:acm:us-east-1:132507767948:certificate/6edda0a3-7cf2-4588-a19a-b80feb554c1a
+          MinimumProtocolVersion: TLSv1
+          SslSupportMethod: sni-only
         DefaultRootObject: index.html
         DefaultCacheBehavior:
           AllowedMethods:
@@ -168,7 +174,7 @@ Resources:
       AliasTarget:
         DNSName: !GetAtt CloudFrontDistribution.DomainName
         EvaluateTargetHealth: false
-        HostedZoneId: Z06420282IBWLWB0CK5TG
+        HostedZoneId: Z2FDTNDATAQYW2
 
 Outputs:
   WebAppDomain:
