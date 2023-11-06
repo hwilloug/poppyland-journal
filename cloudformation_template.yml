@@ -179,7 +179,7 @@ Resources:
   EntryTable:
     Type: AWS::DynamoDB::Table
     Properties:
-      TableName: Entry
+      TableName: JournalEntry
       BillingMode: PAY_PER_REQUEST
       AttributeDefinitions: 
         - 
