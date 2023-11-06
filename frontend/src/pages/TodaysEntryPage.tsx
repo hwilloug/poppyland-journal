@@ -21,11 +21,20 @@ const SectionHeader = styled.h3`
     margin-top: 50px;
 `
 
+const SubmitContainer = styled.div`
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+`
+
 const SubmitButton = styled.button`
     margin-top: 50px;
 `
 
 const MoodContainer = styled.div`
+    display: flex;
+    flex-direciton: row;
+    gap: 10px;
 `
 
 const SleepTimeContainer = styled.div`
@@ -85,6 +94,7 @@ const TodaysEntryPage: React.FunctionComponent = () => {
     const [sociabilityDownChecked, setSociabilityDownChecked] = useState<boolean>(mentalHealth.includes("Sociability Down"))
     const [libidoUpChecked, setLibidoUpChecked] = useState<boolean>(mentalHealth.includes("Libido Up"))
     const [libidoDownChecked, setLibidoDownChecked] = useState<boolean>(mentalHealth.includes("Libido Down"))
+    const [recklessnessChecked, setRecklessnessChecked] = useState<boolean>(mentalHealth.includes("Reckless Behanvior"))
 
     const date = new Date().toLocaleDateString("en-US", { dateStyle: "full" })
 
@@ -296,12 +306,24 @@ const TodaysEntryPage: React.FunctionComponent = () => {
                             sx={{ backgroundColor: 'white' }}
                         /> Libido Down
                     </MentalHealthItemContainer>
+                    <MentalHealthItemContainer>
+                        <Checkbox 
+                            checked={libidoDownChecked} 
+                            onChange={() => {
+                                modifyMentalHealth("Reckless Behavior")
+                                setRecklessnessChecked(!recklessnessChecked)
+                            }} 
+                            sx={{ backgroundColor: 'white' }}
+                        /> Reckless Behavior
+                    </MentalHealthItemContainer>
                 </MentalHealthContainer>
 
                 <SectionHeader>Entry</SectionHeader>
                 <MarkdownComponent view='edit' value={entryContent} onChange={setEntryContent} />
 
-                <SubmitButton>Submit</SubmitButton>
+                <SubmitContainer>
+                    <SubmitButton>Submit</SubmitButton>
+                </SubmitContainer>
             </PageContentContainer>
         </PageContainer>
     )

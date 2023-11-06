@@ -176,6 +176,26 @@ Resources:
         EvaluateTargetHealth: false
         HostedZoneId: Z2FDTNDATAQYW2
 
+  EntryTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: Entry
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions: 
+        - 
+          AttributeName: "UserId"
+          AttributeType: "S"
+        - 
+          AttributeName: "Date"
+          AttributeType: "S"
+      KeySchema: 
+        - 
+          AttributeName: "UserId"
+          KeyType: "HASH"
+        - 
+          AttributeName: "Date"
+          KeyType: "RANGE"
+
 Outputs:
   WebAppDomain:
     Value: journal.poppyland.dev
