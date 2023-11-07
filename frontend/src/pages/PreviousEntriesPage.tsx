@@ -11,7 +11,8 @@ import SentimentSatisfiedIcon from '@mui/icons-material/SentimentSatisfied'
 import SentimentNeutralIcon from '@mui/icons-material/SentimentNeutral'
 import SentimentDissatisfiedIcon from '@mui/icons-material/SentimentDissatisfied'
 import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied'
-import { withAuthenticationRequired } from '@auth0/auth0-react';
+import { useAuth0, withAuthenticationRequired } from '@auth0/auth0-react';
+import { getToken } from '../get-token';
 
 
 const EntriesContainer = styled.div`
@@ -50,14 +51,23 @@ interface EntryType {
 }
 
 const PreviousEntriesPage: React.FunctionComponent = () => {
+    const { user } = useAuth0()
+    const userId = user!.sub
+
     const [isLoading, setIsLoading] = useState<boolean>(true)
     const [entries, setEntries] = useState<EntryType[]>([])
 
     const getEntries = async () => {
         setIsLoading(true)
         try {
+            const token = await getToken()
             const response = await axios.get(
-                apiEndpoints.getEntries.insert({ userId: "test" })
+                apiEndpoints.getEntries.insert({ userId }),
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                }
             )
             const data: ResponseType[] = response.data
             setEntries(data as unknown as EntryType[])
@@ -69,6 +79,7 @@ const PreviousEntriesPage: React.FunctionComponent = () => {
 
     useEffect(() => {
         getEntries()
+        // eslint-disable-next-line
     }, [])
 
     const getMoodIcon = (mood: string) => {

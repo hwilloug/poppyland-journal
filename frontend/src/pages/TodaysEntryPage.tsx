@@ -17,7 +17,8 @@ import { MenuItem, Select, Checkbox, Snackbar, Alert } from '@mui/material'
 import axios from 'axios'
 import { apiEndpoints } from '../api-endpoints'
 import { ResponseType } from './HomePage'
-import { withAuthenticationRequired } from '@auth0/auth0-react'
+import { useAuth0, withAuthenticationRequired } from '@auth0/auth0-react'
+import { getToken } from '../get-token'
 
 
 
@@ -67,6 +68,9 @@ const MentalHealthItemContainer = styled.div`
 `
 
 const TodaysEntryPage: React.FunctionComponent = () => {
+    const { user } = useAuth0()
+    const userId = user!.sub
+
     const date = new Date().toISOString().split('T')[0]
     const dateFull = new Date().toLocaleDateString("en-US", { dateStyle: "full" })
 
@@ -84,8 +88,14 @@ const TodaysEntryPage: React.FunctionComponent = () => {
     const getEntry = async () => {
         setIsLoading(true)
         try {
+            const token = await getToken()
             const response = await axios.get(
-                apiEndpoints.getEntry.insert({ userId: "test", date: date })
+                apiEndpoints.getEntry.insert({ userId: userId, date: date }),
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                }
             )
             const data: ResponseType = response.data
             if (data) {
@@ -111,7 +121,11 @@ const TodaysEntryPage: React.FunctionComponent = () => {
 
     useEffect(() => {
         if (bedTime && wakeUpTime) {
-            setHoursSleep(24 + wakeUpTime.diff(bedTime, 'hour'))
+            let s = wakeUpTime.diff(bedTime, 'hour')
+            if (s < 0) {
+                s = s + 24
+            }
+            setHoursSleep(s)
         }
     }, [bedTime, wakeUpTime])
 
@@ -131,7 +145,7 @@ const TodaysEntryPage: React.FunctionComponent = () => {
             await axios.put(
                 apiEndpoints.createEntry.insert(),
                 {
-                    user_id: "test", 
+                    user_id: userId, 
                     date,
                     mood: mood?.toString(),
                     bed_time: bedTime,

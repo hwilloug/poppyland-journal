@@ -17,6 +17,12 @@ Parameters:
   HostedZoneId:
     Type: String
     Default: Z06420282IBWLWB0CK5TG
+  Auth0Domain:
+    Type: String
+    Default: dev-8igvi3e7o3jja6zf.us.auth0.com
+  Auth0Audience:
+    Type: String
+    Default: https://poppyland-journal-auth-api.com
 
 Resources:
   WebAppS3Bucket:
@@ -318,6 +324,16 @@ Resources:
                       }
                   }
               )
+              
+              if item.get('Item') is None:
+                  return {
+                      "statusCode": 404,
+                      "headers": {
+                          "Content-Type": "application/json"
+                      },
+                      "body": json.dumps("Not found")
+                  }
+              
               response_item = {
                   "entry_content": item['Item'].get('EntryContent', {}).get("S"),
                   "user_id": item['Item'].get('UserId', {}).get("S"),
@@ -477,6 +493,7 @@ Resources:
           - !Sub https://${Domain}
         AllowHeaders:
           - Content-Type
+          - Authorization
         MaxAge: 86400
 
   JournalApiStage:
@@ -536,7 +553,8 @@ Resources:
     Properties:
       ApiId: !Ref JournalApiGatweay
       RouteKey: "PUT /entry"
-      AuthorizationType: NONE
+      AuthorizationType: JWT
+      AuthorizerId: !GetAtt ApiAuthorizer.AuthorizerId
       Target: !Join
         - /
         - - integrations
@@ -557,7 +575,8 @@ Resources:
     Properties:
       ApiId: !Ref JournalApiGatweay
       RouteKey: "GET /entry/{date}"
-      AuthorizationType: NONE
+      AuthorizationType: JWT
+      AuthorizerId: !GetAtt ApiAuthorizer.AuthorizerId
       Target: !Join
         - /
         - - integrations
@@ -578,7 +597,8 @@ Resources:
     Properties:
       ApiId: !Ref JournalApiGatweay
       RouteKey: "GET /entry"
-      AuthorizationType: NONE
+      AuthorizationType: JWT
+      AuthorizerId: !GetAtt ApiAuthorizer.AuthorizerId
       Target: !Join
         - /
         - - integrations
@@ -599,7 +619,8 @@ Resources:
     Properties:
       ApiId: !Ref JournalApiGatweay
       RouteKey: "DELETE /entry/{date}"
-      AuthorizationType: NONE
+      AuthorizationType: JWT
+      AuthorizerId: !GetAtt ApiAuthorizer.AuthorizerId
       Target: !Join
         - /
         - - integrations
@@ -649,6 +670,17 @@ Resources:
         - - integrations
           - !Ref OptionsIntegration
 
+  OptionsDateRoute:
+    Type: AWS::ApiGatewayV2::Route
+    Properties:
+      ApiId: !Ref JournalApiGatweay
+      RouteKey: "OPTIONS /entry/{date}"
+      AuthorizationType: NONE
+      Target: !Join
+        - /
+        - - integrations
+          - !Ref OptionsIntegration
+
   LambdaInvokeOptions:
     Type: AWS::Lambda::Permission
     Properties:
@@ -657,6 +689,28 @@ Resources:
       Principal: apigateway.amazonaws.com
       SourceArn: !Sub 'arn:${AWS::Partition}:execute-api:${AWS::Region}:${AWS::AccountId}:${JournalApiGatweay}/*/*/entry'
       SourceAccount: !Ref 'AWS::AccountId'
+
+  LambdaInvokeOptionsDate:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !Ref OptionsLambda
+      Action: "lambda:InvokeFunction"
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub 'arn:${AWS::Partition}:execute-api:${AWS::Region}:${AWS::AccountId}:${JournalApiGatweay}/*/*/entry/{date}'
+      SourceAccount: !Ref 'AWS::AccountId'
+
+  ApiAuthorizer:
+    Type: 'AWS::ApiGatewayV2::Authorizer'
+    Properties:
+      Name: JWTAuthorizer
+      ApiId: !Ref JournalApiGatweay
+      AuthorizerType: JWT
+      IdentitySource:
+        - $request.header.Authorization
+      JwtConfiguration:
+        Audience:
+          - !Ref Auth0Audience
+        Issuer: !Sub https://${Auth0Domain}/
 
 Outputs:
   WebAppDomain:

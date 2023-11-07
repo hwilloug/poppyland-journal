@@ -6,7 +6,8 @@ import PreviousEntriesComponent from '../components/PreviousEntries';
 import SleepTrackerComponent from '../components/SleepTracker';
 import { apiEndpoints } from '../api-endpoints';
 import axios from 'axios';
-import { withAuthenticationRequired } from '@auth0/auth0-react';
+import { useAuth0, withAuthenticationRequired } from '@auth0/auth0-react';
+import { getToken } from '../get-token';
 
 const PageContainer = styled.div`
     margin: 0px;
@@ -36,6 +37,9 @@ interface DataType {
 }
 
 const HomePage: React.FunctionComponent = () => {
+    const { user } = useAuth0()
+    const userId = user!.sub
+
     const [isLoading, setIsLoading] = useState<boolean>(true)
     const [entryDates, setEntryDates] = useState<string[]>([])
     const [moodData, setMoodData] = useState<DataType>({})
@@ -44,8 +48,14 @@ const HomePage: React.FunctionComponent = () => {
     const getEntries = async () => {
         setIsLoading(true)
         try {
+            const token = await getToken()
             const response = await axios.get(
-                apiEndpoints.getEntries.insert({ userId: "test" })
+                apiEndpoints.getEntries.insert({ userId }),
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                }
             )
             const data: ResponseType[] = response.data
             let dates = []
@@ -67,6 +77,7 @@ const HomePage: React.FunctionComponent = () => {
 
     useEffect(() => {
         getEntries()
+        // eslint-disable-next-line
     }, [])
 
     return (
