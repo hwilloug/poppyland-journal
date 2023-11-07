@@ -142,6 +142,7 @@ const TodaysEntryPage: React.FunctionComponent = () => {
 
     const onSubmit = async () => {
         try {
+            const token = await getToken()
             await axios.put(
                 apiEndpoints.createEntry.insert(),
                 {
@@ -154,6 +155,11 @@ const TodaysEntryPage: React.FunctionComponent = () => {
                     sleep_quality: sleepQuality,
                     mental_health: mentalHealth,
                     entry_content: entryContent
+                },
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
                 }
             )
             setSnackbarMessage("Successfully saved entry!")
