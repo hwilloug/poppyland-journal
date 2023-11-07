@@ -87,7 +87,6 @@ const TodaysEntryPage: React.FunctionComponent = () => {
                 apiEndpoints.getEntry.insert({ userId: "test", date: date })
             )
             const data: ResponseType = response.data
-            console.log(data.mental_health)
             if (data) {
                 setMood(parseInt(data.mood))
                 setBedTime(dayjs(data.bed_time))

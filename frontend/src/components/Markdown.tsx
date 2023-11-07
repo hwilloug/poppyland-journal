@@ -11,7 +11,7 @@ interface MarkdownComponentProps {
 
 const MarkdownComponent: React.FunctionComponent<MarkdownComponentProps> = ({ value, onChange, view }) => {
   return (
-    <div className="container">
+    <div className="container" data-color-mode="light">
       {view === 'edit' && 
         <MDEditor
           value={value}
@@ -24,7 +24,7 @@ const MarkdownComponent: React.FunctionComponent<MarkdownComponentProps> = ({ va
         />
       }
       {view === 'view' &&
-        <MDEditor.Markdown source="value" />
+        <MDEditor.Markdown source={value} />
       
       }
     </div>

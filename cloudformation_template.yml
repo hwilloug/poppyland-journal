@@ -374,7 +374,7 @@ Resources:
                       "sleep_quality": item.get('SleepQuality', {}).get("S"),
                       "wake_up_time": item.get('WakeUpTime', {}).get("S"),
                       "mood": item.get('Mood', {}).get("N"),
-                      "mental_health": item.get('MentalHealth', {}).get("L"),
+                      "mental_health": item.get('MentalHealth', {}).get("SS"),
                   })
               return {
                   "statusCode": 200,
@@ -382,6 +382,39 @@ Resources:
                       "Content-Type": "application/json"
                   },
                   "body": json.dumps(response_items)
+              }
+
+  DeleteEntryLambda:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: !Sub "${AppName}-delete-entry"
+      Runtime: python3.8
+      Handler: index.lambda_handler
+      Role: !GetAtt JournalLambdaRole.Arn
+      Code:
+        ZipFile: |
+          import boto3
+
+          dynamodb = boto3.client("dynamodb")
+
+          def lambda_handler(event, context):
+              item = dynamodb.delete_item(
+                  TableName='JournalEntry',
+                  Key={
+                      'UserId': {
+                          'S': event.get("queryStringParameters", {}).get('user_id')
+                      },
+                      'Date': {
+                          'S': event.get("pathParameters", {}).get('date')
+                      }
+                  }
+              )
+              return {
+                  "statusCode": 200,
+                  "headers": {
+                      "Content-Type": "application/json"
+                  },
+                  "body": json.dumps({"Successfully deleted item"})
               }
 
   LambdaInvokePutEntry:
@@ -409,6 +442,15 @@ Resources:
       Action: "lambda:InvokeFunction"
       Principal: apigateway.amazonaws.com
       SourceArn: !Sub 'arn:${AWS::Partition}:execute-api:${AWS::Region}:${AWS::AccountId}:${JournalApiGatweay}/*/*/entry'
+      SourceAccount: !Ref 'AWS::AccountId'
+
+  LambdaInvokeDeleteEntry:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !Ref DeleteEntryLambda
+      Action: "lambda:InvokeFunction"
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub 'arn:${AWS::Partition}:execute-api:${AWS::Region}:${AWS::AccountId}:${JournalApiGatweay}/*/*/entry/{date}'
       SourceAccount: !Ref 'AWS::AccountId'
 
   CloudWatchApiGatewayLogGroup:
@@ -541,6 +583,27 @@ Resources:
         - /
         - - integrations
           - !Ref GetEntriesIntegration
+
+  DeleteEntryIntegration:
+    Type: AWS::ApiGatewayV2::Integration
+    Properties:
+      ApiId: !Ref JournalApiGatweay
+      Description: Lambda proxy integration
+      IntegrationType: AWS_PROXY
+      IntegrationMethod: POST
+      PayloadFormatVersion: "2.0"
+      IntegrationUri: !Sub 'arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${DeleteEntryLambda.Arn}/invocations'
+
+  DeleteEntryRoute:
+    Type: AWS::ApiGatewayV2::Route
+    Properties:
+      ApiId: !Ref JournalApiGatweay
+      RouteKey: "DELETE /entry/{date}"
+      AuthorizationType: NONE
+      Target: !Join
+        - /
+        - - integrations
+          - !Ref DeleteEntryIntegration
 
   OptionsLambda:
     Type: AWS::Lambda::Function
