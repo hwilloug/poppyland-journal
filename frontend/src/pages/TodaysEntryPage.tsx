@@ -129,7 +129,7 @@ const TodaysEntryPage: React.FunctionComponent = () => {
 
     const onSubmit = async () => {
         try {
-            await axios.post(
+            await axios.put(
                 apiEndpoints.createEntry.insert(),
                 {
                     user_id: "test", 
@@ -378,7 +378,7 @@ const TodaysEntryPage: React.FunctionComponent = () => {
                             <SubmitButton onClick={onSubmit}>Save</SubmitButton>
                         </SubmitContainer>
                         <Snackbar open={snackbarOpen} autoHideDuration={6000} onClose={handleSnackbarClose}>
-                            <Alert onClose={handleSnackbarClose} severity="success" sx={{ width: '20%' }}>
+                            <Alert onClose={handleSnackbarClose} severity="success">
                                 {snackbarMessage}
                             </Alert>
                         </Snackbar>

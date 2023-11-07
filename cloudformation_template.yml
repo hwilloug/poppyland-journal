@@ -489,11 +489,11 @@ Resources:
       PayloadFormatVersion: "2.0"
       IntegrationUri: !Sub 'arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${PutEntryLambda.Arn}/invocations'
 
-  PostRoute:
+  PutRoute:
     Type: AWS::ApiGatewayV2::Route
     Properties:
       ApiId: !Ref JournalApiGatweay
-      RouteKey: "POST /entry"
+      RouteKey: "PUT /entry"
       AuthorizationType: NONE
       Target: !Join
         - /
