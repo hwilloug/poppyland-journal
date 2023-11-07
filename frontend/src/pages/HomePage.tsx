@@ -6,6 +6,7 @@ import PreviousEntriesComponent from '../components/PreviousEntries';
 import SleepTrackerComponent from '../components/SleepTracker';
 import { apiEndpoints } from '../api-endpoints';
 import axios from 'axios';
+import { withAuthenticationRequired } from '@auth0/auth0-react';
 
 const PageContainer = styled.div`
     margin: 0px;
@@ -84,4 +85,4 @@ const HomePage: React.FunctionComponent = () => {
   
 }
   
-export default HomePage
+export default withAuthenticationRequired(HomePage)

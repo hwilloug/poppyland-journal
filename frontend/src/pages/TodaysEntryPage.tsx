@@ -17,6 +17,7 @@ import { MenuItem, Select, Checkbox, Snackbar, Alert } from '@mui/material'
 import axios from 'axios'
 import { apiEndpoints } from '../api-endpoints'
 import { ResponseType } from './HomePage'
+import { withAuthenticationRequired } from '@auth0/auth0-react'
 
 
 
@@ -239,7 +240,7 @@ const TodaysEntryPage: React.FunctionComponent = () => {
                             </Select>
                         </SleepQualityContainer>
 
-                        <SectionHeader>Mental Health</SectionHeader>
+                        <SectionHeader>Mental Health & Behavior</SectionHeader>
                         <MentalHealthContainer>
                             <MentalHealthItemContainer>
                                 <Checkbox 
@@ -389,4 +390,4 @@ const TodaysEntryPage: React.FunctionComponent = () => {
   
 }
   
-export default TodaysEntryPage
+export default withAuthenticationRequired(TodaysEntryPage)

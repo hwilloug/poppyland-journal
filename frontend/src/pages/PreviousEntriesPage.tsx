@@ -11,6 +11,7 @@ import SentimentSatisfiedIcon from '@mui/icons-material/SentimentSatisfied'
 import SentimentNeutralIcon from '@mui/icons-material/SentimentNeutral'
 import SentimentDissatisfiedIcon from '@mui/icons-material/SentimentDissatisfied'
 import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied'
+import { withAuthenticationRequired } from '@auth0/auth0-react';
 
 
 const EntriesContainer = styled.div`
@@ -60,6 +61,7 @@ const PreviousEntriesPage: React.FunctionComponent = () => {
             )
             const data: ResponseType[] = response.data
             setEntries(data as unknown as EntryType[])
+            setIsLoading(false)
         } catch (e) {
             console.log(e)
         }
@@ -90,13 +92,16 @@ const PreviousEntriesPage: React.FunctionComponent = () => {
             <PageContentContainer>
                 <SubHeader>Previous Entries</SubHeader>
                 <EntriesContainer>
-                    {entries.map((entry) => <div>
+                    {!isLoading && entries.map((entry) => <div>
                         <EntryDate>{new Date(entry.date).toLocaleDateString("en-US", { dateStyle: "full" })}</EntryDate>
                         <MoodContainer>Mood: {getMoodIcon(entry.mood)}</MoodContainer>
                         <SleepContainer>Hours sleep: {entry.hours_sleep}</SleepContainer>
                         <MentalHealthContainer>Mental Health: {entry.mental_health && entry.mental_health.join(", ")}</MentalHealthContainer>
                         <MarkdownComponent view='view' value={entry.entry_content} />
                     </div>)}
+                    { isLoading &&
+                        <>Loading...</>
+                    }
                 </EntriesContainer>
             </PageContentContainer>
         </PageContainer>
@@ -104,4 +109,4 @@ const PreviousEntriesPage: React.FunctionComponent = () => {
   
 }
   
-export default PreviousEntriesPage
+export default withAuthenticationRequired(PreviousEntriesPage)
