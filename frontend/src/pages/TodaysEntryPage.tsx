@@ -84,7 +84,12 @@ const TodaysEntryPage: React.FunctionComponent = () => {
         setIsLoading(true)
         try {
             const response = await axios.get(
-                apiEndpoints.getEntry.insert({ userId: "test", date: date })
+                apiEndpoints.getEntry.insert({ userId: "test", date: date }),
+                {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }
             )
             const data: ResponseType = response.data
             if (data) {
@@ -239,7 +244,7 @@ const TodaysEntryPage: React.FunctionComponent = () => {
                             </Select>
                         </SleepQualityContainer>
 
-                        <SectionHeader>Mental Health</SectionHeader>
+                        <SectionHeader>Mental Health & Behaviors</SectionHeader>
                         <MentalHealthContainer>
                             <MentalHealthItemContainer>
                                 <Checkbox 

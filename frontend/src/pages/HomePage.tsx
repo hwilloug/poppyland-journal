@@ -44,7 +44,12 @@ const HomePage: React.FunctionComponent = () => {
         setIsLoading(true)
         try {
             const response = await axios.get(
-                apiEndpoints.getEntries.insert({ userId: "test" })
+                apiEndpoints.getEntries.insert({ userId: "test" }),
+                {
+                    headers: {
+                        "Content-Type": "application/json"
+                    }
+                }
             )
             const data: ResponseType[] = response.data
             let dates = []
