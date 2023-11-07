@@ -70,17 +70,21 @@ const PreviousEntriesPage: React.FunctionComponent = () => {
     }, [])
 
     const getMoodIcon = (mood: string) => {
-        switch (mood) {
-            case "0":
-                return <SentimentVeryDissatisfiedIcon color='error' />
-            case "1":
-                return <SentimentDissatisfiedIcon color='warning' />
-            case "2":
-                return <SentimentNeutralIcon color='info' />
-            case "3":
-                return <SentimentSatisfiedIcon color='success' />
-            case "4":
-                return <SentimentVerySatisfiedIcon style={{color: 'purple'}} />
+        try {
+            switch (mood) {
+                case "0":
+                    return <SentimentVeryDissatisfiedIcon color='error' />
+                case "1":
+                    return <SentimentDissatisfiedIcon color='warning' />
+                case "2":
+                    return <SentimentNeutralIcon color='info' />
+                case "3":
+                    return <SentimentSatisfiedIcon color='success' />
+                case "4":
+                    return <SentimentVerySatisfiedIcon style={{color: 'purple'}} />
+            }
+        } catch (e) {
+            console.log(e)
         }
     }
 
@@ -94,7 +98,7 @@ const PreviousEntriesPage: React.FunctionComponent = () => {
                         <EntryDate>{new Date(entry.date).toLocaleDateString("en-US", { dateStyle: "full" })}</EntryDate>
                         <MoodContainer>Mood: {getMoodIcon(entry.mood)}</MoodContainer>
                         <SleepContainer>Hours sleep: {entry.hours_sleep}</SleepContainer>
-                        <MentalHealthContainer>Mental Health: {entry.mental_health && entry.mental_health.join(", ")}</MentalHealthContainer>
+                        <MentalHealthContainer>Mental Health: {entry.mental_health !== null && entry.mental_health.join(", ")}</MentalHealthContainer>
                         <MarkdownComponent view='view' value={entry.entry_content} />
                     </div>)}
                 </EntriesContainer>

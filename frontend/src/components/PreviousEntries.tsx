@@ -13,7 +13,6 @@ const PreviousEntriesComponent: React.FunctionComponent<PreviousEntriesProps> = 
     return (
         <Container>
             <SubHeader>View Previous Entries</SubHeader>
-            {dates.map((date) => <>{date}</>)}
         </Container>
     )
 }
