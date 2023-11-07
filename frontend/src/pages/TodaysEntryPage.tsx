@@ -382,6 +382,24 @@ const TodaysEntryPage: React.FunctionComponent = () => {
                                     sx={{ backgroundColor: 'white' }}
                                 /> Reckless Behavior
                             </MentalHealthItemContainer>
+                            <MentalHealthItemContainer>
+                                <Checkbox 
+                                    checked={mentalHealth.includes("Fatigue")} 
+                                    onChange={() => {
+                                        modifyMentalHealth("Fatigue")
+                                    }} 
+                                    sx={{ backgroundColor: 'white' }}
+                                /> Fatigue
+                            </MentalHealthItemContainer>
+                            <MentalHealthItemContainer>
+                                <Checkbox 
+                                    checked={mentalHealth.includes("Suicidal Ideation")} 
+                                    onChange={() => {
+                                        modifyMentalHealth("Suicidal Ideation")
+                                    }} 
+                                    sx={{ backgroundColor: 'white' }}
+                                /> Suicidal Ideation
+                            </MentalHealthItemContainer>
                         </MentalHealthContainer>
 
                         <SectionHeader>Entry</SectionHeader>
