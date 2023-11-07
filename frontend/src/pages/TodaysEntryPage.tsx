@@ -93,10 +93,9 @@ const TodaysEntryPage: React.FunctionComponent = () => {
                 setWakeUpTime(dayjs(data.wake_up_time))
                 setHoursSleep(parseInt(data.hours_sleep))
                 setSleepQuality(data.sleep_quality)
-                setMentalHealth(data.mental_health)
+                setMentalHealth(data.mental_health || [])
                 setEntryContent(data.entry_content)
             }
-            
             setIsLoading(false)
         } catch (e) {
             console.log(e)
