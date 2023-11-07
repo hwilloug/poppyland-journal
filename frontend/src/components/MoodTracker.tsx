@@ -5,7 +5,11 @@ import { SubHeader } from './styled-components';
 const Container = styled.div`
 `
 
-const MoodTrackerComponent: React.FunctionComponent = () => {
+interface MoodTrackerProps {
+    moodData: {[date: string]: number}
+}
+
+const MoodTrackerComponent: React.FunctionComponent<MoodTrackerProps> = ({ moodData }) => {
     return (
         <Container>
             <SubHeader>Mood Tracker - Last 30 days</SubHeader>

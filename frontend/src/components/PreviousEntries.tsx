@@ -5,13 +5,17 @@ import { SubHeader } from './styled-components';
 const Container = styled.div`
 `
 
-const PreviousEntriesComponent: React.FunctionComponent = () => {
+interface PreviousEntriesProps {
+    dates: string[]
+}
+
+const PreviousEntriesComponent: React.FunctionComponent<PreviousEntriesProps> = ({ dates }) => {
     return (
         <Container>
             <SubHeader>View Previous Entries</SubHeader>
+            {dates.map((date) => <>{date}</>)}
         </Container>
     )
-  
 }
   
 export default PreviousEntriesComponent

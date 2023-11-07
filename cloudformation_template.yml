@@ -11,12 +11,14 @@ Parameters:
   Domain:
     Type: String
     Default: journal.poppyland.dev
+  ApiDomain:
+    Type: String
+    Default: journal-api.poppyland.dev
   HostedZoneId:
     Type: String
     Default: Z06420282IBWLWB0CK5TG
 
 Resources:
-  # Frontend
   WebAppS3Bucket:
     Type: 'AWS::S3::Bucket'
     Properties:
@@ -249,35 +251,191 @@ Resources:
           dynamodb = boto3.client("dynamodb")
 
           def lambda_handler(event, context):
-              payload = base64.b64decode(event['body'])
+              payload = event.get("body", {})
               payload = json.loads(payload)
-              dynamodb.put_item(
+              response = dynamodb.put_item(
                   TableName='JournalEntry', 
                   Item={
-                      'UserId': {'S': payload['user_id']},
-                      'Date': {'S': payload['date']},
-                      'Mood': {'N': payload['mood']},
-                      'BedTime': {'S': payload['bed_time']},
-                      'WakeUpTime': {'S': payload['wake_up_time']},
-                      'HoursSleep': {'N': payload['hours_sleep']},
-                      'SleepQuality': {'S': payload['sleep_quality']},
-                      'MentalHealth': {'L': payload['mental_health']},
-                      'EntryContent': {'S': payload['entry_content']},
+                      'UserId': {'S': payload.get('user_id')},
+                      'Date': {'S': payload.get('date')},
+                      'Mood': {'N': payload.get('mood')},
+                      'BedTime': {'S': payload.get('bed_time')},
+                      'WakeUpTime': {'S': payload.get('wake_up_time')},
+                      'HoursSleep': {'N': payload.get('hours_sleep')},
+                      'SleepQuality': {'S': payload.get('sleep_quality')},
+                      'MentalHealth': {'SS': payload.get('mental_health')},
+                      'EntryContent': {'S': payload.get('entry_content')},
                   }
               )
+              status_code = response.get("ResponseMetadata", {}).get("HTTPStatusCode")
+              if status_code == 200:
+                  new_item = dynamodb.get_item(
+                      TableName='JournalEntry',
+                      Key={
+                          'UserId': {
+                              'S': payload['user_id']
+                          },
+                          'Date': {
+                              'S': payload['date']
+                          }
+                      }
+                  )
+                  return {
+                      "statusCode": 200,
+                      "headers": {
+                          "Content-Type": "application/json"
+                      },
+                      "body": json.dumps(new_item)
+                  }
+              else:
+                  return {
+                      "statusCode": status_code
+                  }
 
-  LambdaInvokePermissions:
+  GetEntryLambda:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: !Sub "${AppName}-get-entry"
+      Runtime: python3.8
+      Handler: index.lambda_handler
+      Role: !GetAtt JournalLambdaRole.Arn
+      Code:
+        ZipFile: |
+          import json
+          import boto3
+
+          dynamodb = boto3.client("dynamodb")
+
+          def lambda_handler(event, context):
+              item = dynamodb.get_item(
+                  TableName='JournalEntry',
+                  Key={
+                      'UserId': {
+                          'S': event.get("queryStringParameters", {}).get('user_id')
+                      },
+                      'Date': {
+                          'S': event.get("pathParameters", {}).get('date')
+                      }
+                  }
+              )
+              response_item = {
+                  "entry_content": item['Item'].get('EntryContent', {}).get("S"),
+                  "user_id": item['Item'].get('UserId', {}).get("S"),
+                  "date": item['Item'].get('Date', {}).get("S"),
+                  "bed_time": item['Item'].get('BedTime', {}).get("S"),
+                  "hours_sleep": item['Item'].get('HoursSleep', {}).get("N"),
+                  "sleep_quality": item['Item'].get('SleepQuality', {}).get("S"),
+                  "wake_up_time": item['Item'].get('WakeUpTime', {}).get("S"),
+                  "mood": item['Item'].get('Mood', {}).get("N"),
+                  "mental_health": item['Item'].get('MentalHealth', {}).get("SS"),
+              }
+              return {
+                  "statusCode": 200,
+                  "headers": {
+                      "Content-Type": "application/json"
+                  },
+                  "body": json.dumps(response_item)
+              }
+
+  GetEntriesLambda:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: !Sub "${AppName}-get-entries"
+      Runtime: python3.8
+      Handler: index.lambda_handler
+      Role: !GetAtt JournalLambdaRole.Arn
+      Code:
+        ZipFile: |
+          import json
+          import boto3
+          from boto3.dynamodb.conditions import Key
+
+          dynamodb = boto3.client("dynamodb")
+
+          def lambda_handler(event, context):
+              user_id = event.get("queryStringParameters", {}).get("user_id")
+              items = dynamodb.query(
+                  TableName='JournalEntry',
+                  KeyConditionExpression=f"UserId = :user_id",
+                  ExpressionAttributeValues={
+                    ":user_id": {
+                        "S": user_id
+                    }
+                  }
+              )
+              response_items = []
+              for item in items['Items']:
+                  response_items.append({
+                      "entry_content": item.get('EntryContent', {}).get("S"),
+                      "user_id": item.get('UserId', {}).get("S"),
+                      "date": item.get('Date', {}).get("S"),
+                      "bed_time": item.get('BedTime', {}).get("S"),
+                      "hours_sleep": item.get('HoursSleep', {}).get("N"),
+                      "sleep_quality": item.get('SleepQuality', {}).get("S"),
+                      "wake_up_time": item.get('WakeUpTime', {}).get("S"),
+                      "mood": item.get('Mood', {}).get("N"),
+                      "mental_health": item.get('MentalHealth', {}).get("L"),
+                  })
+              return {
+                  "statusCode": 200,
+                  "headers": {
+                      "Content-Type": "application/json"
+                  },
+                  "body": json.dumps(response_items)
+              }
+
+  LambdaInvokePutEntry:
     Type: AWS::Lambda::Permission
     Properties:
       FunctionName: !Ref PutEntryLambda
       Action: "lambda:InvokeFunction"
       Principal: apigateway.amazonaws.com
+      SourceArn: !Sub 'arn:${AWS::Partition}:execute-api:${AWS::Region}:${AWS::AccountId}:${JournalApiGatweay}/*/*/entry'
+      SourceAccount: !Ref 'AWS::AccountId'
+
+  LambdaInvokeGetEntry:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !Ref GetEntryLambda
+      Action: "lambda:InvokeFunction"
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub 'arn:${AWS::Partition}:execute-api:${AWS::Region}:${AWS::AccountId}:${JournalApiGatweay}/*/*/entry/{date}'
+      SourceAccount: !Ref 'AWS::AccountId'
+
+  LambdaInvokeGetEntries:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !Ref GetEntriesLambda
+      Action: "lambda:InvokeFunction"
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub 'arn:${AWS::Partition}:execute-api:${AWS::Region}:${AWS::AccountId}:${JournalApiGatweay}/*/*/entry'
+      SourceAccount: !Ref 'AWS::AccountId'
+
+  CloudWatchApiGatewayLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub ${AppName}-api-logs
 
   JournalApiGatweay:
     Type: AWS::ApiGatewayV2::Api
     Properties:
       Name: !Sub ${AppName}-api-gateway
       ProtocolType: HTTP
+      DisableExecuteApiEndpoint: true
+      CorsConfiguration:
+        AllowMethods:
+          - GET
+          - HEAD
+          - OPTIONS
+          - POST
+          - PUT
+          - DELETE
+        AllowOrigins:
+          - http://localhost:3000
+          - !Sub https://${Domain}
+        AllowHeaders:
+          - Content-Type
+        MaxAge: 86400
 
   JournalApiStage:
     Type: AWS::ApiGatewayV2::Stage
@@ -286,19 +444,38 @@ Resources:
       StageName: api
       Description: Live API Stage
       AutoDeploy: true
+      AccessLogSettings:
+        DestinationArn: !GetAtt CloudWatchApiGatewayLogGroup.Arn
+        Format: >-
+          {"requestId":"$context.requestId", "ip": "$context.identity.sourceIp",
+          "caller":"$context.identity.caller",
+          "user":"$context.identity.user","requestTime":"$context.requestTime",
+          "routeKey":"$context.routeKey","status":"$context.status",
+          "error": "$context.error.message", "integrationError": "$context.integrationErrorMessage"}
 
   JournalApiDomainName:
     Type: AWS::ApiGatewayV2::DomainName
     Properties:
-      DomainName: !Ref Domain
+      DomainName: !Ref ApiDomain
       DomainNameConfigurations:
         - EndpointType: REGIONAL
           CertificateArn: arn:aws:acm:us-east-1:132507767948:certificate/6edda0a3-7cf2-4588-a19a-b80feb554c1a
 
+  ApiRoute53Record:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      Name: !Ref ApiDomain
+      HostedZoneId: !Ref HostedZoneId
+      Type: A
+      AliasTarget:
+        DNSName: !GetAtt JournalApiDomainName.RegionalDomainName
+        EvaluateTargetHealth: false
+        HostedZoneId: !GetAtt JournalApiDomainName.RegionalHostedZoneId
+
   JournalApiBasePathMapping:
     Type: AWS::ApiGatewayV2::ApiMapping
     Properties:
-      DomainName: !Ref Domain
+      DomainName: !Ref ApiDomain
       ApiId: !Ref JournalApiGatweay
       Stage: !Ref JournalApiStage
 
@@ -317,12 +494,106 @@ Resources:
     Properties:
       ApiId: !Ref JournalApiGatweay
       RouteKey: "POST /entry"
-      AuthorizationType: AWS_IAM
+      AuthorizationType: NONE
       Target: !Join
         - /
         - - integrations
           - !Ref PostIntegration
 
+  GetEntryIntegration:
+    Type: AWS::ApiGatewayV2::Integration
+    Properties:
+      ApiId: !Ref JournalApiGatweay
+      Description: Lambda proxy integration
+      IntegrationType: AWS_PROXY
+      IntegrationMethod: POST
+      PayloadFormatVersion: "2.0"
+      IntegrationUri: !Sub 'arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${GetEntryLambda.Arn}/invocations'
+
+  GetEntryRoute:
+    Type: AWS::ApiGatewayV2::Route
+    Properties:
+      ApiId: !Ref JournalApiGatweay
+      RouteKey: "GET /entry/{date}"
+      AuthorizationType: NONE
+      Target: !Join
+        - /
+        - - integrations
+          - !Ref GetEntryIntegration
+  
+  GetEntriesIntegration:
+    Type: AWS::ApiGatewayV2::Integration
+    Properties:
+      ApiId: !Ref JournalApiGatweay
+      Description: Lambda proxy integration
+      IntegrationType: AWS_PROXY
+      IntegrationMethod: POST
+      PayloadFormatVersion: "2.0"
+      IntegrationUri: !Sub 'arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${GetEntriesLambda.Arn}/invocations'
+
+  GetEntriesRoute:
+    Type: AWS::ApiGatewayV2::Route
+    Properties:
+      ApiId: !Ref JournalApiGatweay
+      RouteKey: "GET /entry"
+      AuthorizationType: NONE
+      Target: !Join
+        - /
+        - - integrations
+          - !Ref GetEntriesIntegration
+
+  OptionsLambda:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: !Sub "${AppName}-options"
+      Runtime: python3.8
+      Handler: index.lambda_handler
+      Role: !GetAtt JournalLambdaRole.Arn
+      Code:
+        ZipFile: |
+          import json
+
+          def lambda_handler(event, context):
+              return {
+                  "statusCode": 200,
+                  "headers": {
+                      "Access-Control-Allow-Headers": "Content-Type,X-Amz-Date,X-Amz-Security-Token,x-api-key,Authorization,Origin,Host,X-Requested-With,Accept,Access-Control-Allow-Methods,Access-Control-Allow-Origin,Access-Control-Allow-Headers",
+                      "Access-Control-Allow-Origin": "*",
+                      "Access-Control-Allow-Methods": "DELETE,GET,HEAD,OPTIONS,PATCH,POST,PUT",
+                      "X-Requested-With": "*"
+                  },
+                  "body": json.dumps({ "statusText": "OK" })
+              }
+
+  OptionsIntegration:
+    Type: AWS::ApiGatewayV2::Integration
+    Properties:
+      ApiId: !Ref JournalApiGatweay
+      IntegrationType: AWS_PROXY
+      PassthroughBehavior: 'WHEN_NO_MATCH'
+      IntegrationMethod: POST
+      PayloadFormatVersion: "2.0"
+      IntegrationUri: !Sub 'arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${OptionsLambda.Arn}/invocations'
+
+  OptionsRoute:
+    Type: AWS::ApiGatewayV2::Route
+    Properties:
+      ApiId: !Ref JournalApiGatweay
+      RouteKey: "OPTIONS /entry"
+      AuthorizationType: NONE
+      Target: !Join
+        - /
+        - - integrations
+          - !Ref OptionsIntegration
+
+  LambdaInvokeOptions:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !Ref OptionsLambda
+      Action: "lambda:InvokeFunction"
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub 'arn:${AWS::Partition}:execute-api:${AWS::Region}:${AWS::AccountId}:${JournalApiGatweay}/*/*/entry'
+      SourceAccount: !Ref 'AWS::AccountId'
 
 Outputs:
   WebAppDomain:

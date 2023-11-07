@@ -12,8 +12,11 @@ import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDiss
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { TimePicker, renderTimeViewClock } from '@mui/x-date-pickers';
-import { Dayjs } from 'dayjs'
-import { MenuItem, Select, Checkbox } from '@mui/material'
+import dayjs, { Dayjs } from 'dayjs'
+import { MenuItem, Select, Checkbox, Snackbar, Alert } from '@mui/material'
+import axios from 'axios'
+import { apiEndpoints } from '../api-endpoints'
+import { ResponseType } from './HomePage'
 
 
 
@@ -63,15 +66,57 @@ const MentalHealthItemContainer = styled.div`
 `
 
 const TodaysEntryPage: React.FunctionComponent = () => {
+    const date = new Date().toISOString().split('T')[0]
+    const dateFull = new Date().toLocaleDateString("en-US", { dateStyle: "full" })
+
+    const [isLoading, setIsLoading] = useState<boolean>(true)
+    const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false)
+    const [snackbarMessage, setSnackbarMessage] = useState<string>('')
     const [mood, setMood] = useState<number>()
     const [bedTime, setBedTime] = useState<Dayjs | null>()
     const [wakeUpTime, setWakeUpTime] = useState<Dayjs | null>()
+    const [hoursSleep, setHoursSleep] = useState<number>()
     const [sleepQuality, setSleepQuality] = useState<string>()
     const [mentalHealth, setMentalHealth] = useState<string[]>([])
     const [entryContent, setEntryContent] = useState<string>()
 
+    const getEntry = async () => {
+        setIsLoading(true)
+        try {
+            const response = await axios.get(
+                apiEndpoints.getEntry.insert({ userId: "test", date: date })
+            )
+            const data: ResponseType = response.data
+            console.log(data.mental_health)
+            if (data) {
+                setMood(parseInt(data.mood))
+                setBedTime(dayjs(data.bed_time))
+                setWakeUpTime(dayjs(data.wake_up_time))
+                setHoursSleep(parseInt(data.hours_sleep))
+                setSleepQuality(data.sleep_quality)
+                setMentalHealth(data.mental_health)
+                setEntryContent(data.entry_content)
+            }
+            
+            setIsLoading(false)
+        } catch (e) {
+            console.log(e)
+            setIsLoading(false)
+        }
+    }
+
+    useEffect(() => {
+        getEntry()
+    // eslint-disable-next-line
+    }, [])
+
+    useEffect(() => {
+        if (bedTime && wakeUpTime) {
+            setHoursSleep(24 + wakeUpTime.diff(bedTime, 'hour'))
+        }
+    }, [bedTime, wakeUpTime])
+
     const modifyMentalHealth = (symptom: string) => {
-        console.log(mentalHealth)
         if (mentalHealth.includes(symptom)) {
             let symptoms = mentalHealth
             let index = symptoms.indexOf(symptom)
@@ -82,248 +127,264 @@ const TodaysEntryPage: React.FunctionComponent = () => {
         }
     }
 
-    const [anxietyChecked, setAnxietyChecked] = useState<boolean>(mentalHealth.includes("Anxiety"))
-    const [depressionChecked, setDepressionChecked] = useState<boolean>(mentalHealth.includes("Depression"))
-    const [maniaChecked, setManiaChecked] = useState<boolean>(mentalHealth.includes("Mania"))
-    const [hyperFixationChecked, setHyperFixationChecked] = useState<boolean>(mentalHealth.includes("Hyper-fixation"))
-    const [irritabilityChecked, setIrritabilityChecked] = useState<boolean>(mentalHealth.includes("Irritability"))
-    const [paranoiaChecked, setParanoiaChecked] = useState<boolean>(mentalHealth.includes("Paranoia"))
-    const [lowAppetiteChecked, setLowAppetiteChecked] = useState<boolean>(mentalHealth.includes("Low Appetite"))
-    const [pressuredSpeechChecked, setPressuredSpeechChecked] = useState<boolean>(mentalHealth.includes("Pressured Speech"))
-    const [sociabilityUpChecked, setSociabilityUpChecked] = useState<boolean>(mentalHealth.includes("Sociability Up"))
-    const [sociabilityDownChecked, setSociabilityDownChecked] = useState<boolean>(mentalHealth.includes("Sociability Down"))
-    const [libidoUpChecked, setLibidoUpChecked] = useState<boolean>(mentalHealth.includes("Libido Up"))
-    const [libidoDownChecked, setLibidoDownChecked] = useState<boolean>(mentalHealth.includes("Libido Down"))
-    const [recklessnessChecked, setRecklessnessChecked] = useState<boolean>(mentalHealth.includes("Reckless Behanvior"))
+    const onSubmit = async () => {
+        try {
+            await axios.post(
+                apiEndpoints.createEntry.insert(),
+                {
+                    user_id: "test", 
+                    date,
+                    mood: mood?.toString(),
+                    bed_time: bedTime,
+                    wake_up_time: wakeUpTime,
+                    hours_sleep: hoursSleep?.toString(),
+                    sleep_quality: sleepQuality,
+                    mental_health: mentalHealth,
+                    entry_content: entryContent
+                }
+            )
+            setSnackbarMessage("Successfully saved entry!")
+            setSnackbarOpen(true)
+        } catch(e) {
+            console.log(e)
+        }
+    }
 
-    const date = new Date().toLocaleDateString("en-US", { dateStyle: "full" })
+    const handleSnackbarClose = () => {
+        setSnackbarOpen(false)
+    }
 
     return (
         <PageContainer>
             <SideBarComponent />
             <PageContentContainer>
                 <SubHeader>Today's Entry</SubHeader>
-                <SubHeader>{date}</SubHeader>
+                <SubHeader>{dateFull}</SubHeader>
+                {!isLoading &&
+                    <>
+                        <SectionHeader>Mood</SectionHeader>
+                        <MoodContainer>
+                            <SentimentVeryDissatisfiedIcon 
+                                fontSize='large' 
+                                color='error' 
+                                style={mood === 0 ? {border: '1px solid black'} : {}}
+                                onClick={() => {setMood(0)}}
+                            />
+                            <SentimentDissatisfiedIcon 
+                                fontSize='large' 
+                                color='warning' 
+                                style={mood === 1 ? {border: '1px solid black'} : {}}
+                                onClick={() => {setMood(1)}} 
+                            />
+                            <SentimentNeutralIcon 
+                                fontSize='large' 
+                                color='info' 
+                                style={mood === 2 ? {border: '1px solid black'} : {}}
+                                onClick={() => {setMood(2)}} 
+                            />
+                            <SentimentSatisfiedIcon 
+                                fontSize='large' 
+                                color='success' 
+                                style={mood === 3 ? {border: '1px solid black'} : {}}
+                                onClick={() => {setMood(3)}} 
+                            />
+                            <SentimentVerySatisfiedIcon 
+                                fontSize='large' 
+                                style={mood === 4 ? { color: 'purple', border: '1px solid black' } : { color: 'purple'}} 
+                                onClick={() => {setMood(4)}}
+                            />
+                        </MoodContainer>
 
-                <SectionHeader>Mood</SectionHeader>
-                <MoodContainer>
-                    <SentimentVeryDissatisfiedIcon 
-                        fontSize='large' 
-                        color='error' 
-                        style={mood === 0 ? {border: '1px solid black'} : {}}
-                        onClick={() => {setMood(0)}}
-                    />
-                    <SentimentDissatisfiedIcon 
-                        fontSize='large' 
-                        color='warning' 
-                        style={mood === 1 ? {border: '1px solid black'} : {}}
-                        onClick={() => {setMood(1)}} 
-                    />
-                    <SentimentNeutralIcon 
-                        fontSize='large' 
-                        color='info' 
-                        style={mood === 2 ? {border: '1px solid black'} : {}}
-                        onClick={() => {setMood(2)}} 
-                    />
-                    <SentimentSatisfiedIcon 
-                        fontSize='large' 
-                        color='success' 
-                        style={mood === 3 ? {border: '1px solid black'} : {}}
-                        onClick={() => {setMood(3)}} 
-                    />
-                    <SentimentVerySatisfiedIcon 
-                        fontSize='large' 
-                        style={mood === 4 ? { color: 'purple', border: '1px solid black' } : { color: 'purple'}} 
-                        onClick={() => {setMood(4)}}
-                    />
-                </MoodContainer>
+                        <SectionHeader>Sleep</SectionHeader>
+                        <SleepTimeContainer>
+                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                {/* @ts-ignore */}
+                                <TimePicker 
+                                    label="Bedtime the night before" 
+                                    value={bedTime} 
+                                    onChange={(value) => setBedTime(value)} 
+                                    viewRenderers={{
+                                        hours: renderTimeViewClock,
+                                        minutes: renderTimeViewClock
+                                    }}
+                                    sx={{ backgroundColor: 'white' }}
+                                />
+                                {/* @ts-ignore */}
+                                <TimePicker 
+                                    label="Wake-up time" 
+                                    value={wakeUpTime} 
+                                    onChange={(value) => setWakeUpTime(value)} 
+                                    viewRenderers={{
+                                        hours: renderTimeViewClock,
+                                        minutes: renderTimeViewClock
+                                    }}
+                                    sx={{ backgroundColor: 'white' }}
+                                />
+                            </LocalizationProvider>
+                            {bedTime && wakeUpTime &&
+                                <p>{hoursSleep} hours sleep</p>
+                            }
+                        </SleepTimeContainer>
+                        <SleepQualityContainer>
+                            Sleep Quality:
+                            <Select
+                                value={sleepQuality}
+                                name="Sleep Quality"
+                                autoWidth={false}
+                                style={{width: '200px'}}
+                                onChange={(e) => setSleepQuality(e.target.value)}
+                                sx={{ backgroundColor: 'white' }}
+                            >
+                                <MenuItem value="Good">Good</MenuItem>
+                                <MenuItem value="Interrupted">Interrupted</MenuItem>
+                                <MenuItem value="Bad">Bad</MenuItem>
+                            </Select>
+                        </SleepQualityContainer>
 
-                <SectionHeader>Sleep</SectionHeader>
-                <SleepTimeContainer>
-                    <LocalizationProvider dateAdapter={AdapterDayjs}>
-                        {/* @ts-ignore */}
-                        <TimePicker 
-                            label="Bedtime the night before" 
-                            value={bedTime} 
-                            onChange={(value) => setBedTime(value)} 
-                            viewRenderers={{
-                                hours: renderTimeViewClock,
-                                minutes: renderTimeViewClock
-                            }}
-                            sx={{ backgroundColor: 'white' }}
-                        />
-                        {/* @ts-ignore */}
-                        <TimePicker 
-                            label="Wake-up time" 
-                            value={wakeUpTime} 
-                            onChange={(value) => setWakeUpTime(value)} 
-                            viewRenderers={{
-                                hours: renderTimeViewClock,
-                                minutes: renderTimeViewClock
-                            }}
-                            sx={{ backgroundColor: 'white' }}
-                        />
-                    </LocalizationProvider>
-                    {bedTime && wakeUpTime &&
-                        <p>{24 + wakeUpTime.diff(bedTime, 'hour')} hours sleep</p>
-                    }
-                </SleepTimeContainer>
-                <SleepQualityContainer>
-                    Sleep Quality:
-                    <Select
-                        value={sleepQuality}
-                        name="Sleep Quality"
-                        autoWidth={false}
-                        style={{width: '200px'}}
-                        onChange={(e) => setSleepQuality(e.target.value)}
-                        sx={{ backgroundColor: 'white' }}
-                    >
-                        <MenuItem value="Good">Good</MenuItem>
-                        <MenuItem value="Interrupted">Interrupted</MenuItem>
-                        <MenuItem value="Bad">Bad</MenuItem>
-                    </Select>
-                </SleepQualityContainer>
+                        <SectionHeader>Mental Health</SectionHeader>
+                        <MentalHealthContainer>
+                            <MentalHealthItemContainer>
+                                <Checkbox 
+                                    checked={mentalHealth.includes('Anxiety')} 
+                                    onChange={() => {
+                                        modifyMentalHealth("Anxiety")
+                                    }}
+                                    sx={{ backgroundColor: 'white' }}
+                                /> Anxiety
+                            </MentalHealthItemContainer>
+                            <MentalHealthItemContainer>
+                                <Checkbox 
+                                    checked={mentalHealth.includes("Depression")} 
+                                    onChange={() => {
+                                        modifyMentalHealth("Depression")
+                                    }}
+                                    sx={{ backgroundColor: 'white' }}
+                                /> Depression
+                            </MentalHealthItemContainer>
+                            <MentalHealthItemContainer>
+                                <Checkbox 
+                                    checked={mentalHealth.includes("Mania")} 
+                                    onChange={() => {
+                                        modifyMentalHealth("Mania")
+                                    }}
+                                    sx={{ backgroundColor: 'white' }}
+                                /> Mania
+                            </MentalHealthItemContainer>
+                            <MentalHealthItemContainer>
+                                <Checkbox 
+                                    checked={mentalHealth.includes("No Focus")} 
+                                    onChange={() => {
+                                        modifyMentalHealth("No Focus")
+                                    }} 
+                                    sx={{ backgroundColor: 'white' }}
+                                /> No Focus
+                            </MentalHealthItemContainer>
+                            <MentalHealthItemContainer>
+                                <Checkbox 
+                                    checked={mentalHealth.includes("Hyper-fixation")} 
+                                    onChange={() => {
+                                        modifyMentalHealth("Hyper-fixation")
+                                    }} 
+                                    sx={{ backgroundColor: 'white' }}
+                                /> Hyper-fixation
+                            </MentalHealthItemContainer>
+                            <MentalHealthItemContainer>
+                                <Checkbox 
+                                    checked={mentalHealth.includes("Irritability")} 
+                                    onChange={() => {
+                                        modifyMentalHealth("Irritability")
+                                    }} 
+                                    sx={{ backgroundColor: 'white' }}
+                                /> Irritability
+                            </MentalHealthItemContainer>
+                            <MentalHealthItemContainer>
+                                <Checkbox 
+                                    checked={mentalHealth.includes("Paranoia")} 
+                                    onChange={() => {
+                                        modifyMentalHealth("Paranoia")
+                                    }} 
+                                    sx={{ backgroundColor: 'white' }}
+                                /> Paranoia
+                            </MentalHealthItemContainer>
+                            <MentalHealthItemContainer>
+                                <Checkbox 
+                                    checked={mentalHealth.includes("Low Appetite")} 
+                                    onChange={() => {
+                                        modifyMentalHealth("Low Appetite")
+                                    }} 
+                                    sx={{ backgroundColor: 'white' }}
+                                /> Low Appetite
+                            </MentalHealthItemContainer>
+                            <MentalHealthItemContainer>
+                                <Checkbox 
+                                    checked={mentalHealth.includes("Pressured Speech")} 
+                                    onChange={() => {
+                                        modifyMentalHealth("Pressured Speech")
+                                    }} 
+                                    sx={{ backgroundColor: 'white' }}
+                                /> Pressured Speech
+                            </MentalHealthItemContainer>
+                            <MentalHealthItemContainer>
+                                <Checkbox 
+                                    checked={mentalHealth.includes("Sociability Up")} 
+                                    onChange={() => {
+                                        modifyMentalHealth("Sociability Up")
+                                    }}
+                                    sx={{ backgroundColor: 'white' }}
+                                /> Sociability Up
+                            </MentalHealthItemContainer>
+                            <MentalHealthItemContainer>
+                                <Checkbox 
+                                    checked={mentalHealth.includes("Sociability Down")} 
+                                    onChange={() => {
+                                        modifyMentalHealth("Sociability Down")
+                                    }} 
+                                    sx={{ backgroundColor: 'white' }}
+                                /> Sociability Down
+                            </MentalHealthItemContainer>
+                            <MentalHealthItemContainer>
+                                <Checkbox 
+                                    checked={mentalHealth.includes("Libido Up")} 
+                                    onChange={() => {
+                                        modifyMentalHealth("Libido Up")
+                                    }} 
+                                    sx={{ backgroundColor: 'white' }}
+                                /> Libido Up
+                            </MentalHealthItemContainer>
+                            <MentalHealthItemContainer>
+                                <Checkbox 
+                                    checked={mentalHealth.includes("Libido Down")} 
+                                    onChange={() => {
+                                        modifyMentalHealth("Libido Down")
+                                    }} 
+                                    sx={{ backgroundColor: 'white' }}
+                                /> Libido Down
+                            </MentalHealthItemContainer>
+                            <MentalHealthItemContainer>
+                                <Checkbox 
+                                    checked={mentalHealth.includes("Reckless Behavior")} 
+                                    onChange={() => {
+                                        modifyMentalHealth("Reckless Behavior")
+                                    }} 
+                                    sx={{ backgroundColor: 'white' }}
+                                /> Reckless Behavior
+                            </MentalHealthItemContainer>
+                        </MentalHealthContainer>
 
-                <SectionHeader>Mental Health</SectionHeader>
-                <MentalHealthContainer>
-                    <MentalHealthItemContainer>
-                        <Checkbox 
-                            checked={anxietyChecked} 
-                            onChange={() => {
-                                modifyMentalHealth("Anxiety")
-                                setAnxietyChecked(!anxietyChecked)
-                            }}
-                            sx={{ backgroundColor: 'white' }}
-                        /> Anxiety
-                    </MentalHealthItemContainer>
-                    <MentalHealthItemContainer>
-                        <Checkbox 
-                            checked={depressionChecked} 
-                            onChange={() => {
-                                modifyMentalHealth("Depression")
-                                setDepressionChecked(!depressionChecked)
-                            }}
-                            sx={{ backgroundColor: 'white' }}
-                        /> Depression
-                    </MentalHealthItemContainer>
-                    <MentalHealthItemContainer>
-                        <Checkbox 
-                            checked={maniaChecked} 
-                            onChange={() => {
-                                modifyMentalHealth("Mania")
-                                setManiaChecked(!maniaChecked)
-                            }}
-                            sx={{ backgroundColor: 'white' }}
-                        /> Mania
-                    </MentalHealthItemContainer>
-                    <MentalHealthItemContainer>
-                        <Checkbox 
-                            checked={hyperFixationChecked} 
-                            onChange={() => {
-                                modifyMentalHealth("Hyper-fixation")
-                                setHyperFixationChecked(!hyperFixationChecked)
-                            }} 
-                            sx={{ backgroundColor: 'white' }}
-                        /> Hyper-fixation
-                    </MentalHealthItemContainer>
-                    <MentalHealthItemContainer>
-                        <Checkbox 
-                            checked={irritabilityChecked} 
-                            onChange={() => {
-                                modifyMentalHealth("Irritability")
-                                setIrritabilityChecked(!irritabilityChecked)
-                            }} 
-                            sx={{ backgroundColor: 'white' }}
-                        /> Irritability
-                    </MentalHealthItemContainer>
-                    <MentalHealthItemContainer>
-                        <Checkbox 
-                            checked={paranoiaChecked} 
-                            onChange={() => {
-                                modifyMentalHealth("Paranoia")
-                                setParanoiaChecked(!paranoiaChecked)
-                            }} 
-                            sx={{ backgroundColor: 'white' }}
-                        /> Paranoia
-                    </MentalHealthItemContainer>
-                    <MentalHealthItemContainer>
-                        <Checkbox 
-                            checked={lowAppetiteChecked} 
-                            onChange={() => {
-                                modifyMentalHealth("Low Appetite")
-                                setLowAppetiteChecked(!lowAppetiteChecked)
-                            }} 
-                            sx={{ backgroundColor: 'white' }}
-                        /> Low Appetite
-                    </MentalHealthItemContainer>
-                    <MentalHealthItemContainer>
-                        <Checkbox 
-                            checked={pressuredSpeechChecked} 
-                            onChange={() => {
-                                modifyMentalHealth("Pressured Speech")
-                                setPressuredSpeechChecked(!pressuredSpeechChecked)
-                            }} 
-                            sx={{ backgroundColor: 'white' }}
-                        /> Pressured Speech
-                    </MentalHealthItemContainer>
-                    <MentalHealthItemContainer>
-                        <Checkbox 
-                            checked={sociabilityUpChecked} 
-                            onChange={() => {
-                                modifyMentalHealth("Sociability Up")
-                                setSociabilityUpChecked(!sociabilityUpChecked)
-                            }}
-                            sx={{ backgroundColor: 'white' }}
-                        /> Sociability Up
-                    </MentalHealthItemContainer>
-                    <MentalHealthItemContainer>
-                        <Checkbox 
-                            checked={sociabilityDownChecked} 
-                            onChange={() => {
-                                modifyMentalHealth("Sociability Down")
-                                setSociabilityDownChecked(!sociabilityDownChecked)
-                            }} 
-                            sx={{ backgroundColor: 'white' }}
-                        /> Sociability Down
-                    </MentalHealthItemContainer>
-                    <MentalHealthItemContainer>
-                        <Checkbox 
-                            checked={libidoUpChecked} 
-                            onChange={() => {
-                                modifyMentalHealth("Libido Up")
-                                setLibidoUpChecked(!libidoUpChecked)
-                            }} 
-                            sx={{ backgroundColor: 'white' }}
-                        /> Libido Up
-                    </MentalHealthItemContainer>
-                    <MentalHealthItemContainer>
-                        <Checkbox 
-                            checked={libidoDownChecked} 
-                            onChange={() => {
-                                modifyMentalHealth("Libido Down")
-                                setLibidoDownChecked(!libidoDownChecked)
-                            }} 
-                            sx={{ backgroundColor: 'white' }}
-                        /> Libido Down
-                    </MentalHealthItemContainer>
-                    <MentalHealthItemContainer>
-                        <Checkbox 
-                            checked={libidoDownChecked} 
-                            onChange={() => {
-                                modifyMentalHealth("Reckless Behavior")
-                                setRecklessnessChecked(!recklessnessChecked)
-                            }} 
-                            sx={{ backgroundColor: 'white' }}
-                        /> Reckless Behavior
-                    </MentalHealthItemContainer>
-                </MentalHealthContainer>
+                        <SectionHeader>Entry</SectionHeader>
+                        <MarkdownComponent view='edit' value={entryContent} onChange={setEntryContent} />
 
-                <SectionHeader>Entry</SectionHeader>
-                <MarkdownComponent view='edit' value={entryContent} onChange={setEntryContent} />
-
-                <SubmitContainer>
-                    <SubmitButton>Submit</SubmitButton>
-                </SubmitContainer>
+                        <SubmitContainer>
+                            <SubmitButton onClick={onSubmit}>Save</SubmitButton>
+                        </SubmitContainer>
+                        <Snackbar open={snackbarOpen} autoHideDuration={6000} onClose={handleSnackbarClose}>
+                            <Alert onClose={handleSnackbarClose} severity="success" sx={{ width: '20%' }}>
+                                {snackbarMessage}
+                            </Alert>
+                        </Snackbar>
+                    </>
+                }
+                { isLoading && <>Loading...</>}
             </PageContentContainer>
         </PageContainer>
     )
