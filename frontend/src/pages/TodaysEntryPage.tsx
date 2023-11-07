@@ -110,27 +110,19 @@ const TodaysEntryPage: React.FunctionComponent = () => {
     }, [])
 
     useEffect(() => {
-        try {
-            if (bedTime && wakeUpTime) {
-                setHoursSleep(24 + wakeUpTime.diff(bedTime, 'hour'))
-            }
-        } catch (e) {
-            console.log(e)
+        if (bedTime && wakeUpTime) {
+            setHoursSleep(24 + wakeUpTime.diff(bedTime, 'hour'))
         }
     }, [bedTime, wakeUpTime])
 
     const modifyMentalHealth = (symptom: string) => {
-        try {
-            if (mentalHealth.includes(symptom)) {
-                let symptoms = mentalHealth
-                let index = symptoms.indexOf(symptom)
-                symptoms.splice(index, 1)
-                setMentalHealth(symptoms)
-            } else {
-                setMentalHealth([...mentalHealth, symptom])
-            }
-        } catch(e) {
-            console.log(e)
+        if (mentalHealth.includes(symptom)) {
+            let symptoms = mentalHealth
+            let index = symptoms.indexOf(symptom)
+            symptoms.splice(index, 1)
+            setMentalHealth(symptoms)
+        } else {
+            setMentalHealth([...mentalHealth, symptom])
         }
     }
 
