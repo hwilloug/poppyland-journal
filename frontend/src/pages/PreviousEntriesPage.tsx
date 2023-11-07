@@ -37,6 +37,10 @@ const MentalHealthContainer = styled.div`
     margin: 10px;
 `
 
+const SubstancesContainer = styled.div`
+    margin: 10px;
+`
+
 const EntryDate = styled.h3``
 
 interface EntryType {
@@ -47,6 +51,7 @@ interface EntryType {
     wake_up_time: string
     sleep_quality: string
     mental_health: string[]
+    substances: string[]
     entry_content: string
 }
 
@@ -108,6 +113,7 @@ const PreviousEntriesPage: React.FunctionComponent = () => {
                         <MoodContainer>Mood: {getMoodIcon(entry.mood)}</MoodContainer>
                         <SleepContainer>Hours sleep: {entry.hours_sleep}</SleepContainer>
                         <MentalHealthContainer>Mental Health: {entry.mental_health && entry.mental_health.join(", ")}</MentalHealthContainer>
+                        <SubstancesContainer>Substances: {entry.substances && entry.substances.join(", ")}</SubstancesContainer>
                         <MarkdownComponent view='view' value={entry.entry_content} />
                     </div>)}
                     { isLoading &&

@@ -29,6 +29,7 @@ export interface ResponseType {
     wake_up_time: string
     sleep_quality: string
     mental_health: string[]
+    substances: string[]
     entry_content: string
 }
 

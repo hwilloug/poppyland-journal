@@ -36,7 +36,10 @@ const AccountContainer = styled.div`
 const UserName = styled.h4``
 
 const LogoutButton = styled.button`
-    height: 25px;
+    background-color: #bdcfbc;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
 `
 
 const SideBarComponent: React.FunctionComponent = () => {

@@ -259,19 +259,26 @@ Resources:
           def lambda_handler(event, context):
               payload = event.get("body", {})
               payload = json.loads(payload)
+
+              item_payload = {
+                  'UserId': {'S': payload.get('user_id')},
+                  'Date': {'S': payload.get('date')},
+                  'Mood': {'N': payload.get('mood')},
+                  'BedTime': {'S': payload.get('bed_time')},
+                  'WakeUpTime': {'S': payload.get('wake_up_time')},
+                  'HoursSleep': {'N': payload.get('hours_sleep')},
+                  'SleepQuality': {'S': payload.get('sleep_quality')},
+                  'EntryContent': {'S': payload.get('entry_content')},
+              }
+              if len(payload.get('mental_health', [])):
+                  item_payload['MentalHealth'] = {'SS': payload.get('mental_health')}
+
+              if len(payload.get('substances', [])):
+                  item_payload['Substances'] = {'SS': payload.get('substances')}
+
               response = dynamodb.put_item(
                   TableName='JournalEntry', 
-                  Item={
-                      'UserId': {'S': payload.get('user_id')},
-                      'Date': {'S': payload.get('date')},
-                      'Mood': {'N': payload.get('mood')},
-                      'BedTime': {'S': payload.get('bed_time')},
-                      'WakeUpTime': {'S': payload.get('wake_up_time')},
-                      'HoursSleep': {'N': payload.get('hours_sleep')},
-                      'SleepQuality': {'S': payload.get('sleep_quality')},
-                      'MentalHealth': {'SS': payload.get('mental_health')},
-                      'EntryContent': {'S': payload.get('entry_content')},
-                  }
+                  Item=item_payload
               )
               status_code = response.get("ResponseMetadata", {}).get("HTTPStatusCode")
               if status_code == 200:
@@ -343,7 +350,8 @@ Resources:
                   "sleep_quality": item['Item'].get('SleepQuality', {}).get("S"),
                   "wake_up_time": item['Item'].get('WakeUpTime', {}).get("S"),
                   "mood": item['Item'].get('Mood', {}).get("N"),
-                  "mental_health": item['Item'].get('MentalHealth', {}).get("SS"),
+                  "mental_health": item['Item'].get('MentalHealth', {}).get("SS", []),
+                  "substances": item['Item'].get('Substances', {}).get("SS", [])
               }
               return {
                   "statusCode": 200,
@@ -390,7 +398,8 @@ Resources:
                       "sleep_quality": item.get('SleepQuality', {}).get("S"),
                       "wake_up_time": item.get('WakeUpTime', {}).get("S"),
                       "mood": item.get('Mood', {}).get("N"),
-                      "mental_health": item.get('MentalHealth', {}).get("SS"),
+                      "mental_health": item.get('MentalHealth', {}).get("SS", []),
+                      "substances": item.get('Substances', {}).get("SS", []),
                   })
               return {
                   "statusCode": 200,

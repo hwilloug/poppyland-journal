@@ -14,6 +14,7 @@ import MoodEntryComponent from '../components/MoodEntry'
 import SleepEntryComponent from '../components/SleepEntry'
 import MentalHealthEntryComponent from '../components/MentalHealthEntry'
 import EntryComponent from '../components/Entry'
+import SubstanceEntryComponent from '../components/SubstanceEntry'
 
 
 export const SectionHeader = styled.h3`
@@ -28,6 +29,10 @@ const SubmitContainer = styled.div`
 
 const SubmitButton = styled.button`
     margin-top: 50px;
+    background-color: #8d5bc1;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
 `
 
 const TodaysEntryPage: React.FunctionComponent = () => {
@@ -46,6 +51,7 @@ const TodaysEntryPage: React.FunctionComponent = () => {
     const [hoursSleep, setHoursSleep] = useState<number>()
     const [sleepQuality, setSleepQuality] = useState<string>()
     const [mentalHealth, setMentalHealth] = useState<string[]>([])
+    const [substances, setSubstances] = useState<string[]>([])
     const [entryContent, setEntryContent] = useState<string>()
 
     const getEntry = async () => {
@@ -69,6 +75,7 @@ const TodaysEntryPage: React.FunctionComponent = () => {
                 setSleepQuality(data.sleep_quality)
                 setMentalHealth(data.mental_health || [])
                 setEntryContent(data.entry_content)
+                setSubstances(data.substances || [])
             }
             setIsLoading(false)
         } catch (e) {
@@ -103,6 +110,17 @@ const TodaysEntryPage: React.FunctionComponent = () => {
         }
     }
 
+    const modifySubstances = (substance: string) => {
+        if (substances.includes(substance)) {
+            let s = substances
+            let index = s.indexOf(substance)
+            s.splice(index, 1)
+            setSubstances([...s])
+        } else {
+            setSubstances([...substances, substance])
+        }
+    }
+
     const onSubmit = async () => {
         try {
             const token = await getToken()
@@ -117,6 +135,7 @@ const TodaysEntryPage: React.FunctionComponent = () => {
                     hours_sleep: hoursSleep?.toString(),
                     sleep_quality: sleepQuality,
                     mental_health: mentalHealth,
+                    substances: substances,
                     entry_content: entryContent
                 },
                 {
@@ -155,6 +174,7 @@ const TodaysEntryPage: React.FunctionComponent = () => {
                             hoursSleep={hoursSleep}
                         />
                         <MentalHealthEntryComponent mentalHealth={[...mentalHealth]} onChange={modifyMentalHealth} />
+                        <SubstanceEntryComponent substances={[...substances]} onChange={modifySubstances} />
                         <EntryComponent content={entryContent} onChange={setEntryContent} />
 
                         <SubmitContainer>
