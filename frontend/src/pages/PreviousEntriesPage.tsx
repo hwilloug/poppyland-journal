@@ -56,12 +56,7 @@ const PreviousEntriesPage: React.FunctionComponent = () => {
         setIsLoading(true)
         try {
             const response = await axios.get(
-                apiEndpoints.getEntries.insert({ userId: "test" }),
-                {
-                    headers: {
-                        "Content-Type": "application/json"
-                    }
-                }
+                apiEndpoints.getEntries.insert({ userId: "test" })
             )
             const data: ResponseType[] = response.data
             setEntries(data as unknown as EntryType[])
