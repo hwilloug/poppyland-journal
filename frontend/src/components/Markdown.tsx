@@ -5,7 +5,7 @@ import rehypeSanitize from "rehype-sanitize";
 
 interface MarkdownComponentProps {
     value?: string
-    onChange?: React.Dispatch<React.SetStateAction<string | undefined>>
+    onChange?: Function
     view: "edit" | "view"
 }
 
