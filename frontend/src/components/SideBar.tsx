@@ -57,7 +57,7 @@ const SideBarComponent: React.FunctionComponent = () => {
             </NavContainer>
             <AccountContainer>
                 <UserName>{user?.email}</UserName>
-                <LogoutButton onClick={() => logout()}>Logout</LogoutButton>
+                <LogoutButton onClick={() => logout({logoutParams: {returnTo: window.location.origin}})}>Logout</LogoutButton>
             </AccountContainer>
         </Container>
     )
