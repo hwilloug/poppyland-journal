@@ -15,6 +15,7 @@ import SleepEntryComponent from '../components/SleepEntry'
 import MentalHealthEntryComponent from '../components/MentalHealthEntry'
 import EntryComponent from '../components/Entry'
 import SubstanceEntryComponent from '../components/SubstanceEntry'
+import LoadingComponent from '../components/Loading'
 
 
 export const SectionHeader = styled.h3`
@@ -187,7 +188,7 @@ const TodaysEntryPage: React.FunctionComponent = () => {
                         </Snackbar>
                     </>
                 }
-                { isLoading && <>Loading...</>}
+                { isLoading && <LoadingComponent />}
             </PageContentContainer>
         </PageContainer>
     )

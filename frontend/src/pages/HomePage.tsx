@@ -8,6 +8,7 @@ import { apiEndpoints } from '../api-endpoints';
 import axios from 'axios';
 import { useAuth0, withAuthenticationRequired } from '@auth0/auth0-react';
 import { getToken } from '../get-token';
+import LoadingComponent from '../components/Loading';
 
 const PageContainer = styled.div`
     margin: 0px;
@@ -91,7 +92,7 @@ const HomePage: React.FunctionComponent = () => {
                     <PreviousEntriesComponent dates={entryDates} />
                 </HomePageContainer>
             }
-            { isLoading && <>Loading...</>}
+            { isLoading && <LoadingComponent />}
         </PageContainer>
     )
   

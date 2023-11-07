@@ -13,6 +13,7 @@ import SentimentDissatisfiedIcon from '@mui/icons-material/SentimentDissatisfied
 import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied'
 import { useAuth0, withAuthenticationRequired } from '@auth0/auth0-react';
 import { getToken } from '../get-token';
+import LoadingComponent from '../components/Loading';
 
 
 const EntriesContainer = styled.div`
@@ -109,7 +110,7 @@ const PreviousEntriesPage: React.FunctionComponent = () => {
                 <SubHeader>Previous Entries</SubHeader>
                 <EntriesContainer>
                     {!isLoading && entries.map((entry) => <div>
-                        <EntryDate>{new Date(entry.date).toLocaleDateString("en-US", { dateStyle: "full" })}</EntryDate>
+                        <EntryDate>{new Date(entry.date.replace(/-/g, '\/')).toLocaleDateString("en-US", { dateStyle: "full" })}</EntryDate>
                         <MoodContainer>Mood: {getMoodIcon(entry.mood)}</MoodContainer>
                         <SleepContainer>Hours sleep: {entry.hours_sleep}</SleepContainer>
                         <MentalHealthContainer>Mental Health: {entry.mental_health && entry.mental_health.join(", ")}</MentalHealthContainer>
@@ -117,7 +118,7 @@ const PreviousEntriesPage: React.FunctionComponent = () => {
                         <MarkdownComponent view='view' value={entry.entry_content} />
                     </div>)}
                     { isLoading &&
-                        <>Loading...</>
+                        <LoadingComponent />
                     }
                 </EntriesContainer>
             </PageContentContainer>
