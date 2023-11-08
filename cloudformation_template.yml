@@ -213,29 +213,6 @@ Resources:
           AttributeName: "Date"
           KeyType: "RANGE"
 
-  MedicationTable:
-    Type: AWS::DynamoDB::Table
-    Properties:
-      TableName: UserMedication
-      BillingMode: PAY_PER_REQUEST
-      SSESpecification:
-        SSEEnabled: true
-        SSEType: KMS
-      AttributeDefinitions: 
-        - 
-          AttributeName: "UserId"
-          AttributeType: "S"
-        - 
-          AttributeName: "MedicationName"
-          AttributeType: "S"
-      KeySchema: 
-        - 
-          AttributeName: "UserId"
-          KeyType: "HASH"
-        - 
-          AttributeName: "MedicationName"
-          KeyType: "RANGE"
-
   JournalLambdaRole:
     Type: AWS::IAM::Role
     Properties:
@@ -278,7 +255,6 @@ Resources:
         ZipFile: |
           import json
           import boto3
-          import base64
 
           dynamodb = boto3.client("dynamodb")
 
@@ -766,6 +742,222 @@ Resources:
         Audience:
           - !Ref Auth0Audience
         Issuer: !Sub https://${Auth0Domain}/
+
+  MedicationTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: UserMedication
+      BillingMode: PAY_PER_REQUEST
+      SSESpecification:
+        SSEEnabled: true
+        SSEType: KMS
+      AttributeDefinitions: 
+        - 
+          AttributeName: "UserId"
+          AttributeType: "S"
+        - 
+          AttributeName: "MedicationName"
+          AttributeType: "S"
+      KeySchema: 
+        - 
+          AttributeName: "UserId"
+          KeyType: "HASH"
+        - 
+          AttributeName: "MedicationName"
+          KeyType: "RANGE"
+
+  MedicationLambdaRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: medication-lambda-role
+      AssumeRolePolicyDocument: 
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Action:
+              - "sts:AssumeRole"
+      Policies:
+        - PolicyName: medication-lambda-policy
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Sid: LambdaDynamoDBAccess
+                Action:
+                  - "dynamodb:BatchGetItem"
+                  - "dynamodb:BatchWriteItem"
+                  - "dynamodb:DeleteItem"
+                  - "dynamodb:GetItem"
+                  - "dynamodb:PutItem"
+                  - "dynamodb:Query"
+                  - "dynamodb:Scan"
+                  - "dynamodb:UpdateItem"
+                Resource: !GetAtt MedicationTable.Arn
+
+  PutMedicationLambda:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: !Sub "${AppName}-put-medication"
+      Runtime: python3.8
+      Handler: index.lambda_handler
+      Role: !GetAtt MedicationLambdaRole.Arn
+      Code:
+        ZipFile: |
+          import json
+          import boto3
+
+          dynamodb = boto3.client("dynamodb")
+
+          def lambda_handler(event, context):
+              payload = event.get("body", {})
+              payload = json.loads(payload)
+
+              item_payload = {
+                  'UserId': {'S': payload.get('user_id')},
+                  'MedicationName': {'S': payload.get('medication_name')}
+              }
+              if payload.get('dose') is not None:
+                  item_payload['Dose'] = {'S': payload.get('dose')}
+              if payload.get('start_date') is not None:
+                  item_payload['StartDate'] = {'S': payload.get('start_date')}
+              if payload.get('end_date') is not None:
+                  item_payload['EndDate'] = {'S': payload.get('end_date')}
+
+              response = dynamodb.put_item(
+                  TableName='UserMedication', 
+                  Item=item_payload
+              )
+              status_code = response.get("ResponseMetadata", {}).get("HTTPStatusCode")
+              if status_code == 200:
+                  new_item = dynamodb.get_item(
+                      TableName='UserMedication',
+                      Key={
+                          'UserId': {
+                              'S': payload['user_id']
+                          },
+                          'MedicationName': {
+                              'S': payload['medication_name']
+                          }
+                      }
+                  )
+                  return {
+                      "statusCode": 200,
+                      "headers": {
+                          "Content-Type": "application/json"
+                      },
+                      "body": json.dumps(new_item)
+                  }
+              else:
+                  return {
+                      "statusCode": status_code
+                  }
+
+  LambdaInvokeGetEntries:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !Ref PutMedicationLambda
+      Action: "lambda:InvokeFunction"
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub 'arn:${AWS::Partition}:execute-api:${AWS::Region}:${AWS::AccountId}:${JournalApiGatweay}/*/*/medication'
+      SourceAccount: !Ref 'AWS::AccountId'
+
+  PutMedicationIntegration:
+    Type: AWS::ApiGatewayV2::Integration
+    Properties:
+      ApiId: !Ref JournalApiGatweay
+      Description: Lambda proxy integration
+      IntegrationType: AWS_PROXY
+      IntegrationMethod: POST
+      PayloadFormatVersion: "2.0"
+      IntegrationUri: !Sub 'arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${PutMedicationLambda.Arn}/invocations'
+
+  PutMedicationRoute:
+    Type: AWS::ApiGatewayV2::Route
+    Properties:
+      ApiId: !Ref JournalApiGatweay
+      RouteKey: "PUT /medication"
+      AuthorizationType: JWT
+      AuthorizerId: !GetAtt ApiAuthorizer.AuthorizerId
+      Target: !Join
+        - /
+        - - integrations
+          - !Ref PutMedicationIntegration
+
+  GetMedicationsLambda:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: !Sub "${AppName}-get-medications"
+      Runtime: python3.8
+      Handler: index.lambda_handler
+      Role: !GetAtt MedicationLambdaRole.Arn
+      Code:
+        ZipFile: |
+          import json
+          import boto3
+
+          dynamodb = boto3.client("dynamodb")
+
+          def lambda_handler(event, context):
+              user_id = event.get("queryStringParameters", {}).get("user_id")
+              items = dynamodb.query(
+                  TableName='UserMedication',
+                  KeyConditionExpression=f"UserId = :user_id",
+                  ExpressionAttributeValues={
+                    ":user_id": {
+                        "S": user_id
+                    }
+                  }
+              )
+              response_items = []
+              for item in items['Items']:
+                  response_items.append({
+                      "medication_name": item.get('MedicationName', {}).get("S"),
+                      "user_id": item.get('UserId', {}).get("S"),
+                      "dose": item.get('Dose', {}).get("S"),
+                      "start_date": item.get('StartDate', {}).get("S"),
+                      "end_date": item.get('EndDate', {}).get("S")
+                  })
+              return {
+                  "statusCode": 200,
+                  "headers": {
+                      "Content-Type": "application/json"
+                  },
+                  "body": json.dumps(response_items)
+              }
+
+  LambdaInvokeGetEntries:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !Ref GetMedicationsLambda
+      Action: "lambda:InvokeFunction"
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub 'arn:${AWS::Partition}:execute-api:${AWS::Region}:${AWS::AccountId}:${JournalApiGatweay}/*/*/medication'
+      SourceAccount: !Ref 'AWS::AccountId'
+
+  GetMedicationsIntegration:
+    Type: AWS::ApiGatewayV2::Integration
+    Properties:
+      ApiId: !Ref JournalApiGatweay
+      Description: Lambda proxy integration
+      IntegrationType: AWS_PROXY
+      IntegrationMethod: POST
+      PayloadFormatVersion: "2.0"
+      IntegrationUri: !Sub 'arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${GetMedicationsLambda.Arn}/invocations'
+
+  GetMedicationsRoute:
+    Type: AWS::ApiGatewayV2::Route
+    Properties:
+      ApiId: !Ref JournalApiGatweay
+      RouteKey: "GET /medication"
+      AuthorizationType: JWT
+      AuthorizerId: !GetAtt ApiAuthorizer.AuthorizerId
+      Target: !Join
+        - /
+        - - integrations
+          - !Ref GetMedicationsIntegration
 
 Outputs:
   WebAppDomain:
