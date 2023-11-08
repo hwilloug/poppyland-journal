@@ -855,7 +855,7 @@ Resources:
                       "statusCode": status_code
                   }
 
-  LambdaInvokeGetEntries:
+  LambdaInvokePutMedication:
     Type: AWS::Lambda::Permission
     Properties:
       FunctionName: !Ref PutMedicationLambda
@@ -928,7 +928,7 @@ Resources:
                   "body": json.dumps(response_items)
               }
 
-  LambdaInvokeGetEntries:
+  LambdaInvokeGetMedications:
     Type: AWS::Lambda::Permission
     Properties:
       FunctionName: !Ref GetMedicationsLambda

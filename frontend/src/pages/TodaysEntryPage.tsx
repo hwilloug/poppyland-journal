@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import SideBarComponent from '../components/shared-components/SideBar'
-import { PageContainer, PageContentContainer } from '../components/shared-components/styled-components'
+import { Button, PageContainer, PageContentContainer, SubmitButton } from '../components/shared-components/styled-components'
 import { SubHeader } from '../components/shared-components/styled-components'
 import styled from '@emotion/styled'
 import dayjs, { Dayjs } from 'dayjs'
@@ -19,6 +19,7 @@ import LoadingComponent from '../components/shared-components/Loading'
 import DailyAffirmationComponent from '../components/todaysentrypage/DailyAffirmation'
 import DailyGoalComponent from '../components/todaysentrypage/DailyGoal'
 import DailyQuestionComponent from '../components/todaysentrypage/DailyQuestion'
+import { Link } from 'react-router-dom'
 
 
 export const SectionHeader = styled.h3`
@@ -31,12 +32,8 @@ const SubmitContainer = styled.div`
     justify-content: flex-end;
 `
 
-const SubmitButton = styled.button`
-    margin-top: 50px;
-    background-color: #8d5bc1;
-    color: white;
-    padding: 10px 20px;
-    border-radius: 5px;
+const MedicationsContainer = styled.div`
+    margin: 20px;
 `
 
 const TodaysEntryPage: React.FunctionComponent = () => {
@@ -61,6 +58,7 @@ const TodaysEntryPage: React.FunctionComponent = () => {
     const [entryContent, setEntryContent] = useState<string>()
     const [dailyQuestionQ, setDailyQuestionQ] = useState<string>()
     const [dailyQuestionA, setDailyQuestionA] = useState<string>()
+    const [currentMedications, setCurrentMedications] = useState<string[]>([])
 
     const getEntry = async () => {
         setIsLoading(true)
@@ -96,8 +94,36 @@ const TodaysEntryPage: React.FunctionComponent = () => {
         }
     }
 
+    const getCurrentMedications = async () => {
+        try {
+            const token = await getToken()
+            const response = await axios.get(
+                apiEndpoints.getMedications.insert({ userId: userId, date: date }),
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                }
+            )
+            const data = response.data
+            let currentMeds = []
+            if (data) {
+                for (let i = 0; i < data.length; i++) {
+                    !data[i].end_data && currentMeds.push(data[i].medication_name)
+                }
+                console.log(currentMeds)
+                setCurrentMedications([...currentMeds])
+            }
+            setIsLoading(false)
+        } catch (e) {
+            console.log(e)
+            setIsLoading(false)
+        }
+    }
+
     useEffect(() => {
         getEntry()
+        getCurrentMedications()
     // eslint-disable-next-line
     }, [])
 
@@ -196,6 +222,10 @@ const TodaysEntryPage: React.FunctionComponent = () => {
                         <MentalHealthEntryComponent mentalHealth={[...mentalHealth]} onChange={modifyMentalHealth} />
                         <SubstanceEntryComponent substances={[...substances]} onChange={modifySubstances} />
                         <EntryComponent content={entryContent} onChange={setEntryContent} />
+
+                        <MedicationsContainer>
+                            Current Medications: {currentMedications.join(', ')} <Link to='/medications'>(Edit)</Link>
+                        </MedicationsContainer>
 
                         <SubmitContainer>
                             <SubmitButton onClick={onSubmit}>Save</SubmitButton>

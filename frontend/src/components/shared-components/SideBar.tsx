@@ -2,6 +2,7 @@ import React from 'react';
 import styled from '@emotion/styled'
 import { NavLink } from 'react-router-dom';
 import { useAuth0 } from '@auth0/auth0-react';
+import { Button } from './styled-components';
 
 const Container = styled.div`
     width: 25%;
@@ -35,11 +36,8 @@ const AccountContainer = styled.div`
 
 const UserName = styled.h4``
 
-const LogoutButton = styled.button`
-    background-color: #bdcfbc;
-    color: white;
-    padding: 10px 20px;
-    border-radius: 5px;
+const LogoutButton = styled(Button)`
+    color: black;
 `
 
 const SideBarComponent: React.FunctionComponent = () => {
@@ -53,6 +51,9 @@ const SideBarComponent: React.FunctionComponent = () => {
                 </NavItem>
                 <NavItem>
                     <NavLink to="/today">Today's Entry</NavLink>
+                </NavItem>
+                <NavItem>
+                    <NavLink to="/medications">Medications</NavLink>
                 </NavItem>
                 <NavItem>
                     <NavLink to="/previous">Previous Entries</NavLink>

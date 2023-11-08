@@ -9,5 +9,7 @@ export type apiEndpointsType = {
 export const apiEndpoints = {
     getEntries: new SweetPath(apiBaseUrl + '/entry?user_id=:userId'),
     getEntry: new SweetPath(apiBaseUrl + '/entry/:date?user_id=:userId'),
-    createEntry: new SweetPath(apiBaseUrl + '/entry')
+    createEntry: new SweetPath(apiBaseUrl + '/entry'),
+    getMedications: new SweetPath(apiBaseUrl + '/medication?user_id=:userId'),
+    putMedications: new SweetPath(apiBaseUrl + '/medication?user_id=:userId')
 }

@@ -3,7 +3,6 @@ import MarkdownComponent from "../shared-components/Markdown"
 import { SectionHeader } from "../../pages/TodaysEntryPage"
 
 
-
 const AffirmationsContainer = styled.div``
 
 interface DailyAffirmationProps {

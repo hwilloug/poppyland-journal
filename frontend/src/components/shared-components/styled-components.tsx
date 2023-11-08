@@ -15,3 +15,15 @@ export const PageContentContainer = styled.div`
 
 export const SubHeader = styled.h2`
 `
+
+export const Button = styled.button`
+    background-color: #bdcfbc;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+`
+
+export const SubmitButton = styled(Button)`
+    background-color: #8d5bc1;
+    margin-top: 50px;
+`

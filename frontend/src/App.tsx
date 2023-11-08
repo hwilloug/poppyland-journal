@@ -8,6 +8,7 @@ import HomePage from './pages/HomePage';
 import styled from '@emotion/styled';
 import TodaysEntryPage from './pages/TodaysEntryPage';
 import PreviousEntriesPage from './pages/PreviousEntriesPage';
+import MedicationsPage from './pages/MedicationsPage';
 
 const router = createBrowserRouter([
   {
@@ -21,6 +22,10 @@ const router = createBrowserRouter([
   {
     path: "/previous",
     element: <PreviousEntriesPage />
+  },
+  {
+    path: "/medications",
+    element: <MedicationsPage />
   }
 ]);
 
