@@ -5,24 +5,25 @@ import { SubHeader } from '../components/shared-components/styled-components'
 import styled from '@emotion/styled'
 import { withAuthenticationRequired } from '@auth0/auth0-react'
 import EntryForm from '../components/shared-components/EntryForm'
+import { useParams } from 'react-router-dom'
 
 
 export const SectionHeader = styled.h3`
     margin-top: 50px;
 `
 
-const TodaysEntryPage: React.FunctionComponent = () => {
-    const date = new Date().toLocaleDateString("en-CA")
+const EditEntryPage: React.FunctionComponent = () => {
+    const { date } = useParams()
     return (
         <PageContainer>
             <SideBarComponent />
             <PageContentContainer>
-                <SubHeader>Today's Entry</SubHeader>
-                <EntryForm date={date} />
+                <SubHeader>Edit Entry</SubHeader>
+                <EntryForm date={date!} />
             </PageContentContainer>
         </PageContainer>
     )
   
 }
   
-export default withAuthenticationRequired(TodaysEntryPage)
+export default withAuthenticationRequired(EditEntryPage)
