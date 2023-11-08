@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import styled from '@emotion/styled'
 import SideBarComponent from '../components/shared-components/SideBar';
 import MoodTrackerComponent from '../components/homepage/MoodTracker';
-import PreviousEntriesComponent from '../components/homepage/PreviousEntries';
+import PreviousEntriesListComponent from '../components/homepage/PreviousEntriesList';
 import SleepTrackerComponent from '../components/homepage/SleepTracker';
 import { apiEndpoints } from '../api-endpoints';
 import axios from 'axios';
@@ -93,7 +93,7 @@ const HomePage: React.FunctionComponent = () => {
                 <HomePageContainer>
                     <MoodTrackerComponent moodData={moodData} />
                     <SleepTrackerComponent sleepData={sleepData} />
-                    <PreviousEntriesComponent dates={entryDates} />
+                    <PreviousEntriesListComponent dates={entryDates} />
                 </HomePageContainer>
             }
             { isLoading && <LoadingComponent />}
