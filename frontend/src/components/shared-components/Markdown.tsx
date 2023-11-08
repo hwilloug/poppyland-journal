@@ -1,39 +1,42 @@
 import React from "react";
-import MDEditor from '@uiw/react-md-editor';
+import MDEditor from "@uiw/react-md-editor";
 import rehypeSanitize from "rehype-sanitize";
 
-
 interface MarkdownComponentProps {
-    value?: string
-    onChange?: Function
-    view: "edit" | "view"
-    height?: number
-    hideToolbar?: boolean
-    editMode?: boolean
+  value?: string;
+  onChange?: Function;
+  view: "edit" | "view";
+  height?: number;
+  hideToolbar?: boolean;
+  editMode?: boolean;
 }
 
-const MarkdownComponent: React.FunctionComponent<MarkdownComponentProps> = ({ value, onChange, view, height, hideToolbar, editMode }) => {
+const MarkdownComponent: React.FunctionComponent<MarkdownComponentProps> = ({
+  value,
+  onChange,
+  view,
+  height,
+  hideToolbar,
+  editMode,
+}) => {
   return (
     <div className="container" data-color-mode="light">
-      {view === 'edit' && 
+      {view === "edit" && (
         <MDEditor
           value={value}
           // @ts-ignore
           onChange={onChange}
           height={height}
           hideToolbar={hideToolbar}
-          preview={ editMode ? 'edit' : 'live' }
+          preview={editMode ? "edit" : "live"}
           previewOptions={{
-            rehypePlugins: [[rehypeSanitize]]
+            rehypePlugins: [[rehypeSanitize]],
           }}
         />
-      }
-      {view === 'view' &&
-        <MDEditor.Markdown source={value} />
-      
-      }
+      )}
+      {view === "view" && <MDEditor.Markdown source={value} />}
     </div>
-  )
-}
+  );
+};
 
-export default MarkdownComponent
+export default MarkdownComponent;
