@@ -17,6 +17,7 @@ import EntryComponent from '../components/todaysentrypage/Entry'
 import SubstanceEntryComponent from '../components/todaysentrypage/SubstanceEntry'
 import LoadingComponent from '../components/shared-components/Loading'
 import DailyAffirmationComponent from '../components/todaysentrypage/DailyAffirmation'
+import DailyGoalComponent from '../components/todaysentrypage/DailyGoal'
 
 
 export const SectionHeader = styled.h3`
@@ -53,6 +54,7 @@ const TodaysEntryPage: React.FunctionComponent = () => {
     const [hoursSleep, setHoursSleep] = useState<number>()
     const [sleepQuality, setSleepQuality] = useState<string>()
     const [affirmation, setAffirmation] = useState<string>()
+    const [goal, setGoal] = useState<string>()
     const [mentalHealth, setMentalHealth] = useState<string[]>([])
     const [substances, setSubstances] = useState<string[]>([])
     const [entryContent, setEntryContent] = useState<string>()
@@ -80,6 +82,7 @@ const TodaysEntryPage: React.FunctionComponent = () => {
                 setEntryContent(data.entry_content)
                 setSubstances(data.substances || [])
                 setAffirmation(data.affirmation)
+                setGoal(data.goal)
             }
             setIsLoading(false)
         } catch (e) {
@@ -139,6 +142,7 @@ const TodaysEntryPage: React.FunctionComponent = () => {
                     hours_sleep: hoursSleep?.toString(),
                     sleep_quality: sleepQuality,
                     affirmation: affirmation,
+                    goal: goal,
                     mental_health: mentalHealth,
                     substances: substances,
                     entry_content: entryContent
@@ -179,6 +183,7 @@ const TodaysEntryPage: React.FunctionComponent = () => {
                             hoursSleep={hoursSleep}
                         />
                         <DailyAffirmationComponent affirmation={affirmation} onChange={setAffirmation} />
+                        <DailyGoalComponent goal={goal} onChange={setGoal} />
 
                         <MentalHealthEntryComponent mentalHealth={[...mentalHealth]} onChange={modifyMentalHealth} />
                         <SubstanceEntryComponent substances={[...substances]} onChange={modifySubstances} />

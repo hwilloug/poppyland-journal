@@ -33,6 +33,7 @@ export interface ResponseType {
     mental_health: string[]
     substances: string[]
     entry_content: string
+    goal: string
 }
 
 interface DataType {
