@@ -1,6 +1,6 @@
 import styled from "@emotion/styled"
-import { SectionHeader } from "../pages/TodaysEntryPage"
-import CheckboxItemComponent from "./CheckboxItem"
+import { SectionHeader } from "../../pages/TodaysEntryPage"
+import CheckboxItemComponent from "../shared-components/CheckboxItem"
 
 
 const MentalHealthContainer = styled.div`

@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import styled from '@emotion/styled'
-import SideBarComponent from '../components/SideBar';
-import MoodTrackerComponent from '../components/MoodTracker';
-import PreviousEntriesComponent from '../components/PreviousEntries';
-import SleepTrackerComponent from '../components/SleepTracker';
+import SideBarComponent from '../components/shared-components/SideBar';
+import MoodTrackerComponent from '../components/homepage/MoodTracker';
+import PreviousEntriesComponent from '../components/homepage/PreviousEntries';
+import SleepTrackerComponent from '../components/homepage/SleepTracker';
 import { apiEndpoints } from '../api-endpoints';
 import axios from 'axios';
 import { useAuth0, withAuthenticationRequired } from '@auth0/auth0-react';
 import { getToken } from '../get-token';
-import LoadingComponent from '../components/Loading';
+import LoadingComponent from '../components/shared-components/Loading';
 
 const PageContainer = styled.div`
     margin: 0px;

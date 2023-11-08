@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import SideBarComponent from '../components/SideBar';
-import { PageContainer, PageContentContainer } from '../components/styled-components';
-import { SubHeader } from '../components/styled-components';
+import SideBarComponent from '../components/shared-components/SideBar';
+import { PageContainer, PageContentContainer } from '../components/shared-components/styled-components';
+import { SubHeader } from '../components/shared-components/styled-components';
 import axios from 'axios';
 import { apiEndpoints } from '../api-endpoints';
 import styled from '@emotion/styled';
-import MarkdownComponent from '../components/Markdown';
+import MarkdownComponent from '../components/shared-components/Markdown';
 import SentimentVerySatisfiedIcon from '@mui/icons-material/SentimentVerySatisfied'
 import SentimentSatisfiedIcon from '@mui/icons-material/SentimentSatisfied'
 import SentimentNeutralIcon from '@mui/icons-material/SentimentNeutral'
@@ -13,7 +13,7 @@ import SentimentDissatisfiedIcon from '@mui/icons-material/SentimentDissatisfied
 import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied'
 import { useAuth0, withAuthenticationRequired } from '@auth0/auth0-react';
 import { getToken } from '../get-token';
-import LoadingComponent from '../components/Loading';
+import LoadingComponent from '../components/shared-components/Loading';
 
 
 const EntriesContainer = styled.div`

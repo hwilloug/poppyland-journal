@@ -1,7 +1,7 @@
 import { Dayjs } from "dayjs"
 import { TimePicker, renderTimeViewClock, LocalizationProvider } from '@mui/x-date-pickers';
 
-import { SectionHeader } from "../pages/TodaysEntryPage"
+import { SectionHeader } from "../../pages/TodaysEntryPage"
 import styled from "@emotion/styled"
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs"
 import { MenuItem, Select } from "@mui/material"

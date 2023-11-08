@@ -1,5 +1,5 @@
-import { SectionHeader } from "../pages/TodaysEntryPage"
-import MarkdownComponent from "./Markdown"
+import { SectionHeader } from "../../pages/TodaysEntryPage"
+import MarkdownComponent from "../shared-components/Markdown"
 
 
 interface EntryProps {
