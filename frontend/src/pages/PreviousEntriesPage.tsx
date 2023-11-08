@@ -42,6 +42,10 @@ const SubstancesContainer = styled.div`
     margin: 10px;
 `
 
+const AffirmationsContainer = styled.div`
+    margin: 10px;
+`
+
 const EntryDate = styled.h3``
 
 interface EntryType {
@@ -51,6 +55,7 @@ interface EntryType {
     bed_time: string
     wake_up_time: string
     sleep_quality: string
+    affirmation: string
     mental_health: string[]
     substances: string[]
     entry_content: string
@@ -113,6 +118,7 @@ const PreviousEntriesPage: React.FunctionComponent = () => {
                         <EntryDate>{new Date(entry.date.replace(/-/g, '\/')).toLocaleDateString("en-US", { dateStyle: "full" })}</EntryDate>
                         <MoodContainer>Mood: {getMoodIcon(entry.mood)}</MoodContainer>
                         <SleepContainer>Hours sleep: {entry.hours_sleep}</SleepContainer>
+                        <AffirmationsContainer>Daily Affirmation: <MarkdownComponent view='view' value={entry.affirmation} /></AffirmationsContainer>
                         <MentalHealthContainer>Mental Health: {entry.mental_health && entry.mental_health.join(", ")}</MentalHealthContainer>
                         <SubstancesContainer>Substances: {entry.substances && entry.substances.join(", ")}</SubstancesContainer>
                         <MarkdownComponent view='view' value={entry.entry_content} />

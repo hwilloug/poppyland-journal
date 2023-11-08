@@ -29,6 +29,7 @@ export interface ResponseType {
     bed_time: string
     wake_up_time: string
     sleep_quality: string
+    affirmation: string
     mental_health: string[]
     substances: string[]
     entry_content: string

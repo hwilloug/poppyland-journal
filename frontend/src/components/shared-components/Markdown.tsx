@@ -7,9 +7,12 @@ interface MarkdownComponentProps {
     value?: string
     onChange?: Function
     view: "edit" | "view"
+    height?: number
+    hideToolbar?: boolean
+    editMode?: boolean
 }
 
-const MarkdownComponent: React.FunctionComponent<MarkdownComponentProps> = ({ value, onChange, view }) => {
+const MarkdownComponent: React.FunctionComponent<MarkdownComponentProps> = ({ value, onChange, view, height, hideToolbar, editMode }) => {
   return (
     <div className="container" data-color-mode="light">
       {view === 'edit' && 
@@ -17,7 +20,9 @@ const MarkdownComponent: React.FunctionComponent<MarkdownComponentProps> = ({ va
           value={value}
           // @ts-ignore
           onChange={onChange}
-          height={500}
+          height={height}
+          hideToolbar={hideToolbar}
+          preview={ editMode ? 'edit' : 'live' }
           previewOptions={{
             rehypePlugins: [[rehypeSanitize]]
           }}
