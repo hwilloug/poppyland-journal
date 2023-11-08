@@ -195,6 +195,9 @@ Resources:
     Properties:
       TableName: JournalEntry
       BillingMode: PAY_PER_REQUEST
+      SSESpecification:
+        SSEEnabled: true
+        SSEType: KMS
       AttributeDefinitions: 
         - 
           AttributeName: "UserId"
