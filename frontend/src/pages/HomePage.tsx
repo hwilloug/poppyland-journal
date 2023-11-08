@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styled from '@emotion/styled'
 import SideBarComponent from '../components/SideBar';
-import MoodTrackerComponent from '../components/MoodTracker';
+import MoodTrackerComponent, { MoodDataType } from '../components/MoodTracker';
 import PreviousEntriesComponent from '../components/PreviousEntries';
 import SleepTrackerComponent from '../components/SleepTracker';
 import { apiEndpoints } from '../api-endpoints';
@@ -44,7 +44,7 @@ const HomePage: React.FunctionComponent = () => {
 
     const [isLoading, setIsLoading] = useState<boolean>(true)
     const [entryDates, setEntryDates] = useState<string[]>([])
-    const [moodData, setMoodData] = useState<DataType>({})
+    const [moodData, setMoodData] = useState<MoodDataType[]>([])
     const [sleepData, setSleepData] = useState<DataType>({})
 
     const getEntries = async () => {
@@ -61,11 +61,14 @@ const HomePage: React.FunctionComponent = () => {
             )
             const data: ResponseType[] = response.data
             let dates = []
-            let moods: DataType = {}
+            let moods: MoodDataType[] = []
             let sleepTimes: DataType = {}
             for (let i=0; i < data.length; i++) {
                 dates.push(data[i]['date'])
-                moods[data[i]['date']] = parseInt(data[i]['mood'])
+                moods.push({
+                    date: (new Date(data[i]['date'].replace(/-/g, '\/'))).valueOf(),
+                    mood: parseInt(data[i]['mood'])
+                })
                 sleepTimes[data[i]['date']] = parseInt(data[i]['hours_sleep'])
             }
             setEntryDates(dates)
