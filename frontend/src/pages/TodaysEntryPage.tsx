@@ -40,7 +40,7 @@ const TodaysEntryPage: React.FunctionComponent = () => {
     const { user } = useAuth0()
     const userId = user!.sub
 
-    const date = new Date().toISOString().split('T')[0]
+    const date = new Date().toLocaleDateString("en-CA")
     const dateFull = new Date().toLocaleDateString("en-US", { dateStyle: "full" })
 
     const [isLoading, setIsLoading] = useState<boolean>(true)

@@ -20,7 +20,7 @@ const SubstanceEntryComponent: React.FunctionComponent<SubstanceEntryProps> = ({
         "Nicotine (Cigarrette)",
         "Nicotine (Vape)",
         "Alcohol",
-        "Marajuana (Bud)",
+        "Marajuana (Flower)",
         "Marajuana (Edible)",
         "Cocaine",
         "Mushrooms"
