@@ -400,10 +400,11 @@ Resources:
                   TableName='JournalEntry',
                   KeyConditionExpression=f"UserId = :user_id",
                   ExpressionAttributeValues={
-                    ":user_id": {
-                        "S": user_id
-                    }
-                  }
+                      ":user_id": {
+                          "S": user_id
+                      }
+                  },
+                  ScanIndexForward=False
               )
               response_items = []
               for item in items['Items']:
