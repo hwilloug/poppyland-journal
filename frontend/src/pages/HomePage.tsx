@@ -34,6 +34,8 @@ export interface ResponseType {
     substances: string[]
     entry_content: string
     goal: string
+    daily_question_q: string
+    daily_question_a: string
 }
 
 interface DataType {

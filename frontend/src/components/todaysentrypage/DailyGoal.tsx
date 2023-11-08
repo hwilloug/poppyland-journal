@@ -4,7 +4,7 @@ import { SectionHeader } from "../../pages/TodaysEntryPage"
 
 
 
-const AffirmationsContainer = styled.div``
+const GoalsContainer = styled.div``
 
 interface DailyGoalProps {
     goal?: string
@@ -13,10 +13,10 @@ interface DailyGoalProps {
 
 const DailyGoalComponent: React.FunctionComponent<DailyGoalProps> = ({ goal, onChange }) => {
     return (
-        <AffirmationsContainer>
+        <GoalsContainer>
             <SectionHeader>Daily Goal</SectionHeader>
             <MarkdownComponent view='edit' value={goal} onChange={onChange} height={75} hideToolbar editMode />
-        </AffirmationsContainer>
+        </GoalsContainer>
     )
 }
 

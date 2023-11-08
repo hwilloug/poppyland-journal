@@ -18,6 +18,7 @@ import SubstanceEntryComponent from '../components/todaysentrypage/SubstanceEntr
 import LoadingComponent from '../components/shared-components/Loading'
 import DailyAffirmationComponent from '../components/todaysentrypage/DailyAffirmation'
 import DailyGoalComponent from '../components/todaysentrypage/DailyGoal'
+import DailyQuestionComponent from '../components/todaysentrypage/DailyQuestion'
 
 
 export const SectionHeader = styled.h3`
@@ -58,6 +59,8 @@ const TodaysEntryPage: React.FunctionComponent = () => {
     const [mentalHealth, setMentalHealth] = useState<string[]>([])
     const [substances, setSubstances] = useState<string[]>([])
     const [entryContent, setEntryContent] = useState<string>()
+    const [dailyQuestionQ, setDailyQuestionQ] = useState<string>()
+    const [dailyQuestionA, setDailyQuestionA] = useState<string>()
 
     const getEntry = async () => {
         setIsLoading(true)
@@ -83,6 +86,8 @@ const TodaysEntryPage: React.FunctionComponent = () => {
                 setSubstances(data.substances || [])
                 setAffirmation(data.affirmation)
                 setGoal(data.goal)
+                setDailyQuestionA(data.daily_question_a)
+                setDailyQuestionQ(data.daily_question_q)
             }
             setIsLoading(false)
         } catch (e) {
@@ -145,7 +150,9 @@ const TodaysEntryPage: React.FunctionComponent = () => {
                     goal: goal,
                     mental_health: mentalHealth,
                     substances: substances,
-                    entry_content: entryContent
+                    entry_content: entryContent,
+                    daily_question_q: dailyQuestionQ,
+                    daily_question_a: dailyQuestionA
                 },
                 {
                     headers: {
@@ -184,6 +191,7 @@ const TodaysEntryPage: React.FunctionComponent = () => {
                         />
                         <DailyAffirmationComponent affirmation={affirmation} onChange={setAffirmation} />
                         <DailyGoalComponent goal={goal} onChange={setGoal} />
+                        <DailyQuestionComponent question={dailyQuestionQ} answer={dailyQuestionA} onChange={setDailyQuestionA} setQuestion={setDailyQuestionQ} />
 
                         <MentalHealthEntryComponent mentalHealth={[...mentalHealth]} onChange={modifyMentalHealth} />
                         <SubstanceEntryComponent substances={[...substances]} onChange={modifySubstances} />

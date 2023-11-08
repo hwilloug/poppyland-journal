@@ -43,7 +43,15 @@ const SubstancesContainer = styled.div`
 `
 
 const AffirmationsContainer = styled.div`
-    margin: 10px;
+    margin: 20px 10px;
+`
+
+const GoalContainer = styled.div`
+    margin: 20px 10px;
+`
+
+const DailyQuestionContainer = styled.div`
+    margin: 20px 10px;
 `
 
 const EntryDate = styled.h3``
@@ -59,6 +67,9 @@ interface EntryType {
     mental_health: string[]
     substances: string[]
     entry_content: string
+    goal: string
+    daily_question_q: string
+    daily_question_a: string
 }
 
 const PreviousEntriesPage: React.FunctionComponent = () => {
@@ -119,6 +130,8 @@ const PreviousEntriesPage: React.FunctionComponent = () => {
                         <MoodContainer>Mood: {getMoodIcon(entry.mood)}</MoodContainer>
                         <SleepContainer>Hours sleep: {entry.hours_sleep}</SleepContainer>
                         <AffirmationsContainer>Daily Affirmation: <MarkdownComponent view='view' value={entry.affirmation} /></AffirmationsContainer>
+                        <GoalContainer>Daily Goal: <MarkdownComponent view='view' value={entry.goal} /></GoalContainer>
+                        <DailyQuestionContainer>Daily Question: {entry.daily_question_q}<MarkdownComponent view='view' value={entry.daily_question_a} /></DailyQuestionContainer>
                         <MentalHealthContainer>Mental Health: {entry.mental_health && entry.mental_health.join(", ")}</MentalHealthContainer>
                         <SubstancesContainer>Substances: {entry.substances && entry.substances.join(", ")}</SubstancesContainer>
                         <MarkdownComponent view='view' value={entry.entry_content} />

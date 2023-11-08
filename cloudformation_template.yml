@@ -262,7 +262,8 @@ Resources:
 
               item_payload = {
                   'UserId': {'S': payload.get('user_id')},
-                  'Date': {'S': payload.get('date')}
+                  'Date': {'S': payload.get('date')},
+                  'DailyQuestionQ': {'S': payload.get('daily_question_q')}
               }
               if payload.get('mood') is not None:
                   item_payload['Mood'] = {'N': payload.get('mood')}
@@ -278,6 +279,8 @@ Resources:
                   item_payload['Affirmation'] = {'S': payload.get('affirmation')}
               if payload.get('goal') is not None:
                   item_payload['Goal'] = {'S': payload.get('goal')}
+              if payload.get('daily_question_a') is not None:
+                  item_payload['DailyQuestionA'] = {'S': payload.get('daily_question_a')}
               if len(payload.get('mental_health', [])):
                   item_payload['MentalHealth'] = {'SS': payload.get('mental_health')}
               if len(payload.get('substances', [])):
@@ -362,7 +365,9 @@ Resources:
                   "mental_health": item['Item'].get('MentalHealth', {}).get("SS", []),
                   "substances": item['Item'].get('Substances', {}).get("SS", []),
                   "affirmation": item['Item'].get('Affirmation', {}).get("S"),
-                  "goal": item['Item'].get('Goal', {}).get("S")
+                  "goal": item['Item'].get('Goal', {}).get("S"),
+                  "daily_question_q": item['Item'].get('DailyQuestionQ', {}).get("S"),
+                  "daily_question_a": item['Item'].get('DailyQuestionA', {}).get("S")
               }
               return {
                   "statusCode": 200,
@@ -412,7 +417,9 @@ Resources:
                       "mental_health": item.get('MentalHealth', {}).get("SS", []),
                       "substances": item.get('Substances', {}).get("SS", []),
                       "affirmation": item.get('Affirmation', {}).get("S"),
-                      "goal": item.get('Goal', {}).get("S")
+                      "goal": item.get('Goal', {}).get("S"),
+                      "daily_question_q": item.get('DailyQuestionQ', {}).get("S"),
+                      "daily_question_a": item.get('DailyQuestionA', {}).get("S")
                   })
               return {
                   "statusCode": 200,
