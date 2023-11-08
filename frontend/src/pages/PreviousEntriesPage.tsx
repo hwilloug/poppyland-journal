@@ -14,6 +14,7 @@ import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDiss
 import { useAuth0, withAuthenticationRequired } from '@auth0/auth0-react';
 import { getToken } from '../get-token';
 import LoadingComponent from '../components/shared-components/Loading';
+import { Link } from 'react-router-dom';
 
 
 const EntriesContainer = styled.div`
@@ -135,6 +136,7 @@ const PreviousEntriesPage: React.FunctionComponent = () => {
                         <MentalHealthContainer>Mental Health: {entry.mental_health && entry.mental_health.join(", ")}</MentalHealthContainer>
                         <SubstancesContainer>Substances: {entry.substances && entry.substances.join(", ")}</SubstancesContainer>
                         <MarkdownComponent view='view' value={entry.entry_content} />
+                        <Link to={`/edit/${entry.date}`}>Edit Entry</Link>
                     </div>)}
                     { isLoading &&
                         <LoadingComponent />

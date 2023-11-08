@@ -9,6 +9,7 @@ import styled from '@emotion/styled';
 import TodaysEntryPage from './pages/TodaysEntryPage';
 import PreviousEntriesPage from './pages/PreviousEntriesPage';
 import MedicationsPage from './pages/MedicationsPage';
+import EditEntryPage from './pages/EditEntryPage';
 
 const router = createBrowserRouter([
   {
@@ -26,6 +27,10 @@ const router = createBrowserRouter([
   {
     path: "/medications",
     element: <MedicationsPage />
+  },
+  {
+    path: "/edit/:date",
+    element: <EditEntryPage />
   }
 ]);
 
