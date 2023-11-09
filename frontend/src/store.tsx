@@ -1,5 +1,5 @@
-import { configureStore } from '@reduxjs/toolkit'
-import userReducer, { UserType } from './reducers/user_reducer'
+import { configureStore } from "@reduxjs/toolkit"
+import userReducer, { UserType } from "./reducers/user_reducer"
 
 export type State = {
   user: UserType
@@ -8,5 +8,5 @@ export type State = {
 export default configureStore({
   reducer: {
     user: userReducer,
-  }
+  },
 })

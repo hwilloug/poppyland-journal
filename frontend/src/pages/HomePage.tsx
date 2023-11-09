@@ -50,7 +50,7 @@ const HomePage: React.FunctionComponent = () => {
   const { user, getAccessTokenSilently } = useAuth0()
   const dispatch = useDispatch()
   const userId = useSelector((state: State) => state.user.userId)
-  const preferences =  useSelector((state: State) => state.user.preferences)
+  const preferences = useSelector((state: State) => state.user.preferences)
   if (!userId) {
     getProfile(user!.sub!, dispatch, getAccessTokenSilently)
   }
@@ -104,7 +104,9 @@ const HomePage: React.FunctionComponent = () => {
       {!isLoading && (
         <HomePageContainer>
           {preferences.showMood && <MoodTrackerComponent moodData={moodData} />}
-          {preferences.showSleep && <SleepTrackerComponent sleepData={sleepData} />}
+          {preferences.showSleep && (
+            <SleepTrackerComponent sleepData={sleepData} />
+          )}
           <PreviousEntriesListComponent dates={entryDates} />
         </HomePageContainer>
       )}

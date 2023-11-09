@@ -11,5 +11,5 @@ export const apiEndpoints = {
   getMedications: new SweetPath(apiBaseUrl + "/medication"),
   putMedications: new SweetPath(apiBaseUrl + "/medication"),
   getUserPreferences: new SweetPath(apiBaseUrl + "/preferences"),
-  putUserPreferences: new SweetPath(apiBaseUrl + "/preferences")
+  putUserPreferences: new SweetPath(apiBaseUrl + "/preferences"),
 }

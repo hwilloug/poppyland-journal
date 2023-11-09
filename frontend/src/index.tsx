@@ -14,7 +14,7 @@ root.render(
       clientId={process.env.REACT_APP_AUTH0_LOGIN_CLIENT_ID!}
       authorizationParams={{
         redirect_uri: window.location.origin,
-        audience: process.env.REACT_APP_AUTH0_AUDIENCE
+        audience: process.env.REACT_APP_AUTH0_AUDIENCE,
       }}
     >
       <Provider store={store}>

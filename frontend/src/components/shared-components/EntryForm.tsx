@@ -43,7 +43,7 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
   if (!userId) {
     getProfile(user!.sub!, dispatch, getAccessTokenSilently)
   }
-  
+
   const dateFull = new Date(date.replace(/-/g, "/")).toLocaleDateString(
     "en-US",
     { dateStyle: "full" },
@@ -209,42 +209,58 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
   return (
     <>
       <SubHeader>{dateFull}</SubHeader>
-      {preferences.showMood && <MoodEntryComponent mood={mood} onChange={setMood} />}
-      {preferences.showSleep && <SleepEntryComponent
-        onBedTimeChange={setBedTime}
-        onWakeUpTimeChange={setWakeUpTime}
-        onSleepQualityChange={setSleepQuality}
-        bedTime={bedTime}
-        wakeUpTime={wakeUpTime}
-        sleepQuality={sleepQuality}
-        hoursSleep={hoursSleep}
-      />}
-      {preferences.showDailyAffirmation && <DailyAffirmationComponent
-        affirmation={affirmation}
-        onChange={setAffirmation}
-      />}
-      {preferences.showDailyAffirmation && <DailyGoalComponent goal={goal} onChange={setGoal} />}
-      {preferences.showDailyQuestion && <DailyQuestionComponent
-        question={dailyQuestionQ}
-        answer={dailyQuestionA}
-        onChange={setDailyQuestionA}
-        setQuestion={setDailyQuestionQ}
-      />}
+      {preferences.showMood && (
+        <MoodEntryComponent mood={mood} onChange={setMood} />
+      )}
+      {preferences.showSleep && (
+        <SleepEntryComponent
+          onBedTimeChange={setBedTime}
+          onWakeUpTimeChange={setWakeUpTime}
+          onSleepQualityChange={setSleepQuality}
+          bedTime={bedTime}
+          wakeUpTime={wakeUpTime}
+          sleepQuality={sleepQuality}
+          hoursSleep={hoursSleep}
+        />
+      )}
+      {preferences.showDailyAffirmation && (
+        <DailyAffirmationComponent
+          affirmation={affirmation}
+          onChange={setAffirmation}
+        />
+      )}
+      {preferences.showDailyAffirmation && (
+        <DailyGoalComponent goal={goal} onChange={setGoal} />
+      )}
+      {preferences.showDailyQuestion && (
+        <DailyQuestionComponent
+          question={dailyQuestionQ}
+          answer={dailyQuestionA}
+          onChange={setDailyQuestionA}
+          setQuestion={setDailyQuestionQ}
+        />
+      )}
 
-      {preferences.showMentalHealth && <MentalHealthEntryComponent
-        mentalHealth={[...mentalHealth]}
-        onChange={modifyMentalHealth}
-      />}
-      {preferences.showSubstance && <SubstanceEntryComponent
-        substances={[...substances]}
-        onChange={modifySubstances}
-      />}
+      {preferences.showMentalHealth && (
+        <MentalHealthEntryComponent
+          mentalHealth={[...mentalHealth]}
+          onChange={modifyMentalHealth}
+        />
+      )}
+      {preferences.showSubstance && (
+        <SubstanceEntryComponent
+          substances={[...substances]}
+          onChange={modifySubstances}
+        />
+      )}
       <EntryComponent content={entryContent} onChange={setEntryContent} />
 
-      {currentMedications.length && <MedicationsContainer>
-        Current Medications: {currentMedications.join(", ")}{" "}
-        <Link to="/medications">(Edit)</Link>
-      </MedicationsContainer>}
+      {currentMedications.length && (
+        <MedicationsContainer>
+          Current Medications: {currentMedications.join(", ")}{" "}
+          <Link to="/medications">(Edit)</Link>
+        </MedicationsContainer>
+      )}
 
       <SubmitContainer>
         <SubmitButton onClick={onSubmit}>Save</SubmitButton>

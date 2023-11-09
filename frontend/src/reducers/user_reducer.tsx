@@ -1,33 +1,33 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice } from "@reduxjs/toolkit"
 
 export type UserType = {
-    preferences: PreferencesType
-    userId: string
+  preferences: PreferencesType
+  userId: string
 }
 
 export type PreferencesType = {
-    showDailyAffirmation?: boolean
-    showDailyGoal?: boolean
-    showDailyQuestion?: boolean
-    showMood?: boolean
-    showMentalHealth?: boolean
-    showSleep?: boolean
-    showSubstance?: boolean
+  showDailyAffirmation?: boolean
+  showDailyGoal?: boolean
+  showDailyQuestion?: boolean
+  showMood?: boolean
+  showMentalHealth?: boolean
+  showSleep?: boolean
+  showSubstance?: boolean
 }
 
 export const userSlice = createSlice({
-  name: 'user',
+  name: "user",
   initialState: {
     preferences: {},
-    userId: ''
+    userId: "",
   },
   reducers: {
     setUserPreferences: (state, action) => {
-      state.preferences = {...action.payload}
+      state.preferences = { ...action.payload }
     },
     setUserId: (state, action) => {
       state.userId = action.payload
-    }
+    },
   },
 })
 

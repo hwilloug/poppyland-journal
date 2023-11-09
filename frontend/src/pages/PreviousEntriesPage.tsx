@@ -85,7 +85,7 @@ const PreviousEntriesPage: React.FunctionComponent = () => {
   if (!userId) {
     getProfile(user!.sub!, dispatch, getAccessTokenSilently)
   }
-  
+
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [entries, setEntries] = useState<EntryType[]>([])
 
@@ -144,32 +144,47 @@ const PreviousEntriesPage: React.FunctionComponent = () => {
                     { dateStyle: "full" },
                   )}
                 </EntryDate>
-                {preferences.showMood && <MoodContainer>Mood: {getMoodIcon(entry.mood)}</MoodContainer>}
-                {preferences.showSleep && <SleepContainer>
-                  Hours sleep: {entry.hours_sleep}
-                </SleepContainer>}
-                {preferences.showDailyAffirmation && <AffirmationsContainer>
-                  Daily Affirmation:{" "}
-                  <MarkdownComponent view="view" value={entry.affirmation} />
-                </AffirmationsContainer>}
-                {preferences.showDailyGoal && <GoalContainer>
-                  Daily Goal:{" "}
-                  <MarkdownComponent view="view" value={entry.goal} />
-                </GoalContainer>}
-                {preferences.showDailyQuestion && <DailyQuestionContainer>
-                  Daily Question: {entry.daily_question_q}
-                  <MarkdownComponent
-                    view="view"
-                    value={entry.daily_question_a}
-                  />
-                </DailyQuestionContainer>}
-                {preferences.showMentalHealth && <MentalHealthContainer>
-                  Mental Health:{" "}
-                  {entry.mental_health && entry.mental_health.join(", ")}
-                </MentalHealthContainer>}
-                {preferences.showSubstance && <SubstancesContainer>
-                  Substances: {entry.substances && entry.substances.join(", ")}
-                </SubstancesContainer>}
+                {preferences.showMood && (
+                  <MoodContainer>Mood: {getMoodIcon(entry.mood)}</MoodContainer>
+                )}
+                {preferences.showSleep && (
+                  <SleepContainer>
+                    Hours sleep: {entry.hours_sleep}
+                  </SleepContainer>
+                )}
+                {preferences.showDailyAffirmation && (
+                  <AffirmationsContainer>
+                    Daily Affirmation:{" "}
+                    <MarkdownComponent view="view" value={entry.affirmation} />
+                  </AffirmationsContainer>
+                )}
+                {preferences.showDailyGoal && (
+                  <GoalContainer>
+                    Daily Goal:{" "}
+                    <MarkdownComponent view="view" value={entry.goal} />
+                  </GoalContainer>
+                )}
+                {preferences.showDailyQuestion && (
+                  <DailyQuestionContainer>
+                    Daily Question: {entry.daily_question_q}
+                    <MarkdownComponent
+                      view="view"
+                      value={entry.daily_question_a}
+                    />
+                  </DailyQuestionContainer>
+                )}
+                {preferences.showMentalHealth && (
+                  <MentalHealthContainer>
+                    Mental Health:{" "}
+                    {entry.mental_health && entry.mental_health.join(", ")}
+                  </MentalHealthContainer>
+                )}
+                {preferences.showSubstance && (
+                  <SubstancesContainer>
+                    Substances:{" "}
+                    {entry.substances && entry.substances.join(", ")}
+                  </SubstancesContainer>
+                )}
                 <MarkdownComponent view="view" value={entry.entry_content} />
                 <Link to={`/edit/${entry.date}`}>Edit Entry</Link>
               </div>

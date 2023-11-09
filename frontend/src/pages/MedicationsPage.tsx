@@ -67,7 +67,7 @@ const MedicationsPage: React.FunctionComponent = () => {
   if (!userId) {
     getProfile(user!.sub!, dispatch, getAccessTokenSilently)
   }
-  
+
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [snackbarMessage, setSnackbarMessage] = useState<string>()
   const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false)
