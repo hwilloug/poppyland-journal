@@ -45,7 +45,7 @@ const PreviousEntriesListComponent: React.FunctionComponent<
               const shortDate = convertToShortDate(date)
               const dateString = convertToDayOfWeekMonthDay(date)
               return (
-                <TableRow>
+                <TableRow key={dateString}>
                   <TableCell>{dateString}</TableCell>
                   <TableCell>
                     {dates.includes(shortDate) ? "Submitted" : "Not Submitted"}

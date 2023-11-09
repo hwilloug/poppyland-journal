@@ -15,9 +15,11 @@ import SentimentNeutralIcon from "@mui/icons-material/SentimentNeutral"
 import SentimentDissatisfiedIcon from "@mui/icons-material/SentimentDissatisfied"
 import SentimentVeryDissatisfiedIcon from "@mui/icons-material/SentimentVeryDissatisfied"
 import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react"
-import { getToken } from "../get-token"
 import LoadingComponent from "../components/shared-components/Loading"
 import { Link } from "react-router-dom"
+import { useDispatch, useSelector } from "react-redux"
+import { State } from "../store"
+import { getProfile } from "../utils/get-profile"
 
 const EntriesContainer = styled.div`
   display: flex;
@@ -76,16 +78,21 @@ interface EntryType {
 }
 
 const PreviousEntriesPage: React.FunctionComponent = () => {
-  const { user } = useAuth0()
-  const userId = user!.sub
-
+  const { user, getAccessTokenSilently } = useAuth0()
+  const dispatch = useDispatch()
+  const userId = useSelector((state: State) => state.user.userId)
+  const preferences = useSelector((state: State) => state.user.preferences)
+  if (!userId) {
+    getProfile(user!.sub!, dispatch, getAccessTokenSilently)
+  }
+  
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [entries, setEntries] = useState<EntryType[]>([])
 
   const getEntries = async () => {
     setIsLoading(true)
     try {
-      const token = await getToken()
+      const token = await getAccessTokenSilently()
       const response = await axios.get(
         apiEndpoints.getEntries.insert({ userId }),
         {
@@ -130,39 +137,39 @@ const PreviousEntriesPage: React.FunctionComponent = () => {
         <EntriesContainer>
           {!isLoading &&
             entries.map((entry) => (
-              <div>
+              <div key={entry.date}>
                 <EntryDate>
                   {new Date(entry.date.replace(/-/g, "/")).toLocaleDateString(
                     "en-US",
                     { dateStyle: "full" },
                   )}
                 </EntryDate>
-                <MoodContainer>Mood: {getMoodIcon(entry.mood)}</MoodContainer>
-                <SleepContainer>
+                {preferences.showMood && <MoodContainer>Mood: {getMoodIcon(entry.mood)}</MoodContainer>}
+                {preferences.showSleep && <SleepContainer>
                   Hours sleep: {entry.hours_sleep}
-                </SleepContainer>
-                <AffirmationsContainer>
+                </SleepContainer>}
+                {preferences.showDailyAffirmation && <AffirmationsContainer>
                   Daily Affirmation:{" "}
                   <MarkdownComponent view="view" value={entry.affirmation} />
-                </AffirmationsContainer>
-                <GoalContainer>
+                </AffirmationsContainer>}
+                {preferences.showDailyGoal && <GoalContainer>
                   Daily Goal:{" "}
                   <MarkdownComponent view="view" value={entry.goal} />
-                </GoalContainer>
-                <DailyQuestionContainer>
+                </GoalContainer>}
+                {preferences.showDailyQuestion && <DailyQuestionContainer>
                   Daily Question: {entry.daily_question_q}
                   <MarkdownComponent
                     view="view"
                     value={entry.daily_question_a}
                   />
-                </DailyQuestionContainer>
-                <MentalHealthContainer>
+                </DailyQuestionContainer>}
+                {preferences.showMentalHealth && <MentalHealthContainer>
                   Mental Health:{" "}
                   {entry.mental_health && entry.mental_health.join(", ")}
-                </MentalHealthContainer>
-                <SubstancesContainer>
+                </MentalHealthContainer>}
+                {preferences.showSubstance && <SubstancesContainer>
                   Substances: {entry.substances && entry.substances.join(", ")}
-                </SubstancesContainer>
+                </SubstancesContainer>}
                 <MarkdownComponent view="view" value={entry.entry_content} />
                 <Link to={`/edit/${entry.date}`}>Edit Entry</Link>
               </div>

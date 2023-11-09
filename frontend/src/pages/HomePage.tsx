@@ -9,8 +9,10 @@ import SleepTrackerComponent from "../components/homepage/SleepTracker"
 import { apiEndpoints } from "../api-endpoints"
 import axios from "axios"
 import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react"
-import { getToken } from "../get-token"
 import LoadingComponent from "../components/shared-components/Loading"
+import { useDispatch, useSelector } from "react-redux"
+import { State } from "../store"
+import { getProfile } from "../utils/get-profile"
 
 const PageContainer = styled.div`
   margin: 0px;
@@ -45,8 +47,13 @@ interface DataType {
 }
 
 const HomePage: React.FunctionComponent = () => {
-  const { user } = useAuth0()
-  const userId = user!.sub
+  const { user, getAccessTokenSilently } = useAuth0()
+  const dispatch = useDispatch()
+  const userId = useSelector((state: State) => state.user.userId)
+  const preferences =  useSelector((state: State) => state.user.preferences)
+  if (!userId) {
+    getProfile(user!.sub!, dispatch, getAccessTokenSilently)
+  }
 
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [entryDates, setEntryDates] = useState<string[]>([])
@@ -56,7 +63,7 @@ const HomePage: React.FunctionComponent = () => {
   const getEntries = async () => {
     setIsLoading(true)
     try {
-      const token = await getToken()
+      const token = await getAccessTokenSilently()
       const response = await axios.get(
         apiEndpoints.getEntries.insert({ userId }),
         {
@@ -96,8 +103,8 @@ const HomePage: React.FunctionComponent = () => {
       <SideBarComponent />
       {!isLoading && (
         <HomePageContainer>
-          <MoodTrackerComponent moodData={moodData} />
-          <SleepTrackerComponent sleepData={sleepData} />
+          {preferences.showMood && <MoodTrackerComponent moodData={moodData} />}
+          {preferences.showSleep && <SleepTrackerComponent sleepData={sleepData} />}
           <PreviousEntriesListComponent dates={entryDates} />
         </HomePageContainer>
       )}

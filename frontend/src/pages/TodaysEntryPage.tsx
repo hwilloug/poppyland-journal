@@ -15,6 +15,7 @@ export const SectionHeader = styled.h3`
 
 const TodaysEntryPage: React.FunctionComponent = () => {
   const date = new Date().toLocaleDateString("en-CA")
+  console.log(date)
   return (
     <PageContainer>
       <SideBarComponent />

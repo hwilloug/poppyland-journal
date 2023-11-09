@@ -4,7 +4,6 @@ import SideBarComponent from "../components/shared-components/SideBar"
 import { apiEndpoints } from "../api-endpoints"
 import axios from "axios"
 import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react"
-import { getToken } from "../get-token"
 import LoadingComponent from "../components/shared-components/Loading"
 import {
   Button,
@@ -14,6 +13,9 @@ import {
 import MedicationComponent from "../components/medicationspage/Medication"
 import { Alert, Snackbar } from "@mui/material"
 import dayjs, { Dayjs } from "dayjs"
+import { useDispatch, useSelector } from "react-redux"
+import { State } from "../store"
+import { getProfile } from "../utils/get-profile"
 
 const PageContainer = styled.div`
   margin: 0px;
@@ -58,9 +60,14 @@ export type MedicationType = {
 }
 
 const MedicationsPage: React.FunctionComponent = () => {
-  const { user } = useAuth0()
-  const userId = user!.sub
-
+  const { user, getAccessTokenSilently } = useAuth0()
+  const dispatch = useDispatch()
+  const userId = useSelector((state: State) => state.user.userId)
+  const preferences = useSelector((state: State) => state.user.preferences)
+  if (!userId) {
+    getProfile(user!.sub!, dispatch, getAccessTokenSilently)
+  }
+  
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [snackbarMessage, setSnackbarMessage] = useState<string>()
   const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false)
@@ -69,7 +76,7 @@ const MedicationsPage: React.FunctionComponent = () => {
   const getMedications = async () => {
     setIsLoading(true)
     try {
-      const token = await getToken()
+      const token = await getAccessTokenSilently()
       const response = await axios.get(
         apiEndpoints.getMedications.insert({ userId }),
         {
@@ -136,7 +143,7 @@ const MedicationsPage: React.FunctionComponent = () => {
     for (let i = 0; i < medications.length; i++) {
       try {
         if (medications[i].name) {
-          const token = await getToken()
+          const token = await getAccessTokenSilently()
           await axios.put(
             apiEndpoints.putMedications.insert(),
             {

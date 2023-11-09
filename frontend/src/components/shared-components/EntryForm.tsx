@@ -3,7 +3,6 @@ import styled from "@emotion/styled"
 import dayjs, { Dayjs } from "dayjs"
 import { useEffect, useState } from "react"
 import { apiEndpoints } from "../../api-endpoints"
-import { getToken } from "../../get-token"
 import axios from "axios"
 import { ResponseType } from "../../pages/HomePage"
 import MoodEntryComponent from "../todaysentrypage/MoodEntry"
@@ -18,6 +17,9 @@ import { SubHeader, SubmitButton } from "./styled-components"
 import { Alert, Snackbar } from "@mui/material"
 import { Link } from "react-router-dom"
 import LoadingComponent from "./Loading"
+import { useDispatch, useSelector } from "react-redux"
+import { State } from "../../store"
+import { getProfile } from "../../utils/get-profile"
 
 const SubmitContainer = styled.div`
   display: flex;
@@ -34,13 +36,18 @@ interface EntryFormProps {
 }
 
 const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
+  const { user, getAccessTokenSilently } = useAuth0()
+  const dispatch = useDispatch()
+  const userId = useSelector((state: State) => state.user.userId)
+  const preferences = useSelector((state: State) => state.user.preferences)
+  if (!userId) {
+    getProfile(user!.sub!, dispatch, getAccessTokenSilently)
+  }
+  
   const dateFull = new Date(date.replace(/-/g, "/")).toLocaleDateString(
     "en-US",
     { dateStyle: "full" },
   )
-
-  const { user } = useAuth0()
-  const userId = user!.sub
 
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false)
@@ -62,7 +69,7 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
   const getEntry = async () => {
     setIsLoading(true)
     try {
-      const token = await getToken()
+      const token = await getAccessTokenSilently()
       const response = await axios.get(
         apiEndpoints.getEntry.insert({ userId: userId, date: date }),
         {
@@ -95,7 +102,7 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
 
   const getCurrentMedications = async () => {
     try {
-      const token = await getToken()
+      const token = await getAccessTokenSilently()
       const response = await axios.get(
         apiEndpoints.getMedications.insert({ userId: userId, date: date }),
         {
@@ -110,7 +117,6 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
         for (let i = 0; i < data.length; i++) {
           !data[i].end_data && currentMeds.push(data[i].medication_name)
         }
-        console.log(currentMeds)
         setCurrentMedications([...currentMeds])
       }
       setIsLoading(false)
@@ -160,16 +166,16 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
 
   const onSubmit = async () => {
     try {
-      const token = await getToken()
+      const token = await getAccessTokenSilently()
       await axios.put(
         apiEndpoints.createEntry.insert(),
         {
           user_id: userId,
           date,
-          mood: mood?.toString(),
+          mood: mood ? mood.toString() : null,
           bed_time: bedTime,
           wake_up_time: wakeUpTime,
-          hours_sleep: hoursSleep?.toString(),
+          hours_sleep: hoursSleep ? hoursSleep.toString() : null,
           sleep_quality: sleepQuality,
           affirmation: affirmation,
           goal: goal,
@@ -203,8 +209,8 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
   return (
     <>
       <SubHeader>{dateFull}</SubHeader>
-      <MoodEntryComponent mood={mood} onChange={setMood} />
-      <SleepEntryComponent
+      {preferences.showMood && <MoodEntryComponent mood={mood} onChange={setMood} />}
+      {preferences.showSleep && <SleepEntryComponent
         onBedTimeChange={setBedTime}
         onWakeUpTimeChange={setWakeUpTime}
         onSleepQualityChange={setSleepQuality}
@@ -212,33 +218,33 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
         wakeUpTime={wakeUpTime}
         sleepQuality={sleepQuality}
         hoursSleep={hoursSleep}
-      />
-      <DailyAffirmationComponent
+      />}
+      {preferences.showDailyAffirmation && <DailyAffirmationComponent
         affirmation={affirmation}
         onChange={setAffirmation}
-      />
-      <DailyGoalComponent goal={goal} onChange={setGoal} />
-      <DailyQuestionComponent
+      />}
+      {preferences.showDailyAffirmation && <DailyGoalComponent goal={goal} onChange={setGoal} />}
+      {preferences.showDailyQuestion && <DailyQuestionComponent
         question={dailyQuestionQ}
         answer={dailyQuestionA}
         onChange={setDailyQuestionA}
         setQuestion={setDailyQuestionQ}
-      />
+      />}
 
-      <MentalHealthEntryComponent
+      {preferences.showMentalHealth && <MentalHealthEntryComponent
         mentalHealth={[...mentalHealth]}
         onChange={modifyMentalHealth}
-      />
-      <SubstanceEntryComponent
+      />}
+      {preferences.showSubstance && <SubstanceEntryComponent
         substances={[...substances]}
         onChange={modifySubstances}
-      />
+      />}
       <EntryComponent content={entryContent} onChange={setEntryContent} />
 
-      <MedicationsContainer>
+      {currentMedications.length && <MedicationsContainer>
         Current Medications: {currentMedications.join(", ")}{" "}
         <Link to="/medications">(Edit)</Link>
-      </MedicationsContainer>
+      </MedicationsContainer>}
 
       <SubmitContainer>
         <SubmitButton onClick={onSubmit}>Save</SubmitButton>

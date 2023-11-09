@@ -135,7 +135,7 @@ Resources:
     Type: AWS::Lambda::Function
     Properties:
       FunctionName: !Sub "${AppName}-cloudfront-invalidation"
-      Runtime: python3.8
+      Runtime: python3.7
       Handler: index.lambda_handler
       Role: !GetAtt InvalidationLambdaRole.Arn
       Code:
@@ -244,17 +244,31 @@ Resources:
                   - "dynamodb:UpdateItem"
                 Resource: !GetAtt EntryTable.Arn
 
+  JWTLayer:
+    Type: AWS::Lambda::LayerVersion
+    Properties:
+      CompatibleRuntimes:
+        - python3.6
+        - python3.7
+      Content:
+        S3Bucket: poppyland-journal-lambda-layers
+        S3Key: pyjwt-lambda-package.zip
+      LayerName: pyjwt-layer
+
   PutEntryLambda:
     Type: AWS::Lambda::Function
     Properties:
       FunctionName: !Sub "${AppName}-put-entry"
-      Runtime: python3.8
+      Runtime: python3.7
       Handler: index.lambda_handler
       Role: !GetAtt JournalLambdaRole.Arn
+      Layers:
+        - !Ref JWTLayer
       Code:
         ZipFile: |
           import json
           import boto3
+          import jwt
 
           dynamodb = boto3.client("dynamodb")
 
@@ -262,8 +276,12 @@ Resources:
               payload = event.get("body", {})
               payload = json.loads(payload)
 
+              token = event.get('headers', {}).get("authorization").split(' ')[1]
+              decoded_token = jwt.decode(token, algorithms=["RS256"], options={"verify_signature": False})
+              user_id = decoded_token.get('sub')
+
               item_payload = {
-                  'UserId': {'S': payload.get('user_id')},
+                  'UserId': {'S': user_id},
                   'Date': {'S': payload.get('date')},
                   'DailyQuestionQ': {'S': payload.get('daily_question_q')}
               }
@@ -274,7 +292,7 @@ Resources:
               if payload.get('wake_up_time') is not None:
                   item_payload['WakeUpTime'] = {'S': payload.get('wake_up_time')}
               if payload.get('hours_sleep') is not None:
-                  item_payload['HoursSleep'] = {'S': payload.get('hours_sleep')}
+                  item_payload['HoursSleep'] = {'N': payload.get('hours_sleep')}
               if payload.get('sleep_quality') is not None:
                   item_payload['SleepQuality'] = {'S': payload.get('sleep_quality')}
               if payload.get('affirmation') is not None:
@@ -300,7 +318,7 @@ Resources:
                       TableName='JournalEntry',
                       Key={
                           'UserId': {
-                              'S': payload['user_id']
+                              'S': user_id
                           },
                           'Date': {
                               'S': payload['date']
@@ -323,22 +341,29 @@ Resources:
     Type: AWS::Lambda::Function
     Properties:
       FunctionName: !Sub "${AppName}-get-entry"
-      Runtime: python3.8
+      Runtime: python3.7
       Handler: index.lambda_handler
       Role: !GetAtt JournalLambdaRole.Arn
+      Layers:
+        - !Ref JWTLayer
       Code:
         ZipFile: |
           import json
           import boto3
+          import jwt
 
           dynamodb = boto3.client("dynamodb")
 
           def lambda_handler(event, context):
+              token = event.get('headers', {}).get("authorization").split(' ')[1]
+              decoded_token = jwt.decode(token, algorithms=["RS256"], options={"verify_signature": False})
+              user_id = decoded_token.get('sub')
+
               item = dynamodb.get_item(
                   TableName='JournalEntry',
                   Key={
                       'UserId': {
-                          'S': event.get("queryStringParameters", {}).get('user_id')
+                          'S': user_id
                       },
                       'Date': {
                           'S': event.get("pathParameters", {}).get('date')
@@ -383,19 +408,24 @@ Resources:
     Type: AWS::Lambda::Function
     Properties:
       FunctionName: !Sub "${AppName}-get-entries"
-      Runtime: python3.8
+      Runtime: python3.7
       Handler: index.lambda_handler
       Role: !GetAtt JournalLambdaRole.Arn
+      Layers:
+        - !Ref JWTLayer
       Code:
         ZipFile: |
           import json
           import boto3
           from boto3.dynamodb.conditions import Key
+          import jwt
 
           dynamodb = boto3.client("dynamodb")
 
           def lambda_handler(event, context):
-              user_id = event.get("queryStringParameters", {}).get("user_id")
+              token = event.get('headers', {}).get("authorization").split(' ')[1]
+              decoded_token = jwt.decode(token, algorithms=["RS256"], options={"verify_signature": False})
+              user_id = decoded_token.get('sub')
               items = dynamodb.query(
                   TableName='JournalEntry',
                   KeyConditionExpression=f"UserId = :user_id",
@@ -436,21 +466,27 @@ Resources:
     Type: AWS::Lambda::Function
     Properties:
       FunctionName: !Sub "${AppName}-delete-entry"
-      Runtime: python3.8
+      Runtime: python3.7
       Handler: index.lambda_handler
       Role: !GetAtt JournalLambdaRole.Arn
+      Layers:
+        - !Ref JWTLayer
       Code:
         ZipFile: |
           import boto3
+          import jwt
 
           dynamodb = boto3.client("dynamodb")
 
           def lambda_handler(event, context):
+              token = event.get('headers', {}).get("authorization").split(' ')[1]
+              decoded_token = jwt.decode(token, algorithms=["RS256"], options={"verify_signature": False})
+              user_id = decoded_token.get('sub')
               item = dynamodb.delete_item(
                   TableName='JournalEntry',
                   Key={
                       'UserId': {
-                          'S': event.get("queryStringParameters", {}).get('user_id')
+                          'S': user_id
                       },
                       'Date': {
                           'S': event.get("pathParameters", {}).get('date')
@@ -662,7 +698,7 @@ Resources:
     Type: AWS::Lambda::Function
     Properties:
       FunctionName: !Sub "${AppName}-options"
-      Runtime: python3.8
+      Runtime: python3.7
       Handler: index.lambda_handler
       Role: !GetAtt JournalLambdaRole.Arn
       Code:
@@ -802,13 +838,16 @@ Resources:
     Type: AWS::Lambda::Function
     Properties:
       FunctionName: !Sub "${AppName}-put-medication"
-      Runtime: python3.8
+      Runtime: python3.7
       Handler: index.lambda_handler
       Role: !GetAtt MedicationLambdaRole.Arn
+      Layers:
+        - !Ref JWTLayer
       Code:
         ZipFile: |
           import json
           import boto3
+          import jwt
 
           dynamodb = boto3.client("dynamodb")
 
@@ -816,8 +855,12 @@ Resources:
               payload = event.get("body", {})
               payload = json.loads(payload)
 
+              token = event.get('headers', {}).get("authorization").split(' ')[1]
+              decoded_token = jwt.decode(token, algorithms=["RS256"], options={"verify_signature": False})
+              user_id = decoded_token.get('sub')
+
               item_payload = {
-                  'UserId': {'S': payload.get('user_id')},
+                  'UserId': {'S': user_id},
                   'MedicationName': {'S': payload.get('medication_name')}
               }
               if payload.get('dose') is not None:
@@ -837,7 +880,7 @@ Resources:
                       TableName='UserMedication',
                       Key={
                           'UserId': {
-                              'S': payload['user_id']
+                              'S': user_id
                           },
                           'MedicationName': {
                               'S': payload['medication_name']
@@ -891,18 +934,23 @@ Resources:
     Type: AWS::Lambda::Function
     Properties:
       FunctionName: !Sub "${AppName}-get-medications"
-      Runtime: python3.8
+      Runtime: python3.7
       Handler: index.lambda_handler
       Role: !GetAtt MedicationLambdaRole.Arn
+      Layers:
+        - !Ref JWTLayer
       Code:
         ZipFile: |
           import json
           import boto3
+          import jwt
 
           dynamodb = boto3.client("dynamodb")
 
           def lambda_handler(event, context):
-              user_id = event.get("queryStringParameters", {}).get("user_id")
+              token = event.get('headers', {}).get("authorization").split(' ')[1]
+              decoded_token = jwt.decode(token, algorithms=["RS256"], options={"verify_signature": False})
+              user_id = decoded_token.get('sub')
               items = dynamodb.query(
                   TableName='UserMedication',
                   KeyConditionExpression=f"UserId = :user_id",
@@ -1012,24 +1060,37 @@ Resources:
     Type: AWS::Lambda::Function
     Properties:
       FunctionName: !Sub "${AppName}-put-user-preferences"
-      Runtime: python3.8
+      Runtime: python3.7
       Handler: index.lambda_handler
       Role: !GetAtt UserPreferencesLambdaRole.Arn
+      Layers:
+        - !Ref JWTLayer
       Code:
         ZipFile: |
           import json
           import boto3
+          from boto3.dynamodb.types import TypeSerializer
+          import jwt
 
           dynamodb = boto3.client("dynamodb")
+          serializer = TypeSerializer()
 
           def lambda_handler(event, context):
               payload = event.get("body", {})
               payload = json.loads(payload)
 
+              token = event.get('headers', {}).get("authorization").split(' ')[1]
+              decoded_token = jwt.decode(token, algorithms=["RS256"], options={"verify_signature": False})
+              user_id = decoded_token.get('sub')
+
               item_payload = {
-                  'UserId': {'S': payload.get('user_id')},
-                  'Preferences': {'M': payload.get('preferences')}
+                  'UserId': {'S': user_id},
+                  'Preferences': serializer.serialize(payload.get('preferences')),
               }
+              if payload.get('first_name'):
+                  item_payload['FirstName'] = {'S': payload.get('first_name')}
+              if payload.get('last_name'):
+                  item_payload['LastName']: {'S': payload.get('last_name')}
 
               response = dynamodb.put_item(
                   TableName='UserPreferences', 
@@ -1041,7 +1102,7 @@ Resources:
                       TableName='UserPreferences',
                       Key={
                           'UserId': {
-                              'S': payload['user_id']
+                              'S': user_id
                           }
                       }
                   )
@@ -1092,39 +1153,55 @@ Resources:
     Type: AWS::Lambda::Function
     Properties:
       FunctionName: !Sub "${AppName}-get-user-preferences"
-      Runtime: python3.8
+      Runtime: python3.7
       Handler: index.lambda_handler
       Role: !GetAtt UserPreferencesLambdaRole.Arn
+      Layers:
+        - !Ref JWTLayer
       Code:
         ZipFile: |
           import json
           import boto3
+          from boto3.dynamodb.types import TypeDeserializer
+          import jwt
 
           dynamodb = boto3.client("dynamodb")
+          deserializer = TypeDeserializer()
 
           def lambda_handler(event, context):
-              user_id = event.get("queryStringParameters", {}).get("user_id")
-              items = dynamodb.query(
+              token = event.get('headers', {}).get("authorization").split(' ')[1]
+              decoded_token = jwt.decode(token, algorithms=["RS256"], options={"verify_signature": False})
+              user_id = decoded_token.get('sub')
+              item = dynamodb.get_item(
                   TableName='UserPreferences',
-                  KeyConditionExpression=f"UserId = :user_id",
-                  ExpressionAttributeValues={
-                    ":user_id": {
-                        "S": user_id
-                    }
+                  Key={
+                      'UserId': {
+                          'S': user_id
+                      }
                   }
               )
-              response_items = []
-              for item in items['Items']:
-                  response_items.append({
-                      "user_id": item.get('UserId', {}).get("S"),
-                      "preferences": item.get('Preferences', {}).get("M")
-                  })
+              
+              if item.get('Item') is None:
+                  return {
+                      "statusCode": 404,
+                      "headers": {
+                          "Content-Type": "application/json"
+                      },
+                      "body": json.dumps("Not found")
+                  }
+              
+              response_item = {
+                  "user_id": item['Item'].get('UserId', {}).get("S"),
+                  "preferences": deserializer.deserialize(item['Item'].get('Preferences', {})),
+                  "first_name": item['Item'].get('FirstName', {}).get("S"),
+                  "last_name": item['Item'].get('LastName', {}).get("S")
+              }
               return {
                   "statusCode": 200,
                   "headers": {
                       "Content-Type": "application/json"
                   },
-                  "body": json.dumps(response_items)
+                  "body": json.dumps(response_item)
               }
 
   LambdaInvokeGetUserPreferences:

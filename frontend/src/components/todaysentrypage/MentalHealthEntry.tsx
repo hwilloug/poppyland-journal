@@ -33,6 +33,7 @@ const MentalHealthEntryComponent: React.FunctionComponent<
     "Libido Down",
     "Reckless Behavior",
     "Fatigue",
+    "Illusions of Grandeur",
     "Suicidal Ideation",
   ]
 
