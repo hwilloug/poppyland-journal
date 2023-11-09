@@ -187,36 +187,39 @@ const PreviousEntriesPage: React.FunctionComponent = () => {
       <PageContentContainer>
         <SubHeader>Previous Entries</SubHeader>
         <EntriesContainer>
-          {!isLoading && entries.length === 0 &&
-            <NoEntriesContainer>No entries yet! Head to <Link to="/today">today's entry page</Link> to get started.</NoEntriesContainer>
-          }
+          {!isLoading && entries.length === 0 && (
+            <NoEntriesContainer>
+              No entries yet! Head to{" "}
+              <Link to="/today">today's entry page</Link> to get started.
+            </NoEntriesContainer>
+          )}
           {!isLoading &&
             entries.map((entry) => (
               <div key={entry.date}>
                 <EntryDate>
                   {convertToLongDateFromShortDate(entry.date)}
                 </EntryDate>
-                {preferences.showMood && (
+                {preferences.showMood && entry.mood && (
                   <MoodContainer>Mood: {getMoodIcon(entry.mood)}</MoodContainer>
                 )}
-                {preferences.showSleep && (
+                {preferences.showSleep && entry.hours_sleep && (
                   <SleepContainer>
                     Hours sleep: {entry.hours_sleep}
                   </SleepContainer>
                 )}
-                {preferences.showDailyAffirmation && (
+                {preferences.showDailyAffirmation && entry.affirmation && (
                   <AffirmationsContainer>
                     Daily Affirmation:{" "}
                     <MarkdownComponent view="view" value={entry.affirmation} />
                   </AffirmationsContainer>
                 )}
-                {preferences.showDailyGoal && (
+                {preferences.showDailyGoal && entry.goal && (
                   <GoalContainer>
                     Daily Goal:{" "}
                     <MarkdownComponent view="view" value={entry.goal} />
                   </GoalContainer>
                 )}
-                {preferences.showDailyQuestion && (
+                {preferences.showDailyQuestion && entry.daily_question_a && (
                   <DailyQuestionContainer>
                     Daily Question: {entry.daily_question_q}
                     <MarkdownComponent
@@ -225,19 +228,21 @@ const PreviousEntriesPage: React.FunctionComponent = () => {
                     />
                   </DailyQuestionContainer>
                 )}
-                {preferences.showMentalHealth && (
+                {preferences.showMentalHealth && entry.mental_health.length && (
                   <MentalHealthContainer>
                     Mental Health:{" "}
                     {entry.mental_health && entry.mental_health.join(", ")}
                   </MentalHealthContainer>
                 )}
-                {preferences.showSubstance && (
+                {preferences.showSubstance && entry.substances.length && (
                   <SubstancesContainer>
                     Substances:{" "}
                     {entry.substances && entry.substances.join(", ")}
                   </SubstancesContainer>
                 )}
-                <MarkdownComponent view="view" value={entry.entry_content} />
+                {entry.entry_content && (
+                  <MarkdownComponent view="view" value={entry.entry_content} />
+                )}
                 <Link to={`/edit/${entry.date}`}>
                   <EditEntryButton>Edit Entry</EditEntryButton>
                 </Link>
