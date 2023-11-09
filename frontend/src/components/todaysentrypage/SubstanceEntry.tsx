@@ -26,6 +26,7 @@ const SubstanceEntryComponent: React.FunctionComponent<SubstanceEntryProps> = ({
     "Marajuana (Edible)",
     "Cocaine",
     "Mushrooms",
+    "Other"
   ];
   return (
     <>
