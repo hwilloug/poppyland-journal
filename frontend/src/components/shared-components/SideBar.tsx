@@ -3,6 +3,7 @@ import styled from "@emotion/styled";
 import { NavLink } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
 import { Button } from "./styled-components";
+import { Chip } from "@mui/material";
 
 const Container = styled.div`
   width: 25%;
@@ -44,6 +45,7 @@ const SideBarComponent: React.FunctionComponent = () => {
   return (
     <Container>
       <AppTitle>Poppyland Journal</AppTitle>
+      <Chip label="BETA" color="primary" sx={{width: '100px'}} />
       <NavContainer>
         <NavItem>
           <NavLink to="/">Home</NavLink>
