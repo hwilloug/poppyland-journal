@@ -27,7 +27,7 @@ export const getProfile = async (
     })
     const data = response.data
     dispatch(setUserId(userId))
-    dispatch(setUserPreferences(data.preferences))
+    dispatch(setUserPreferences({...data.preferences}))
   } catch (e) {
     const token = await getAccessTokenSilently()
     const response = await axios.put(
@@ -42,6 +42,6 @@ export const getProfile = async (
       },
     )
     dispatch(setUserId(userId))
-    dispatch(setUserPreferences(defaultPreferences))
+    dispatch(setUserPreferences({...defaultPreferences}))
   }
 }

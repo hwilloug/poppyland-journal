@@ -207,6 +207,11 @@ const PreviousEntriesPage: React.FunctionComponent = () => {
                     Hours sleep: {entry.hours_sleep}
                   </SleepContainer>
                 )}
+                {preferences.showSleep && entry.sleep_quality && (
+                  <SleepContainer>
+                    Sleep Quality: {entry.sleep_quality}
+                  </SleepContainer>
+                )}
                 {preferences.showDailyAffirmation && entry.affirmation && (
                   <AffirmationsContainer>
                     Daily Affirmation:{" "}

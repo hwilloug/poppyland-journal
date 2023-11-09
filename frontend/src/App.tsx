@@ -7,7 +7,7 @@ import PreviousEntriesPage from "./pages/PreviousEntriesPage"
 import MedicationsPage from "./pages/MedicationsPage"
 import EditEntryPage from "./pages/EditEntryPage"
 import { withAuthenticationRequired } from "@auth0/auth0-react"
-import NewUserPage from "./pages/NewUserPage"
+import UserPreferencesPage from "./pages/UserPreferencesPage"
 
 const AppContainer = styled.div`
   min-height: 100vh;
@@ -23,7 +23,7 @@ function App() {
           <Route path="/previous" element={<PreviousEntriesPage />} />
           <Route path="/medications" element={<MedicationsPage />} />
           <Route path="/edit/:date" element={<EditEntryPage />} />
-          <Route path="/new-user" element={<NewUserPage />} />
+          <Route path="/preferences" element={<UserPreferencesPage />} />
         </Routes>
       </BrowserRouter>
     </AppContainer>

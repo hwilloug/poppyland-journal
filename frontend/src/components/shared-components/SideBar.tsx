@@ -1,9 +1,11 @@
 import React from "react"
 import styled from "@emotion/styled"
-import { NavLink } from "react-router-dom"
+import { Link, NavLink } from "react-router-dom"
 import { useAuth0 } from "@auth0/auth0-react"
 import { Button } from "./styled-components"
 import { Chip } from "@mui/material"
+import ManageAccountsIcon from '@mui/icons-material/ManageAccounts'
+import LogoutIcon from '@mui/icons-material/Logout'
 
 const Container = styled.div`
   width: 25%;
@@ -62,13 +64,12 @@ const SideBarComponent: React.FunctionComponent = () => {
       </NavContainer>
       <AccountContainer>
         <UserName>{user?.email}</UserName>
-        <LogoutButton
+        <Link to="/preferences"><ManageAccountsIcon /></Link>
+        <a href="#"><LogoutIcon
           onClick={() =>
             logout({ logoutParams: { returnTo: window.location.origin } })
           }
-        >
-          Logout
-        </LogoutButton>
+        /></a>
       </AccountContainer>
     </Container>
   )

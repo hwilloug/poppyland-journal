@@ -28,10 +28,17 @@ export const userSlice = createSlice({
     setUserId: (state, action) => {
       state.userId = action.payload
     },
+    setUserPreference: (state, action) => {
+      // @ts-ignore
+      state.preferences = {
+        ...state.preferences,
+        [action.payload.preference]: action.payload.value
+      }
+    }
   },
 })
 
 // Action creators are generated for each case reducer function
-export const { setUserPreferences, setUserId } = userSlice.actions
+export const { setUserPreferences, setUserId, setUserPreference } = userSlice.actions
 
 export default userSlice.reducer
