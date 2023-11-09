@@ -64,14 +64,11 @@ const HomePage: React.FunctionComponent = () => {
     setIsLoading(true)
     try {
       const token = await getAccessTokenSilently()
-      const response = await axios.get(
-        apiEndpoints.getEntries.insert(),
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+      const response = await axios.get(apiEndpoints.getEntries.insert(), {
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
-      )
+      })
       const data: ResponseType[] = response.data
       let dates = []
       let moods: MoodDataType[] = []

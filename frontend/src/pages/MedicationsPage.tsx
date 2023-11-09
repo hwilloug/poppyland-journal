@@ -77,14 +77,11 @@ const MedicationsPage: React.FunctionComponent = () => {
     setIsLoading(true)
     try {
       const token = await getAccessTokenSilently()
-      const response = await axios.get(
-        apiEndpoints.getMedications.insert(),
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+      const response = await axios.get(apiEndpoints.getMedications.insert(), {
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
-      )
+      })
       const data: MedicationResponseType[] = response.data
       let meds = []
       for (let i = 0; i < data.length; i++) {

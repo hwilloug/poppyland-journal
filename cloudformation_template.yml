@@ -475,6 +475,7 @@ Resources:
         ZipFile: |
           import boto3
           import jwt
+          import json
 
           dynamodb = boto3.client("dynamodb")
 
@@ -498,7 +499,7 @@ Resources:
                   "headers": {
                       "Content-Type": "application/json"
                   },
-                  "body": json.dumps({"Successfully deleted item"})
+                  "body": json.dumps("Successfully deleted item")
               }
 
   LambdaInvokePutEntry:

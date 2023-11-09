@@ -20,14 +20,11 @@ export const getProfile = async (
   }
   try {
     const token = await getAccessTokenSilently()
-    const response = await axios.get(
-      apiEndpoints.getUserPreferences.insert(),
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+    const response = await axios.get(apiEndpoints.getUserPreferences.insert(), {
+      headers: {
+        Authorization: `Bearer ${token}`,
       },
-    )
+    })
     const data = response.data
     dispatch(setUserId(userId))
     dispatch(setUserPreferences(data.preferences))

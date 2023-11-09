@@ -22,7 +22,10 @@ import { useDispatch, useSelector } from "react-redux"
 import { State } from "../store"
 import { getProfile } from "../utils/get-profile"
 import { Box, Modal, Typography } from "@mui/material"
-import { convertToLongDateFromShortDate, convertToShortDate } from "../utils/date-utils"
+import {
+  convertToLongDateFromShortDate,
+  convertToShortDate,
+} from "../utils/date-utils"
 
 const EntriesContainer = styled.div`
   display: flex;
@@ -102,21 +105,20 @@ const PreviousEntriesPage: React.FunctionComponent = () => {
 
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
-  const [deleteEntryDate, setDeleteEntryDate] = useState<string>(convertToShortDate(new Date()))
+  const [deleteEntryDate, setDeleteEntryDate] = useState<string>(
+    convertToShortDate(new Date()),
+  )
   const [entries, setEntries] = useState<EntryType[]>([])
 
   const getEntries = async () => {
     setIsLoading(true)
     try {
       const token = await getAccessTokenSilently()
-      const response = await axios.get(
-        apiEndpoints.getEntries.insert(),
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+      const response = await axios.get(apiEndpoints.getEntries.insert(), {
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
-      )
+      })
       const data: ResponseType[] = response.data
       setEntries(data as unknown as EntryType[])
       setIsLoading(false)
@@ -145,18 +147,17 @@ const PreviousEntriesPage: React.FunctionComponent = () => {
     }
   }
 
-
   const modalStyle = {
-    position: 'absolute' as 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
+    position: "absolute" as "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
     width: 400,
-    bgcolor: 'background.paper',
-    border: '2px solid #000',
+    bgcolor: "background.paper",
+    border: "2px solid #000",
     boxShadow: 24,
     p: 4,
-  };
+  }
 
   const handleModalClose = () => {
     setIsModalOpen(false)
@@ -165,14 +166,11 @@ const PreviousEntriesPage: React.FunctionComponent = () => {
   const handleDeleteEntry = async (date: string) => {
     try {
       const token = await getAccessTokenSilently()
-      await axios.delete(
-        apiEndpoints.deleteEntry.insert({ date }),
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+      await axios.delete(apiEndpoints.deleteEntry.insert({ date }), {
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
-      )
+      })
       setIsModalOpen(false)
     } catch (e) {
       console.log(e)
@@ -233,28 +231,42 @@ const PreviousEntriesPage: React.FunctionComponent = () => {
                   </SubstancesContainer>
                 )}
                 <MarkdownComponent view="view" value={entry.entry_content} />
-                <Link to={`/edit/${entry.date}`}><EditEntryButton>Edit Entry</EditEntryButton></Link>
-                <DeleteEntryButton onClick={() => {
-                  setDeleteEntryDate(entry.date)
-                  setIsModalOpen(true)
-                }}>Delete Entry</DeleteEntryButton>
+                <Link to={`/edit/${entry.date}`}>
+                  <EditEntryButton>Edit Entry</EditEntryButton>
+                </Link>
+                <DeleteEntryButton
+                  onClick={() => {
+                    setDeleteEntryDate(entry.date)
+                    setIsModalOpen(true)
+                  }}
+                >
+                  Delete Entry
+                </DeleteEntryButton>
               </div>
             ))}
-            <Modal
-              open={isModalOpen}
-              onClose={handleModalClose}
-              aria-labelledby="modal-modal-title"
-              aria-describedby="modal-modal-description"
-            >
-              <Box sx={modalStyle}>
-                <Typography id="modal-modal-title" variant="h6" component="h2">
-                  Are you sure you want to delete this entry?
-                </Typography>
-                <Typography>{convertToLongDateFromShortDate(deleteEntryDate)}</Typography>
-                <CancelButton onClick={() => handleModalClose()}>No, take me back</CancelButton>
-                <DeleteEntryButton onClick={() => handleDeleteEntry(deleteEntryDate)}>Yes, Delete</DeleteEntryButton>
-              </Box>
-            </Modal>
+          <Modal
+            open={isModalOpen}
+            onClose={handleModalClose}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+          >
+            <Box sx={modalStyle}>
+              <Typography id="modal-modal-title" variant="h6" component="h2">
+                Are you sure you want to delete this entry?
+              </Typography>
+              <Typography>
+                {convertToLongDateFromShortDate(deleteEntryDate)}
+              </Typography>
+              <CancelButton onClick={() => handleModalClose()}>
+                No, take me back
+              </CancelButton>
+              <DeleteEntryButton
+                onClick={() => handleDeleteEntry(deleteEntryDate)}
+              >
+                Yes, Delete
+              </DeleteEntryButton>
+            </Box>
+          </Modal>
           {isLoading && <LoadingComponent />}
         </EntriesContainer>
       </PageContentContainer>

@@ -134,7 +134,8 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
 
   useEffect(() => {
     if (bedTime && wakeUpTime) {
-      let s = wakeUpTime.diff(bedTime, "hour")
+      let s = wakeUpTime.diff(bedTime, "minute")
+      s = s / 24
       if (s < 0) {
         s = s + 24
       }
