@@ -977,6 +977,187 @@ Resources:
           AttributeName: "UserId"
           KeyType: "HASH"
 
+  UserPreferencesLambdaRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: user-preferences-lambda-role
+      AssumeRolePolicyDocument: 
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Action:
+              - "sts:AssumeRole"
+      Policies:
+        - PolicyName: user-preferences-lambda-policy
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Sid: LambdaDynamoDBAccess
+                Action:
+                  - "dynamodb:BatchGetItem"
+                  - "dynamodb:BatchWriteItem"
+                  - "dynamodb:DeleteItem"
+                  - "dynamodb:GetItem"
+                  - "dynamodb:PutItem"
+                  - "dynamodb:Query"
+                  - "dynamodb:Scan"
+                  - "dynamodb:UpdateItem"
+                Resource: !GetAtt UserPreferencesTable.Arn
+
+  PutUserPreferencesLambda:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: !Sub "${AppName}-put-user-preferences"
+      Runtime: python3.8
+      Handler: index.lambda_handler
+      Role: !GetAtt UserPreferencesLambdaRole.Arn
+      Code:
+        ZipFile: |
+          import json
+          import boto3
+
+          dynamodb = boto3.client("dynamodb")
+
+          def lambda_handler(event, context):
+              payload = event.get("body", {})
+              payload = json.loads(payload)
+
+              item_payload = {
+                  'UserId': {'S': payload.get('user_id')},
+                  'Preferences': {'M': payload.get('preferences')}
+              }
+
+              response = dynamodb.put_item(
+                  TableName='UserPreferences', 
+                  Item=item_payload
+              )
+              status_code = response.get("ResponseMetadata", {}).get("HTTPStatusCode")
+              if status_code == 200:
+                  new_item = dynamodb.get_item(
+                      TableName='UserPreferences',
+                      Key={
+                          'UserId': {
+                              'S': payload['user_id']
+                          }
+                      }
+                  )
+                  return {
+                      "statusCode": 200,
+                      "headers": {
+                          "Content-Type": "application/json"
+                      },
+                      "body": json.dumps(new_item)
+                  }
+              else:
+                  return {
+                      "statusCode": status_code
+                  }
+
+  LambdaInvokePutUserPreferences:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !Ref PutUserPreferencesLambda
+      Action: "lambda:InvokeFunction"
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub 'arn:${AWS::Partition}:execute-api:${AWS::Region}:${AWS::AccountId}:${JournalApiGatweay}/*/*/preferences'
+      SourceAccount: !Ref 'AWS::AccountId'
+
+  PutUserPreferencesIntegration:
+    Type: AWS::ApiGatewayV2::Integration
+    Properties:
+      ApiId: !Ref JournalApiGatweay
+      Description: Lambda proxy integration
+      IntegrationType: AWS_PROXY
+      IntegrationMethod: POST
+      PayloadFormatVersion: "2.0"
+      IntegrationUri: !Sub 'arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${PutUserPreferencesLambda.Arn}/invocations'
+
+  PutUserPreferencesRoute:
+    Type: AWS::ApiGatewayV2::Route
+    Properties:
+      ApiId: !Ref JournalApiGatweay
+      RouteKey: "PUT /preferences"
+      AuthorizationType: JWT
+      AuthorizerId: !GetAtt ApiAuthorizer.AuthorizerId
+      Target: !Join
+        - /
+        - - integrations
+          - !Ref PutUserPreferencesIntegration
+
+  GetUserPreferencesLambda:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: !Sub "${AppName}-get-user-preferences"
+      Runtime: python3.8
+      Handler: index.lambda_handler
+      Role: !GetAtt UserPreferencesLambdaRole.Arn
+      Code:
+        ZipFile: |
+          import json
+          import boto3
+
+          dynamodb = boto3.client("dynamodb")
+
+          def lambda_handler(event, context):
+              user_id = event.get("queryStringParameters", {}).get("user_id")
+              items = dynamodb.query(
+                  TableName='UserPreferences',
+                  KeyConditionExpression=f"UserId = :user_id",
+                  ExpressionAttributeValues={
+                    ":user_id": {
+                        "S": user_id
+                    }
+                  }
+              )
+              response_items = []
+              for item in items['Items']:
+                  response_items.append({
+                      "user_id": item.get('UserId', {}).get("S"),
+                      "preferences": item.get('Preferences', {}).get("M")
+                  })
+              return {
+                  "statusCode": 200,
+                  "headers": {
+                      "Content-Type": "application/json"
+                  },
+                  "body": json.dumps(response_items)
+              }
+
+  LambdaInvokeGetUserPreferences:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !Ref GetUserPreferencesLambda
+      Action: "lambda:InvokeFunction"
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub 'arn:${AWS::Partition}:execute-api:${AWS::Region}:${AWS::AccountId}:${JournalApiGatweay}/*/*/preferences'
+      SourceAccount: !Ref 'AWS::AccountId'
+
+  GetUserPreferencesIntegration:
+    Type: AWS::ApiGatewayV2::Integration
+    Properties:
+      ApiId: !Ref JournalApiGatweay
+      Description: Lambda proxy integration
+      IntegrationType: AWS_PROXY
+      IntegrationMethod: POST
+      PayloadFormatVersion: "2.0"
+      IntegrationUri: !Sub 'arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${GetUserPreferencesLambda.Arn}/invocations'
+
+  GetUserPreferencesRoute:
+    Type: AWS::ApiGatewayV2::Route
+    Properties:
+      ApiId: !Ref JournalApiGatweay
+      RouteKey: "GET /preferences"
+      AuthorizationType: JWT
+      AuthorizerId: !GetAtt ApiAuthorizer.AuthorizerId
+      Target: !Join
+        - /
+        - - integrations
+          - !Ref GetUserPreferencesIntegration
+
 Outputs:
   WebAppDomain:
     Value: journal.poppyland.dev
