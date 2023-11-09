@@ -78,7 +78,7 @@ const MedicationsPage: React.FunctionComponent = () => {
     try {
       const token = await getAccessTokenSilently()
       const response = await axios.get(
-        apiEndpoints.getMedications.insert({ userId }),
+        apiEndpoints.getMedications.insert(),
         {
           headers: {
             Authorization: `Bearer ${token}`,

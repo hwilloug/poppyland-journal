@@ -21,7 +21,7 @@ export const getProfile = async (
   try {
     const token = await getAccessTokenSilently()
     const response = await axios.get(
-      apiEndpoints.getUserPreferences.insert({ userId }),
+      apiEndpoints.getUserPreferences.insert(),
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -34,7 +34,7 @@ export const getProfile = async (
   } catch (e) {
     const token = await getAccessTokenSilently()
     const response = await axios.put(
-      apiEndpoints.putUserPreferences.insert({ userId }),
+      apiEndpoints.putUserPreferences.insert(),
       {
         preferences: defaultPreferences,
       },

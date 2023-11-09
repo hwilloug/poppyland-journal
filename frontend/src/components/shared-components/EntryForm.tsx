@@ -71,7 +71,7 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
     try {
       const token = await getAccessTokenSilently()
       const response = await axios.get(
-        apiEndpoints.getEntry.insert({ userId: userId, date: date }),
+        apiEndpoints.getEntry.insert({ date: date }),
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -104,7 +104,7 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
     try {
       const token = await getAccessTokenSilently()
       const response = await axios.get(
-        apiEndpoints.getMedications.insert({ userId: userId, date: date }),
+        apiEndpoints.getMedications.insert({ date: date }),
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -238,6 +238,7 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
           answer={dailyQuestionA}
           onChange={setDailyQuestionA}
           setQuestion={setDailyQuestionQ}
+          date={date}
         />
       )}
 

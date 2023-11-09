@@ -34,7 +34,7 @@ const MarkdownComponent: React.FunctionComponent<MarkdownComponentProps> = ({
           }}
         />
       )}
-      {view === "view" && <MDEditor.Markdown source={value} />}
+      {view === "view" && <MDEditor.Markdown source={value} style={{padding: '20px', backgroundColor: '#fffcf5'}} />}
     </div>
   )
 }

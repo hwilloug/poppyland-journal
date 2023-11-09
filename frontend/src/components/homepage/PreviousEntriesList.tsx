@@ -51,7 +51,7 @@ const PreviousEntriesListComponent: React.FunctionComponent<
                     {dates.includes(shortDate) ? "Submitted" : "Not Submitted"}
                   </TableCell>
                   <TableCell>
-                    <Link to={`/edit/${date}`}>Edit</Link>
+                    <Link to={`/edit/${shortDate}`}>Edit</Link>
                   </TableCell>
                 </TableRow>
               )

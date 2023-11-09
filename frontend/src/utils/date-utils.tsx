@@ -25,3 +25,10 @@ export const convertToDayOfWeekMonthDay = (date: Date): string => {
   const monthDay = convertToMonthDay(date)
   return `${days[date.getDay()]}, ${monthDay}`
 }
+
+export const convertToLongDateFromShortDate = (date: string) => {
+  return new Date(date.replace(/-/g, "/")).toLocaleDateString(
+    "en-US",
+    { dateStyle: "full" },
+  )
+}

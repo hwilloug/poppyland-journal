@@ -65,7 +65,7 @@ const HomePage: React.FunctionComponent = () => {
     try {
       const token = await getAccessTokenSilently()
       const response = await axios.get(
-        apiEndpoints.getEntries.insert({ userId }),
+        apiEndpoints.getEntries.insert(),
         {
           headers: {
             Authorization: `Bearer ${token}`,

@@ -8,6 +8,7 @@ export const apiEndpoints = {
   getEntries: new SweetPath(apiBaseUrl + "/entry"),
   getEntry: new SweetPath(apiBaseUrl + "/entry/:date"),
   createEntry: new SweetPath(apiBaseUrl + "/entry"),
+  deleteEntry: new SweetPath(apiBaseUrl + "/entry/:date"),
   getMedications: new SweetPath(apiBaseUrl + "/medication"),
   putMedications: new SweetPath(apiBaseUrl + "/medication"),
   getUserPreferences: new SweetPath(apiBaseUrl + "/preferences"),

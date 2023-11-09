@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react"
 import SideBarComponent from "../components/shared-components/SideBar"
 import {
+  Button,
   PageContainer,
   PageContentContainer,
 } from "../components/shared-components/styled-components"
@@ -20,6 +21,8 @@ import { Link } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux"
 import { State } from "../store"
 import { getProfile } from "../utils/get-profile"
+import { Box, Modal, Typography } from "@mui/material"
+import { convertToLongDateFromShortDate, convertToShortDate } from "../utils/date-utils"
 
 const EntriesContainer = styled.div`
   display: flex;
@@ -61,6 +64,17 @@ const DailyQuestionContainer = styled.div`
 
 const EntryDate = styled.h3``
 
+const EditEntryButton = styled(Button)``
+
+const DeleteEntryButton = styled(Button)`
+  background-color: white;
+  color: black;
+`
+
+const CancelButton = styled(Button)`
+  color: black;
+`
+
 interface EntryType {
   date: string
   mood: string
@@ -87,6 +101,8 @@ const PreviousEntriesPage: React.FunctionComponent = () => {
   }
 
   const [isLoading, setIsLoading] = useState<boolean>(true)
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
+  const [deleteEntryDate, setDeleteEntryDate] = useState<string>(convertToShortDate(new Date()))
   const [entries, setEntries] = useState<EntryType[]>([])
 
   const getEntries = async () => {
@@ -94,7 +110,7 @@ const PreviousEntriesPage: React.FunctionComponent = () => {
     try {
       const token = await getAccessTokenSilently()
       const response = await axios.get(
-        apiEndpoints.getEntries.insert({ userId }),
+        apiEndpoints.getEntries.insert(),
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -129,6 +145,40 @@ const PreviousEntriesPage: React.FunctionComponent = () => {
     }
   }
 
+
+  const modalStyle = {
+    position: 'absolute' as 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    p: 4,
+  };
+
+  const handleModalClose = () => {
+    setIsModalOpen(false)
+  }
+
+  const handleDeleteEntry = async (date: string) => {
+    try {
+      const token = await getAccessTokenSilently()
+      await axios.delete(
+        apiEndpoints.deleteEntry.insert({ date }),
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      )
+      setIsModalOpen(false)
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
   return (
     <PageContainer>
       <SideBarComponent />
@@ -139,10 +189,7 @@ const PreviousEntriesPage: React.FunctionComponent = () => {
             entries.map((entry) => (
               <div key={entry.date}>
                 <EntryDate>
-                  {new Date(entry.date.replace(/-/g, "/")).toLocaleDateString(
-                    "en-US",
-                    { dateStyle: "full" },
-                  )}
+                  {convertToLongDateFromShortDate(entry.date)}
                 </EntryDate>
                 {preferences.showMood && (
                   <MoodContainer>Mood: {getMoodIcon(entry.mood)}</MoodContainer>
@@ -186,9 +233,28 @@ const PreviousEntriesPage: React.FunctionComponent = () => {
                   </SubstancesContainer>
                 )}
                 <MarkdownComponent view="view" value={entry.entry_content} />
-                <Link to={`/edit/${entry.date}`}>Edit Entry</Link>
+                <Link to={`/edit/${entry.date}`}><EditEntryButton>Edit Entry</EditEntryButton></Link>
+                <DeleteEntryButton onClick={() => {
+                  setDeleteEntryDate(entry.date)
+                  setIsModalOpen(true)
+                }}>Delete Entry</DeleteEntryButton>
               </div>
             ))}
+            <Modal
+              open={isModalOpen}
+              onClose={handleModalClose}
+              aria-labelledby="modal-modal-title"
+              aria-describedby="modal-modal-description"
+            >
+              <Box sx={modalStyle}>
+                <Typography id="modal-modal-title" variant="h6" component="h2">
+                  Are you sure you want to delete this entry?
+                </Typography>
+                <Typography>{convertToLongDateFromShortDate(deleteEntryDate)}</Typography>
+                <CancelButton onClick={() => handleModalClose()}>No, take me back</CancelButton>
+                <DeleteEntryButton onClick={() => handleDeleteEntry(deleteEntryDate)}>Yes, Delete</DeleteEntryButton>
+              </Box>
+            </Modal>
           {isLoading && <LoadingComponent />}
         </EntriesContainer>
       </PageContentContainer>
