@@ -78,6 +78,10 @@ const CancelButton = styled(Button)`
   color: black;
 `
 
+const NoEntriesContainer = styled.div`
+  padding: 20px;
+`
+
 interface EntryType {
   date: string
   mood: string
@@ -183,6 +187,9 @@ const PreviousEntriesPage: React.FunctionComponent = () => {
       <PageContentContainer>
         <SubHeader>Previous Entries</SubHeader>
         <EntriesContainer>
+          {!isLoading && entries.length === 0 &&
+            <NoEntriesContainer>No entries yet! Head to <Link to="/today">today's entry page</Link> to get started.</NoEntriesContainer>
+          }
           {!isLoading &&
             entries.map((entry) => (
               <div key={entry.date}>
