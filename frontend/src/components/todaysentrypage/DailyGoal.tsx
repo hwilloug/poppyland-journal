@@ -1,12 +1,12 @@
-import styled from "@emotion/styled";
-import MarkdownComponent from "../shared-components/Markdown";
-import { SectionHeader } from "../../pages/TodaysEntryPage";
+import styled from "@emotion/styled"
+import MarkdownComponent from "../shared-components/Markdown"
+import { SectionHeader } from "../../pages/TodaysEntryPage"
 
-const GoalsContainer = styled.div``;
+const GoalsContainer = styled.div``
 
 interface DailyGoalProps {
-  goal?: string;
-  onChange: Function;
+  goal?: string
+  onChange: Function
 }
 
 const DailyGoalComponent: React.FunctionComponent<DailyGoalProps> = ({
@@ -25,7 +25,7 @@ const DailyGoalComponent: React.FunctionComponent<DailyGoalProps> = ({
         editMode
       />
     </GoalsContainer>
-  );
-};
+  )
+}
 
-export default DailyGoalComponent;
+export default DailyGoalComponent

@@ -1,20 +1,20 @@
-import styled from "@emotion/styled";
-import { SectionHeader } from "../../pages/TodaysEntryPage";
-import SentimentVerySatisfiedIcon from "@mui/icons-material/SentimentVerySatisfied";
-import SentimentSatisfiedIcon from "@mui/icons-material/SentimentSatisfied";
-import SentimentNeutralIcon from "@mui/icons-material/SentimentNeutral";
-import SentimentDissatisfiedIcon from "@mui/icons-material/SentimentDissatisfied";
-import SentimentVeryDissatisfiedIcon from "@mui/icons-material/SentimentVeryDissatisfied";
+import styled from "@emotion/styled"
+import { SectionHeader } from "../../pages/TodaysEntryPage"
+import SentimentVerySatisfiedIcon from "@mui/icons-material/SentimentVerySatisfied"
+import SentimentSatisfiedIcon from "@mui/icons-material/SentimentSatisfied"
+import SentimentNeutralIcon from "@mui/icons-material/SentimentNeutral"
+import SentimentDissatisfiedIcon from "@mui/icons-material/SentimentDissatisfied"
+import SentimentVeryDissatisfiedIcon from "@mui/icons-material/SentimentVeryDissatisfied"
 
 const MoodContainer = styled.div`
   display: flex;
   flex-direciton: row;
   gap: 10px;
-`;
+`
 
 interface MoodEntryProps {
-  mood?: number;
-  onChange: Function;
+  mood?: number
+  onChange: Function
 }
 
 const MoodEntryComponent: React.FunctionComponent<MoodEntryProps> = ({
@@ -30,7 +30,7 @@ const MoodEntryComponent: React.FunctionComponent<MoodEntryProps> = ({
           color="error"
           style={mood === 0 ? { border: "1px solid black" } : {}}
           onClick={() => {
-            onChange(0);
+            onChange(0)
           }}
         />
         <SentimentDissatisfiedIcon
@@ -38,7 +38,7 @@ const MoodEntryComponent: React.FunctionComponent<MoodEntryProps> = ({
           color="warning"
           style={mood === 1 ? { border: "1px solid black" } : {}}
           onClick={() => {
-            onChange(1);
+            onChange(1)
           }}
         />
         <SentimentNeutralIcon
@@ -46,7 +46,7 @@ const MoodEntryComponent: React.FunctionComponent<MoodEntryProps> = ({
           color="info"
           style={mood === 2 ? { border: "1px solid black" } : {}}
           onClick={() => {
-            onChange(2);
+            onChange(2)
           }}
         />
         <SentimentSatisfiedIcon
@@ -54,7 +54,7 @@ const MoodEntryComponent: React.FunctionComponent<MoodEntryProps> = ({
           color="success"
           style={mood === 3 ? { border: "1px solid black" } : {}}
           onClick={() => {
-            onChange(3);
+            onChange(3)
           }}
         />
         <SentimentVerySatisfiedIcon
@@ -65,12 +65,12 @@ const MoodEntryComponent: React.FunctionComponent<MoodEntryProps> = ({
               : { color: "purple" }
           }
           onClick={() => {
-            onChange(4);
+            onChange(4)
           }}
         />
       </MoodContainer>
     </>
-  );
-};
+  )
+}
 
-export default MoodEntryComponent;
+export default MoodEntryComponent

@@ -1,14 +1,14 @@
-import React from "react";
-import MDEditor from "@uiw/react-md-editor";
-import rehypeSanitize from "rehype-sanitize";
+import React from "react"
+import MDEditor from "@uiw/react-md-editor"
+import rehypeSanitize from "rehype-sanitize"
 
 interface MarkdownComponentProps {
-  value?: string;
-  onChange?: Function;
-  view: "edit" | "view";
-  height?: number;
-  hideToolbar?: boolean;
-  editMode?: boolean;
+  value?: string
+  onChange?: Function
+  view: "edit" | "view"
+  height?: number
+  hideToolbar?: boolean
+  editMode?: boolean
 }
 
 const MarkdownComponent: React.FunctionComponent<MarkdownComponentProps> = ({
@@ -36,7 +36,7 @@ const MarkdownComponent: React.FunctionComponent<MarkdownComponentProps> = ({
       )}
       {view === "view" && <MDEditor.Markdown source={value} />}
     </div>
-  );
-};
+  )
+}
 
-export default MarkdownComponent;
+export default MarkdownComponent

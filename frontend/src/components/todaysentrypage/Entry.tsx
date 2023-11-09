@@ -1,9 +1,9 @@
-import { SectionHeader } from "../../pages/TodaysEntryPage";
-import MarkdownComponent from "../shared-components/Markdown";
+import { SectionHeader } from "../../pages/TodaysEntryPage"
+import MarkdownComponent from "../shared-components/Markdown"
 
 interface EntryProps {
-  content?: string;
-  onChange: Function;
+  content?: string
+  onChange: Function
 }
 
 const EntryComponent: React.FunctionComponent<EntryProps> = ({
@@ -20,7 +20,7 @@ const EntryComponent: React.FunctionComponent<EntryProps> = ({
         height={500}
       />
     </>
-  );
-};
+  )
+}
 
-export default EntryComponent;
+export default EntryComponent

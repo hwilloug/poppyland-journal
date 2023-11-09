@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "axios"
 
 export const getToken = async () => {
   const options = {
@@ -11,13 +11,13 @@ export const getToken = async () => {
       client_secret: process.env.REACT_APP_AUTH0_M2M_CLIENT_SECRET!,
       audience: process.env.REACT_APP_AUTH0_AUDIENCE!,
     }),
-  };
+  }
 
   try {
-    const response = await axios.request(options);
-    return response.data["access_token"];
+    const response = await axios.request(options)
+    return response.data["access_token"]
   } catch (e) {
-    console.log(e);
-    return "";
+    console.log(e)
+    return ""
   }
-};
+}

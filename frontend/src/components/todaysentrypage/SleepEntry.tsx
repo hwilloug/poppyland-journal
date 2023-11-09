@@ -1,20 +1,20 @@
-import { Dayjs } from "dayjs";
+import { Dayjs } from "dayjs"
 import {
   TimePicker,
   renderTimeViewClock,
   LocalizationProvider,
-} from "@mui/x-date-pickers";
+} from "@mui/x-date-pickers"
 
-import { SectionHeader } from "../../pages/TodaysEntryPage";
-import styled from "@emotion/styled";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { MenuItem, Select } from "@mui/material";
+import { SectionHeader } from "../../pages/TodaysEntryPage"
+import styled from "@emotion/styled"
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs"
+import { MenuItem, Select } from "@mui/material"
 
 const SleepTimeContainer = styled.div`
   display: flex;
   flex-direction: row;
   gap: 20px;
-`;
+`
 
 const SleepQualityContainer = styled.div`
   display: flex;
@@ -22,16 +22,16 @@ const SleepQualityContainer = styled.div`
   gap: 20px;
   align-items: center;
   margin-top: 10px;
-`;
+`
 
 interface SleepEntryProps {
-  onBedTimeChange: Function;
-  onWakeUpTimeChange: Function;
-  onSleepQualityChange: Function;
-  bedTime?: Dayjs | null;
-  wakeUpTime?: Dayjs | null;
-  sleepQuality?: string | null;
-  hoursSleep?: number | null;
+  onBedTimeChange: Function
+  onWakeUpTimeChange: Function
+  onSleepQualityChange: Function
+  bedTime?: Dayjs | null
+  wakeUpTime?: Dayjs | null
+  sleepQuality?: string | null
+  hoursSleep?: number | null
 }
 
 const SleepEntryComponent: React.FunctionComponent<SleepEntryProps> = ({
@@ -89,7 +89,7 @@ const SleepEntryComponent: React.FunctionComponent<SleepEntryProps> = ({
         </Select>
       </SleepQualityContainer>
     </>
-  );
-};
+  )
+}
 
-export default SleepEntryComponent;
+export default SleepEntryComponent

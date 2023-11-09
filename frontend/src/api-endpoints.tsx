@@ -1,8 +1,8 @@
-import { SweetPath } from "sweet-path";
+import { SweetPath } from "sweet-path"
 
-const apiBaseUrl = process.env.REACT_APP_API;
+const apiBaseUrl = process.env.REACT_APP_API
 
-export type apiEndpointsType = {};
+export type apiEndpointsType = {}
 
 export const apiEndpoints = {
   getEntries: new SweetPath(apiBaseUrl + "/entry?user_id=:userId"),
@@ -10,4 +10,4 @@ export const apiEndpoints = {
   createEntry: new SweetPath(apiBaseUrl + "/entry"),
   getMedications: new SweetPath(apiBaseUrl + "/medication?user_id=:userId"),
   putMedications: new SweetPath(apiBaseUrl + "/medication?user_id=:userId"),
-};
+}

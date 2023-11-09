@@ -1,68 +1,68 @@
-import { useAuth0 } from "@auth0/auth0-react";
-import styled from "@emotion/styled";
-import dayjs, { Dayjs } from "dayjs";
-import { useEffect, useState } from "react";
-import { apiEndpoints } from "../../api-endpoints";
-import { getToken } from "../../get-token";
-import axios from "axios";
-import { ResponseType } from "../../pages/HomePage";
-import MoodEntryComponent from "../todaysentrypage/MoodEntry";
-import SleepEntryComponent from "../todaysentrypage/SleepEntry";
-import DailyAffirmationComponent from "../todaysentrypage/DailyAffirmation";
-import DailyGoalComponent from "../todaysentrypage/DailyGoal";
-import DailyQuestionComponent from "../todaysentrypage/DailyQuestion";
-import MentalHealthEntryComponent from "../todaysentrypage/MentalHealthEntry";
-import SubstanceEntryComponent from "../todaysentrypage/SubstanceEntry";
-import EntryComponent from "../todaysentrypage/Entry";
-import { SubHeader, SubmitButton } from "./styled-components";
-import { Alert, Snackbar } from "@mui/material";
-import { Link } from "react-router-dom";
-import LoadingComponent from "./Loading";
+import { useAuth0 } from "@auth0/auth0-react"
+import styled from "@emotion/styled"
+import dayjs, { Dayjs } from "dayjs"
+import { useEffect, useState } from "react"
+import { apiEndpoints } from "../../api-endpoints"
+import { getToken } from "../../get-token"
+import axios from "axios"
+import { ResponseType } from "../../pages/HomePage"
+import MoodEntryComponent from "../todaysentrypage/MoodEntry"
+import SleepEntryComponent from "../todaysentrypage/SleepEntry"
+import DailyAffirmationComponent from "../todaysentrypage/DailyAffirmation"
+import DailyGoalComponent from "../todaysentrypage/DailyGoal"
+import DailyQuestionComponent from "../todaysentrypage/DailyQuestion"
+import MentalHealthEntryComponent from "../todaysentrypage/MentalHealthEntry"
+import SubstanceEntryComponent from "../todaysentrypage/SubstanceEntry"
+import EntryComponent from "../todaysentrypage/Entry"
+import { SubHeader, SubmitButton } from "./styled-components"
+import { Alert, Snackbar } from "@mui/material"
+import { Link } from "react-router-dom"
+import LoadingComponent from "./Loading"
 
 const SubmitContainer = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
-`;
+`
 
 const MedicationsContainer = styled.div`
   margin: 20px;
-`;
+`
 
 interface EntryFormProps {
-  date: string;
+  date: string
 }
 
 const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
   const dateFull = new Date(date.replace(/-/g, "/")).toLocaleDateString(
     "en-US",
     { dateStyle: "full" },
-  );
+  )
 
-  const { user } = useAuth0();
-  const userId = user!.sub;
+  const { user } = useAuth0()
+  const userId = user!.sub
 
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false);
-  const [snackbarMessage, setSnackbarMessage] = useState<string>("");
-  const [mood, setMood] = useState<number>();
-  const [bedTime, setBedTime] = useState<Dayjs | null>();
-  const [wakeUpTime, setWakeUpTime] = useState<Dayjs | null>();
-  const [hoursSleep, setHoursSleep] = useState<number>();
-  const [sleepQuality, setSleepQuality] = useState<string>();
-  const [affirmation, setAffirmation] = useState<string>();
-  const [goal, setGoal] = useState<string>();
-  const [mentalHealth, setMentalHealth] = useState<string[]>([]);
-  const [substances, setSubstances] = useState<string[]>([]);
-  const [entryContent, setEntryContent] = useState<string>();
-  const [dailyQuestionQ, setDailyQuestionQ] = useState<string>();
-  const [dailyQuestionA, setDailyQuestionA] = useState<string>();
-  const [currentMedications, setCurrentMedications] = useState<string[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true)
+  const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false)
+  const [snackbarMessage, setSnackbarMessage] = useState<string>("")
+  const [mood, setMood] = useState<number>()
+  const [bedTime, setBedTime] = useState<Dayjs | null>()
+  const [wakeUpTime, setWakeUpTime] = useState<Dayjs | null>()
+  const [hoursSleep, setHoursSleep] = useState<number>()
+  const [sleepQuality, setSleepQuality] = useState<string>()
+  const [affirmation, setAffirmation] = useState<string>()
+  const [goal, setGoal] = useState<string>()
+  const [mentalHealth, setMentalHealth] = useState<string[]>([])
+  const [substances, setSubstances] = useState<string[]>([])
+  const [entryContent, setEntryContent] = useState<string>()
+  const [dailyQuestionQ, setDailyQuestionQ] = useState<string>()
+  const [dailyQuestionA, setDailyQuestionA] = useState<string>()
+  const [currentMedications, setCurrentMedications] = useState<string[]>([])
 
   const getEntry = async () => {
-    setIsLoading(true);
+    setIsLoading(true)
     try {
-      const token = await getToken();
+      const token = await getToken()
       const response = await axios.get(
         apiEndpoints.getEntry.insert({ userId: userId, date: date }),
         {
@@ -70,32 +70,32 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
             Authorization: `Bearer ${token}`,
           },
         },
-      );
-      const data: ResponseType = response.data;
+      )
+      const data: ResponseType = response.data
       if (data) {
-        setMood(parseInt(data.mood));
-        setBedTime(dayjs(data.bed_time));
-        setWakeUpTime(dayjs(data.wake_up_time));
-        setHoursSleep(parseInt(data.hours_sleep));
-        setSleepQuality(data.sleep_quality);
-        setMentalHealth(data.mental_health || []);
-        setEntryContent(data.entry_content);
-        setSubstances(data.substances || []);
-        setAffirmation(data.affirmation);
-        setGoal(data.goal);
-        setDailyQuestionA(data.daily_question_a);
-        setDailyQuestionQ(data.daily_question_q);
+        setMood(parseInt(data.mood))
+        setBedTime(dayjs(data.bed_time))
+        setWakeUpTime(dayjs(data.wake_up_time))
+        setHoursSleep(parseInt(data.hours_sleep))
+        setSleepQuality(data.sleep_quality)
+        setMentalHealth(data.mental_health || [])
+        setEntryContent(data.entry_content)
+        setSubstances(data.substances || [])
+        setAffirmation(data.affirmation)
+        setGoal(data.goal)
+        setDailyQuestionA(data.daily_question_a)
+        setDailyQuestionQ(data.daily_question_q)
       }
-      setIsLoading(false);
+      setIsLoading(false)
     } catch (e) {
-      console.log(e);
-      setIsLoading(false);
+      console.log(e)
+      setIsLoading(false)
     }
-  };
+  }
 
   const getCurrentMedications = async () => {
     try {
-      const token = await getToken();
+      const token = await getToken()
       const response = await axios.get(
         apiEndpoints.getMedications.insert({ userId: userId, date: date }),
         {
@@ -103,64 +103,64 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
             Authorization: `Bearer ${token}`,
           },
         },
-      );
-      const data = response.data;
-      let currentMeds = [];
+      )
+      const data = response.data
+      let currentMeds = []
       if (data) {
         for (let i = 0; i < data.length; i++) {
-          !data[i].end_data && currentMeds.push(data[i].medication_name);
+          !data[i].end_data && currentMeds.push(data[i].medication_name)
         }
-        console.log(currentMeds);
-        setCurrentMedications([...currentMeds]);
+        console.log(currentMeds)
+        setCurrentMedications([...currentMeds])
       }
-      setIsLoading(false);
+      setIsLoading(false)
     } catch (e) {
-      console.log(e);
-      setIsLoading(false);
+      console.log(e)
+      setIsLoading(false)
     }
-  };
+  }
 
   useEffect(() => {
-    getEntry();
-    getCurrentMedications();
+    getEntry()
+    getCurrentMedications()
     // eslint-disable-next-line
-  }, []);
+  }, [])
 
   useEffect(() => {
     if (bedTime && wakeUpTime) {
-      let s = wakeUpTime.diff(bedTime, "hour");
+      let s = wakeUpTime.diff(bedTime, "hour")
       if (s < 0) {
-        s = s + 24;
+        s = s + 24
       }
-      setHoursSleep(s);
+      setHoursSleep(s)
     }
-  }, [bedTime, wakeUpTime]);
+  }, [bedTime, wakeUpTime])
 
   const modifyMentalHealth = (symptom: string) => {
     if (mentalHealth.includes(symptom)) {
-      let symptoms = mentalHealth;
-      let index = symptoms.indexOf(symptom);
-      symptoms.splice(index, 1);
-      setMentalHealth([...symptoms]);
+      let symptoms = mentalHealth
+      let index = symptoms.indexOf(symptom)
+      symptoms.splice(index, 1)
+      setMentalHealth([...symptoms])
     } else {
-      setMentalHealth([...mentalHealth, symptom]);
+      setMentalHealth([...mentalHealth, symptom])
     }
-  };
+  }
 
   const modifySubstances = (substance: string) => {
     if (substances.includes(substance)) {
-      let s = substances;
-      let index = s.indexOf(substance);
-      s.splice(index, 1);
-      setSubstances([...s]);
+      let s = substances
+      let index = s.indexOf(substance)
+      s.splice(index, 1)
+      setSubstances([...s])
     } else {
-      setSubstances([...substances, substance]);
+      setSubstances([...substances, substance])
     }
-  };
+  }
 
   const onSubmit = async () => {
     try {
-      const token = await getToken();
+      const token = await getToken()
       await axios.put(
         apiEndpoints.createEntry.insert(),
         {
@@ -184,20 +184,20 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
             Authorization: `Bearer ${token}`,
           },
         },
-      );
-      setSnackbarMessage("Successfully saved entry!");
-      setSnackbarOpen(true);
+      )
+      setSnackbarMessage("Successfully saved entry!")
+      setSnackbarOpen(true)
     } catch (e) {
-      console.log(e);
+      console.log(e)
     }
-  };
+  }
 
   const handleSnackbarClose = () => {
-    setSnackbarOpen(false);
-  };
+    setSnackbarOpen(false)
+  }
 
   if (isLoading) {
-    return <LoadingComponent />;
+    return <LoadingComponent />
   }
 
   return (
@@ -253,7 +253,7 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
         </Alert>
       </Snackbar>
     </>
-  );
-};
+  )
+}
 
-export default EntryForm;
+export default EntryForm

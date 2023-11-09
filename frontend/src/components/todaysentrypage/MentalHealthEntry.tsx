@@ -1,17 +1,17 @@
-import styled from "@emotion/styled";
-import { SectionHeader } from "../../pages/TodaysEntryPage";
-import CheckboxItemComponent from "../shared-components/CheckboxItem";
+import styled from "@emotion/styled"
+import { SectionHeader } from "../../pages/TodaysEntryPage"
+import CheckboxItemComponent from "../shared-components/CheckboxItem"
 
 const MentalHealthContainer = styled.div`
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
   max-height: 200px;
-`;
+`
 
 interface MentalHealthEntryProps {
-  mentalHealth: string[];
-  onChange: Function;
+  mentalHealth: string[]
+  onChange: Function
 }
 
 const MentalHealthEntryComponent: React.FunctionComponent<
@@ -34,7 +34,7 @@ const MentalHealthEntryComponent: React.FunctionComponent<
     "Reckless Behavior",
     "Fatigue",
     "Suicidal Ideation",
-  ];
+  ]
 
   return (
     <>
@@ -50,7 +50,7 @@ const MentalHealthEntryComponent: React.FunctionComponent<
         ))}
       </MentalHealthContainer>
     </>
-  );
-};
+  )
+}
 
-export default MentalHealthEntryComponent;
+export default MentalHealthEntryComponent

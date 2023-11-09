@@ -1,12 +1,12 @@
-import React from "react";
-import styled from "@emotion/styled";
-import { SubHeader } from "../shared-components/styled-components";
+import React from "react"
+import styled from "@emotion/styled"
+import { SubHeader } from "../shared-components/styled-components"
 import {
   convertToDayOfWeekMonthDay,
   convertToMonthDay,
   convertToShortDate,
-} from "../../utils/date-utils";
-import { Link } from "react-router-dom";
+} from "../../utils/date-utils"
+import { Link } from "react-router-dom"
 import {
   Paper,
   Table,
@@ -14,19 +14,19 @@ import {
   TableCell,
   TableContainer,
   TableRow,
-} from "@mui/material";
+} from "@mui/material"
 
-const Container = styled.div``;
+const Container = styled.div``
 
 const EntryItemContainer = styled.div`
   display: flex;
   flex-direction: row;
   gap: 20px;
   align-items: center;
-`;
+`
 
 interface PreviousEntriesListProps {
-  dates: string[];
+  dates: string[]
 }
 
 const PreviousEntriesListComponent: React.FunctionComponent<
@@ -41,9 +41,9 @@ const PreviousEntriesListComponent: React.FunctionComponent<
             {[...Array(7).keys()].map((i) => {
               const date = new Date(
                 new Date().setDate(new Date().getDate() - i),
-              );
-              const shortDate = convertToShortDate(date);
-              const dateString = convertToDayOfWeekMonthDay(date);
+              )
+              const shortDate = convertToShortDate(date)
+              const dateString = convertToDayOfWeekMonthDay(date)
               return (
                 <TableRow>
                   <TableCell>{dateString}</TableCell>
@@ -54,13 +54,13 @@ const PreviousEntriesListComponent: React.FunctionComponent<
                     <Link to={`/edit/${date}`}>Edit</Link>
                   </TableCell>
                 </TableRow>
-              );
+              )
             })}
           </TableBody>
         </Table>
       </TableContainer>
     </Container>
-  );
-};
+  )
+}
 
-export default PreviousEntriesListComponent;
+export default PreviousEntriesListComponent

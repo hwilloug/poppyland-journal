@@ -1,17 +1,17 @@
-import styled from "@emotion/styled";
-import { SectionHeader } from "../../pages/TodaysEntryPage";
-import CheckboxItemComponent from "../shared-components/CheckboxItem";
+import styled from "@emotion/styled"
+import { SectionHeader } from "../../pages/TodaysEntryPage"
+import CheckboxItemComponent from "../shared-components/CheckboxItem"
 
 const SubstancesContainer = styled.div`
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
   max-height: 100px;
-`;
+`
 
 interface SubstanceEntryProps {
-  substances: string[];
-  onChange: Function;
+  substances: string[]
+  onChange: Function
 }
 
 const SubstanceEntryComponent: React.FunctionComponent<SubstanceEntryProps> = ({
@@ -26,8 +26,8 @@ const SubstanceEntryComponent: React.FunctionComponent<SubstanceEntryProps> = ({
     "Marajuana (Edible)",
     "Cocaine",
     "Mushrooms",
-    "Other"
-  ];
+    "Other",
+  ]
   return (
     <>
       <SectionHeader>Substance Use</SectionHeader>
@@ -42,7 +42,7 @@ const SubstanceEntryComponent: React.FunctionComponent<SubstanceEntryProps> = ({
         ))}
       </SubstancesContainer>
     </>
-  );
-};
+  )
+}
 
-export default SubstanceEntryComponent;
+export default SubstanceEntryComponent

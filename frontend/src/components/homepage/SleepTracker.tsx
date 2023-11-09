@@ -1,11 +1,11 @@
-import React from "react";
-import styled from "@emotion/styled";
-import { SubHeader } from "../shared-components/styled-components";
+import React from "react"
+import styled from "@emotion/styled"
+import { SubHeader } from "../shared-components/styled-components"
 
-const Container = styled.div``;
+const Container = styled.div``
 
 interface SleepTrackerProps {
-  sleepData: { [date: string]: number };
+  sleepData: { [date: string]: number }
 }
 
 const SleepTrackerComponent: React.FunctionComponent<SleepTrackerProps> = ({
@@ -15,7 +15,7 @@ const SleepTrackerComponent: React.FunctionComponent<SleepTrackerProps> = ({
     <Container>
       <SubHeader>Sleep Tracker - Last 30 days</SubHeader>
     </Container>
-  );
-};
+  )
+}
 
-export default SleepTrackerComponent;
+export default SleepTrackerComponent

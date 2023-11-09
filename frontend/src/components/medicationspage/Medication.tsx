@@ -1,19 +1,19 @@
-import styled from "@emotion/styled";
-import { MedicationType } from "../../pages/MedicationsPage";
-import { TextField } from "@mui/material";
-import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import styled from "@emotion/styled"
+import { MedicationType } from "../../pages/MedicationsPage"
+import { TextField } from "@mui/material"
+import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers"
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs"
 
 const MedicationContainer = styled.div`
   display: flex;
   flex-direction: row;
   gap: 20px;
   align-items: center;
-`;
+`
 
 interface MedicationProps {
-  medication: MedicationType;
-  onChange: Function;
+  medication: MedicationType
+  onChange: Function
 }
 
 const MedicationComponent: React.FunctionComponent<MedicationProps> = ({
@@ -54,7 +54,7 @@ const MedicationComponent: React.FunctionComponent<MedicationProps> = ({
         />
       </LocalizationProvider>
     </MedicationContainer>
-  );
-};
+  )
+}
 
-export default MedicationComponent;
+export default MedicationComponent
