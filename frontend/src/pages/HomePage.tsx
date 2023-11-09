@@ -5,7 +5,7 @@ import MoodTrackerComponent, {
   MoodDataType,
 } from "../components/homepage/MoodTracker"
 import PreviousEntriesListComponent from "../components/homepage/PreviousEntriesList"
-import SleepTrackerComponent from "../components/homepage/SleepTracker"
+import SleepTrackerComponent, { SleepDataType } from "../components/homepage/SleepTracker"
 import { apiEndpoints } from "../api-endpoints"
 import axios from "axios"
 import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react"
@@ -58,7 +58,7 @@ const HomePage: React.FunctionComponent = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [entryDates, setEntryDates] = useState<string[]>([])
   const [moodData, setMoodData] = useState<MoodDataType[]>([])
-  const [sleepData, setSleepData] = useState<DataType>({})
+  const [sleepData, setSleepData] = useState<SleepDataType[]>([])
 
   const getEntries = async () => {
     setIsLoading(true)
@@ -72,18 +72,21 @@ const HomePage: React.FunctionComponent = () => {
       const data: ResponseType[] = response.data
       let dates = []
       let moods: MoodDataType[] = []
-      let sleepTimes: DataType = {}
+      let sleep: SleepDataType[] = []
       for (let i = 0; i < data.length; i++) {
         dates.push(data[i]["date"])
         moods.push({
           date: new Date(data[i]["date"].replace(/-/g, "/")).valueOf(),
           mood: parseInt(data[i]["mood"]),
         })
-        sleepTimes[data[i]["date"]] = parseInt(data[i]["hours_sleep"])
+        sleep.push({
+          date: new Date(data[i]["date"].replace(/-/g, "/")).valueOf(),
+          hoursSleep: parseInt(data[i]["hours_sleep"])
+        })
       }
       setEntryDates(dates)
       setMoodData(moods)
-      setSleepData(sleepTimes)
+      setSleepData(sleep)
       setIsLoading(false)
     } catch (e) {
       console.log(e)

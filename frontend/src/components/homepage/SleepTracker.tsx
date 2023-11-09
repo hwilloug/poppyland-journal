@@ -1,19 +1,71 @@
 import React from "react"
 import styled from "@emotion/styled"
 import { SubHeader } from "../shared-components/styled-components"
+import { Label, Line, LineChart, XAxis, YAxis } from "recharts"
+import SentimentVerySatisfiedIcon from "@mui/icons-material/SentimentVerySatisfied"
+import SentimentSatisfiedIcon from "@mui/icons-material/SentimentSatisfied"
+import SentimentNeutralIcon from "@mui/icons-material/SentimentNeutral"
+import SentimentDissatisfiedIcon from "@mui/icons-material/SentimentDissatisfied"
+import SentimentVeryDissatisfiedIcon from "@mui/icons-material/SentimentVeryDissatisfied"
+import { convertToMonthDay } from "../../utils/date-utils"
 
 const Container = styled.div``
 
+export type SleepDataType = {
+  date: number
+  hoursSleep: number
+}
+
 interface SleepTrackerProps {
-  sleepData: { [date: string]: number }
+  sleepData: SleepDataType[]
 }
 
 const SleepTrackerComponent: React.FunctionComponent<SleepTrackerProps> = ({
   sleepData,
 }) => {
+  const today = new Date().valueOf()
+  const thirtyDaysAgo = new Date(
+    new Date().setDate(new Date().getDate() - 30),
+  ).valueOf()
+
   return (
     <Container>
       <SubHeader>Sleep Tracker - Last 30 days</SubHeader>
+      <LineChart
+        margin={{ top: 5, left: 5, right: 5, bottom: 5 }}
+        width={900}
+        height={300}
+        data={sleepData}
+        style={{
+          backgroundColor: "white",
+          padding: "20px 20px 10px 0px",
+          boxShadow: "1px 1px 1px lightgrey",
+          border: "1px solid lightgrey",
+        }}
+      >
+        <Line
+          type="monotone"
+          dataKey="hoursSleep"
+          stroke="#8d5bc1"
+          dot={{ stroke: "#8d5bc1" }}
+        />
+        <XAxis
+          dataKey="date"
+          type="number"
+          domain={[thirtyDaysAgo, today]}
+          includeHidden
+          tickFormatter={(value) => convertToMonthDay(new Date(value))}
+        />
+        <YAxis>
+          <Label
+            style={{
+                textAnchor: "middle"
+            }}
+            angle={270}
+            value={"Hours Slept"} 
+          />
+        </YAxis>
+      </LineChart>
     </Container>
   )
 }

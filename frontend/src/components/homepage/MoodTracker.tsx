@@ -7,6 +7,7 @@ import SentimentSatisfiedIcon from "@mui/icons-material/SentimentSatisfied"
 import SentimentNeutralIcon from "@mui/icons-material/SentimentNeutral"
 import SentimentDissatisfiedIcon from "@mui/icons-material/SentimentDissatisfied"
 import SentimentVeryDissatisfiedIcon from "@mui/icons-material/SentimentVeryDissatisfied"
+import { convertToMonthDay } from "../../utils/date-utils"
 
 const Container = styled.div``
 
@@ -26,11 +27,6 @@ const MoodTrackerComponent: React.FunctionComponent<MoodTrackerProps> = ({
   const thirtyDaysAgo = new Date(
     new Date().setDate(new Date().getDate() - 30),
   ).valueOf()
-
-  const tickStyle = {
-    width: "20px",
-    height: "20px",
-  }
 
   const renderCustomAxisTick = ({
     x,
@@ -123,24 +119,7 @@ const MoodTrackerComponent: React.FunctionComponent<MoodTrackerProps> = ({
           type="number"
           domain={[thirtyDaysAgo, today]}
           includeHidden
-          tickFormatter={(value) => {
-            const date = new Date(value)
-            const months = [
-              "Jan",
-              "Feb",
-              "Mar",
-              "Apr",
-              "May",
-              "Jun",
-              "Jul",
-              "Aug",
-              "Sep",
-              "Oct",
-              "Nov",
-              "Dec",
-            ]
-            return `${months[date.getMonth()]} ${date.getDate()}`
-          }}
+          tickFormatter={(value) => convertToMonthDay(new Date(value))}
         />
         <YAxis domain={[0, 4]} includeHidden tick={renderCustomAxisTick} />
       </LineChart>
