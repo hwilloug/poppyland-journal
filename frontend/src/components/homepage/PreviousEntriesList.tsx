@@ -34,7 +34,7 @@ const PreviousEntriesListComponent: React.FunctionComponent<
 > = ({ dates }) => {
   return (
     <Container>
-      <SubHeader>Entries (last 7 days)</SubHeader>
+      <SubHeader>Entries - last 7 days</SubHeader>
       <TableContainer component={Paper}>
         <Table>
           <TableBody>

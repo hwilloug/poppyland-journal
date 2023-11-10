@@ -15,6 +15,9 @@ import LoadingComponent from "../components/shared-components/Loading"
 import { useDispatch, useSelector } from "react-redux"
 import { State } from "../store"
 import { getProfile } from "../utils/get-profile"
+import ExerciseTrackerComponent, {
+  ExerciseDataType,
+} from "../components/homepage/ExerciseTracker"
 
 const PageContainer = styled.div`
   margin: 0px;
@@ -62,6 +65,7 @@ const HomePage: React.FunctionComponent = () => {
   const [entryDates, setEntryDates] = useState<string[]>([])
   const [moodData, setMoodData] = useState<MoodDataType[]>([])
   const [sleepData, setSleepData] = useState<SleepDataType[]>([])
+  const [exerciseData, setExerciseData] = useState<ExerciseDataType[]>([])
 
   const getEntries = async () => {
     setIsLoading(true)
@@ -76,6 +80,7 @@ const HomePage: React.FunctionComponent = () => {
       let dates = []
       let moods: MoodDataType[] = []
       let sleep: SleepDataType[] = []
+      let exercise: ExerciseDataType[] = []
       for (let i = 0; i < data.length; i++) {
         dates.push(data[i]["date"])
         moods.push({
@@ -86,10 +91,15 @@ const HomePage: React.FunctionComponent = () => {
           date: new Date(data[i]["date"].replace(/-/g, "/")).valueOf(),
           hoursSleep: parseInt(data[i]["hours_sleep"]),
         })
+        exercise.push({
+          date: new Date(data[i]["date"].replace(/-/g, "/")).valueOf(),
+          minutesExercise: parseInt(data[i]["exercise"]),
+        })
       }
       setEntryDates(dates)
       setMoodData(moods)
       setSleepData(sleep)
+      setExerciseData(exercise)
       setIsLoading(false)
     } catch (e) {
       console.log(e)
@@ -109,6 +119,9 @@ const HomePage: React.FunctionComponent = () => {
           {preferences.showMood && <MoodTrackerComponent moodData={moodData} />}
           {preferences.showSleep && (
             <SleepTrackerComponent sleepData={sleepData} />
+          )}
+          {preferences.showExercise && (
+            <ExerciseTrackerComponent data={exerciseData} />
           )}
           <PreviousEntriesListComponent dates={entryDates} />
         </HomePageContainer>
