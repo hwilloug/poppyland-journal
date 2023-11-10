@@ -1,4 +1,12 @@
-import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom"
+import {
+  BrowserRouter,
+  createBrowserRouter,
+  createRoutesFromElements,
+  Route,
+  RouterProvider,
+  Routes,
+  useLocation,
+} from "react-router-dom"
 import "./App.css"
 import HomePage from "./pages/HomePage"
 import styled from "@emotion/styled"
@@ -13,19 +21,37 @@ const AppContainer = styled.div`
   min-height: 100vh;
 `
 
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <HomePage />,
+  },
+  {
+    path: "/today",
+    element: <TodaysEntryPage />,
+  },
+  {
+    path: "/previous",
+    element: <PreviousEntriesPage />,
+  },
+  {
+    path: "/medications",
+    element: <MedicationsPage />,
+  },
+  {
+    path: "/edit/:date",
+    element: <EditEntryPage />,
+  },
+  {
+    path: "/preferences",
+    element: <UserPreferencesPage />,
+  },
+])
+
 function App() {
   return (
     <AppContainer className="App">
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/today" element={<TodaysEntryPage />} />
-          <Route path="/previous" element={<PreviousEntriesPage />} />
-          <Route path="/medications" element={<MedicationsPage />} />
-          <Route path="/edit/:date" element={<EditEntryPage />} />
-          <Route path="/preferences" element={<UserPreferencesPage />} />
-        </Routes>
-      </BrowserRouter>
+      <RouterProvider router={router} />
     </AppContainer>
   )
 }

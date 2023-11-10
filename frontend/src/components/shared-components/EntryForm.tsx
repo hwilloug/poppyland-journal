@@ -21,6 +21,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { State } from "../../store"
 import { getProfile } from "../../utils/get-profile"
 import ExerciseEntryComponent from "../todaysentrypage/ExerciseEntry"
+import { FormPrompt } from "./FormPrompt"
 
 const SubmitContainer = styled.div`
   display: flex;
@@ -222,6 +223,7 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
 
   return (
     <>
+      <FormPrompt hasUnsavedChanges={true} />
       <SubHeader>{dateFull}</SubHeader>
       {preferences.showMood && (
         <MoodEntryComponent mood={mood} onChange={setMood} />
