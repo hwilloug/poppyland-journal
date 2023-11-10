@@ -20,6 +20,7 @@ import LoadingComponent from "./Loading"
 import { useDispatch, useSelector } from "react-redux"
 import { State } from "../../store"
 import { getProfile } from "../../utils/get-profile"
+import ExerciseEntryComponent from "../todaysentrypage/ExerciseEntry"
 
 const SubmitContainer = styled.div`
   display: flex;
@@ -65,6 +66,7 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
   const [dailyQuestionQ, setDailyQuestionQ] = useState<string>()
   const [dailyQuestionA, setDailyQuestionA] = useState<string>()
   const [currentMedications, setCurrentMedications] = useState<string[]>([])
+  const [minutesExercise, setMinutesExercise] = useState<number>(0)
 
   const getEntry = async () => {
     setIsLoading(true)
@@ -83,7 +85,9 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
         setMood(parseInt(data.mood))
         setBedTime(data.bed_time ? dayjs(data.bed_time) : undefined)
         setWakeUpTime(data.wake_up_time ? dayjs(data.wake_up_time) : undefined)
-        setHoursSleep(parseInt(data.hours_sleep) ? parseInt(data.hours_sleep) : undefined)
+        setHoursSleep(
+          parseInt(data.hours_sleep) ? parseInt(data.hours_sleep) : undefined,
+        )
         setSleepQuality(data.sleep_quality)
         setMentalHealth(data.mental_health || [])
         setEntryContent(data.entry_content)
@@ -92,6 +96,7 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
         setGoal(data.goal)
         setDailyQuestionA(data.daily_question_a)
         setDailyQuestionQ(data.daily_question_q)
+        setMinutesExercise(data.exercise ? parseInt(data.exercise) : 0)
       }
       setIsLoading(false)
     } catch (e) {
@@ -186,6 +191,7 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
           entry_content: entryContent,
           daily_question_q: dailyQuestionQ,
           daily_question_a: dailyQuestionA,
+          exercise: minutesExercise.toString(),
         },
         {
           headers: {
@@ -256,6 +262,14 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
           onChange={modifySubstances}
         />
       )}
+
+      {preferences.showExercise && (
+        <ExerciseEntryComponent
+          minutesExercise={minutesExercise}
+          onChange={setMinutesExercise}
+        />
+      )}
+
       <EntryComponent content={entryContent} onChange={setEntryContent} />
 
       {currentMedications.length && (
