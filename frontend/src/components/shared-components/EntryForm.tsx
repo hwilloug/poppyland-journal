@@ -171,6 +171,12 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
     }
   }
 
+  const modifyMinutesExercise = (minutes: number) => {
+    if (minutes >= 0) {
+      setMinutesExercise(minutes)
+    }
+  }
+
   const onSubmit = async () => {
     try {
       const token = await getAccessTokenSilently()
@@ -266,7 +272,7 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
       {preferences.showExercise && (
         <ExerciseEntryComponent
           minutesExercise={minutesExercise}
-          onChange={setMinutesExercise}
+          onChange={modifyMinutesExercise}
         />
       )}
 
