@@ -121,7 +121,13 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
       let currentMeds = []
       if (data) {
         for (let i = 0; i < data.length; i++) {
-          !data[i].end_data && currentMeds.push(data[i].medication_name)
+          if (
+            !data[i].end_date ||
+            (dayjs(date).isBefore(dayjs(data[i].end_date)) &&
+              dayjs(date).isAfter(dayjs(data[i].start_date)))
+          ) {
+            currentMeds.push(data[i].medication_name)
+          }
         }
         setCurrentMedications([...currentMeds])
       }
