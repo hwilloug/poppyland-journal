@@ -1236,6 +1236,53 @@ Resources:
         - - integrations
           - !Ref GetUserPreferencesIntegration
 
+  BackupVault:
+    Type: AWS::Backup::BackupVault
+    Properties:
+      BackupVaultName: !Sub ${AppName}-backup-vault
+      LockConfiguration: 
+        MinRetentionDays: 7
+        MaxRetentionDays: 30
+
+  BackupPlan:
+    Type: AWS::Backup::BackupPlan
+    Properties:
+      BackupPlan: 
+        BackupPlanName: !Sub ${AppName}-backup-plan
+        BackupPlanRule: 
+          - 
+            RuleName: !Sub ${AppName}-backup-plan-rule
+            ScheduleExpression: cron(0 2 * * ? *)
+            TargetBackupVault: !Ref BackupVault
+
+  BackupIamRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - backup.amazonaws.com
+            Action:
+              - "sts:AssumeRole"
+      ManagedPolicyArns: 
+        - arn:aws:iam::aws:policy/service-role/AWSBackupServiceRolePolicyForBackup
+      RoleName: backups-role
+
+  BackupSelection:
+    Type: AWS::Backup::BackupSelection
+    Properties:
+      BackupPlanId: !Ref BackupPlan
+      BackupSelection: 
+        IamRoleArn: !GetAtt  BackupIamRole.Arn
+        Resources: 
+          - !GetAtt EntryTable.Arn
+          - !GetAtt MedicationTable.Arn
+          - !GetAtt UserPreferencesTable.Arn
+        SelectionName: !Sub ${AppName}-backup-selection
+
 Outputs:
   WebAppDomain:
     Value: journal.poppyland.dev
