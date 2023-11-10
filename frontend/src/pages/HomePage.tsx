@@ -5,7 +5,9 @@ import MoodTrackerComponent, {
   MoodDataType,
 } from "../components/homepage/MoodTracker"
 import PreviousEntriesListComponent from "../components/homepage/PreviousEntriesList"
-import SleepTrackerComponent, { SleepDataType } from "../components/homepage/SleepTracker"
+import SleepTrackerComponent, {
+  SleepDataType,
+} from "../components/homepage/SleepTracker"
 import { apiEndpoints } from "../api-endpoints"
 import axios from "axios"
 import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react"
@@ -40,6 +42,7 @@ export interface ResponseType {
   goal: string
   daily_question_q: string
   daily_question_a: string
+  exercise: string
 }
 
 interface DataType {
@@ -81,7 +84,7 @@ const HomePage: React.FunctionComponent = () => {
         })
         sleep.push({
           date: new Date(data[i]["date"].replace(/-/g, "/")).valueOf(),
-          hoursSleep: parseInt(data[i]["hours_sleep"])
+          hoursSleep: parseInt(data[i]["hours_sleep"]),
         })
       }
       setEntryDates(dates)

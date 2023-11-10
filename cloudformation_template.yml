@@ -305,6 +305,8 @@ Resources:
                   item_payload['MentalHealth'] = {'SS': payload.get('mental_health')}
               if len(payload.get('substances', [])):
                   item_payload['Substances'] = {'SS': payload.get('substances')}
+              if len(payload.get('exercise', [])):
+                  item_payload['Exercise'] = {'N': payload.get('exercise')}
               if payload.get('entry_content') is not None:
                   item_payload['EntryContent'] = {'S': payload.get('entry_content')}
 
@@ -394,7 +396,8 @@ Resources:
                   "affirmation": item['Item'].get('Affirmation', {}).get("S"),
                   "goal": item['Item'].get('Goal', {}).get("S"),
                   "daily_question_q": item['Item'].get('DailyQuestionQ', {}).get("S"),
-                  "daily_question_a": item['Item'].get('DailyQuestionA', {}).get("S")
+                  "daily_question_a": item['Item'].get('DailyQuestionA', {}).get("S"),
+                  "exercise": item['Item'].get('Exercise', {}).get("N")
               }
               return {
                   "statusCode": 200,
@@ -452,7 +455,8 @@ Resources:
                       "affirmation": item.get('Affirmation', {}).get("S"),
                       "goal": item.get('Goal', {}).get("S"),
                       "daily_question_q": item.get('DailyQuestionQ', {}).get("S"),
-                      "daily_question_a": item.get('DailyQuestionA', {}).get("S")
+                      "daily_question_a": item.get('DailyQuestionA', {}).get("S"),
+                      "exercise": item.get('Exercise', {}).get("N")
                   })
               return {
                   "statusCode": 200,

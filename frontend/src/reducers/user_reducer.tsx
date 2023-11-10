@@ -13,6 +13,7 @@ export type PreferencesType = {
   showMentalHealth?: boolean
   showSleep?: boolean
   showSubstance?: boolean
+  showExercise?: boolean
 }
 
 export const userSlice = createSlice({
@@ -32,13 +33,14 @@ export const userSlice = createSlice({
       // @ts-ignore
       state.preferences = {
         ...state.preferences,
-        [action.payload.preference]: action.payload.value
+        [action.payload.preference]: action.payload.value,
       }
-    }
+    },
   },
 })
 
 // Action creators are generated for each case reducer function
-export const { setUserPreferences, setUserId, setUserPreference } = userSlice.actions
+export const { setUserPreferences, setUserId, setUserPreference } =
+  userSlice.actions
 
 export default userSlice.reducer

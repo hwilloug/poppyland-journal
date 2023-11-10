@@ -14,6 +14,7 @@ Features:
 - Mental Health Tracker
 - Substance Use Tracker
 - Medication Tracker
+- Exercise Tracker
 
 ## Tech Specs
 ### Architecture
