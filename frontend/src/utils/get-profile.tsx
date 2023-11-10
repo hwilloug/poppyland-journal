@@ -33,7 +33,7 @@ export const getProfile = async (
     })
     const data = response.data
     dispatch(setUserId(userId))
-    dispatch(setUserPreferences({ ...data.preferences }))
+    dispatch(setUserPreferences({ ...defaultPreferences, ...data.preferences }))
     data.first_name && dispatch(setFirstName(data.first_name))
     data.last_name && dispatch(setLastName(data.last_name))
   } catch (e) {

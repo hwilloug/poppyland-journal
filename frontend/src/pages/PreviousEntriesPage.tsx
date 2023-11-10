@@ -21,7 +21,7 @@ import { Link } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux"
 import { State } from "../store"
 import { getProfile } from "../utils/get-profile"
-import { Box, Modal, Typography } from "@mui/material"
+import { Alert, Box, Modal, Snackbar, Typography } from "@mui/material"
 import {
   convertToLongDateFromShortDate,
   convertToShortDate,
@@ -113,6 +113,8 @@ const PreviousEntriesPage: React.FunctionComponent = () => {
   }
 
   const [isLoading, setIsLoading] = useState<boolean>(true)
+  const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false)
+  const [snackbarMessage, setSnackbarMessage] = useState<string>("")
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
   const [deleteEntryDate, setDeleteEntryDate] = useState<string>(
     convertToShortDate(new Date()),
@@ -181,9 +183,16 @@ const PreviousEntriesPage: React.FunctionComponent = () => {
         },
       })
       setIsModalOpen(false)
+      getEntries()
+      setSnackbarMessage(`Successfully deleted entry ${date}!`)
+      setSnackbarOpen(true)
     } catch (e) {
       console.log(e)
     }
+  }
+
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false)
   }
 
   return (
@@ -294,6 +303,15 @@ const PreviousEntriesPage: React.FunctionComponent = () => {
               </DeleteEntryButton>
             </Box>
           </Modal>
+          <Snackbar
+            open={snackbarOpen}
+            autoHideDuration={6000}
+            onClose={handleSnackbarClose}
+          >
+            <Alert onClose={handleSnackbarClose} severity="success">
+              {snackbarMessage}
+            </Alert>
+          </Snackbar>
           {isLoading && <LoadingComponent />}
         </EntriesContainer>
       </PageContentContainer>
