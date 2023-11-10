@@ -15,10 +15,24 @@ Features:
 - Substance Use Tracker
 - Medication Tracker
 
-
-## Architecture
+## Tech Specs
+### Architecture
 ![Architecture Diagram](images/poppyland_journal_architecture.drawio.png)
 
 
-## ERD
+### ERD
 ![ERD](images/ERD.drawio.png)
+
+## Development
+### Pre-commit Hooks
+
+Steps to run prettier pre-commit hook:
+
+1. Install `pre-commit`
+```
+brew install pre-commit
+```
+2. Install git hook scripts
+```
+pre-commit install
+```
