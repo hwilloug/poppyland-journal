@@ -81,9 +81,9 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
       const data: ResponseType = response.data
       if (data) {
         setMood(parseInt(data.mood))
-        setBedTime(dayjs(data.bed_time))
-        setWakeUpTime(dayjs(data.wake_up_time))
-        setHoursSleep(parseInt(data.hours_sleep))
+        setBedTime(data.bed_time ? dayjs(data.bed_time) : undefined)
+        setWakeUpTime(data.wake_up_time ? dayjs(data.wake_up_time) : undefined)
+        setHoursSleep(parseInt(data.hours_sleep) ? parseInt(data.hours_sleep) : undefined)
         setSleepQuality(data.sleep_quality)
         setMentalHealth(data.mental_health || [])
         setEntryContent(data.entry_content)
