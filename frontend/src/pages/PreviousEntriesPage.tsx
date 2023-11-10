@@ -65,6 +65,10 @@ const DailyQuestionContainer = styled.div`
   margin: 20px 10px;
 `
 
+const ExerciseContainer = styled.div`
+  margin: 10px;
+`
+
 const EntryDate = styled.h3``
 
 const EditEntryButton = styled(Button)``
@@ -96,6 +100,7 @@ interface EntryType {
   goal: string
   daily_question_q: string
   daily_question_a: string
+  exercise: string
 }
 
 const PreviousEntriesPage: React.FunctionComponent = () => {
@@ -244,6 +249,11 @@ const PreviousEntriesPage: React.FunctionComponent = () => {
                     Substances:{" "}
                     {entry.substances && entry.substances.join(", ")}
                   </SubstancesContainer>
+                )}
+                {preferences.showExercise && (
+                  <ExerciseContainer>
+                    Minutes Exercise: {entry.exercise}
+                  </ExerciseContainer>
                 )}
                 {entry.entry_content && (
                   <MarkdownComponent view="view" value={entry.entry_content} />
