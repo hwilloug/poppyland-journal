@@ -3,6 +3,8 @@ import { createSlice } from "@reduxjs/toolkit"
 export type UserType = {
   preferences: PreferencesType
   userId: string
+  firstName: string
+  lastName: string
 }
 
 export type PreferencesType = {
@@ -21,6 +23,8 @@ export const userSlice = createSlice({
   initialState: {
     preferences: {},
     userId: "",
+    firstName: "",
+    lastName: "",
   },
   reducers: {
     setUserPreferences: (state, action) => {
@@ -28,6 +32,12 @@ export const userSlice = createSlice({
     },
     setUserId: (state, action) => {
       state.userId = action.payload
+    },
+    setFirstName: (state, action) => {
+      state.firstName = action.payload
+    },
+    setLastName: (state, action) => {
+      state.lastName = action.payload
     },
     setUserPreference: (state, action) => {
       // @ts-ignore
@@ -40,7 +50,12 @@ export const userSlice = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const { setUserPreferences, setUserId, setUserPreference } =
-  userSlice.actions
+export const {
+  setUserPreferences,
+  setUserId,
+  setUserPreference,
+  setFirstName,
+  setLastName,
+} = userSlice.actions
 
 export default userSlice.reducer

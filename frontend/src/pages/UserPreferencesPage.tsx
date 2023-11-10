@@ -9,16 +9,22 @@ import {
 import SideBarComponent from "../components/shared-components/SideBar"
 import { useDispatch, useSelector } from "react-redux"
 import { State } from "../store"
-import { Alert, Checkbox, Snackbar, Typography } from "@mui/material"
-import { PreferencesType, setUserPreference } from "../reducers/user_reducer"
+import { Alert, Checkbox, Snackbar, TextField, Typography } from "@mui/material"
+import {
+  setFirstName,
+  setLastName,
+  setUserPreference,
+} from "../reducers/user_reducer"
 import { getProfile } from "../utils/get-profile"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { apiEndpoints } from "../api-endpoints"
 import axios from "axios"
 
 const Container = styled.div``
 
 const SectionHeader = styled.h3``
+
+const SectionSubheader = styled.h5``
 
 const PreferenceContainer = styled.div`
   display: flex;
@@ -31,6 +37,8 @@ const PreferenceContainer = styled.div`
 const UserPreferencesPage: React.FunctionComponent = () => {
   const { user, getAccessTokenSilently } = useAuth0()
   const userId = useSelector((state: State) => state.user.userId)
+  const firstName = useSelector((state: State) => state.user.firstName)
+  const lastName = useSelector((state: State) => state.user.lastName)
   const preferences = useSelector((state: State) => state.user.preferences)
   const dispatch = useDispatch()
   if (!userId) {
@@ -80,7 +88,7 @@ const UserPreferencesPage: React.FunctionComponent = () => {
       const token = await getAccessTokenSilently()
       await axios.put(
         apiEndpoints.putUserPreferences.insert(),
-        { preferences },
+        { preferences, first_name: firstName, last_name: lastName },
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -104,7 +112,33 @@ const UserPreferencesPage: React.FunctionComponent = () => {
       <PageContentContainer>
         <SubHeader>Preferences</SubHeader>
         <Container>
+          <SectionHeader>Account Preferences</SectionHeader>
+          <SectionSubheader>Options related to your account.</SectionSubheader>
+          <TextField
+            label="First Name"
+            InputLabelProps={{
+              shrink: true,
+            }}
+            value={firstName}
+            defaultValue={0}
+            onChange={(e) => dispatch(setFirstName(e.target.value))}
+            sx={{ backgroundColor: "white", width: "200px" }}
+          />
+          <TextField
+            label="Last Name"
+            InputLabelProps={{
+              shrink: true,
+            }}
+            value={lastName}
+            defaultValue={0}
+            onChange={(e) => dispatch(setLastName(e.target.value))}
+            sx={{ backgroundColor: "white", width: "200px" }}
+          />
+
           <SectionHeader>Journal Sections</SectionHeader>
+          <SectionSubheader>
+            Options related to which sections to show in your journal.
+          </SectionSubheader>
           {sections.map((s) => (
             <PreferenceContainer key={s.preference}>
               <Checkbox

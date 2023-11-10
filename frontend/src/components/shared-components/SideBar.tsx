@@ -4,8 +4,10 @@ import { Link, NavLink } from "react-router-dom"
 import { useAuth0 } from "@auth0/auth0-react"
 import { Button } from "./styled-components"
 import { Chip } from "@mui/material"
-import ManageAccountsIcon from '@mui/icons-material/ManageAccounts'
-import LogoutIcon from '@mui/icons-material/Logout'
+import ManageAccountsIcon from "@mui/icons-material/ManageAccounts"
+import LogoutIcon from "@mui/icons-material/Logout"
+import { useSelector } from "react-redux"
+import { State } from "../../store"
 
 const Container = styled.div`
   width: 25%;
@@ -44,6 +46,8 @@ const LogoutButton = styled(Button)`
 
 const SideBarComponent: React.FunctionComponent = () => {
   const { user, logout } = useAuth0()
+  const firstName = useSelector((state: State) => state.user.firstName)
+  const lastName = useSelector((state: State) => state.user.lastName)
   return (
     <Container>
       <AppTitle>Poppyland Journal</AppTitle>
@@ -63,13 +67,19 @@ const SideBarComponent: React.FunctionComponent = () => {
         </NavItem>
       </NavContainer>
       <AccountContainer>
-        <UserName>{user?.email}</UserName>
-        <Link to="/preferences"><ManageAccountsIcon /></Link>
-        <a href="#"><LogoutIcon
-          onClick={() =>
-            logout({ logoutParams: { returnTo: window.location.origin } })
-          }
-        /></a>
+        <UserName>
+          {firstName ? `${firstName} ${lastName}` : user?.email}
+        </UserName>
+        <Link to="/preferences">
+          <ManageAccountsIcon />
+        </Link>
+        <a href="#">
+          <LogoutIcon
+            onClick={() =>
+              logout({ logoutParams: { returnTo: window.location.origin } })
+            }
+          />
+        </a>
       </AccountContainer>
     </Container>
   )

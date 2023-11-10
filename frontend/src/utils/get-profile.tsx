@@ -1,7 +1,12 @@
 import axios from "axios"
 import { apiEndpoints } from "../api-endpoints"
 import { useDispatch } from "react-redux"
-import { setUserId, setUserPreferences } from "../reducers/user_reducer"
+import {
+  setFirstName,
+  setLastName,
+  setUserId,
+  setUserPreferences,
+} from "../reducers/user_reducer"
 import { AnyAction, Dispatch } from "@reduxjs/toolkit"
 
 export const getProfile = async (
@@ -29,6 +34,8 @@ export const getProfile = async (
     const data = response.data
     dispatch(setUserId(userId))
     dispatch(setUserPreferences({ ...data.preferences }))
+    data.first_name && dispatch(setFirstName(data.first_name))
+    data.last_name && dispatch(setLastName(data.last_name))
   } catch (e) {
     const token = await getAccessTokenSilently()
     const response = await axios.put(
