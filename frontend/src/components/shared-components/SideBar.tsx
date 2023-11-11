@@ -92,7 +92,7 @@ const SideBarComponent: React.FunctionComponent = () => {
             boxSizing: "border-box",
             padding: "20px",
             backgroundColor: "#bdcfbc",
-            maxWidth: drawerWidth,
+            width: drawerWidth,
           },
         }}
         anchor="left"
