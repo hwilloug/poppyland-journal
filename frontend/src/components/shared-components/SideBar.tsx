@@ -16,7 +16,7 @@ import TodayIcon from "@mui/icons-material/Today"
 import MedicationIcon from "@mui/icons-material/Medication"
 import HomeIcon from "@mui/icons-material/Home"
 
-const drawerWidth = "15rem"
+const drawerWidth = "17rem"
 const drawerClosedWidth = "5rem"
 
 const NavContainer = styled.li`
@@ -51,6 +51,7 @@ const AccountContainer = styled.div`
   flex-direction: row;
   justify-content: space-evenly;
   align-items: center;
+  flex-wrap: wrap;
 `
 
 const AccountContainerCompact = styled.div`
@@ -91,6 +92,7 @@ const SideBarComponent: React.FunctionComponent = () => {
             boxSizing: "border-box",
             padding: "20px",
             backgroundColor: "#bdcfbc",
+            maxWidth: drawerWidth,
           },
         }}
         anchor="left"
