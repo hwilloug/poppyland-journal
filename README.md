@@ -1,5 +1,5 @@
 # Poppyland Journal
-![PoppylandLogo](images/logo.png)
+![PoppylandLogo](frontend/public/logo.png)
 
 Make an account now at: 
 [https://journal.poppyland.dev](https://journal.poppyland.dev)
