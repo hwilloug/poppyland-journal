@@ -57,6 +57,7 @@ export type MedicationType = {
   dose?: string
   startDate?: Dayjs
   endDate?: Dayjs
+  new?: boolean
 }
 
 const MedicationsPage: React.FunctionComponent = () => {
@@ -89,14 +90,10 @@ const MedicationsPage: React.FunctionComponent = () => {
           id: i,
           name: data[i].medication_name,
           dose: data[i].dose,
-          startDate: data[i].start_date
-            ? dayjs(data[i].start_date + "-01")
-            : undefined,
-          endDate: data[i].end_date
-            ? dayjs(data[i].end_date + "-01")
-            : undefined,
+          startDate: data[i].start_date ? dayjs(data[i].start_date) : undefined,
+          endDate: data[i].end_date ? dayjs(data[i].end_date) : undefined,
+          new: false,
         })
-        console.log(dayjs(data[i].start_date + "-01"))
       }
       setMedications([...meds])
       setIsLoading(false)
@@ -133,7 +130,7 @@ const MedicationsPage: React.FunctionComponent = () => {
   }
 
   const addNewMedication = () => {
-    setMedications([...medications, { id: medications.length }])
+    setMedications([...medications, { id: medications.length, new: true }])
   }
 
   const handleSave = async () => {
@@ -147,8 +144,8 @@ const MedicationsPage: React.FunctionComponent = () => {
               user_id: userId,
               medication_name: medications[i].name,
               dose: medications[i].dose,
-              start_date: medications[i].startDate?.format("YYYY-MMM"),
-              end_date: medications[i].endDate?.format("YYYY-MMMM"),
+              start_date: medications[i].startDate?.format("YYYY-MM-DD"),
+              end_date: medications[i].endDate?.format("YYYY-MM-DD"),
             },
             {
               headers: {
@@ -156,6 +153,7 @@ const MedicationsPage: React.FunctionComponent = () => {
               },
             },
           )
+          getMedications()
           setSnackbarMessage("Successfully saved medications!")
           setSnackbarOpen(true)
         }
