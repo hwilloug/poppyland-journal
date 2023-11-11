@@ -16,8 +16,8 @@ import TodayIcon from "@mui/icons-material/Today"
 import MedicationIcon from "@mui/icons-material/Medication"
 import HomeIcon from "@mui/icons-material/Home"
 
-const drawerWidth = 170
-const drawerClosedWidth = 75
+const drawerWidth = "15rem"
+const drawerClosedWidth = "5rem"
 
 const NavContainer = styled.li`
   list-style-type: none;
@@ -85,7 +85,7 @@ const SideBarComponent: React.FunctionComponent = () => {
         open={isDrawerOpen}
         onClose={handleDrawerToggle}
         sx={{
-          width: isDrawerOpen ? drawerWidth : 10,
+          width: isDrawerOpen ? drawerWidth : 0,
           flexShrink: 0,
           "& .MuiDrawer-paper": {
             boxSizing: "border-box",
@@ -121,9 +121,9 @@ const SideBarComponent: React.FunctionComponent = () => {
             </NavLink>
           </NavItem>
           <NavItem>
-            <NavLink to="/previous" style={navItemStyle}>
+            <NavLink to="/journal" style={navItemStyle}>
               <MenuBookIcon />
-              <Typography>Previous Entries</Typography>
+              <Typography>My Journal</Typography>
             </NavLink>
           </NavItem>
         </NavContainer>
@@ -152,7 +152,7 @@ const SideBarComponent: React.FunctionComponent = () => {
         open={!isDrawerOpen}
         onClose={handleDrawerToggle}
         sx={{
-          width: !isDrawerOpen ? drawerClosedWidth : 65,
+          width: !isDrawerOpen ? drawerClosedWidth : 0,
           flexShrink: 0,
           "& .MuiDrawer-paper": {
             boxSizing: "border-box",
@@ -176,7 +176,7 @@ const SideBarComponent: React.FunctionComponent = () => {
           <NavLink to="/medications" style={navItemStyle}>
             <MedicationIcon fontSize="large" />
           </NavLink>
-          <NavLink to="/previous" style={navItemStyle}>
+          <NavLink to="/journal" style={navItemStyle}>
             <MenuBookIcon fontSize="large" />
           </NavLink>
         </NavContainerCompact>
