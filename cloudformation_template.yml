@@ -1013,6 +1013,78 @@ Resources:
         - - integrations
           - !Ref GetMedicationsIntegration
 
+  DeleteMedicationLambda:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: !Sub "${AppName}-delete-medication"
+      Runtime: python3.7
+      Handler: index.lambda_handler
+      Role: !GetAtt MedicationLambdaRole.Arn
+      Layers:
+        - !Ref JWTLayer
+      Code:
+        ZipFile: |
+          import json
+          import boto3
+          import jwt
+
+          dynamodb = boto3.client("dynamodb")
+
+          def lambda_handler(event, context):
+              token = event.get('headers', {}).get("authorization").split(' ')[1]
+              decoded_token = jwt.decode(token, algorithms=["RS256"], options={"verify_signature": False})
+              user_id = decoded_token.get('sub')
+
+              response = dynamodb.delete_item(
+                  TableName='UserMedication',
+                  Key={
+                      'UserId': {
+                          'S': user_id
+                      },
+                      'MedicationName': {
+                          'S': event.get("pathParameters", {}).get('name')
+                      }
+                  }
+              )
+              return {
+                  "statusCode": 200,
+                  "headers": {
+                      "Content-Type": "application/json"
+                  },
+                  "body": json.dumps("Successfully deleted medication")
+              }
+
+  LambdaInvokeDeleteMedication:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !Ref DeleteMedicationLambda
+      Action: "lambda:InvokeFunction"
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub 'arn:${AWS::Partition}:execute-api:${AWS::Region}:${AWS::AccountId}:${JournalApiGatweay}/*/*/medication/{name}'
+      SourceAccount: !Ref 'AWS::AccountId'
+
+  DeleteMedicationIntegration:
+    Type: AWS::ApiGatewayV2::Integration
+    Properties:
+      ApiId: !Ref JournalApiGatweay
+      Description: Lambda proxy integration
+      IntegrationType: AWS_PROXY
+      IntegrationMethod: POST
+      PayloadFormatVersion: "2.0"
+      IntegrationUri: !Sub 'arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${DeleteMedicationLambda.Arn}/invocations'
+
+  DeleteMedicationRoute:
+    Type: AWS::ApiGatewayV2::Route
+    Properties:
+      ApiId: !Ref JournalApiGatweay
+      RouteKey: "DELETE /medication/{name}"
+      AuthorizationType: JWT
+      AuthorizerId: !GetAtt ApiAuthorizer.AuthorizerId
+      Target: !Join
+        - /
+        - - integrations
+          - !Ref DeleteMedicationIntegration
+
   UserPreferencesTable:
     Type: AWS::DynamoDB::Table
     Properties:

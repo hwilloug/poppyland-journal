@@ -11,6 +11,7 @@ export const apiEndpoints = {
   deleteEntry: new SweetPath(apiBaseUrl + "/entry/:date"),
   getMedications: new SweetPath(apiBaseUrl + "/medication"),
   putMedications: new SweetPath(apiBaseUrl + "/medication"),
+  deleteMedication: new SweetPath(apiBaseUrl + "/medication/:name"),
   getUserPreferences: new SweetPath(apiBaseUrl + "/preferences"),
   putUserPreferences: new SweetPath(apiBaseUrl + "/preferences"),
 }

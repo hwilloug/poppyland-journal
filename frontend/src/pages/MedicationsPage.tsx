@@ -163,6 +163,29 @@ const MedicationsPage: React.FunctionComponent = () => {
     }
   }
 
+  const handleDelete = async (id: number) => {
+    for (let i = 0; i < medications.length; i++) {
+      try {
+        if (medications[i].id === id) {
+          const token = await getAccessTokenSilently()
+          await axios.delete(
+            apiEndpoints.deleteMedication.insert({ name: medications[i].name }),
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            },
+          )
+          getMedications()
+          setSnackbarMessage("Successfully deleted medication!")
+          setSnackbarOpen(true)
+        }
+      } catch (e) {
+        console.log(e)
+      }
+    }
+  }
+
   const handleSnackbarClose = () => {
     setSnackbarOpen(false)
   }
@@ -180,6 +203,7 @@ const MedicationsPage: React.FunctionComponent = () => {
                   key={m.id}
                   medication={m}
                   onChange={modifyMedications}
+                  onDelete={handleDelete}
                 />
               ))}
               {medications.length === 0 && (

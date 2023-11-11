@@ -3,6 +3,7 @@ import { MedicationType } from "../../pages/MedicationsPage"
 import { TextField } from "@mui/material"
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers"
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs"
+import CancelIcon from "@mui/icons-material/Cancel"
 
 const MedicationContainer = styled.div`
   display: flex;
@@ -14,11 +15,13 @@ const MedicationContainer = styled.div`
 interface MedicationProps {
   medication: MedicationType
   onChange: Function
+  onDelete: Function
 }
 
 const MedicationComponent: React.FunctionComponent<MedicationProps> = ({
   medication,
   onChange,
+  onDelete,
 }) => {
   return (
     <MedicationContainer>
@@ -48,6 +51,7 @@ const MedicationComponent: React.FunctionComponent<MedicationProps> = ({
           sx={{ backgroundColor: "white" }}
           onChange={(value) => onChange({ ...medication, endDate: value })}
         />
+        <CancelIcon onClick={() => onDelete(medication.id)} />
       </LocalizationProvider>
     </MedicationContainer>
   )
