@@ -5,7 +5,6 @@ import {
   PageContainer,
   PageContentContainer,
 } from "../components/shared-components/styled-components"
-import { SubHeader } from "../components/shared-components/styled-components"
 import axios from "axios"
 import { apiEndpoints } from "../api-endpoints"
 import styled from "@emotion/styled"
@@ -21,7 +20,16 @@ import { Link } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux"
 import { State } from "../store"
 import { getProfile } from "../utils/get-profile"
-import { Alert, Box, Modal, Snackbar, Typography } from "@mui/material"
+import {
+  Alert,
+  Box,
+  Menu,
+  MenuItem,
+  Modal,
+  Snackbar,
+  Typography,
+} from "@mui/material"
+import MoreHorizIcon from "@mui/icons-material/MoreHoriz"
 import {
   convertToLongDateFromShortDate,
   convertToShortDate,
@@ -33,6 +41,12 @@ const EntriesContainer = styled.div`
   gap: 50px;
 `
 
+const EntryContainer = styled.div`
+  background-color: white;
+  border: 1px solid lightgrey;
+  padding: 20px;
+`
+
 const MoodContainer = styled.div`
   margin: 10px;
   display: flex;
@@ -41,37 +55,9 @@ const MoodContainer = styled.div`
   gap: 5px;
 `
 
-const SleepContainer = styled.div`
+const SectionContainer = styled.div`
   margin: 10px;
 `
-
-const MentalHealthContainer = styled.div`
-  margin: 10px;
-`
-
-const SubstancesContainer = styled.div`
-  margin: 10px;
-`
-
-const AffirmationsContainer = styled.div`
-  margin: 20px 10px;
-`
-
-const GoalContainer = styled.div`
-  margin: 20px 10px;
-`
-
-const DailyQuestionContainer = styled.div`
-  margin: 20px 10px;
-`
-
-const ExerciseContainer = styled.div`
-  margin: 10px;
-`
-
-const EntryDate = styled.h3``
-
-const EditEntryButton = styled(Button)``
 
 const DeleteEntryButton = styled(Button)`
   background-color: white;
@@ -84,6 +70,12 @@ const CancelButton = styled(Button)`
 
 const NoEntriesContainer = styled.div`
   padding: 20px;
+`
+
+const MoreButton = styled(Button)`
+  padding: 0;
+  color: black;
+  background-color: white;
 `
 
 interface EntryType {
@@ -116,6 +108,9 @@ const PreviousEntriesPage: React.FunctionComponent = () => {
   const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false)
   const [snackbarMessage, setSnackbarMessage] = useState<string>("")
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
+  const [selectedDate, setSelectedDate] = useState<string>()
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
+  const menuOpen = Boolean(anchorEl)
   const [deleteEntryDate, setDeleteEntryDate] = useState<string>(
     convertToShortDate(new Date()),
   )
@@ -195,11 +190,25 @@ const PreviousEntriesPage: React.FunctionComponent = () => {
     setSnackbarOpen(false)
   }
 
+  const handleMoreClick = (
+    event: React.MouseEvent<HTMLButtonElement>,
+    date: string,
+  ) => {
+    setAnchorEl(event.currentTarget)
+    setSelectedDate(date)
+  }
+
+  const handleMoreClose = () => {
+    setAnchorEl(null)
+  }
+
   return (
     <PageContainer>
       <SideBarComponent />
       <PageContentContainer>
-        <SubHeader>Previous Entries</SubHeader>
+        <Typography variant="h4" sx={{ mb: "20px" }}>
+          My Journal
+        </Typography>
         <EntriesContainer>
           {!isLoading && entries.length === 0 && (
             <NoEntriesContainer>
@@ -209,77 +218,108 @@ const PreviousEntriesPage: React.FunctionComponent = () => {
           )}
           {!isLoading &&
             entries.map((entry) => (
-              <div key={entry.date}>
-                <EntryDate>
+              <EntryContainer key={entry.date}>
+                <Typography variant="h6">
                   {convertToLongDateFromShortDate(entry.date)}
-                </EntryDate>
+                </Typography>
                 {preferences.showMood && entry.mood && (
-                  <MoodContainer>Mood: {getMoodIcon(entry.mood)}</MoodContainer>
+                  <MoodContainer>
+                    <Typography>Mood: </Typography>
+                    {getMoodIcon(entry.mood)}
+                  </MoodContainer>
                 )}
                 {preferences.showSleep && entry.hours_sleep && (
-                  <SleepContainer>
-                    Hours sleep: {entry.hours_sleep}
-                  </SleepContainer>
+                  <SectionContainer>
+                    <Typography>Hours sleep: {entry.hours_sleep}</Typography>
+                  </SectionContainer>
                 )}
                 {preferences.showSleep && entry.sleep_quality && (
-                  <SleepContainer>
-                    Sleep Quality: {entry.sleep_quality}
-                  </SleepContainer>
+                  <SectionContainer>
+                    <Typography>
+                      Sleep Quality: {entry.sleep_quality}
+                    </Typography>
+                  </SectionContainer>
                 )}
                 {preferences.showDailyAffirmation && entry.affirmation && (
-                  <AffirmationsContainer>
-                    Daily Affirmation:{" "}
+                  <SectionContainer>
+                    <Typography>Daily Affirmation:</Typography>
                     <MarkdownComponent view="view" value={entry.affirmation} />
-                  </AffirmationsContainer>
+                  </SectionContainer>
                 )}
                 {preferences.showDailyGoal && entry.goal && (
-                  <GoalContainer>
-                    Daily Goal:{" "}
+                  <SectionContainer>
+                    <Typography>Daily Goal:</Typography>
                     <MarkdownComponent view="view" value={entry.goal} />
-                  </GoalContainer>
+                  </SectionContainer>
                 )}
                 {preferences.showDailyQuestion && entry.daily_question_a && (
-                  <DailyQuestionContainer>
-                    Daily Question: {entry.daily_question_q}
+                  <SectionContainer>
+                    <Typography>
+                      Daily Question: {entry.daily_question_q}
+                    </Typography>
                     <MarkdownComponent
                       view="view"
                       value={entry.daily_question_a}
                     />
-                  </DailyQuestionContainer>
+                  </SectionContainer>
                 )}
-                {preferences.showMentalHealth && entry.mental_health.length && (
-                  <MentalHealthContainer>
-                    Mental Health:{" "}
-                    {entry.mental_health && entry.mental_health.join(", ")}
-                  </MentalHealthContainer>
-                )}
-                {preferences.showSubstance && entry.substances.length && (
-                  <SubstancesContainer>
-                    Substances:{" "}
-                    {entry.substances && entry.substances.join(", ")}
-                  </SubstancesContainer>
+                {preferences.showMentalHealth &&
+                  entry.mental_health.length > 0 && (
+                    <SectionContainer>
+                      <Typography>
+                        Mental Health:{" "}
+                        {entry.mental_health && entry.mental_health.join(", ")}
+                      </Typography>
+                    </SectionContainer>
+                  )}
+                {preferences.showSubstance && entry.substances.length > 0 && (
+                  <SectionContainer>
+                    <Typography>
+                      Substances:{" "}
+                      {entry.substances && entry.substances.join(", ")}
+                    </Typography>
+                  </SectionContainer>
                 )}
                 {preferences.showExercise && (
-                  <ExerciseContainer>
-                    Minutes Exercise: {entry.exercise}
-                  </ExerciseContainer>
+                  <SectionContainer>
+                    <Typography>Minutes Exercise: {entry.exercise}</Typography>
+                  </SectionContainer>
                 )}
                 {entry.entry_content && (
                   <MarkdownComponent view="view" value={entry.entry_content} />
                 )}
-                <Link to={`/edit/${entry.date}`}>
-                  <EditEntryButton>Edit Entry</EditEntryButton>
-                </Link>
-                <DeleteEntryButton
-                  onClick={() => {
-                    setDeleteEntryDate(entry.date)
-                    setIsModalOpen(true)
-                  }}
+                <MoreButton
+                  id="more-button"
+                  onClick={(e) => handleMoreClick(e, entry.date)}
                 >
-                  Delete Entry
-                </DeleteEntryButton>
-              </div>
+                  <MoreHorizIcon />
+                </MoreButton>
+              </EntryContainer>
             ))}
+          <Menu
+            anchorEl={anchorEl}
+            open={menuOpen}
+            onClose={handleMoreClose}
+            MenuListProps={{ "aria-labelledby": "more-button" }}
+          >
+            <MenuItem onClick={handleMoreClose}>
+              <Link
+                to={`/edit/${selectedDate}`}
+                style={{ textDecoration: "None", color: "black" }}
+              >
+                Edit Entry
+              </Link>
+            </MenuItem>
+            <MenuItem
+              onClick={() => {
+                setDeleteEntryDate(selectedDate!)
+                setIsModalOpen(true)
+                handleMoreClose()
+              }}
+            >
+              Delete Entry
+            </MenuItem>
+          </Menu>
           <Modal
             open={isModalOpen}
             onClose={handleModalClose}

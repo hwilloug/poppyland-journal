@@ -31,7 +31,7 @@ const router = createBrowserRouter([
     element: <TodaysEntryPage />,
   },
   {
-    path: "/previous",
+    path: "/journal",
     element: <PreviousEntriesPage />,
   },
   {
