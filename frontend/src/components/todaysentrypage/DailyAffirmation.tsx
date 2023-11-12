@@ -19,7 +19,9 @@ const DailyAffirmationComponent: React.FunctionComponent<
         view="edit"
         value={affirmation}
         onChange={onChange}
-        height={100}
+        hideToolbar
+        height={75}
+        preview="edit"
       />
     </AffirmationsContainer>
   )

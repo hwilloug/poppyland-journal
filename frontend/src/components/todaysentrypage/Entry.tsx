@@ -18,6 +18,7 @@ const EntryComponent: React.FunctionComponent<EntryProps> = ({
         value={content}
         onChange={onChange}
         height={500}
+        preview={"live"}
       />
     </>
   )
