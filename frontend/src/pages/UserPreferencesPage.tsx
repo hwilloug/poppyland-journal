@@ -3,7 +3,6 @@ import styled from "@emotion/styled"
 import {
   PageContainer,
   PageContentContainer,
-  SubHeader,
   SubmitButton,
 } from "../components/shared-components/styled-components"
 import SideBarComponent from "../components/shared-components/SideBar"
@@ -110,7 +109,7 @@ const UserPreferencesPage: React.FunctionComponent = () => {
     <PageContainer>
       <SideBarComponent defaultOpen={false} />
       <PageContentContainer>
-        <SubHeader>Preferences</SubHeader>
+        <Typography variant="h5">Preferences</Typography>
         <Container>
           <SectionHeader>Account Preferences</SectionHeader>
           <SectionSubheader>Options related to your account.</SectionSubheader>

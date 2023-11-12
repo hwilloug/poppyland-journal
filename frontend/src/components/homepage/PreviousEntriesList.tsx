@@ -1,9 +1,7 @@
 import React from "react"
 import styled from "@emotion/styled"
-import { SubHeader } from "../shared-components/styled-components"
 import {
   convertToDayOfWeekMonthDay,
-  convertToMonthDay,
   convertToShortDate,
 } from "../../utils/date-utils"
 import { Link } from "react-router-dom"
@@ -14,15 +12,14 @@ import {
   TableCell,
   TableContainer,
   TableRow,
+  Typography,
 } from "@mui/material"
 
-const Container = styled.div``
-
-const EntryItemContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  gap: 20px;
-  align-items: center;
+const Container = styled.div`
+  background-color: white;
+  padding: 20px;
+  margin: 50px 20px;
+  border: 1px solid lightgrey;
 `
 
 interface PreviousEntriesListProps {
@@ -34,8 +31,10 @@ const PreviousEntriesListComponent: React.FunctionComponent<
 > = ({ dates }) => {
   return (
     <Container>
-      <SubHeader>Entries - last 7 days</SubHeader>
-      <TableContainer component={Paper}>
+      <Typography variant="h5" sx={{ p: "20px" }}>
+        Entries - last 7 days
+      </Typography>
+      <TableContainer>
         <Table>
           <TableBody>
             {[...Array(7).keys()].map((i) => {

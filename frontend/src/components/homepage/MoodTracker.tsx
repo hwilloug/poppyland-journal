@@ -1,15 +1,15 @@
 import React from "react"
 import styled from "@emotion/styled"
-import { SubHeader } from "../shared-components/styled-components"
 import { Line, LineChart, XAxis, YAxis } from "recharts"
-import SentimentVerySatisfiedIcon from "@mui/icons-material/SentimentVerySatisfied"
-import SentimentSatisfiedIcon from "@mui/icons-material/SentimentSatisfied"
-import SentimentNeutralIcon from "@mui/icons-material/SentimentNeutral"
-import SentimentDissatisfiedIcon from "@mui/icons-material/SentimentDissatisfied"
-import SentimentVeryDissatisfiedIcon from "@mui/icons-material/SentimentVeryDissatisfied"
 import { convertToMonthDay } from "../../utils/date-utils"
+import { Typography } from "@mui/material"
 
-const Container = styled.div``
+const Container = styled.div`
+  background-color: white;
+  padding: 20px;
+  margin: 50px 20px;
+  border: 1px solid lightgrey;
+`
 
 export type MoodDataType = {
   date: number
@@ -95,7 +95,9 @@ const MoodTrackerComponent: React.FunctionComponent<MoodTrackerProps> = ({
 
   return (
     <Container>
-      <SubHeader>Mood Tracker - Last 30 days</SubHeader>
+      <Typography variant="h5" sx={{ p: "20px" }}>
+        Mood Tracker - Last 30 days
+      </Typography>
       <LineChart
         margin={{ top: 5, left: 5, right: 5, bottom: 5 }}
         width={900}
@@ -104,8 +106,6 @@ const MoodTrackerComponent: React.FunctionComponent<MoodTrackerProps> = ({
         style={{
           backgroundColor: "white",
           padding: "20px 20px 10px 0px",
-          boxShadow: "1px 1px 1px lightgrey",
-          border: "1px solid lightgrey",
         }}
       >
         <Line

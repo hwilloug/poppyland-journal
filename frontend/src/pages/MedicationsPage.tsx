@@ -7,11 +7,10 @@ import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react"
 import LoadingComponent from "../components/shared-components/Loading"
 import {
   Button,
-  SubHeader,
   SubmitButton,
 } from "../components/shared-components/styled-components"
 import MedicationComponent from "../components/medicationspage/Medication"
-import { Alert, Snackbar } from "@mui/material"
+import { Alert, Snackbar, Typography } from "@mui/material"
 import dayjs, { Dayjs } from "dayjs"
 import { useDispatch, useSelector } from "react-redux"
 import { State } from "../store"
@@ -24,9 +23,10 @@ const PageContainer = styled.div`
 `
 
 const Container = styled.div`
-  padding: 20px;
+  padding: 20px 50px;
   flex-grow: 1;
   background-color: #fffcf5;
+  min-height: 100vh;
 `
 
 const MedicationsContainer = styled.div`
@@ -194,7 +194,9 @@ const MedicationsPage: React.FunctionComponent = () => {
     <PageContainer>
       <SideBarComponent defaultOpen={false} />
       <Container>
-        <SubHeader>Medications</SubHeader>
+        <Typography variant="h5" sx={{ m: "25px 0" }}>
+          Medications
+        </Typography>
         {!isLoading && (
           <>
             <MedicationsContainer>

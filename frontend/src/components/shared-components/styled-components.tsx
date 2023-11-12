@@ -7,12 +7,10 @@ export const PageContainer = styled.div`
 `
 
 export const PageContentContainer = styled.div`
-  padding: 20px;
+  padding: 20px 50px;
   flex-grow: 1;
   background-color: #fffcf5;
 `
-
-export const SubHeader = styled.h2``
 
 export const Button = styled.button`
   background-color: #bdcfbc;

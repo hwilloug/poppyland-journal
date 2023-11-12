@@ -206,7 +206,7 @@ const PreviousEntriesPage: React.FunctionComponent = () => {
     <PageContainer>
       <SideBarComponent defaultOpen={false} />
       <PageContentContainer>
-        <Typography variant="h4" sx={{ mb: "20px" }}>
+        <Typography variant="h4" sx={{ m: "20px 0" }}>
           My Journal
         </Typography>
         <EntriesContainer>

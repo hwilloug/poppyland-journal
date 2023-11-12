@@ -3,7 +3,7 @@ import styled from "@emotion/styled"
 const LoadingDiv = styled.div`
   background-color: #fffcf5;
   padding: 20px;
-  flex-grow: 1;
+  flex-grow: 2;
 `
 
 const LoadingComponent: React.FunctionComponent = () => {

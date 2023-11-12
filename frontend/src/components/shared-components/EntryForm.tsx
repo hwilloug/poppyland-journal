@@ -13,8 +13,8 @@ import DailyQuestionComponent from "../todaysentrypage/DailyQuestion"
 import MentalHealthEntryComponent from "../todaysentrypage/MentalHealthEntry"
 import SubstanceEntryComponent from "../todaysentrypage/SubstanceEntry"
 import EntryComponent from "../todaysentrypage/Entry"
-import { SubHeader, SubmitButton } from "./styled-components"
-import { Alert, Snackbar } from "@mui/material"
+import { SubmitButton } from "./styled-components"
+import { Alert, Snackbar, Typography } from "@mui/material"
 import { Link } from "react-router-dom"
 import LoadingComponent from "./Loading"
 import { useDispatch, useSelector } from "react-redux"
@@ -152,6 +152,9 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
       }
       let s = wakeUpTime.diff(fixedBedTime, "minute")
       s = s / 60 // convert to hours
+      if (s < 0) {
+        s = s + 24
+      }
       setHoursSleep(s)
     }
   }, [bedTime, wakeUpTime])
@@ -230,7 +233,7 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
   return (
     <>
       <FormPrompt hasUnsavedChanges={true} />
-      <SubHeader>{dateFull}</SubHeader>
+      <Typography variant="h5">{dateFull}</Typography>
       {preferences.showMood && (
         <MoodEntryComponent mood={mood} onChange={setMood} />
       )}
