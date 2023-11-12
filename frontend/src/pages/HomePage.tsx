@@ -113,7 +113,7 @@ const HomePage: React.FunctionComponent = () => {
 
   return (
     <PageContainer>
-      <SideBarComponent />
+      <SideBarComponent defaultOpen />
       {!isLoading && (
         <HomePageContainer>
           {preferences.showMood && <MoodTrackerComponent moodData={moodData} />}

@@ -192,7 +192,7 @@ const MedicationsPage: React.FunctionComponent = () => {
 
   return (
     <PageContainer>
-      <SideBarComponent />
+      <SideBarComponent defaultOpen={false} />
       <Container>
         <SubHeader>Medications</SubHeader>
         {!isLoading && (

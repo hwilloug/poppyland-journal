@@ -18,7 +18,7 @@ const TodaysEntryPage: React.FunctionComponent = () => {
   const [date] = useState(convertToShortDate(new Date()))
   return (
     <PageContainer>
-      <SideBarComponent />
+      <SideBarComponent defaultOpen={false} />
       <PageContentContainer>
         <SubHeader>Today's Entry</SubHeader>
         <EntryForm date={date} />

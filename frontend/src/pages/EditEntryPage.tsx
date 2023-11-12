@@ -18,7 +18,7 @@ const EditEntryPage: React.FunctionComponent = () => {
   const { date } = useParams()
   return (
     <PageContainer>
-      <SideBarComponent />
+      <SideBarComponent defaultOpen={false} />
       <PageContentContainer>
         <SubHeader>Edit Entry</SubHeader>
         <EntryForm date={date!} />

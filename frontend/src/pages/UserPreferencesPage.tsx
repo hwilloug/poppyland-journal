@@ -108,7 +108,7 @@ const UserPreferencesPage: React.FunctionComponent = () => {
 
   return (
     <PageContainer>
-      <SideBarComponent />
+      <SideBarComponent defaultOpen={false} />
       <PageContentContainer>
         <SubHeader>Preferences</SubHeader>
         <Container>

@@ -1,12 +1,4 @@
-import {
-  BrowserRouter,
-  createBrowserRouter,
-  createRoutesFromElements,
-  Route,
-  RouterProvider,
-  Routes,
-  useLocation,
-} from "react-router-dom"
+import { createBrowserRouter, RouterProvider } from "react-router-dom"
 import "./App.css"
 import HomePage from "./pages/HomePage"
 import styled from "@emotion/styled"

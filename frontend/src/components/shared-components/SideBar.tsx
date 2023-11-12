@@ -1,6 +1,6 @@
 import React, { CSSProperties, useState } from "react"
 import styled from "@emotion/styled"
-import { Link, NavLink } from "react-router-dom"
+import { Link } from "react-router-dom"
 import { useAuth0 } from "@auth0/auth0-react"
 import { Button } from "./styled-components"
 import { Chip, Divider, Drawer, Typography } from "@mui/material"
@@ -25,6 +25,7 @@ const NavContainer = styled.li`
 `
 
 const NavItem = styled.ul`
+  margin-top: 30px;
   padding: 0px;
 `
 
@@ -43,7 +44,7 @@ const NavContainerCompact = styled.div`
   flex-direction: column;
   align-items: center;
   padding: 20px 0px;
-  gap: 20px;
+  gap: 30px;
 `
 
 const AccountContainer = styled.div`
@@ -58,7 +59,7 @@ const AccountContainerCompact = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 20px;
+  gap: 30px;
 `
 
 const SideBarHeader = styled.div`
@@ -69,11 +70,17 @@ const SideBarHeader = styled.div`
   max-width: ${drawerWidth};
 `
 
-const SideBarComponent: React.FunctionComponent = () => {
+interface SideBarProps {
+  defaultOpen: boolean
+}
+
+const SideBarComponent: React.FunctionComponent<SideBarProps> = ({
+  defaultOpen,
+}) => {
   const { user, logout } = useAuth0()
   const firstName = useSelector((state: State) => state.user.firstName)
   const lastName = useSelector((state: State) => state.user.lastName)
-  const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(true)
+  const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(defaultOpen)
 
   const handleDrawerToggle = () => {
     setIsDrawerOpen(!isDrawerOpen)
@@ -105,28 +112,28 @@ const SideBarComponent: React.FunctionComponent = () => {
         <Divider />
         <NavContainer>
           <NavItem>
-            <NavLink to="/" style={navItemStyle}>
+            <Link to="/" style={navItemStyle}>
               <HomeIcon />
               <Typography>Home</Typography>
-            </NavLink>
+            </Link>
           </NavItem>
           <NavItem>
-            <NavLink to="/today" style={navItemStyle}>
+            <Link to="/today" style={navItemStyle}>
               <TodayIcon />
               <Typography>Today's Entry</Typography>
-            </NavLink>
+            </Link>
           </NavItem>
           <NavItem>
-            <NavLink to="/medications" style={navItemStyle}>
+            <Link to="/medications" style={navItemStyle}>
               <MedicationIcon />
               <Typography>Medications</Typography>
-            </NavLink>
+            </Link>
           </NavItem>
           <NavItem>
-            <NavLink to="/journal" style={navItemStyle}>
+            <Link to="/journal" style={navItemStyle}>
               <MenuBookIcon />
               <Typography>My Journal</Typography>
-            </NavLink>
+            </Link>
           </NavItem>
         </NavContainer>
         <AccountContainer>
@@ -169,29 +176,28 @@ const SideBarComponent: React.FunctionComponent = () => {
         </SideBarHeader>
         <Divider />
         <NavContainerCompact>
-          <NavLink to="/" style={navItemStyle}>
-            <HomeIcon fontSize="large" />
-          </NavLink>
-          <NavLink to="/today" style={navItemStyle}>
-            <TodayIcon fontSize="large" />
-          </NavLink>
-          <NavLink to="/medications" style={navItemStyle}>
-            <MedicationIcon fontSize="large" />
-          </NavLink>
-          <NavLink to="/journal" style={navItemStyle}>
-            <MenuBookIcon fontSize="large" />
-          </NavLink>
+          <Link to="/" style={navItemStyle}>
+            <HomeIcon />
+          </Link>
+          <Link to="/today" style={navItemStyle}>
+            <TodayIcon />
+          </Link>
+          <Link to="/medications" style={navItemStyle}>
+            <MedicationIcon />
+          </Link>
+          <Link to="/journal" style={navItemStyle}>
+            <MenuBookIcon />
+          </Link>
         </NavContainerCompact>
         <AccountContainerCompact>
           <Link to="/preferences" style={navItemStyle}>
-            <ManageAccountsIcon fontSize="large" />
+            <ManageAccountsIcon />
           </Link>
           <LogoutIcon
             style={navItemStyle}
             onClick={() =>
               logout({ logoutParams: { returnTo: window.location.origin } })
             }
-            fontSize="large"
           />
           <ArrowCircleRightIcon
             onClick={handleDrawerToggle}
