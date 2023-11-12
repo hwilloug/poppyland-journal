@@ -6,7 +6,7 @@ const MentalHealthContainer = styled.div`
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
-  max-height: 200px;
+  max-height: 250px;
 `
 
 interface MentalHealthEntryProps {
@@ -34,6 +34,8 @@ const MentalHealthEntryComponent: React.FunctionComponent<
     "Reckless Behavior",
     "Fatigue",
     "Illusions of Grandeur",
+    "Low Self-Esteem",
+    "Reckless Spending",
     "Suicidal Ideation",
   ]
 

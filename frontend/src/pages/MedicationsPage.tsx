@@ -7,6 +7,7 @@ import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react"
 import LoadingComponent from "../components/shared-components/Loading"
 import {
   Button,
+  PageContentContainer,
   SubmitButton,
 } from "../components/shared-components/styled-components"
 import MedicationComponent from "../components/medicationspage/Medication"
@@ -22,17 +23,10 @@ const PageContainer = styled.div`
   flex-direction: row;
 `
 
-const Container = styled.div`
-  padding: 20px 50px;
-  flex-grow: 1;
-  background-color: #fffcf5;
-  min-height: 100vh;
-`
-
 const MedicationsContainer = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 50px;
 `
 
 const NoMedicationsContainer = styled.div`
@@ -193,7 +187,7 @@ const MedicationsPage: React.FunctionComponent = () => {
   return (
     <PageContainer>
       <SideBarComponent defaultOpen={false} />
-      <Container>
+      <PageContentContainer>
         <Typography variant="h5" sx={{ m: "25px 0" }}>
           Medications
         </Typography>
@@ -228,7 +222,7 @@ const MedicationsPage: React.FunctionComponent = () => {
             {snackbarMessage}
           </Alert>
         </Snackbar>
-      </Container>
+      </PageContentContainer>
     </PageContainer>
   )
 }

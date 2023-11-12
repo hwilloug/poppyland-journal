@@ -8,8 +8,9 @@ export const PageContainer = styled.div`
 
 export const PageContentContainer = styled.div`
   padding: 20px 50px;
+  max-width: 750px;
+  margin: 0 auto;
   flex-grow: 1;
-  background-color: #fffcf5;
 `
 
 export const Button = styled.button`
