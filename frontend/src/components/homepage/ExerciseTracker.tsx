@@ -35,7 +35,7 @@ const ExerciseTrackerComponent: React.FunctionComponent<
   const today = new Date().valueOf()
 
   const [timeFilter, setTimeFilter] = useState(
-    new Date(new Date(today).setDate(new Date(today).getDate() - 7)).valueOf(),
+    new Date(new Date(today).setDate(new Date(today).getDate() - 30)).valueOf(),
   )
   const timeFilters = [
     {
@@ -99,6 +99,7 @@ const ExerciseTrackerComponent: React.FunctionComponent<
           backgroundColor: "white",
           padding: "20px 20px 10px 0px",
         }}
+        barCategoryGap={0}
       >
         <Bar
           type="monotone"
@@ -110,6 +111,7 @@ const ExerciseTrackerComponent: React.FunctionComponent<
           type="number"
           domain={[timeFilter, today]}
           includeHidden
+          interval={0}
           tickFormatter={(value) => convertToMonthDay(new Date(value))}
         />
         <YAxis>
