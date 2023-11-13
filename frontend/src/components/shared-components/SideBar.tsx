@@ -24,6 +24,7 @@ const NavContainer = styled.li`
 const NavItem = styled.ul`
   margin-top: 30px;
   padding: 0px;
+  margin-left: 20px;
 `
 
 const navItemStyle: CSSProperties = {
@@ -77,6 +78,7 @@ const SideBarComponent: React.FunctionComponent<SideBarProps> = ({
   const { user, logout } = useAuth0()
   const firstName = useSelector((state: State) => state.user.firstName)
   const lastName = useSelector((state: State) => state.user.lastName)
+  const journalName = useSelector((state: State) => state.user.journalName)
   const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(defaultOpen)
 
   const handleDrawerToggle = () => {
@@ -129,7 +131,7 @@ const SideBarComponent: React.FunctionComponent<SideBarProps> = ({
           <NavItem>
             <Link to="/journal" style={navItemStyle}>
               <MenuBookIcon />
-              <Typography>My Journal</Typography>
+              <Typography>{journalName || "My Journal"}</Typography>
             </Link>
           </NavItem>
         </NavContainer>

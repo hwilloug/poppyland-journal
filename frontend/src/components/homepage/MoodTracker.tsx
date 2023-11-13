@@ -48,19 +48,19 @@ const MoodTrackerComponent: React.FunctionComponent<MoodTrackerProps> = ({
             <rect x="8" y="18" width="8" height="0.25" />
           </>
         )
-        color = "red"
+        color = theme.palette.error.main
         break
       case 1:
         mouth = <path d="M8,17 Q12,14 16,17" />
-        color = "orange"
+        color = theme.palette.warning.main
         break
       case 2:
         mouth = <path d="M8,17 16,17" />
-        color = "blue"
+        color = theme.palette.info.main
         break
       case 3:
         mouth = <path d="M8,17 Q12,20 16,17" />
-        color = "green"
+        color = theme.palette.success.main
         break
       case 4:
         mouth = (
@@ -69,7 +69,7 @@ const MoodTrackerComponent: React.FunctionComponent<MoodTrackerProps> = ({
             <rect x="7" y="16" width="10" height="0.25" />
           </>
         )
-        color = "purple"
+        color = theme.palette.primary.main
         break
     }
     return (
@@ -96,7 +96,7 @@ const MoodTrackerComponent: React.FunctionComponent<MoodTrackerProps> = ({
 
   return (
     <Container>
-      <Typography variant="h5" sx={{ p: "20px" }}>
+      <Typography variant="h5" sx={{ p: "20px" }} align="center">
         Mood Tracker - Last 30 days
       </Typography>
       <LineChart

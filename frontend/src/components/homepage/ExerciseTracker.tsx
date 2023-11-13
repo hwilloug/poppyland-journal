@@ -31,7 +31,7 @@ const ExerciseTrackerComponent: React.FunctionComponent<
 
   return (
     <Container>
-      <Typography variant="h5" sx={{ p: "20px" }}>
+      <Typography variant="h5" sx={{ p: "20px" }} align="center">
         Exercise Tracker - Last 30 days
       </Typography>
       <BarChart

@@ -19,17 +19,23 @@ import {
   setFirstName,
   setLastName,
   setUserPreference,
+  setJournalName,
 } from "../reducers/user_reducer"
 import { getProfile } from "../utils/get-profile"
 import { useState } from "react"
 import { apiEndpoints } from "../api-endpoints"
 import axios from "axios"
 
-const Container = styled.div``
+const Container = styled.div`
+  margin-top: 20px;
+`
 
-const SectionHeader = styled.h3``
-
-const SectionSubheader = styled.h5``
+const SettingSection = styled.div`
+  background-color: white;
+  border: 1px solid lightgrey;
+  margin-bottom: 30px;
+  padding: 20px;
+`
 
 const PreferenceContainer = styled.div`
   display: flex;
@@ -39,12 +45,19 @@ const PreferenceContainer = styled.div`
   margin-top: 10px;
 `
 
+const SubmitButtonContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+`
+
 const UserPreferencesPage: React.FunctionComponent = () => {
   const { user, getAccessTokenSilently } = useAuth0()
   const userId = useSelector((state: State) => state.user.userId)
   const firstName = useSelector((state: State) => state.user.firstName)
   const lastName = useSelector((state: State) => state.user.lastName)
   const preferences = useSelector((state: State) => state.user.preferences)
+  const journalName = useSelector((state: State) => state.user.journalName)
   const dispatch = useDispatch()
   if (!userId) {
     getProfile(user!.sub!, dispatch, getAccessTokenSilently)
@@ -93,7 +106,12 @@ const UserPreferencesPage: React.FunctionComponent = () => {
       const token = await getAccessTokenSilently()
       await axios.put(
         apiEndpoints.putUserPreferences.insert(),
-        { preferences, first_name: firstName, last_name: lastName },
+        {
+          preferences,
+          first_name: firstName,
+          last_name: lastName,
+          journal_name: journalName,
+        },
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -115,58 +133,84 @@ const UserPreferencesPage: React.FunctionComponent = () => {
     <PageContainer>
       <SideBarComponent defaultOpen={false} />
       <PageContentContainer>
-        <Typography variant="h5">Preferences</Typography>
+        <Typography variant="h4" align="center">
+          Preferences
+        </Typography>
         <Container>
-          <SectionHeader>Account Preferences</SectionHeader>
-          <SectionSubheader>Options related to your account.</SectionSubheader>
-          <TextField
-            label="First Name"
-            InputLabelProps={{
-              shrink: true,
-            }}
-            value={firstName}
-            defaultValue={0}
-            onChange={(e) => dispatch(setFirstName(e.target.value))}
-            sx={{ backgroundColor: "white", width: "200px" }}
-          />
-          <TextField
-            label="Last Name"
-            InputLabelProps={{
-              shrink: true,
-            }}
-            value={lastName}
-            defaultValue={0}
-            onChange={(e) => dispatch(setLastName(e.target.value))}
-            sx={{ backgroundColor: "white", width: "200px" }}
-          />
-
-          <SectionHeader>Journal Sections</SectionHeader>
-          <SectionSubheader>
-            Options related to which sections to show in your journal.
-          </SectionSubheader>
-          {sections.map((s) => (
-            <PreferenceContainer key={s.preference}>
-              <Checkbox
-                // @ts-ignore
-                checked={preferences[s.preference]}
-                onChange={() =>
-                  handlePreferenceChange(
-                    s.preference,
-                    // @ts-ignore
-                    !preferences[s.preference],
-                  )
-                }
-              />
-              <Typography>{s.section}</Typography>
-            </PreferenceContainer>
-          ))}
-          <Button
-            color="primary"
-            variant="contained"
-            onClick={() => onSubmit()}
-          >
-            Save
-          </Button>
+          <SettingSection>
+            <Typography variant="h6">Account Preferences</Typography>
+            <Typography sx={{ mt: "10px", mb: "20px" }}>
+              Options related to your account.
+            </Typography>
+            <TextField
+              label="First Name"
+              InputLabelProps={{
+                shrink: true,
+              }}
+              value={firstName}
+              defaultValue={0}
+              onChange={(e) => dispatch(setFirstName(e.target.value))}
+              sx={{ backgroundColor: "white", width: "200px", mr: "10px" }}
+            />
+            <TextField
+              label="Last Name"
+              InputLabelProps={{
+                shrink: true,
+              }}
+              value={lastName}
+              defaultValue={0}
+              onChange={(e) => dispatch(setLastName(e.target.value))}
+              sx={{ backgroundColor: "white", width: "200px" }}
+            />
+          </SettingSection>
+          <SettingSection>
+            <Typography variant="h6">Journal Options</Typography>
+            <Typography sx={{ mt: "10px", mb: "20px" }}>
+              Options related to your journal.
+            </Typography>
+            <TextField
+              label="Journal Name"
+              InputLabelProps={{
+                shrink: true,
+              }}
+              value={journalName}
+              defaultValue={0}
+              onChange={(e) => dispatch(setJournalName(e.target.value))}
+              sx={{ backgroundColor: "white", width: "100%" }}
+            />
+          </SettingSection>
+          <SettingSection>
+            <Typography variant="h6">Journal Sections</Typography>
+            <Typography sx={{ my: "10px" }}>
+              Options related to which sections to show in your journal.
+            </Typography>
+            {sections.map((s) => (
+              <PreferenceContainer key={s.preference}>
+                <Checkbox
+                  // @ts-ignore
+                  checked={preferences[s.preference]}
+                  onChange={() =>
+                    handlePreferenceChange(
+                      s.preference,
+                      // @ts-ignore
+                      !preferences[s.preference],
+                    )
+                  }
+                />
+                <Typography>{s.section}</Typography>
+              </PreferenceContainer>
+            ))}
+          </SettingSection>
+          <SubmitButtonContainer>
+            <Button
+              color="primary"
+              variant="contained"
+              onClick={() => onSubmit()}
+              sx={{ mt: "20px" }}
+            >
+              Save
+            </Button>
+          </SubmitButtonContainer>
           <Snackbar
             open={snackbarOpen}
             autoHideDuration={6000}

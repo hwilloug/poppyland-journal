@@ -20,7 +20,7 @@ const TodaysEntryPage: React.FunctionComponent = () => {
     <PageContainer>
       <SideBarComponent defaultOpen={false} />
       <PageContentContainer>
-        <Typography variant="h5" sx={{ my: "20px" }}>
+        <Typography variant="h4" sx={{ my: "20px" }} align="center">
           Today's Entry
         </Typography>
         <EntryForm date={date} />

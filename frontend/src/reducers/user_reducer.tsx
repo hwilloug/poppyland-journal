@@ -5,6 +5,8 @@ export type UserType = {
   userId: string
   firstName: string
   lastName: string
+  journalName: string
+  isDarkMode: boolean
 }
 
 export type PreferencesType = {
@@ -25,6 +27,8 @@ export const userSlice = createSlice({
     userId: "",
     firstName: "",
     lastName: "",
+    journalName: "My Journal",
+    isDarkMode: false,
   },
   reducers: {
     setUserPreferences: (state, action) => {
@@ -46,6 +50,12 @@ export const userSlice = createSlice({
         [action.payload.preference]: action.payload.value,
       }
     },
+    setJournalName: (state, action) => {
+      state.journalName = action.payload
+    },
+    setIsDarkMode: (state, action) => {
+      state.isDarkMode = action.payload
+    },
   },
 })
 
@@ -56,6 +66,8 @@ export const {
   setUserPreference,
   setFirstName,
   setLastName,
+  setJournalName,
+  setIsDarkMode,
 } = userSlice.actions
 
 export default userSlice.reducer

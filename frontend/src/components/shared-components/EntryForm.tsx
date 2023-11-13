@@ -233,7 +233,9 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
   return (
     <>
       <FormPrompt hasUnsavedChanges={true} />
-      <Typography variant="h5">{dateFull}</Typography>
+      <Typography variant="h5" align="center">
+        {dateFull}
+      </Typography>
       {preferences.showMood && (
         <MoodEntryComponent mood={mood} onChange={setMood} />
       )}

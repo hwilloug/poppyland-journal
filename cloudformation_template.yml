@@ -1167,7 +1167,11 @@ Resources:
               if payload.get('first_name'):
                   item_payload['FirstName'] = {'S': payload.get('first_name')}
               if payload.get('last_name'):
-                  item_payload['LastName']: {'S': payload.get('last_name')}
+                  item_payload['LastName'] = {'S': payload.get('last_name')}
+              if payload.get('journal_name'):
+                  item_payload['JournalName'] = {'S': payload.get('journal_name')}
+              if payload.get('is_dark_mode'):
+                  item_payload['IsDarkMode'] = {'BOOL': payload.get('is_dark_mode')}
 
               response = dynamodb.put_item(
                   TableName='UserPreferences', 
@@ -1271,7 +1275,9 @@ Resources:
                   "user_id": item['Item'].get('UserId', {}).get("S"),
                   "preferences": deserializer.deserialize(item['Item'].get('Preferences', {})),
                   "first_name": item['Item'].get('FirstName', {}).get("S"),
-                  "last_name": item['Item'].get('LastName', {}).get("S")
+                  "last_name": item['Item'].get('LastName', {}).get("S"),
+                  "journal_name": item['Item'].get('JournalName', {}).get("S"),
+                  "is_dark_mode": item['Item'].get('IsDarkMode', {}).get("BOOL"),
               }
               return {
                   "statusCode": 200,

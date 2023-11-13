@@ -31,7 +31,7 @@ const SleepTrackerComponent: React.FunctionComponent<SleepTrackerProps> = ({
 
   return (
     <Container>
-      <Typography variant="h5" sx={{ p: "20px" }}>
+      <Typography variant="h5" sx={{ p: "20px" }} align="center">
         Sleep Tracker - Last 30 days
       </Typography>
       <LineChart

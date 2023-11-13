@@ -63,6 +63,13 @@ const NoEntriesContainer = styled.div`
   padding: 20px;
 `
 
+const ModalButtonsContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-top: 20px;
+`
+
 interface EntryType {
   date: string
   mood: string
@@ -85,6 +92,7 @@ const PreviousEntriesPage: React.FunctionComponent = () => {
   const dispatch = useDispatch()
   const userId = useSelector((state: State) => state.user.userId)
   const preferences = useSelector((state: State) => state.user.preferences)
+  const journalName = useSelector((state: State) => state.user.journalName)
   if (!userId) {
     getProfile(user!.sub!, dispatch, getAccessTokenSilently)
   }
@@ -191,8 +199,8 @@ const PreviousEntriesPage: React.FunctionComponent = () => {
     <PageContainer>
       <SideBarComponent defaultOpen={false} />
       <PageContentContainer>
-        <Typography variant="h4" sx={{ m: "20px 0" }}>
-          My Journal
+        <Typography variant="h4" sx={{ m: "20px 0" }} align="center">
+          {journalName || "My Journal"}
         </Typography>
         <EntriesContainer>
           {!isLoading && entries.length === 0 && (
@@ -318,15 +326,17 @@ const PreviousEntriesPage: React.FunctionComponent = () => {
               <Typography>
                 {convertToLongDateFromShortDate(deleteEntryDate)}
               </Typography>
-              <Button variant="contained" onClick={() => handleModalClose()}>
-                No, take me back
-              </Button>
-              <Button
-                color="error"
-                onClick={() => handleDeleteEntry(deleteEntryDate)}
-              >
-                Yes, Delete
-              </Button>
+              <ModalButtonsContainer>
+                <Button variant="contained" onClick={() => handleModalClose()}>
+                  No, take me back
+                </Button>
+                <Button
+                  color="error"
+                  onClick={() => handleDeleteEntry(deleteEntryDate)}
+                >
+                  Yes, Delete
+                </Button>
+              </ModalButtonsContainer>
             </Box>
           </Modal>
           <Snackbar
