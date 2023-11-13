@@ -1,9 +1,8 @@
 import styled from "@emotion/styled"
 import { SectionHeader } from "../../pages/TodaysEntryPage"
 import { unstable_useNumberInput as useNumberInput } from "@mui/base"
-import { TextField } from "@mui/material"
-
-const Container = styled.div``
+import { TextField, Typography } from "@mui/material"
+import { EntrySectionContainer } from "../shared-components/styled-components"
 
 const ExerciseContainer = styled.div``
 
@@ -19,8 +18,10 @@ const ExerciseEntryComponent: React.FunctionComponent<ExerciseEntryProps> = ({
   onChange,
 }) => {
   return (
-    <Container>
-      <SectionHeader>Exercise</SectionHeader>
+    <EntrySectionContainer>
+      <Typography variant="h6" sx={{ mb: "20px" }}>
+        Exercise
+      </Typography>
       <ExerciseContainer>
         <TextField
           label="Minutes Exercise"
@@ -34,7 +35,7 @@ const ExerciseEntryComponent: React.FunctionComponent<ExerciseEntryProps> = ({
           sx={{ backgroundColor: "white", width: "150px" }}
         />
       </ExerciseContainer>
-    </Container>
+    </EntrySectionContainer>
   )
 }
 

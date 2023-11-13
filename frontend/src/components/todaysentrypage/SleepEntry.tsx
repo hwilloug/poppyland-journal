@@ -8,7 +8,8 @@ import {
 import { SectionHeader } from "../../pages/TodaysEntryPage"
 import styled from "@emotion/styled"
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs"
-import { MenuItem, Select } from "@mui/material"
+import { MenuItem, Select, Typography } from "@mui/material"
+import { EntrySectionContainer } from "../shared-components/styled-components"
 
 const SleepTimeContainer = styled.div`
   display: flex;
@@ -44,8 +45,10 @@ const SleepEntryComponent: React.FunctionComponent<SleepEntryProps> = ({
   hoursSleep,
 }) => {
   return (
-    <>
-      <SectionHeader>Sleep</SectionHeader>
+    <EntrySectionContainer>
+      <Typography variant="h6" sx={{ mb: "20px" }}>
+        Sleep
+      </Typography>
       <SleepTimeContainer>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           {/* @ts-ignore */}
@@ -88,7 +91,7 @@ const SleepEntryComponent: React.FunctionComponent<SleepEntryProps> = ({
           <MenuItem value="Bad">Bad</MenuItem>
         </Select>
       </SleepQualityContainer>
-    </>
+    </EntrySectionContainer>
   )
 }
 

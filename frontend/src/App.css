@@ -17,12 +17,8 @@ body {
   background-color: #fffcf5;
 }
 
-.w-md-editor-text-input:focus {
-  border: 2px solid purple;
-}
-
 .w-md-editor-show-edit:hover {
-  border: 1px solid darkgrey;
+  border: 1px solid slategray;
 }
 
 .w-md-editor-show-edit {

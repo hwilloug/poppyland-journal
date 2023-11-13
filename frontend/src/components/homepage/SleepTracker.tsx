@@ -1,9 +1,11 @@
 import React from "react"
 import styled from "@emotion/styled"
-import { Label, Line, LineChart, XAxis, YAxis } from "recharts"
+import { Label, Line, LineChart, ReferenceLine, XAxis, YAxis } from "recharts"
 import { convertToMonthDay } from "../../utils/date-utils"
 import { Typography } from "@mui/material"
 import { theme } from "../../App"
+import { State } from "../../store"
+import { useSelector } from "react-redux"
 
 const Container = styled.div`
   background-color: white;
@@ -24,6 +26,9 @@ interface SleepTrackerProps {
 const SleepTrackerComponent: React.FunctionComponent<SleepTrackerProps> = ({
   sleepData,
 }) => {
+  const idealHoursSleep = useSelector(
+    (state: State) => state.user.idealHoursSleep,
+  )
   const today = new Date().valueOf()
   const thirtyDaysAgo = new Date(
     new Date().setDate(new Date().getDate() - 30),
@@ -45,11 +50,16 @@ const SleepTrackerComponent: React.FunctionComponent<SleepTrackerProps> = ({
         }}
       >
         <Line
-          type="monotone"
+          type="linear"
           dataKey="hoursSleep"
           stroke={theme.palette.primary.main}
           dot={{ stroke: theme.palette.primary.main }}
           connectNulls
+        />
+        <ReferenceLine
+          y={idealHoursSleep}
+          stroke="darkgrey"
+          strokeDasharray="3 3"
         />
         <XAxis
           dataKey="date"

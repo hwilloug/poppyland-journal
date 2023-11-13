@@ -13,3 +13,11 @@ export const PageContentContainer = styled.div`
   margin: 0 auto;
   flex-grow: 1;
 `
+
+export const EntrySectionContainer = styled.div`
+  background-color: white;
+  border: 1px solid lightgrey;
+  padding: 20px;
+  margin-bottom: 50px;
+  margin-top: 20px;
+`

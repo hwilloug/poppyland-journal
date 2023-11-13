@@ -110,7 +110,7 @@ const MoodTrackerComponent: React.FunctionComponent<MoodTrackerProps> = ({
         }}
       >
         <Line
-          type="monotone"
+          type="linear"
           dataKey="mood"
           stroke={theme.palette.primary.main}
           dot={{ stroke: theme.palette.primary.main }}

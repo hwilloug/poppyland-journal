@@ -1,8 +1,8 @@
 import styled from "@emotion/styled"
 import MarkdownComponent from "../shared-components/Markdown"
 import { SectionHeader } from "../../pages/TodaysEntryPage"
-
-const GoalsContainer = styled.div``
+import { EntrySectionContainer } from "../shared-components/styled-components"
+import { Typography } from "@mui/material"
 
 interface DailyGoalProps {
   goal?: string
@@ -14,8 +14,10 @@ const DailyGoalComponent: React.FunctionComponent<DailyGoalProps> = ({
   onChange,
 }) => {
   return (
-    <GoalsContainer>
-      <SectionHeader>Daily Goal</SectionHeader>
+    <EntrySectionContainer>
+      <Typography variant="h6" sx={{ mb: "20px" }}>
+        Daily Goal
+      </Typography>
       <MarkdownComponent
         view="edit"
         value={goal}
@@ -24,7 +26,7 @@ const DailyGoalComponent: React.FunctionComponent<DailyGoalProps> = ({
         height={75}
         preview="edit"
       />
-    </GoalsContainer>
+    </EntrySectionContainer>
   )
 }
 

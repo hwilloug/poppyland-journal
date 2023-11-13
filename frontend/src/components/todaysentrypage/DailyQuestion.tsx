@@ -1,10 +1,6 @@
-import styled from "@emotion/styled"
 import MarkdownComponent from "../shared-components/Markdown"
-import { SectionHeader } from "../../pages/TodaysEntryPage"
-
-const DailyQuestionContainer = styled.div``
-
-const QuestionContainer = styled.div``
+import { EntrySectionContainer } from "../shared-components/styled-components"
+import { Typography } from "@mui/material"
 
 interface DailyQuestionProps {
   date?: string
@@ -55,9 +51,11 @@ const DailyQuestionComponent: React.FunctionComponent<DailyQuestionProps> = ({
   }
 
   return (
-    <DailyQuestionContainer>
-      <SectionHeader>Daily Question</SectionHeader>
-      <QuestionContainer>{question}</QuestionContainer>
+    <EntrySectionContainer>
+      <Typography variant="h6" sx={{ mb: "20px" }}>
+        Daily Question
+      </Typography>
+      <Typography>{question}</Typography>
       <MarkdownComponent
         view="edit"
         value={answer}
@@ -66,7 +64,7 @@ const DailyQuestionComponent: React.FunctionComponent<DailyQuestionProps> = ({
         height={75}
         preview="edit"
       />
-    </DailyQuestionContainer>
+    </EntrySectionContainer>
   )
 }
 

@@ -3,6 +3,7 @@ import { apiEndpoints } from "../api-endpoints"
 import { useDispatch } from "react-redux"
 import {
   setFirstName,
+  setIdealHoursSleep,
   setIsDarkMode,
   setJournalName,
   setLastName,
@@ -38,8 +39,10 @@ export const getProfile = async (
     dispatch(setUserPreferences({ ...defaultPreferences, ...data.preferences }))
     data.first_name && dispatch(setFirstName(data.first_name))
     data.last_name && dispatch(setLastName(data.last_name))
-    dispatch(setJournalName(data.journal_name))
+    data.journal_name && dispatch(setJournalName(data.journal_name))
     dispatch(setIsDarkMode(data.is_dark_mode))
+    data.ideal_hours_sleep &&
+      dispatch(setIdealHoursSleep(data.ideal_hours_sleep))
   } catch (e) {
     const token = await getAccessTokenSilently()
     const response = await axios.put(

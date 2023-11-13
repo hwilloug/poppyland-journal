@@ -1,8 +1,8 @@
 import styled from "@emotion/styled"
 import MarkdownComponent from "../shared-components/Markdown"
 import { SectionHeader } from "../../pages/TodaysEntryPage"
-
-const AffirmationsContainer = styled.div``
+import { Typography } from "@mui/material"
+import { EntrySectionContainer } from "../shared-components/styled-components"
 
 interface DailyAffirmationProps {
   affirmation?: string
@@ -13,8 +13,10 @@ const DailyAffirmationComponent: React.FunctionComponent<
   DailyAffirmationProps
 > = ({ affirmation, onChange }) => {
   return (
-    <AffirmationsContainer>
-      <SectionHeader>Daily Affirmation</SectionHeader>
+    <EntrySectionContainer>
+      <Typography variant="h6" sx={{ mb: "20px" }}>
+        Daily Affirmation
+      </Typography>
       <MarkdownComponent
         view="edit"
         value={affirmation}
@@ -23,7 +25,7 @@ const DailyAffirmationComponent: React.FunctionComponent<
         height={75}
         preview="edit"
       />
-    </AffirmationsContainer>
+    </EntrySectionContainer>
   )
 }
 

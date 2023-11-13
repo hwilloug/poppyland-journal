@@ -20,6 +20,7 @@ import {
   setLastName,
   setUserPreference,
   setJournalName,
+  setIdealHoursSleep,
 } from "../reducers/user_reducer"
 import { getProfile } from "../utils/get-profile"
 import { useState } from "react"
@@ -58,6 +59,9 @@ const UserPreferencesPage: React.FunctionComponent = () => {
   const lastName = useSelector((state: State) => state.user.lastName)
   const preferences = useSelector((state: State) => state.user.preferences)
   const journalName = useSelector((state: State) => state.user.journalName)
+  const idealHoursSleep = useSelector(
+    (state: State) => state.user.idealHoursSleep,
+  )
   const dispatch = useDispatch()
   if (!userId) {
     getProfile(user!.sub!, dispatch, getAccessTokenSilently)
@@ -67,6 +71,14 @@ const UserPreferencesPage: React.FunctionComponent = () => {
   const [snackbarMessage, setSnackbarMessage] = useState<string>("")
 
   const sections = [
+    {
+      section: "Mood",
+      preference: "showMood",
+    },
+    {
+      section: "Sleep",
+      preference: "showSleep",
+    },
     {
       section: "Daily Affirmation",
       preference: "showDailyAffirmation",
@@ -78,10 +90,6 @@ const UserPreferencesPage: React.FunctionComponent = () => {
     {
       section: "Daily Question",
       preference: "showDailyQuestion",
-    },
-    {
-      section: "Mood",
-      preference: "showMood",
     },
     {
       section: "Mental Health & Behavior",
@@ -111,6 +119,7 @@ const UserPreferencesPage: React.FunctionComponent = () => {
           first_name: firstName,
           last_name: lastName,
           journal_name: journalName,
+          ideal_hours_sleep: idealHoursSleep,
         },
         {
           headers: {
@@ -174,9 +183,18 @@ const UserPreferencesPage: React.FunctionComponent = () => {
                 shrink: true,
               }}
               value={journalName}
-              defaultValue={0}
               onChange={(e) => dispatch(setJournalName(e.target.value))}
               sx={{ backgroundColor: "white", width: "100%" }}
+            />
+            <TextField
+              label="Ideal Hours Sleep"
+              type="number"
+              InputLabelProps={{
+                shrink: true,
+              }}
+              value={idealHoursSleep}
+              onChange={(e) => dispatch(setIdealHoursSleep(e.target.value))}
+              sx={{ backgroundColor: "white", mt: "20px" }}
             />
           </SettingSection>
           <SettingSection>

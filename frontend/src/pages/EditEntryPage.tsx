@@ -20,7 +20,9 @@ const EditEntryPage: React.FunctionComponent = () => {
     <PageContainer>
       <SideBarComponent defaultOpen={false} />
       <PageContentContainer>
-        <Typography variant="h5">Edit Entry</Typography>
+        <Typography variant="h4" sx={{ my: "20px" }} align="center">
+          Edit Entry
+        </Typography>
         <EntryForm date={date!} />
       </PageContentContainer>
     </PageContainer>

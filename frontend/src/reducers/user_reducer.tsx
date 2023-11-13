@@ -7,6 +7,7 @@ export type UserType = {
   lastName: string
   journalName: string
   isDarkMode: boolean
+  idealHoursSleep: number
 }
 
 export type PreferencesType = {
@@ -29,6 +30,7 @@ export const userSlice = createSlice({
     lastName: "",
     journalName: "My Journal",
     isDarkMode: false,
+    idealHoursSleep: 8,
   },
   reducers: {
     setUserPreferences: (state, action) => {
@@ -56,6 +58,9 @@ export const userSlice = createSlice({
     setIsDarkMode: (state, action) => {
       state.isDarkMode = action.payload
     },
+    setIdealHoursSleep: (state, action) => {
+      state.idealHoursSleep = action.payload
+    },
   },
 })
 
@@ -68,6 +73,7 @@ export const {
   setLastName,
   setJournalName,
   setIsDarkMode,
+  setIdealHoursSleep,
 } = userSlice.actions
 
 export default userSlice.reducer

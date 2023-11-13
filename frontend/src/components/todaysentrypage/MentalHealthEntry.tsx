@@ -1,6 +1,8 @@
 import styled from "@emotion/styled"
 import { SectionHeader } from "../../pages/TodaysEntryPage"
 import CheckboxItemComponent from "../shared-components/CheckboxItem"
+import { EntrySectionContainer } from "../shared-components/styled-components"
+import { Typography } from "@mui/material"
 
 const MentalHealthContainer = styled.div`
   display: flex;
@@ -40,8 +42,10 @@ const MentalHealthEntryComponent: React.FunctionComponent<
   ]
 
   return (
-    <>
-      <SectionHeader>Mental Health & Behavior</SectionHeader>
+    <EntrySectionContainer>
+      <Typography variant="h6" sx={{ mb: "20px" }}>
+        Mental Health & Behavior
+      </Typography>
       <MentalHealthContainer>
         {mentalHealthSymptoms.map((s) => (
           <CheckboxItemComponent
@@ -52,7 +56,7 @@ const MentalHealthEntryComponent: React.FunctionComponent<
           />
         ))}
       </MentalHealthContainer>
-    </>
+    </EntrySectionContainer>
   )
 }
 

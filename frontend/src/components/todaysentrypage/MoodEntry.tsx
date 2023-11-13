@@ -5,6 +5,8 @@ import SentimentSatisfiedIcon from "@mui/icons-material/SentimentSatisfied"
 import SentimentNeutralIcon from "@mui/icons-material/SentimentNeutral"
 import SentimentDissatisfiedIcon from "@mui/icons-material/SentimentDissatisfied"
 import SentimentVeryDissatisfiedIcon from "@mui/icons-material/SentimentVeryDissatisfied"
+import { EntrySectionContainer } from "../shared-components/styled-components"
+import { Typography } from "@mui/material"
 
 const MoodContainer = styled.div`
   display: flex;
@@ -22,8 +24,10 @@ const MoodEntryComponent: React.FunctionComponent<MoodEntryProps> = ({
   onChange,
 }) => {
   return (
-    <>
-      <SectionHeader>Mood</SectionHeader>
+    <EntrySectionContainer>
+      <Typography variant="h6" sx={{ mb: "20px" }}>
+        Mood
+      </Typography>
       <MoodContainer>
         <SentimentVeryDissatisfiedIcon
           fontSize="large"
@@ -69,7 +73,7 @@ const MoodEntryComponent: React.FunctionComponent<MoodEntryProps> = ({
           }}
         />
       </MoodContainer>
-    </>
+    </EntrySectionContainer>
   )
 }
 
