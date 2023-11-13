@@ -48,6 +48,7 @@ const SleepTrackerComponent: React.FunctionComponent<SleepTrackerProps> = ({
           dataKey="hoursSleep"
           stroke="#8d5bc1"
           dot={{ stroke: "#8d5bc1" }}
+          connectNulls
         />
         <XAxis
           dataKey="date"

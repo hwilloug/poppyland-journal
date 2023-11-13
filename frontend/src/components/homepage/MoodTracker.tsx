@@ -93,6 +93,8 @@ const MoodTrackerComponent: React.FunctionComponent<MoodTrackerProps> = ({
     )
   }
 
+  console.log(moodData)
+
   return (
     <Container>
       <Typography variant="h5" sx={{ p: "20px" }}>
@@ -113,6 +115,7 @@ const MoodTrackerComponent: React.FunctionComponent<MoodTrackerProps> = ({
           dataKey="mood"
           stroke="#8d5bc1"
           dot={{ stroke: "#8d5bc1" }}
+          connectNulls
         />
         <XAxis
           dataKey="date"
