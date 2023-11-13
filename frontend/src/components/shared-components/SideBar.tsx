@@ -106,7 +106,7 @@ const SideBarComponent: React.FunctionComponent<SideBarProps> = ({
         <SideBarHeader>
           <img src="logo.png" width={100}></img>
           <Typography variant="h5">Poppyland Journal</Typography>
-          <Chip label="BETA" color="primary" sx={{ width: "100px" }} />
+          <Chip label="ALPHA" color="primary" sx={{ width: "100px" }} />
         </SideBarHeader>
         <Divider />
         <NavContainer>
