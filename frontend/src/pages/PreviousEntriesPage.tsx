@@ -70,6 +70,12 @@ const ModalButtonsContainer = styled.div`
   margin-top: 20px;
 `
 
+const EntryFooterContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+`
+
 interface EntryType {
   date: string
   mood: string
@@ -281,12 +287,14 @@ const PreviousEntriesPage: React.FunctionComponent = () => {
                 {entry.entry_content && (
                   <MarkdownComponent view="view" value={entry.entry_content} />
                 )}
-                <Button
-                  id="more-button"
-                  onClick={(e) => handleMoreClick(e, entry.date)}
-                >
-                  <MoreHorizIcon />
-                </Button>
+                <EntryFooterContainer>
+                  <Button
+                    id="more-button"
+                    onClick={(e) => handleMoreClick(e, entry.date)}
+                  >
+                    <MoreHorizIcon />
+                  </Button>
+                </EntryFooterContainer>
               </EntryContainer>
             ))}
           <Menu

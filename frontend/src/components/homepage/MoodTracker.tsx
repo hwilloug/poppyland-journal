@@ -1,8 +1,8 @@
-import React from "react"
+import React, { useState } from "react"
 import styled from "@emotion/styled"
 import { Line, LineChart, XAxis, YAxis } from "recharts"
 import { convertToMonthDay } from "../../utils/date-utils"
-import { Typography } from "@mui/material"
+import { Button, Typography } from "@mui/material"
 import { theme } from "../../App"
 
 const Container = styled.div`
@@ -10,6 +10,14 @@ const Container = styled.div`
   padding: 20px;
   margin: 50px 20px;
   border: 1px solid lightgrey;
+`
+
+const TimeFiltersContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  justify-content: center;
+  margin-bottom: 20px;
 `
 
 export type MoodDataType = {
@@ -25,9 +33,42 @@ const MoodTrackerComponent: React.FunctionComponent<MoodTrackerProps> = ({
   moodData,
 }) => {
   const today = new Date().valueOf()
-  const thirtyDaysAgo = new Date(
-    new Date().setDate(new Date().getDate() - 30),
-  ).valueOf()
+
+  const [timeFilter, setTimeFilter] = useState(
+    new Date(new Date(today).setDate(new Date(today).getDate() - 30)).valueOf(),
+  )
+  const timeFilters = [
+    {
+      name: "Last 7 Days",
+      firstDate: new Date(
+        new Date(today).setDate(new Date(today).getDate() - 7),
+      ).valueOf(),
+    },
+    {
+      name: "Last 30 Days",
+      firstDate: new Date(
+        new Date(today).setDate(new Date(today).getDate() - 30),
+      ).valueOf(),
+    },
+    {
+      name: "Last 90 Days",
+      firstDate: new Date(
+        new Date(today).setDate(new Date(today).getDate() - 90),
+      ).valueOf(),
+    },
+    {
+      name: "Last 180 Days",
+      firstDate: new Date(
+        new Date(today).setDate(new Date(today).getDate() - 180),
+      ).valueOf(),
+    },
+    {
+      name: "Last Year",
+      firstDate: new Date(
+        new Date(today).setDate(new Date(today).getDate() - 365),
+      ).valueOf(),
+    },
+  ]
 
   const renderCustomAxisTick = ({
     x,
@@ -97,8 +138,23 @@ const MoodTrackerComponent: React.FunctionComponent<MoodTrackerProps> = ({
   return (
     <Container>
       <Typography variant="h5" sx={{ p: "20px" }} align="center">
-        Mood Tracker - Last 30 days
+        Mood Tracker
       </Typography>
+      <TimeFiltersContainer>
+        {timeFilters.map((f) => (
+          <Button
+            key={f.name}
+            variant={
+              new Date(f.firstDate).getDate() === new Date(timeFilter).getDate()
+                ? "contained"
+                : "outlined"
+            }
+            onClick={() => setTimeFilter(f.firstDate)}
+          >
+            {f.name}
+          </Button>
+        ))}
+      </TimeFiltersContainer>
       <LineChart
         margin={{ top: 5, left: 5, right: 5, bottom: 5 }}
         width={900}
@@ -119,7 +175,7 @@ const MoodTrackerComponent: React.FunctionComponent<MoodTrackerProps> = ({
         <XAxis
           dataKey="date"
           type="number"
-          domain={[thirtyDaysAgo, today]}
+          domain={[timeFilter, today]}
           includeHidden
           tickFormatter={(value) => convertToMonthDay(new Date(value))}
         />

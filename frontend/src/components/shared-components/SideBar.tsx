@@ -131,7 +131,7 @@ const SideBarComponent: React.FunctionComponent<SideBarProps> = ({
           <NavItem>
             <Link to="/journal" style={navItemStyle}>
               <MenuBookIcon />
-              <Typography>My Journal</Typography>
+              <Typography>{journalName}</Typography>
             </Link>
           </NavItem>
         </NavContainer>
