@@ -289,12 +289,12 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
 
       <EntryComponent content={entryContent} onChange={setEntryContent} />
 
-      {currentMedications.length && (
+      {/* {currentMedications.length && (
         <MedicationsContainer>
           Current Medications: {currentMedications.join(", ")}{" "}
           <Link to="/medications">(Edit)</Link>
         </MedicationsContainer>
-      )}
+      )} */}
 
       <SubmitContainer>
         <SubmitButton onClick={onSubmit}>Save</SubmitButton>

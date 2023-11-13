@@ -123,12 +123,12 @@ const SideBarComponent: React.FunctionComponent<SideBarProps> = ({
               <Typography>Today's Entry</Typography>
             </Link>
           </NavItem>
-          <NavItem>
+          {/* <NavItem>
             <Link to="/medications" style={navItemStyle}>
               <MedicationIcon />
               <Typography>Medications</Typography>
             </Link>
-          </NavItem>
+          </NavItem> */}
           <NavItem>
             <Link to="/journal" style={navItemStyle}>
               <MenuBookIcon />
@@ -182,9 +182,9 @@ const SideBarComponent: React.FunctionComponent<SideBarProps> = ({
           <Link to="/today" style={navItemStyle}>
             <TodayIcon />
           </Link>
-          <Link to="/medications" style={navItemStyle}>
+          {/* <Link to="/medications" style={navItemStyle}>
             <MedicationIcon />
-          </Link>
+          </Link> */}
           <Link to="/journal" style={navItemStyle}>
             <MenuBookIcon />
           </Link>

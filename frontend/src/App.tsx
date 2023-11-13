@@ -27,10 +27,6 @@ const router = createBrowserRouter([
     element: <PreviousEntriesPage />,
   },
   {
-    path: "/medications",
-    element: <MedicationsPage />,
-  },
-  {
     path: "/edit/:date",
     element: <EditEntryPage />,
   },
