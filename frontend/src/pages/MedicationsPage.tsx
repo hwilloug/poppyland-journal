@@ -5,13 +5,9 @@ import { apiEndpoints } from "../api-endpoints"
 import axios from "axios"
 import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react"
 import LoadingComponent from "../components/shared-components/Loading"
-import {
-  Button,
-  PageContentContainer,
-  SubmitButton,
-} from "../components/shared-components/styled-components"
+import { PageContentContainer } from "../components/shared-components/styled-components"
 import MedicationComponent from "../components/medicationspage/Medication"
-import { Alert, Snackbar, Typography } from "@mui/material"
+import { Alert, Button, Snackbar, Typography } from "@mui/material"
 import dayjs, { Dayjs } from "dayjs"
 import { useDispatch, useSelector } from "react-redux"
 import { State } from "../store"
@@ -30,11 +26,6 @@ const MedicationsContainer = styled.div`
 `
 
 const NoMedicationsContainer = styled.div`
-  margin: 20px;
-`
-
-const NewMedicationButton = styled(Button)`
-  color: black;
   margin: 20px;
 `
 
@@ -206,10 +197,10 @@ const MedicationsPage: React.FunctionComponent = () => {
                 <NoMedicationsContainer>No Medications</NoMedicationsContainer>
               )}
             </MedicationsContainer>
-            <NewMedicationButton onClick={() => addNewMedication()}>
+            <Button color="secondary" onClick={() => addNewMedication()}>
               New
-            </NewMedicationButton>
-            <SubmitButton onClick={() => handleSave()}>Save</SubmitButton>
+            </Button>
+            <Button onClick={() => handleSave()}>Save</Button>
           </>
         )}
         {isLoading && <LoadingComponent />}

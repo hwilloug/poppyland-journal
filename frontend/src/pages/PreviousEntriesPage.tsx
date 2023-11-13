@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react"
 import SideBarComponent from "../components/shared-components/SideBar"
 import {
-  Button,
   PageContainer,
   PageContentContainer,
 } from "../components/shared-components/styled-components"
@@ -23,6 +22,7 @@ import { getProfile } from "../utils/get-profile"
 import {
   Alert,
   Box,
+  Button,
   Menu,
   MenuItem,
   Modal,
@@ -59,23 +59,8 @@ const SectionContainer = styled.div`
   margin: 10px;
 `
 
-const DeleteEntryButton = styled(Button)`
-  background-color: white;
-  color: black;
-`
-
-const CancelButton = styled(Button)`
-  color: black;
-`
-
 const NoEntriesContainer = styled.div`
   padding: 20px;
-`
-
-const MoreButton = styled(Button)`
-  padding: 0;
-  color: black;
-  background-color: white;
 `
 
 interface EntryType {
@@ -288,12 +273,12 @@ const PreviousEntriesPage: React.FunctionComponent = () => {
                 {entry.entry_content && (
                   <MarkdownComponent view="view" value={entry.entry_content} />
                 )}
-                <MoreButton
+                <Button
                   id="more-button"
                   onClick={(e) => handleMoreClick(e, entry.date)}
                 >
                   <MoreHorizIcon />
-                </MoreButton>
+                </Button>
               </EntryContainer>
             ))}
           <Menu
@@ -333,14 +318,15 @@ const PreviousEntriesPage: React.FunctionComponent = () => {
               <Typography>
                 {convertToLongDateFromShortDate(deleteEntryDate)}
               </Typography>
-              <CancelButton onClick={() => handleModalClose()}>
+              <Button variant="contained" onClick={() => handleModalClose()}>
                 No, take me back
-              </CancelButton>
-              <DeleteEntryButton
+              </Button>
+              <Button
+                color="error"
                 onClick={() => handleDeleteEntry(deleteEntryDate)}
               >
                 Yes, Delete
-              </DeleteEntryButton>
+              </Button>
             </Box>
           </Modal>
           <Snackbar

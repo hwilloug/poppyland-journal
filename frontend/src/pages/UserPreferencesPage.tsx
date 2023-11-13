@@ -3,12 +3,18 @@ import styled from "@emotion/styled"
 import {
   PageContainer,
   PageContentContainer,
-  SubmitButton,
 } from "../components/shared-components/styled-components"
 import SideBarComponent from "../components/shared-components/SideBar"
 import { useDispatch, useSelector } from "react-redux"
 import { State } from "../store"
-import { Alert, Checkbox, Snackbar, TextField, Typography } from "@mui/material"
+import {
+  Alert,
+  Button,
+  Checkbox,
+  Snackbar,
+  TextField,
+  Typography,
+} from "@mui/material"
 import {
   setFirstName,
   setLastName,
@@ -154,7 +160,13 @@ const UserPreferencesPage: React.FunctionComponent = () => {
               <Typography>{s.section}</Typography>
             </PreferenceContainer>
           ))}
-          <SubmitButton onClick={() => onSubmit()}>Save</SubmitButton>
+          <Button
+            color="primary"
+            variant="contained"
+            onClick={() => onSubmit()}
+          >
+            Save
+          </Button>
           <Snackbar
             open={snackbarOpen}
             autoHideDuration={6000}

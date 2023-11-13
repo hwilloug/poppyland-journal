@@ -3,6 +3,7 @@ import styled from "@emotion/styled"
 import { Bar, BarChart, Label, XAxis, YAxis } from "recharts"
 import { convertToMonthDay } from "../../utils/date-utils"
 import { Typography } from "@mui/material"
+import { theme } from "../../App"
 
 const Container = styled.div`
   background-color: white;
@@ -43,7 +44,11 @@ const ExerciseTrackerComponent: React.FunctionComponent<
           padding: "20px 20px 10px 0px",
         }}
       >
-        <Bar type="monotone" dataKey="minutesExercise" fill="#8d5bc1" />
+        <Bar
+          type="monotone"
+          dataKey="minutesExercise"
+          fill={theme.palette.primary.main}
+        />
         <XAxis
           dataKey="date"
           type="number"

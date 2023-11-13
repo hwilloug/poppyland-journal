@@ -6,7 +6,7 @@ import {
 } from "../../utils/date-utils"
 import { Link } from "react-router-dom"
 import {
-  Paper,
+  Button,
   Table,
   TableBody,
   TableCell,
@@ -46,11 +46,15 @@ const PreviousEntriesListComponent: React.FunctionComponent<
               return (
                 <TableRow key={dateString}>
                   <TableCell>{dateString}</TableCell>
-                  <TableCell>
+                  <TableCell align="center">
                     {dates.includes(shortDate) ? "Submitted" : "Not Submitted"}
                   </TableCell>
-                  <TableCell>
-                    <Link to={`/edit/${shortDate}`}>Edit</Link>
+                  <TableCell align="right">
+                    <Link to={`/edit/${shortDate}`}>
+                      <Button color="primary" variant="contained">
+                        {dates.includes(shortDate) ? "Edit" : "Create"} Entry
+                      </Button>
+                    </Link>
                   </TableCell>
                 </TableRow>
               )

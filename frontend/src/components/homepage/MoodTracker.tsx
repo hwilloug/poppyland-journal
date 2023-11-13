@@ -3,6 +3,7 @@ import styled from "@emotion/styled"
 import { Line, LineChart, XAxis, YAxis } from "recharts"
 import { convertToMonthDay } from "../../utils/date-utils"
 import { Typography } from "@mui/material"
+import { theme } from "../../App"
 
 const Container = styled.div`
   background-color: white;
@@ -111,8 +112,8 @@ const MoodTrackerComponent: React.FunctionComponent<MoodTrackerProps> = ({
         <Line
           type="monotone"
           dataKey="mood"
-          stroke="#8d5bc1"
-          dot={{ stroke: "#8d5bc1" }}
+          stroke={theme.palette.primary.main}
+          dot={{ stroke: theme.palette.primary.main }}
           connectNulls
         />
         <XAxis

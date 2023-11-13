@@ -13,8 +13,7 @@ import DailyQuestionComponent from "../todaysentrypage/DailyQuestion"
 import MentalHealthEntryComponent from "../todaysentrypage/MentalHealthEntry"
 import SubstanceEntryComponent from "../todaysentrypage/SubstanceEntry"
 import EntryComponent from "../todaysentrypage/Entry"
-import { SubmitButton } from "./styled-components"
-import { Alert, Snackbar, Typography } from "@mui/material"
+import { Alert, Button, Snackbar, Typography } from "@mui/material"
 import { Link } from "react-router-dom"
 import LoadingComponent from "./Loading"
 import { useDispatch, useSelector } from "react-redux"
@@ -27,6 +26,7 @@ const SubmitContainer = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
+  margin-top: 50px;
 `
 
 const MedicationsContainer = styled.div`
@@ -297,7 +297,9 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
       )} */}
 
       <SubmitContainer>
-        <SubmitButton onClick={onSubmit}>Save</SubmitButton>
+        <Button color="primary" variant="contained" onClick={onSubmit}>
+          Save
+        </Button>
       </SubmitContainer>
       <Snackbar
         open={snackbarOpen}

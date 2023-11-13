@@ -2,18 +2,15 @@ import React, { CSSProperties, useState } from "react"
 import styled from "@emotion/styled"
 import { Link } from "react-router-dom"
 import { useAuth0 } from "@auth0/auth0-react"
-import { Button } from "./styled-components"
 import { Chip, Divider, Drawer, Typography } from "@mui/material"
 import ManageAccountsIcon from "@mui/icons-material/ManageAccounts"
 import LogoutIcon from "@mui/icons-material/Logout"
 import { useSelector } from "react-redux"
 import { State } from "../../store"
-import { Home, Image } from "@mui/icons-material"
 import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft"
 import ArrowCircleRightIcon from "@mui/icons-material/ArrowCircleRight"
 import MenuBookIcon from "@mui/icons-material/MenuBook"
 import TodayIcon from "@mui/icons-material/Today"
-import MedicationIcon from "@mui/icons-material/Medication"
 import HomeIcon from "@mui/icons-material/Home"
 
 const drawerWidth = "17rem"
@@ -98,7 +95,7 @@ const SideBarComponent: React.FunctionComponent<SideBarProps> = ({
           "& .MuiDrawer-paper": {
             boxSizing: "border-box",
             padding: "20px",
-            backgroundColor: "#bdcfbc",
+            backgroundColor: "secondary.main",
             width: drawerWidth,
           },
         }}
@@ -166,7 +163,7 @@ const SideBarComponent: React.FunctionComponent<SideBarProps> = ({
           "& .MuiDrawer-paper": {
             boxSizing: "border-box",
             padding: "20px",
-            backgroundColor: "#bdcfbc",
+            backgroundColor: "secondary.main",
           },
         }}
         anchor="left"

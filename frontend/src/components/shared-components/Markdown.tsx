@@ -29,6 +29,7 @@ const MarkdownComponent: React.FunctionComponent<MarkdownComponentProps> = ({
           height={height}
           hideToolbar={hideToolbar}
           preview={preview}
+          defaultTabEnable={preview === "edit"}
           previewOptions={{
             rehypePlugins: [[rehypeSanitize]],
           }}

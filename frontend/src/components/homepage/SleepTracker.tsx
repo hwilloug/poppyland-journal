@@ -3,6 +3,7 @@ import styled from "@emotion/styled"
 import { Label, Line, LineChart, XAxis, YAxis } from "recharts"
 import { convertToMonthDay } from "../../utils/date-utils"
 import { Typography } from "@mui/material"
+import { theme } from "../../App"
 
 const Container = styled.div`
   background-color: white;
@@ -28,8 +29,6 @@ const SleepTrackerComponent: React.FunctionComponent<SleepTrackerProps> = ({
     new Date().setDate(new Date().getDate() - 30),
   ).valueOf()
 
-  console.log(sleepData)
-
   return (
     <Container>
       <Typography variant="h5" sx={{ p: "20px" }}>
@@ -48,8 +47,8 @@ const SleepTrackerComponent: React.FunctionComponent<SleepTrackerProps> = ({
         <Line
           type="monotone"
           dataKey="hoursSleep"
-          stroke="#8d5bc1"
-          dot={{ stroke: "#8d5bc1" }}
+          stroke={theme.palette.primary.main}
+          dot={{ stroke: theme.palette.primary.main }}
           connectNulls
         />
         <XAxis
