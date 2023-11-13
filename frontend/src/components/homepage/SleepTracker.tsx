@@ -28,6 +28,8 @@ const SleepTrackerComponent: React.FunctionComponent<SleepTrackerProps> = ({
     new Date().setDate(new Date().getDate() - 30),
   ).valueOf()
 
+  console.log(sleepData)
+
   return (
     <Container>
       <Typography variant="h5" sx={{ p: "20px" }}>

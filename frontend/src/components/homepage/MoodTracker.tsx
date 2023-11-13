@@ -93,8 +93,6 @@ const MoodTrackerComponent: React.FunctionComponent<MoodTrackerProps> = ({
     )
   }
 
-  console.log(moodData)
-
   return (
     <Container>
       <Typography variant="h5" sx={{ p: "20px" }}>

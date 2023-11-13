@@ -69,8 +69,6 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
   const [currentMedications, setCurrentMedications] = useState<string[]>([])
   const [minutesExercise, setMinutesExercise] = useState<number>(0)
 
-  console.log(mood)
-
   const getEntry = async () => {
     setIsLoading(true)
     try {

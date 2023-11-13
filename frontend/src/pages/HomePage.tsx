@@ -89,7 +89,7 @@ const HomePage: React.FunctionComponent = () => {
         })
         sleep.push({
           date: new Date(data[i]["date"].replace(/-/g, "/")).valueOf(),
-          hoursSleep: parseInt(data[i]["hours_sleep"]),
+          hoursSleep: parseFloat(data[i]["hours_sleep"]),
         })
         exercise.push({
           date: new Date(data[i]["date"].replace(/-/g, "/")).valueOf(),
