@@ -22,9 +22,8 @@ const DailyGoalComponent: React.FunctionComponent<DailyGoalProps> = ({
         view="edit"
         value={goal}
         onChange={onChange}
-        hideToolbar
-        height={75}
-        preview="edit"
+        height={100}
+        preview="live"
       />
     </EntrySectionContainer>
   )

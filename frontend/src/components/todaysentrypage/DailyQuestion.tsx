@@ -60,9 +60,8 @@ const DailyQuestionComponent: React.FunctionComponent<DailyQuestionProps> = ({
         view="edit"
         value={answer}
         onChange={onChange}
-        hideToolbar
-        height={75}
-        preview="edit"
+        height={100}
+        preview="live"
       />
     </EntrySectionContainer>
   )
