@@ -23,7 +23,7 @@ const DailyGoalComponent: React.FunctionComponent<DailyGoalProps> = ({
         value={goal}
         onChange={onChange}
         height={100}
-        preview="live"
+        preview="edit"
       />
     </EntrySectionContainer>
   )

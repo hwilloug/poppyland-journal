@@ -8,7 +8,7 @@ const SubstancesContainer = styled.div`
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
-  max-height: 100px;
+  max-height: 150px;
 `
 
 interface SubstanceEntryProps {
@@ -28,6 +28,7 @@ const SubstanceEntryComponent: React.FunctionComponent<SubstanceEntryProps> = ({
     "Marajuana (Edible)",
     "Cocaine",
     "Mushrooms",
+    "Adderall",
     "Other",
   ]
   return (

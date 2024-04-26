@@ -236,9 +236,7 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
       <Typography variant="h5" align="center">
         {dateFull}
       </Typography>
-      {preferences.showMood && (
-        <MoodEntryComponent mood={mood} onChange={setMood} />
-      )}
+      <Typography variant="h5">Morning</Typography>
       {preferences.showSleep && (
         <SleepEntryComponent
           onBedTimeChange={setBedTime}
@@ -256,8 +254,12 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
           onChange={setAffirmation}
         />
       )}
-      {preferences.showDailyAffirmation && (
+      {preferences.showDailyGoal && (
         <DailyGoalComponent goal={goal} onChange={setGoal} />
+      )}
+      <Typography variant="h5">Evening</Typography>
+      {preferences.showMood && (
+        <MoodEntryComponent mood={mood} onChange={setMood} />
       )}
       {preferences.showDailyQuestion && (
         <DailyQuestionComponent

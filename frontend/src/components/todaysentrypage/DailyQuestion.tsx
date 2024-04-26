@@ -61,7 +61,7 @@ const DailyQuestionComponent: React.FunctionComponent<DailyQuestionProps> = ({
         value={answer}
         onChange={onChange}
         height={100}
-        preview="live"
+        preview="edit"
       />
     </EntrySectionContainer>
   )

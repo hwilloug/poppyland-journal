@@ -28,6 +28,7 @@ const MentalHealthEntryComponent: React.FunctionComponent<
     "Irritability",
     "Paranoia",
     "Low Appetite",
+    "Food Restriction",
     "Pressured Speech",
     "Sociability Up",
     "Sociability Down",

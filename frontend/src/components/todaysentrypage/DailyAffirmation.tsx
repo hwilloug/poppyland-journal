@@ -22,7 +22,7 @@ const DailyAffirmationComponent: React.FunctionComponent<
         value={affirmation}
         onChange={onChange}
         height={100}
-        preview="live"
+        preview="edit"
       />
     </EntrySectionContainer>
   )
