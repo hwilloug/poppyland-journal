@@ -2,8 +2,7 @@ import React, { useState } from "react"
 import styled from "@emotion/styled"
 import { Label, Line, LineChart, ReferenceLine, XAxis, YAxis } from "recharts"
 import { convertToMonthDay } from "../../utils/date-utils"
-import { Button, Typography } from "@mui/material"
-import { theme } from "../../App"
+import { Button, Typography, useTheme } from "@mui/material"
 import { State } from "../../store"
 import { useSelector } from "react-redux"
 
@@ -34,6 +33,8 @@ interface SleepTrackerProps {
 const SleepTrackerComponent: React.FunctionComponent<SleepTrackerProps> = ({
   sleepData,
 }) => {
+  const theme = useTheme()
+
   const idealHoursSleep = useSelector(
     (state: State) => state.user.idealHoursSleep,
   )

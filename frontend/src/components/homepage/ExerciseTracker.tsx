@@ -2,8 +2,7 @@ import React, { useState } from "react"
 import styled from "@emotion/styled"
 import { Bar, BarChart, Label, XAxis, YAxis } from "recharts"
 import { convertToMonthDay } from "../../utils/date-utils"
-import { Button, Typography } from "@mui/material"
-import { theme } from "../../App"
+import { Button, Typography, useTheme } from "@mui/material"
 
 const Container = styled.div`
   background-color: white;
@@ -32,6 +31,8 @@ interface ExerciseTrackerProps {
 const ExerciseTrackerComponent: React.FunctionComponent<
   ExerciseTrackerProps
 > = ({ data }) => {
+  const theme = useTheme()
+
   const today = new Date().valueOf()
 
   const [timeFilter, setTimeFilter] = useState(

@@ -2,8 +2,7 @@ import React, { useState } from "react"
 import styled from "@emotion/styled"
 import { Line, LineChart, XAxis, YAxis } from "recharts"
 import { convertToMonthDay } from "../../utils/date-utils"
-import { Button, Typography } from "@mui/material"
-import { theme } from "../../App"
+import { Button, Typography, useTheme } from "@mui/material"
 
 const Container = styled.div`
   background-color: white;
@@ -32,6 +31,7 @@ interface MoodTrackerProps {
 const MoodTrackerComponent: React.FunctionComponent<MoodTrackerProps> = ({
   moodData,
 }) => {
+  const theme = useTheme()
   const today = new Date().valueOf()
 
   const [timeFilter, setTimeFilter] = useState(

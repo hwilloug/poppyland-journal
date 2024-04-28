@@ -2,18 +2,25 @@ import styled from "@emotion/styled"
 import { SectionHeader } from "../../pages/TodaysEntryPage"
 import CheckboxItemComponent from "../shared-components/CheckboxItem"
 import { EntrySectionContainer } from "../shared-components/styled-components"
-import { Typography } from "@mui/material"
+import {
+  ListSubheader,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
+  Typography,
+} from "@mui/material"
+import { ReactNode } from "react"
 
 const MentalHealthContainer = styled.div`
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
-  max-height: 250px;
+  max-height: 400px;
 `
 
 interface MentalHealthEntryProps {
   mentalHealth: string[]
-  onChange: Function
+  onChange: (event: SelectChangeEvent<string[]>, child: ReactNode) => void
 }
 
 const MentalHealthEntryComponent: React.FunctionComponent<
@@ -22,7 +29,7 @@ const MentalHealthEntryComponent: React.FunctionComponent<
   const mentalHealthSymptoms = [
     "Anxiety",
     "Depression",
-    "Mania",
+    "Hypomania",
     "No Focus",
     "Hyper-fixation",
     "Irritability",
@@ -48,14 +55,11 @@ const MentalHealthEntryComponent: React.FunctionComponent<
         Mental Health & Behavior
       </Typography>
       <MentalHealthContainer>
-        {mentalHealthSymptoms.map((s) => (
-          <CheckboxItemComponent
-            key={s}
-            checked={mentalHealth.includes(s)}
-            label={s}
-            onChange={onChange}
-          />
-        ))}
+        <Select multiple value={mentalHealth} onChange={onChange}>
+          {mentalHealthSymptoms.map((s) => (
+            <MenuItem value={s}>{s}</MenuItem>
+          ))}
+        </Select>
       </MentalHealthContainer>
     </EntrySectionContainer>
   )

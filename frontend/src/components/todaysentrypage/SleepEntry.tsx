@@ -5,7 +5,6 @@ import {
   LocalizationProvider,
 } from "@mui/x-date-pickers"
 
-import { SectionHeader } from "../../pages/TodaysEntryPage"
 import styled from "@emotion/styled"
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs"
 import { MenuItem, Select, Typography } from "@mui/material"
@@ -77,7 +76,7 @@ const SleepEntryComponent: React.FunctionComponent<SleepEntryProps> = ({
         {bedTime && wakeUpTime && <p>{hoursSleep} hours sleep</p>}
       </SleepTimeContainer>
       <SleepQualityContainer>
-        Sleep Quality:
+        <Typography>Sleep Quality:</Typography>
         <Select
           value={sleepQuality}
           name="Sleep Quality"

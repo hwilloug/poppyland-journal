@@ -5,6 +5,7 @@ import reportWebVitals from "./reportWebVitals"
 import { Auth0Provider } from "@auth0/auth0-react"
 import { Provider } from "react-redux"
 import store from "./store"
+import "./index.css"
 
 const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement)
 root.render(

@@ -26,6 +26,7 @@ import {
   Menu,
   MenuItem,
   Modal,
+  Paper,
   Snackbar,
   Typography,
 } from "@mui/material"
@@ -41,10 +42,27 @@ const EntriesContainer = styled.div`
   gap: 50px;
 `
 
-const EntryContainer = styled.div`
+const EntryContainer = styled(Paper)`
   background-color: white;
   border: 1px solid lightgrey;
   padding: 20px;
+  padding-left: 75px;
+  position: relative;
+  :before {
+    content: "";
+    position: absolute;
+    display: inline-block;
+    background-color: darksalmon;
+    height: 100%;
+    width: 2px;
+    top: 0;
+    left: 65px;
+  }
+  hr {
+    border: 1px solid lightblue;
+    margin-left: -75px;
+    margin-right: -20px;
+  }
 `
 
 const MoodContainer = styled.div`
@@ -221,6 +239,7 @@ const PreviousEntriesPage: React.FunctionComponent = () => {
                 <Typography variant="h6">
                   {convertToLongDateFromShortDate(entry.date)}
                 </Typography>
+                <hr />
                 {preferences.showMood && entry.mood && (
                   <MoodContainer>
                     <Typography>Mood: </Typography>

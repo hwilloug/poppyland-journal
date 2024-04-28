@@ -1,7 +1,7 @@
 import { useAuth0 } from "@auth0/auth0-react"
 import styled from "@emotion/styled"
 import dayjs, { Dayjs } from "dayjs"
-import { useEffect, useState } from "react"
+import { ReactNode, useEffect, useState } from "react"
 import { apiEndpoints } from "../../api-endpoints"
 import axios from "axios"
 import { ResponseType } from "../../pages/HomePage"
@@ -13,8 +13,13 @@ import DailyQuestionComponent from "../todaysentrypage/DailyQuestion"
 import MentalHealthEntryComponent from "../todaysentrypage/MentalHealthEntry"
 import SubstanceEntryComponent from "../todaysentrypage/SubstanceEntry"
 import EntryComponent from "../todaysentrypage/Entry"
-import { Alert, Button, Snackbar, Typography } from "@mui/material"
-import { Link } from "react-router-dom"
+import {
+  Alert,
+  Button,
+  SelectChangeEvent,
+  Snackbar,
+  Typography,
+} from "@mui/material"
 import LoadingComponent from "./Loading"
 import { useDispatch, useSelector } from "react-redux"
 import { State } from "../../store"
@@ -159,15 +164,12 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
     }
   }, [bedTime, wakeUpTime])
 
-  const modifyMentalHealth = (symptom: string) => {
-    if (mentalHealth.includes(symptom)) {
-      let symptoms = mentalHealth
-      let index = symptoms.indexOf(symptom)
-      symptoms.splice(index, 1)
-      setMentalHealth([...symptoms])
-    } else {
-      setMentalHealth([...mentalHealth, symptom])
-    }
+  const modifyMentalHealth = (
+    event: SelectChangeEvent<string[]>,
+    child: ReactNode,
+  ) => {
+    const symptoms = event.target.value
+    setMentalHealth([...symptoms])
   }
 
   const modifySubstances = (substance: string) => {

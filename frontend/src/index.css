@@ -1,0 +1,14 @@
+@font-face {
+  font-family: "DancingScript";
+  src: url("./fonts/static/DancingScript-Bold.ttf");
+}
+
+@font-face {
+  font-family: "Caveat-Bold";
+  src: url("./fonts/static/Caveat-SemiBold.ttf");
+}
+
+@font-face {
+  font-family: "Caveat";
+  src: url("./fonts/static/Caveat-Regular.ttf");
+}
