@@ -29,6 +29,7 @@ const HomePageContainer = styled.div`
   padding: 20px;
   flex-grow: 1;
   background-color: #fffcf5;
+  max-width: 85%;
 `
 
 export interface ResponseType {
@@ -113,7 +114,7 @@ const HomePage: React.FunctionComponent = () => {
 
   return (
     <PageContainer>
-      <SideBarComponent defaultOpen />
+      <SideBarComponent defaultOpen={false} />
       {!isLoading && (
         <HomePageContainer>
           {preferences.showMood && <MoodTrackerComponent moodData={moodData} />}

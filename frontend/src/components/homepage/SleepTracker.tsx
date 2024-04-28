@@ -1,14 +1,22 @@
-import React, { useState } from "react"
+import React, { useRef, useState } from "react"
 import styled from "@emotion/styled"
-import { Label, Line, LineChart, ReferenceLine, XAxis, YAxis } from "recharts"
+import {
+  Label,
+  Line,
+  LineChart,
+  ReferenceLine,
+  ResponsiveContainer,
+  XAxis,
+  YAxis,
+} from "recharts"
 import { convertToMonthDay } from "../../utils/date-utils"
-import { Button, Typography, useTheme } from "@mui/material"
+import { Button, Paper, Typography, useTheme } from "@mui/material"
 import { State } from "../../store"
 import { useSelector } from "react-redux"
 
-const Container = styled.div`
+const Container = styled(Paper)`
   background-color: white;
-  padding: 20px;
+  padding: 20px 20px 50px 20px;
   margin: 50px 20px;
   border: 1px solid lightgrey;
 `
@@ -41,7 +49,7 @@ const SleepTrackerComponent: React.FunctionComponent<SleepTrackerProps> = ({
   const today = new Date().valueOf()
 
   const [timeFilter, setTimeFilter] = useState(
-    new Date(new Date(today).setDate(new Date(today).getDate() - 30)).valueOf(),
+    new Date(new Date(today).setDate(new Date(today).getDate() - 7)).valueOf(),
   )
   const timeFilters = [
     {
@@ -86,7 +94,8 @@ const SleepTrackerComponent: React.FunctionComponent<SleepTrackerProps> = ({
           <Button
             key={f.name}
             variant={
-              new Date(f.firstDate).getDate() === new Date(timeFilter).getDate()
+              new Date(f.firstDate).toDateString() ===
+              new Date(timeFilter).toDateString()
                 ? "contained"
                 : "outlined"
             }
@@ -96,45 +105,45 @@ const SleepTrackerComponent: React.FunctionComponent<SleepTrackerProps> = ({
           </Button>
         ))}
       </TimeFiltersContainer>
-      <LineChart
-        margin={{ top: 5, left: 5, right: 5, bottom: 5 }}
-        width={900}
-        height={300}
-        data={sleepData}
-        style={{
-          backgroundColor: "white",
-          padding: "20px 20px 10px 0px",
-        }}
-      >
-        <Line
-          type="linear"
-          dataKey="hoursSleep"
-          stroke={theme.palette.primary.main}
-          dot={{ stroke: theme.palette.primary.main }}
-          connectNulls
-        />
-        <ReferenceLine
-          y={idealHoursSleep}
-          stroke="darkgrey"
-          strokeDasharray="3 3"
-        />
-        <XAxis
-          dataKey="date"
-          type="number"
-          domain={[timeFilter, today]}
-          includeHidden
-          tickFormatter={(value) => convertToMonthDay(new Date(value))}
-        />
-        <YAxis>
-          <Label
-            style={{
-              textAnchor: "middle",
-            }}
-            angle={270}
-            value={"Hours Slept"}
+      <ResponsiveContainer width="100%" height={250}>
+        <LineChart
+          margin={{ top: 5, left: 5, right: 5, bottom: 5 }}
+          data={sleepData}
+          style={{
+            backgroundColor: "white",
+            padding: "20px 20px 10px 0px",
+          }}
+        >
+          <Line
+            type="linear"
+            dataKey="hoursSleep"
+            stroke={theme.palette.primary.main}
+            dot={{ stroke: theme.palette.primary.main }}
+            connectNulls
           />
-        </YAxis>
-      </LineChart>
+          <ReferenceLine
+            y={idealHoursSleep}
+            stroke="darkgrey"
+            strokeDasharray="3 3"
+          />
+          <XAxis
+            dataKey="date"
+            type="number"
+            domain={[timeFilter, today]}
+            includeHidden
+            tickFormatter={(value) => convertToMonthDay(new Date(value))}
+          />
+          <YAxis>
+            <Label
+              style={{
+                textAnchor: "middle",
+              }}
+              angle={270}
+              value={"Hours Slept"}
+            />
+          </YAxis>
+        </LineChart>
+      </ResponsiveContainer>
     </Container>
   )
 }

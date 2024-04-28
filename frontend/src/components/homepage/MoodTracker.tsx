@@ -1,12 +1,12 @@
-import React, { useState } from "react"
+import React, { useRef, useState } from "react"
 import styled from "@emotion/styled"
-import { Line, LineChart, XAxis, YAxis } from "recharts"
+import { Line, LineChart, ResponsiveContainer, XAxis, YAxis } from "recharts"
 import { convertToMonthDay } from "../../utils/date-utils"
 import { Button, Typography, useTheme } from "@mui/material"
 
 const Container = styled.div`
   background-color: white;
-  padding: 20px;
+  padding: 20px 20px 50px 20px;
   margin: 50px 20px;
   border: 1px solid lightgrey;
 `
@@ -31,11 +31,12 @@ interface MoodTrackerProps {
 const MoodTrackerComponent: React.FunctionComponent<MoodTrackerProps> = ({
   moodData,
 }) => {
+  const container_ref = useRef(null)
   const theme = useTheme()
   const today = new Date().valueOf()
 
   const [timeFilter, setTimeFilter] = useState(
-    new Date(new Date(today).setDate(new Date(today).getDate() - 30)).valueOf(),
+    new Date(new Date(today).setDate(new Date(today).getDate() - 7)).valueOf(),
   )
   const timeFilters = [
     {
@@ -145,7 +146,8 @@ const MoodTrackerComponent: React.FunctionComponent<MoodTrackerProps> = ({
           <Button
             key={f.name}
             variant={
-              new Date(f.firstDate).getDate() === new Date(timeFilter).getDate()
+              new Date(f.firstDate).toDateString() ===
+              new Date(timeFilter).toDateString()
                 ? "contained"
                 : "outlined"
             }
@@ -155,32 +157,32 @@ const MoodTrackerComponent: React.FunctionComponent<MoodTrackerProps> = ({
           </Button>
         ))}
       </TimeFiltersContainer>
-      <LineChart
-        margin={{ top: 5, left: 5, right: 5, bottom: 5 }}
-        width={900}
-        height={300}
-        data={moodData}
-        style={{
-          backgroundColor: "white",
-          padding: "20px 20px 10px 0px",
-        }}
-      >
-        <Line
-          type="linear"
-          dataKey="mood"
-          stroke={theme.palette.primary.main}
-          dot={{ stroke: theme.palette.primary.main }}
-          connectNulls
-        />
-        <XAxis
-          dataKey="date"
-          type="number"
-          domain={[timeFilter, today]}
-          includeHidden
-          tickFormatter={(value) => convertToMonthDay(new Date(value))}
-        />
-        <YAxis domain={[0, 4]} includeHidden tick={renderCustomAxisTick} />
-      </LineChart>
+      <ResponsiveContainer height={250} width="100%">
+        <LineChart
+          margin={{ top: 5, left: 5, right: 5, bottom: 5 }}
+          data={moodData}
+          style={{
+            backgroundColor: "white",
+            padding: "20px 20px 10px 0px",
+          }}
+        >
+          <Line
+            type="linear"
+            dataKey="mood"
+            stroke={theme.palette.primary.main}
+            dot={{ stroke: theme.palette.primary.main }}
+            connectNulls
+          />
+          <XAxis
+            dataKey="date"
+            type="number"
+            domain={[timeFilter, today]}
+            includeHidden
+            tickFormatter={(value) => convertToMonthDay(new Date(value))}
+          />
+          <YAxis domain={[0, 4]} includeHidden tick={renderCustomAxisTick} />
+        </LineChart>
+      </ResponsiveContainer>
     </Container>
   )
 }

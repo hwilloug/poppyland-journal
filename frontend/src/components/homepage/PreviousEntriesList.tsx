@@ -7,6 +7,7 @@ import {
 import { Link } from "react-router-dom"
 import {
   Button,
+  Paper,
   Table,
   TableBody,
   TableCell,
@@ -15,7 +16,7 @@ import {
   Typography,
 } from "@mui/material"
 
-const Container = styled.div`
+const Container = styled(Paper)`
   background-color: white;
   padding: 20px;
   margin: 50px 20px;
@@ -31,7 +32,7 @@ const PreviousEntriesListComponent: React.FunctionComponent<
 > = ({ dates }) => {
   return (
     <Container>
-      <Typography variant="h5" sx={{ p: "20px" }}>
+      <Typography variant="h5" sx={{ p: "20px", textAlign: "center" }}>
         Entries - last 7 days
       </Typography>
       <TableContainer>

@@ -1,12 +1,19 @@
-import React, { useState } from "react"
+import React, { useRef, useState } from "react"
 import styled from "@emotion/styled"
-import { Bar, BarChart, Label, XAxis, YAxis } from "recharts"
+import {
+  Bar,
+  BarChart,
+  Label,
+  ResponsiveContainer,
+  XAxis,
+  YAxis,
+} from "recharts"
 import { convertToMonthDay } from "../../utils/date-utils"
-import { Button, Typography, useTheme } from "@mui/material"
+import { Button, Paper, Typography, useTheme } from "@mui/material"
 
-const Container = styled.div`
+const Container = styled(Paper)`
   background-color: white;
-  padding: 20px;
+  padding: 20px 20px 50px 20px;
   margin: 50px 20px;
   border: 1px solid lightgrey;
 `
@@ -36,7 +43,7 @@ const ExerciseTrackerComponent: React.FunctionComponent<
   const today = new Date().valueOf()
 
   const [timeFilter, setTimeFilter] = useState(
-    new Date(new Date(today).setDate(new Date(today).getDate() - 30)).valueOf(),
+    new Date(new Date(today).setDate(new Date(today).getDate() - 7)).valueOf(),
   )
   const timeFilters = [
     {
@@ -71,6 +78,8 @@ const ExerciseTrackerComponent: React.FunctionComponent<
     },
   ]
 
+  const containerRef = useRef<HTMLDivElement>(null)
+
   return (
     <Container>
       <Typography variant="h5" sx={{ p: "20px" }} align="center">
@@ -81,7 +90,8 @@ const ExerciseTrackerComponent: React.FunctionComponent<
           <Button
             key={f.name}
             variant={
-              new Date(f.firstDate).getDate() === new Date(timeFilter).getDate()
+              new Date(f.firstDate).toDateString() ===
+              new Date(timeFilter).toDateString()
                 ? "contained"
                 : "outlined"
             }
@@ -91,40 +101,40 @@ const ExerciseTrackerComponent: React.FunctionComponent<
           </Button>
         ))}
       </TimeFiltersContainer>
-      <BarChart
-        margin={{ top: 5, left: 5, right: 5, bottom: 5 }}
-        width={900}
-        height={300}
-        data={data}
-        style={{
-          backgroundColor: "white",
-          padding: "20px 20px 10px 0px",
-        }}
-        barCategoryGap={0}
-      >
-        <Bar
-          type="monotone"
-          dataKey="minutesExercise"
-          fill={theme.palette.primary.main}
-        />
-        <XAxis
-          dataKey="date"
-          type="number"
-          domain={[timeFilter, today]}
-          includeHidden
-          interval={0}
-          tickFormatter={(value) => convertToMonthDay(new Date(value))}
-        />
-        <YAxis>
-          <Label
-            style={{
-              textAnchor: "middle",
-            }}
-            angle={270}
-            value={"Minutes Exercised"}
+      <ResponsiveContainer width="100%" height={250}>
+        <BarChart
+          margin={{ top: 5, left: 5, right: 5, bottom: 5 }}
+          data={data}
+          style={{
+            backgroundColor: "white",
+            padding: "20px 20px 10px 0px",
+          }}
+          barCategoryGap={0}
+        >
+          <Bar
+            type="monotone"
+            dataKey="minutesExercise"
+            fill={theme.palette.primary.main}
           />
-        </YAxis>
-      </BarChart>
+          <XAxis
+            dataKey="date"
+            type="number"
+            domain={[timeFilter, today]}
+            includeHidden
+            interval={0}
+            tickFormatter={(value) => convertToMonthDay(new Date(value))}
+          />
+          <YAxis>
+            <Label
+              style={{
+                textAnchor: "middle",
+              }}
+              angle={270}
+              value={"Minutes Exercised"}
+            />
+          </YAxis>
+        </BarChart>
+      </ResponsiveContainer>
     </Container>
   )
 }
