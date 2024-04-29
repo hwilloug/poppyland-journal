@@ -2,9 +2,9 @@ import React, { useRef, useState } from "react"
 import styled from "@emotion/styled"
 import { Line, LineChart, ResponsiveContainer, XAxis, YAxis } from "recharts"
 import { convertToMonthDay } from "../../utils/date-utils"
-import { Button, Typography, useTheme } from "@mui/material"
+import { Button, Paper, Typography, useTheme } from "@mui/material"
 
-const Container = styled.div`
+const Container = styled(Paper)`
   background-color: white;
   padding: 20px 20px 50px 20px;
   margin: 50px 20px;

@@ -18,6 +18,9 @@ import { getProfile } from "../utils/get-profile"
 import ExerciseTrackerComponent, {
   ExerciseDataType,
 } from "../components/homepage/ExerciseTracker"
+import { Paper, Typography } from "@mui/material"
+import { deepPurple } from "@mui/material/colors"
+import { convertToShortDate } from "../utils/date-utils"
 
 const PageContainer = styled.div`
   margin: 0px;
@@ -29,7 +32,15 @@ const HomePageContainer = styled.div`
   padding: 20px;
   flex-grow: 1;
   background-color: #fffcf5;
-  max-width: 85%;
+  max-width: calc(100% - 7rem);
+`
+
+const DailyAffiramtionContainer = styled(Paper)`
+  background-color: ${deepPurple[500]};
+  margin: 20px;
+  padding: 20px;
+  color: white;
+  text-align: center;
 `
 
 export interface ResponseType {
@@ -67,6 +78,7 @@ const HomePage: React.FunctionComponent = () => {
   const [moodData, setMoodData] = useState<MoodDataType[]>([])
   const [sleepData, setSleepData] = useState<SleepDataType[]>([])
   const [exerciseData, setExerciseData] = useState<ExerciseDataType[]>([])
+  const [dailyAffirmation, setDailyAffirmation] = useState("")
 
   const getEntries = async () => {
     setIsLoading(true)
@@ -83,17 +95,21 @@ const HomePage: React.FunctionComponent = () => {
       let sleep: SleepDataType[] = []
       let exercise: ExerciseDataType[] = []
       for (let i = 0; i < data.length; i++) {
-        dates.push(data[i]["date"])
+        const date = data[i]["date"]
+        dates.push(date)
+        if (date === convertToShortDate(new Date())) {
+          setDailyAffirmation(data[i].affirmation)
+        }
         moods.push({
-          date: new Date(data[i]["date"].replace(/-/g, "/")).valueOf(),
+          date: new Date(date.replace(/-/g, "/")).valueOf(),
           mood: parseInt(data[i]["mood"]),
         })
         sleep.push({
-          date: new Date(data[i]["date"].replace(/-/g, "/")).valueOf(),
+          date: new Date(date.replace(/-/g, "/")).valueOf(),
           hoursSleep: parseFloat(data[i]["hours_sleep"]),
         })
         exercise.push({
-          date: new Date(data[i]["date"].replace(/-/g, "/")).valueOf(),
+          date: new Date(date.replace(/-/g, "/")).valueOf(),
           minutesExercise: parseInt(data[i]["exercise"]),
         })
       }
@@ -117,6 +133,15 @@ const HomePage: React.FunctionComponent = () => {
       <SideBarComponent defaultOpen={false} />
       {!isLoading && (
         <HomePageContainer>
+          {dailyAffirmation && (
+            <DailyAffiramtionContainer>
+              <Typography>
+                Daily Affirmation:
+                <br />
+                {dailyAffirmation}
+              </Typography>
+            </DailyAffiramtionContainer>
+          )}
           {preferences.showMood && <MoodTrackerComponent moodData={moodData} />}
           {preferences.showSleep && (
             <SleepTrackerComponent sleepData={sleepData} />

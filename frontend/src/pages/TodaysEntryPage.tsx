@@ -16,6 +16,7 @@ export const SectionHeader = styled.h3`
 
 const TodaysEntryPage: React.FunctionComponent = () => {
   const [date] = useState(convertToShortDate(new Date()))
+  console.log(date)
   return (
     <PageContainer>
       <SideBarComponent defaultOpen={false} />
