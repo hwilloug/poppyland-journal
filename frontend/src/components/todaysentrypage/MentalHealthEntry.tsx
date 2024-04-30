@@ -18,6 +18,29 @@ const MentalHealthContainer = styled.div`
   max-height: 400px;
 `
 
+export const mentalHealthSymptoms = [
+  "Anxiety",
+  "Depression",
+  "Hypomania",
+  "No Focus",
+  "Hyper-fixation",
+  "Irritability",
+  "Paranoia",
+  "Low Appetite",
+  "Food Restriction",
+  "Pressured Speech",
+  "Sociability Up",
+  "Sociability Down",
+  "Libido Up",
+  "Libido Down",
+  "Reckless Behavior",
+  "Fatigue",
+  "Illusions of Grandeur",
+  "Low Self-Esteem",
+  "Reckless Spending",
+  "Suicidal Ideation",
+]
+
 interface MentalHealthEntryProps {
   mentalHealth: string[]
   onChange: (event: SelectChangeEvent<string[]>, child: ReactNode) => void
@@ -26,29 +49,6 @@ interface MentalHealthEntryProps {
 const MentalHealthEntryComponent: React.FunctionComponent<
   MentalHealthEntryProps
 > = ({ mentalHealth, onChange }) => {
-  const mentalHealthSymptoms = [
-    "Anxiety",
-    "Depression",
-    "Hypomania",
-    "No Focus",
-    "Hyper-fixation",
-    "Irritability",
-    "Paranoia",
-    "Low Appetite",
-    "Food Restriction",
-    "Pressured Speech",
-    "Sociability Up",
-    "Sociability Down",
-    "Libido Up",
-    "Libido Down",
-    "Reckless Behavior",
-    "Fatigue",
-    "Illusions of Grandeur",
-    "Low Self-Esteem",
-    "Reckless Spending",
-    "Suicidal Ideation",
-  ]
-
   return (
     <EntrySectionContainer>
       <Typography variant="h6" sx={{ mb: "20px" }}>
