@@ -31,7 +31,9 @@ const SubmitContainer = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
-  margin-top: 50px;
+  bottom: 50px;
+  right: 50px;
+  position: fixed;
 `
 
 const MedicationsContainer = styled.div`
