@@ -7,11 +7,12 @@ import { EntrySectionContainer } from "../shared-components/styled-components"
 interface DailyAffirmationProps {
   affirmation?: string
   onChange: Function
+  setHasUnsavedChanges: Function
 }
 
 const DailyAffirmationComponent: React.FunctionComponent<
   DailyAffirmationProps
-> = ({ affirmation, onChange }) => {
+> = ({ affirmation, onChange, setHasUnsavedChanges }) => {
   return (
     <EntrySectionContainer>
       <Typography variant="h6" sx={{ mb: "20px" }}>
@@ -20,7 +21,10 @@ const DailyAffirmationComponent: React.FunctionComponent<
       <MarkdownComponent
         view="edit"
         value={affirmation}
-        onChange={onChange}
+        onChange={() => {
+          onChange()
+          setHasUnsavedChanges(true)
+        }}
         height={100}
         preview="edit"
       />

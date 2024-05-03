@@ -8,6 +8,7 @@ interface DailyQuestionProps {
   answer?: string
   onChange: Function
   setQuestion: Function
+  setHasUnsavedChanges: Function
 }
 
 const DailyQuestionComponent: React.FunctionComponent<DailyQuestionProps> = ({
@@ -16,6 +17,7 @@ const DailyQuestionComponent: React.FunctionComponent<DailyQuestionProps> = ({
   onChange,
   setQuestion,
   date,
+  setHasUnsavedChanges,
 }) => {
   const day = date
     ? new Date(date?.replace(/-/g, "/")).getDay()
@@ -59,7 +61,10 @@ const DailyQuestionComponent: React.FunctionComponent<DailyQuestionProps> = ({
       <MarkdownComponent
         view="edit"
         value={answer}
-        onChange={onChange}
+        onChange={() => {
+          onChange()
+          setHasUnsavedChanges(true)
+        }}
         height={100}
         preview="edit"
       />

@@ -32,6 +32,7 @@ interface SleepEntryProps {
   wakeUpTime?: Dayjs | null
   sleepQuality?: string | null
   hoursSleep?: number | null
+  setHasUnsavedChanges: Function
 }
 
 const SleepEntryComponent: React.FunctionComponent<SleepEntryProps> = ({
@@ -42,6 +43,7 @@ const SleepEntryComponent: React.FunctionComponent<SleepEntryProps> = ({
   wakeUpTime,
   sleepQuality,
   hoursSleep,
+  setHasUnsavedChanges,
 }) => {
   return (
     <EntrySectionContainer>
@@ -54,7 +56,10 @@ const SleepEntryComponent: React.FunctionComponent<SleepEntryProps> = ({
           <TimePicker
             label="Bedtime the night before"
             value={bedTime}
-            onChange={(value: Dayjs | null) => onBedTimeChange(value)}
+            onChange={(value: Dayjs | null) => {
+              onBedTimeChange(value)
+              setHasUnsavedChanges(true)
+            }}
             viewRenderers={{
               hours: renderTimeViewClock,
               minutes: renderTimeViewClock,
@@ -65,7 +70,10 @@ const SleepEntryComponent: React.FunctionComponent<SleepEntryProps> = ({
           <TimePicker
             label="Wake-up time"
             value={wakeUpTime}
-            onChange={(value: Dayjs | null) => onWakeUpTimeChange(value)}
+            onChange={(value: Dayjs | null) => {
+              onWakeUpTimeChange(value)
+              setHasUnsavedChanges(true)
+            }}
             viewRenderers={{
               hours: renderTimeViewClock,
               minutes: renderTimeViewClock,
@@ -82,7 +90,10 @@ const SleepEntryComponent: React.FunctionComponent<SleepEntryProps> = ({
           name="Sleep Quality"
           autoWidth={false}
           style={{ width: "200px" }}
-          onChange={(e) => onSleepQualityChange(e.target.value)}
+          onChange={(e) => {
+            onSleepQualityChange(e.target.value)
+            setHasUnsavedChanges(true)
+          }}
           sx={{ backgroundColor: "white" }}
         >
           <MenuItem value="Good">Good</MenuItem>

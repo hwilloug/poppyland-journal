@@ -1,7 +1,7 @@
 import { useAuth0 } from "@auth0/auth0-react"
 import styled from "@emotion/styled"
 import dayjs, { Dayjs } from "dayjs"
-import { ReactNode, useEffect, useState } from "react"
+import { ReactNode, useEffect, useMemo, useState } from "react"
 import { apiEndpoints } from "../../api-endpoints"
 import axios from "axios"
 import { ResponseType } from "../../pages/HomePage"
@@ -76,6 +76,8 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
   // const [currentMedications, setCurrentMedications] = useState<string[]>([])
   const [minutesExercise, setMinutesExercise] = useState<number>(0)
 
+  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false)
+
   const getEntry = async () => {
     setIsLoading(true)
     try {
@@ -106,6 +108,7 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
         setDailyQuestionQ(data.daily_question_q)
         setMinutesExercise(data.exercise ? parseInt(data.exercise) : 0)
       }
+      setHasUnsavedChanges(false)
       setIsLoading(false)
     } catch (e) {
       console.log(e)
@@ -221,6 +224,7 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
       )
       setSnackbarMessage("Successfully saved entry!")
       setSnackbarOpen(true)
+      setHasUnsavedChanges(false)
     } catch (e) {
       console.log(e)
     }
@@ -236,7 +240,7 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
 
   return (
     <>
-      <FormPrompt hasUnsavedChanges={true} />
+      <FormPrompt hasUnsavedChanges={hasUnsavedChanges} />
       <Typography variant="h5" align="center">
         {dateFull}
       </Typography>
@@ -250,20 +254,30 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
           wakeUpTime={wakeUpTime}
           sleepQuality={sleepQuality}
           hoursSleep={hoursSleep}
+          setHasUnsavedChanges={setHasUnsavedChanges}
         />
       )}
       {preferences.showDailyAffirmation && (
         <DailyAffirmationComponent
           affirmation={affirmation}
           onChange={setAffirmation}
+          setHasUnsavedChanges={setHasUnsavedChanges}
         />
       )}
       {preferences.showDailyGoal && (
-        <DailyGoalComponent goal={goal} onChange={setGoal} />
+        <DailyGoalComponent
+          goal={goal}
+          onChange={setGoal}
+          setHasUnsavedChanges={setHasUnsavedChanges}
+        />
       )}
       <Typography variant="h5">Evening</Typography>
       {preferences.showMood && (
-        <MoodEntryComponent mood={mood} onChange={setMood} />
+        <MoodEntryComponent
+          mood={mood}
+          onChange={setMood}
+          setHasUnsavedChanges={setHasUnsavedChanges}
+        />
       )}
       {preferences.showDailyQuestion && (
         <DailyQuestionComponent
@@ -272,6 +286,7 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
           onChange={setDailyQuestionA}
           setQuestion={setDailyQuestionQ}
           date={date}
+          setHasUnsavedChanges={setHasUnsavedChanges}
         />
       )}
 
@@ -279,12 +294,14 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
         <MentalHealthEntryComponent
           mentalHealth={[...mentalHealth]}
           onChange={modifyMentalHealth}
+          setHasUnsavedChanges={setHasUnsavedChanges}
         />
       )}
       {preferences.showSubstance && (
         <SubstanceEntryComponent
           substances={[...substances]}
           onChange={modifySubstances}
+          setHasUnsavedChanges={setHasUnsavedChanges}
         />
       )}
 
@@ -292,10 +309,15 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
         <ExerciseEntryComponent
           minutesExercise={minutesExercise}
           onChange={modifyMinutesExercise}
+          setHasUnsavedChanges={setHasUnsavedChanges}
         />
       )}
 
-      <EntryComponent content={entryContent} onChange={setEntryContent} />
+      <EntryComponent
+        content={entryContent}
+        onChange={setEntryContent}
+        setHasUnsavedChanges={setHasUnsavedChanges}
+      />
 
       {/* {currentMedications.length && (
         <MedicationsContainer>

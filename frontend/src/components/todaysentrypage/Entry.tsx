@@ -6,11 +6,13 @@ import { EntrySectionContainer } from "../shared-components/styled-components"
 interface EntryProps {
   content?: string
   onChange: Function
+  setHasUnsavedChanges: Function
 }
 
 const EntryComponent: React.FunctionComponent<EntryProps> = ({
   content,
   onChange,
+  setHasUnsavedChanges,
 }) => {
   return (
     <EntrySectionContainer>
@@ -20,7 +22,10 @@ const EntryComponent: React.FunctionComponent<EntryProps> = ({
       <MarkdownComponent
         view="edit"
         value={content}
-        onChange={onChange}
+        onChange={() => {
+          onChange()
+          setHasUnsavedChanges(true)
+        }}
         height={500}
         preview={"edit"}
       />

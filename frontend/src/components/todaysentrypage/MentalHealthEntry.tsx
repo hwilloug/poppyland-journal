@@ -44,18 +44,26 @@ export const mentalHealthSymptoms = [
 interface MentalHealthEntryProps {
   mentalHealth: string[]
   onChange: (event: SelectChangeEvent<string[]>, child: ReactNode) => void
+  setHasUnsavedChanges: Function
 }
 
 const MentalHealthEntryComponent: React.FunctionComponent<
   MentalHealthEntryProps
-> = ({ mentalHealth, onChange }) => {
+> = ({ mentalHealth, onChange, setHasUnsavedChanges }) => {
   return (
     <EntrySectionContainer>
       <Typography variant="h6" sx={{ mb: "20px" }}>
         Mental Health & Behavior
       </Typography>
       <MentalHealthContainer>
-        <Select multiple value={mentalHealth} onChange={onChange}>
+        <Select
+          multiple
+          value={mentalHealth}
+          onChange={(e, child) => {
+            onChange(e, child)
+            setHasUnsavedChanges(true)
+          }}
+        >
           {mentalHealthSymptoms.map((s) => (
             <MenuItem value={s}>{s}</MenuItem>
           ))}

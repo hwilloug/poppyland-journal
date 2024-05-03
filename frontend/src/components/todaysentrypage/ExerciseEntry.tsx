@@ -11,11 +11,13 @@ const InputLabel = styled.div``
 interface ExerciseEntryProps {
   minutesExercise: number
   onChange: Function
+  setHasUnsavedChanges: Function
 }
 
 const ExerciseEntryComponent: React.FunctionComponent<ExerciseEntryProps> = ({
   minutesExercise,
   onChange,
+  setHasUnsavedChanges,
 }) => {
   return (
     <EntrySectionContainer>
@@ -31,7 +33,10 @@ const ExerciseEntryComponent: React.FunctionComponent<ExerciseEntryProps> = ({
           }}
           value={minutesExercise}
           defaultValue={0}
-          onChange={(e) => onChange(e.target.value)}
+          onChange={(e) => {
+            onChange(e.target.value)
+            setHasUnsavedChanges(true)
+          }}
           sx={{ backgroundColor: "white", width: "150px" }}
         />
       </ExerciseContainer>
