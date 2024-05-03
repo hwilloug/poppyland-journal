@@ -133,7 +133,7 @@ const HomePage: React.FunctionComponent = () => {
       <SideBarComponent defaultOpen={false} />
       {!isLoading && (
         <HomePageContainer>
-          {dailyAffirmation && (
+          {preferences.showDailyAffirmation && dailyAffirmation && (
             <DailyAffiramtionContainer>
               <Typography>
                 Daily Affirmation:

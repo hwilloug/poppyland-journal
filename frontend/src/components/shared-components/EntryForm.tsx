@@ -73,7 +73,7 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
   const [entryContent, setEntryContent] = useState<string>()
   const [dailyQuestionQ, setDailyQuestionQ] = useState<string>()
   const [dailyQuestionA, setDailyQuestionA] = useState<string>()
-  const [currentMedications, setCurrentMedications] = useState<string[]>([])
+  // const [currentMedications, setCurrentMedications] = useState<string[]>([])
   const [minutesExercise, setMinutesExercise] = useState<number>(0)
 
   const getEntry = async () => {
@@ -113,41 +113,41 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
     }
   }
 
-  const getCurrentMedications = async () => {
-    try {
-      const token = await getAccessTokenSilently()
-      const response = await axios.get(
-        apiEndpoints.getMedications.insert({ date: date }),
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      )
-      const data = response.data
-      let currentMeds = []
-      if (data) {
-        for (let i = 0; i < data.length; i++) {
-          if (
-            !data[i].end_date ||
-            (dayjs(date).isBefore(dayjs(data[i].end_date)) &&
-              dayjs(date).isAfter(dayjs(data[i].start_date)))
-          ) {
-            currentMeds.push(data[i].medication_name)
-          }
-        }
-        setCurrentMedications([...currentMeds])
-      }
-      setIsLoading(false)
-    } catch (e) {
-      console.log(e)
-      setIsLoading(false)
-    }
-  }
+  // const getCurrentMedications = async () => {
+  //   try {
+  //     const token = await getAccessTokenSilently()
+  //     const response = await axios.get(
+  //       apiEndpoints.getMedications.insert({ date: date }),
+  //       {
+  //         headers: {
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //       },
+  //     )
+  //     const data = response.data
+  //     let currentMeds = []
+  //     if (data) {
+  //       for (let i = 0; i < data.length; i++) {
+  //         if (
+  //           !data[i].end_date ||
+  //           (dayjs(date).isBefore(dayjs(data[i].end_date)) &&
+  //             dayjs(date).isAfter(dayjs(data[i].start_date)))
+  //         ) {
+  //           currentMeds.push(data[i].medication_name)
+  //         }
+  //       }
+  //       setCurrentMedications([...currentMeds])
+  //     }
+  //     setIsLoading(false)
+  //   } catch (e) {
+  //     console.log(e)
+  //     setIsLoading(false)
+  //   }
+  // }
 
   useEffect(() => {
     getEntry()
-    getCurrentMedications()
+    // getCurrentMedications()
     // eslint-disable-next-line
   }, [])
 
