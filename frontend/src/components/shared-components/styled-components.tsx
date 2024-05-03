@@ -3,8 +3,6 @@ import { Button, Paper } from "@mui/material"
 
 export const PageContainer = styled.div`
   margin: 0px;
-  display: flex;
-  flex-direction: row;
 `
 
 export const PageContentContainer = styled.div`

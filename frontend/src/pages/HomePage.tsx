@@ -32,7 +32,7 @@ const HomePageContainer = styled.div`
   padding: 20px;
   flex-grow: 1;
   background-color: #fffcf5;
-  max-width: calc(100% - 7rem);
+  max-width: 100%;
 `
 
 const DailyAffiramtionContainer = styled(Paper)`
