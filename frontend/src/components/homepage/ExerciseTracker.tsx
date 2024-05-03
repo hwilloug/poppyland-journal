@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react"
+import React, { useMemo, useRef, useState } from "react"
 import styled from "@emotion/styled"
 import {
   Bar,
@@ -45,6 +45,11 @@ const ExerciseTrackerComponent: React.FunctionComponent<
   const [timeFilter, setTimeFilter] = useState(
     new Date(new Date(today).setDate(new Date(today).getDate() - 7)).valueOf(),
   )
+  const filteredData = useMemo(() => {
+    return data.filter((d) => {
+      return new Date(d.date) > new Date(timeFilter)
+    })
+  }, [data, timeFilter])
   const timeFilters = [
     {
       name: "Last 7 Days",
@@ -78,8 +83,6 @@ const ExerciseTrackerComponent: React.FunctionComponent<
     },
   ]
 
-  const containerRef = useRef<HTMLDivElement>(null)
-
   return (
     <Container>
       <Typography variant="h5" sx={{ p: "20px" }} align="center">
@@ -104,7 +107,7 @@ const ExerciseTrackerComponent: React.FunctionComponent<
       <ResponsiveContainer width="100%" height={250}>
         <BarChart
           margin={{ top: 5, left: 5, right: 5, bottom: 5 }}
-          data={data}
+          data={filteredData}
           style={{
             backgroundColor: "white",
             padding: "20px 20px 10px 0px",

@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react"
+import React, { useMemo, useRef, useState } from "react"
 import styled from "@emotion/styled"
 import {
   Label,
@@ -51,6 +51,11 @@ const SleepTrackerComponent: React.FunctionComponent<SleepTrackerProps> = ({
   const [timeFilter, setTimeFilter] = useState(
     new Date(new Date(today).setDate(new Date(today).getDate() - 7)).valueOf(),
   )
+  const filteredSleepData = useMemo(() => {
+    return sleepData.filter((d) => {
+      return new Date(d.date) > new Date(timeFilter)
+    })
+  }, [sleepData, timeFilter])
   const timeFilters = [
     {
       name: "Last 7 Days",
@@ -108,7 +113,7 @@ const SleepTrackerComponent: React.FunctionComponent<SleepTrackerProps> = ({
       <ResponsiveContainer width="100%" height={250}>
         <LineChart
           margin={{ top: 5, left: 5, right: 5, bottom: 5 }}
-          data={sleepData}
+          data={filteredSleepData}
           style={{
             backgroundColor: "white",
             padding: "20px 20px 10px 0px",

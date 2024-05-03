@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react"
+import React, { useMemo, useRef, useState } from "react"
 import styled from "@emotion/styled"
 import { Line, LineChart, ResponsiveContainer, XAxis, YAxis } from "recharts"
 import { convertToMonthDay } from "../../utils/date-utils"
@@ -31,13 +31,17 @@ interface MoodTrackerProps {
 const MoodTrackerComponent: React.FunctionComponent<MoodTrackerProps> = ({
   moodData,
 }) => {
-  const container_ref = useRef(null)
   const theme = useTheme()
   const today = new Date().valueOf()
 
   const [timeFilter, setTimeFilter] = useState(
     new Date(new Date(today).setDate(new Date(today).getDate() - 7)).valueOf(),
   )
+  const filteredMoodData = useMemo(() => {
+    return moodData.filter((d) => {
+      return new Date(d.date) > new Date(timeFilter)
+    })
+  }, [moodData, timeFilter])
   const timeFilters = [
     {
       name: "Last 7 Days",
@@ -160,7 +164,7 @@ const MoodTrackerComponent: React.FunctionComponent<MoodTrackerProps> = ({
       <ResponsiveContainer height={250} width="100%">
         <LineChart
           margin={{ top: 5, left: 5, right: 5, bottom: 5 }}
-          data={moodData}
+          data={filteredMoodData}
           style={{
             backgroundColor: "white",
             padding: "20px 20px 10px 0px",
