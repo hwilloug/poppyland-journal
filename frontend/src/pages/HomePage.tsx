@@ -128,32 +128,28 @@ const HomePage: React.FunctionComponent = () => {
     // eslint-disable-next-line
   }, [])
 
+  if (isLoading) {
+    return <LoadingComponent />
+  }
+
   return (
-    <PageContainer>
-      <SideBarComponent defaultOpen={false} />
-      {!isLoading && (
-        <HomePageContainer>
-          {preferences.showDailyAffirmation && dailyAffirmation && (
-            <DailyAffiramtionContainer>
-              <Typography>
-                Daily Affirmation:
-                <br />
-                {dailyAffirmation}
-              </Typography>
-            </DailyAffiramtionContainer>
-          )}
-          {preferences.showMood && <MoodTrackerComponent moodData={moodData} />}
-          {preferences.showSleep && (
-            <SleepTrackerComponent sleepData={sleepData} />
-          )}
-          {preferences.showExercise && (
-            <ExerciseTrackerComponent data={exerciseData} />
-          )}
-          <PreviousEntriesListComponent dates={entryDates} />
-        </HomePageContainer>
+    <HomePageContainer>
+      {preferences.showDailyAffirmation && dailyAffirmation && (
+        <DailyAffiramtionContainer>
+          <Typography>
+            Daily Affirmation:
+            <br />
+            {dailyAffirmation}
+          </Typography>
+        </DailyAffiramtionContainer>
       )}
-      {isLoading && <LoadingComponent />}
-    </PageContainer>
+      {preferences.showMood && <MoodTrackerComponent moodData={moodData} />}
+      {preferences.showSleep && <SleepTrackerComponent sleepData={sleepData} />}
+      {preferences.showExercise && (
+        <ExerciseTrackerComponent data={exerciseData} />
+      )}
+      <PreviousEntriesListComponent dates={entryDates} />
+    </HomePageContainer>
   )
 }
 

@@ -4,12 +4,12 @@ import HomePage from "./pages/HomePage"
 import styled from "@emotion/styled"
 import TodaysEntryPage from "./pages/TodaysEntryPage"
 import PreviousEntriesPage from "./pages/PreviousEntriesPage"
-import MedicationsPage from "./pages/MedicationsPage"
 import EditEntryPage from "./pages/EditEntryPage"
 import { withAuthenticationRequired } from "@auth0/auth0-react"
 import UserPreferencesPage from "./pages/UserPreferencesPage"
 import { ThemeProvider } from "@emotion/react"
 import { theme } from "./theme"
+import Layout from "./Layout"
 
 const AppContainer = styled.div`
   min-height: 100vh;
@@ -18,23 +18,29 @@ const AppContainer = styled.div`
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <HomePage />,
-  },
-  {
-    path: "/today",
-    element: <TodaysEntryPage />,
-  },
-  {
-    path: "/journal",
-    element: <PreviousEntriesPage />,
-  },
-  {
-    path: "/edit/:date",
-    element: <EditEntryPage />,
-  },
-  {
-    path: "/preferences",
-    element: <UserPreferencesPage />,
+    element: <Layout />,
+    children: [
+      {
+        path: "",
+        element: <HomePage />,
+      },
+      {
+        path: "today",
+        element: <TodaysEntryPage />,
+      },
+      {
+        path: "journal",
+        element: <PreviousEntriesPage />,
+      },
+      {
+        path: "edit/:date",
+        element: <EditEntryPage />,
+      },
+      {
+        path: "preferences",
+        element: <UserPreferencesPage />,
+      },
+    ],
   },
 ])
 

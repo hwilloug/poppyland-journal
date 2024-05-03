@@ -1,9 +1,5 @@
 import React, { useEffect, useState } from "react"
-import SideBarComponent from "../components/shared-components/SideBar"
-import {
-  PageContainer,
-  PageContentContainer,
-} from "../components/shared-components/styled-components"
+import { PageContentContainer } from "../components/shared-components/styled-components"
 import axios from "axios"
 import { apiEndpoints } from "../api-endpoints"
 import styled from "@emotion/styled"
@@ -220,165 +216,160 @@ const PreviousEntriesPage: React.FunctionComponent = () => {
   }
 
   return (
-    <PageContainer>
-      <SideBarComponent defaultOpen={false} />
-      <PageContentContainer>
-        <Typography variant="h4" sx={{ m: "20px 0" }} align="center">
-          {journalName || "My Journal"}
-        </Typography>
-        <EntriesContainer>
-          {!isLoading && entries.length === 0 && (
-            <NoEntriesContainer>
-              No entries yet! Head to{" "}
-              <Link to="/today">today's entry page</Link> to get started.
-            </NoEntriesContainer>
-          )}
-          {!isLoading &&
-            entries.map((entry) => (
-              <EntryContainer key={entry.date}>
-                <Typography variant="h6">
-                  {convertToLongDateFromShortDate(entry.date)}
-                </Typography>
-                <hr />
-                {preferences.showMood && entry.mood && (
-                  <MoodContainer>
-                    <Typography>Mood: </Typography>
-                    {getMoodIcon(entry.mood)}
-                  </MoodContainer>
-                )}
-                {preferences.showSleep && entry.hours_sleep && (
-                  <SectionContainer>
-                    <Typography>Hours sleep: {entry.hours_sleep}</Typography>
-                  </SectionContainer>
-                )}
-                {preferences.showSleep && entry.sleep_quality && (
-                  <SectionContainer>
-                    <Typography>
-                      Sleep Quality: {entry.sleep_quality}
-                    </Typography>
-                  </SectionContainer>
-                )}
-                {preferences.showDailyAffirmation && entry.affirmation && (
-                  <SectionContainer>
-                    <Typography>Daily Affirmation:</Typography>
-                    <MarkdownComponent view="view" value={entry.affirmation} />
-                  </SectionContainer>
-                )}
-                {preferences.showDailyGoal && entry.goal && (
-                  <SectionContainer>
-                    <Typography>Daily Goal:</Typography>
-                    <MarkdownComponent view="view" value={entry.goal} />
-                  </SectionContainer>
-                )}
-                {preferences.showDailyQuestion && entry.daily_question_a && (
-                  <SectionContainer>
-                    <Typography>
-                      Daily Question: {entry.daily_question_q}
-                    </Typography>
-                    <MarkdownComponent
-                      view="view"
-                      value={entry.daily_question_a}
-                    />
-                  </SectionContainer>
-                )}
-                {preferences.showMentalHealth &&
-                  entry.mental_health.length > 0 && (
-                    <SectionContainer>
-                      <Typography>
-                        Mental Health:{" "}
-                        {entry.mental_health && entry.mental_health.join(", ")}
-                      </Typography>
-                    </SectionContainer>
-                  )}
-                {preferences.showSubstance && entry.substances.length > 0 && (
-                  <SectionContainer>
-                    <Typography>
-                      Substances:{" "}
-                      {entry.substances && entry.substances.join(", ")}
-                    </Typography>
-                  </SectionContainer>
-                )}
-                {preferences.showExercise && (
-                  <SectionContainer>
-                    <Typography>Minutes Exercise: {entry.exercise}</Typography>
-                  </SectionContainer>
-                )}
-                {entry.entry_content && (
-                  <MarkdownComponent view="view" value={entry.entry_content} />
-                )}
-                <EntryFooterContainer>
-                  <Button
-                    id="more-button"
-                    onClick={(e) => handleMoreClick(e, entry.date)}
-                  >
-                    <MoreHorizIcon />
-                  </Button>
-                </EntryFooterContainer>
-              </EntryContainer>
-            ))}
-          <Menu
-            anchorEl={anchorEl}
-            open={menuOpen}
-            onClose={handleMoreClose}
-            MenuListProps={{ "aria-labelledby": "more-button" }}
-          >
-            <MenuItem onClick={handleMoreClose}>
-              <Link
-                to={`/edit/${selectedDate}`}
-                style={{ textDecoration: "None", color: "black" }}
-              >
-                Edit Entry
-              </Link>
-            </MenuItem>
-            <MenuItem
-              onClick={() => {
-                setDeleteEntryDate(selectedDate!)
-                setIsModalOpen(true)
-                handleMoreClose()
-              }}
-            >
-              Delete Entry
-            </MenuItem>
-          </Menu>
-          <Modal
-            open={isModalOpen}
-            onClose={handleModalClose}
-            aria-labelledby="modal-modal-title"
-            aria-describedby="modal-modal-description"
-          >
-            <Box sx={modalStyle}>
-              <Typography id="modal-modal-title" variant="h6" component="h2">
-                Are you sure you want to delete this entry?
+    <PageContentContainer>
+      <Typography variant="h4" sx={{ m: "20px 0" }} align="center">
+        {journalName || "My Journal"}
+      </Typography>
+      <EntriesContainer>
+        {!isLoading && entries.length === 0 && (
+          <NoEntriesContainer>
+            No entries yet! Head to <Link to="/today">today's entry page</Link>{" "}
+            to get started.
+          </NoEntriesContainer>
+        )}
+        {!isLoading &&
+          entries.map((entry) => (
+            <EntryContainer key={entry.date}>
+              <Typography variant="h6">
+                {convertToLongDateFromShortDate(entry.date)}
               </Typography>
-              <Typography>
-                {convertToLongDateFromShortDate(deleteEntryDate)}
-              </Typography>
-              <ModalButtonsContainer>
-                <Button variant="contained" onClick={() => handleModalClose()}>
-                  No, take me back
-                </Button>
+              <hr />
+              {preferences.showMood && entry.mood && (
+                <MoodContainer>
+                  <Typography>Mood: </Typography>
+                  {getMoodIcon(entry.mood)}
+                </MoodContainer>
+              )}
+              {preferences.showSleep && entry.hours_sleep && (
+                <SectionContainer>
+                  <Typography>Hours sleep: {entry.hours_sleep}</Typography>
+                </SectionContainer>
+              )}
+              {preferences.showSleep && entry.sleep_quality && (
+                <SectionContainer>
+                  <Typography>Sleep Quality: {entry.sleep_quality}</Typography>
+                </SectionContainer>
+              )}
+              {preferences.showDailyAffirmation && entry.affirmation && (
+                <SectionContainer>
+                  <Typography>Daily Affirmation:</Typography>
+                  <MarkdownComponent view="view" value={entry.affirmation} />
+                </SectionContainer>
+              )}
+              {preferences.showDailyGoal && entry.goal && (
+                <SectionContainer>
+                  <Typography>Daily Goal:</Typography>
+                  <MarkdownComponent view="view" value={entry.goal} />
+                </SectionContainer>
+              )}
+              {preferences.showDailyQuestion && entry.daily_question_a && (
+                <SectionContainer>
+                  <Typography>
+                    Daily Question: {entry.daily_question_q}
+                  </Typography>
+                  <MarkdownComponent
+                    view="view"
+                    value={entry.daily_question_a}
+                  />
+                </SectionContainer>
+              )}
+              {preferences.showMentalHealth &&
+                entry.mental_health.length > 0 && (
+                  <SectionContainer>
+                    <Typography>
+                      Mental Health:{" "}
+                      {entry.mental_health && entry.mental_health.join(", ")}
+                    </Typography>
+                  </SectionContainer>
+                )}
+              {preferences.showSubstance && entry.substances.length > 0 && (
+                <SectionContainer>
+                  <Typography>
+                    Substances:{" "}
+                    {entry.substances && entry.substances.join(", ")}
+                  </Typography>
+                </SectionContainer>
+              )}
+              {preferences.showExercise && (
+                <SectionContainer>
+                  <Typography>Minutes Exercise: {entry.exercise}</Typography>
+                </SectionContainer>
+              )}
+              {entry.entry_content && (
+                <MarkdownComponent view="view" value={entry.entry_content} />
+              )}
+              <EntryFooterContainer>
                 <Button
-                  color="error"
-                  onClick={() => handleDeleteEntry(deleteEntryDate)}
+                  id="more-button"
+                  onClick={(e) => handleMoreClick(e, entry.date)}
                 >
-                  Yes, Delete
+                  <MoreHorizIcon />
                 </Button>
-              </ModalButtonsContainer>
-            </Box>
-          </Modal>
-          <Snackbar
-            open={snackbarOpen}
-            autoHideDuration={6000}
-            onClose={handleSnackbarClose}
+              </EntryFooterContainer>
+            </EntryContainer>
+          ))}
+        <Menu
+          anchorEl={anchorEl}
+          open={menuOpen}
+          onClose={handleMoreClose}
+          MenuListProps={{ "aria-labelledby": "more-button" }}
+        >
+          <MenuItem onClick={handleMoreClose}>
+            <Link
+              to={`/edit/${selectedDate}`}
+              style={{ textDecoration: "None", color: "black" }}
+            >
+              Edit Entry
+            </Link>
+          </MenuItem>
+          <MenuItem
+            onClick={() => {
+              setDeleteEntryDate(selectedDate!)
+              setIsModalOpen(true)
+              handleMoreClose()
+            }}
           >
-            <Alert onClose={handleSnackbarClose} severity="success">
-              {snackbarMessage}
-            </Alert>
-          </Snackbar>
-          {isLoading && <LoadingComponent />}
-        </EntriesContainer>
-      </PageContentContainer>
-    </PageContainer>
+            Delete Entry
+          </MenuItem>
+        </Menu>
+        <Modal
+          open={isModalOpen}
+          onClose={handleModalClose}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <Box sx={modalStyle}>
+            <Typography id="modal-modal-title" variant="h6" component="h2">
+              Are you sure you want to delete this entry?
+            </Typography>
+            <Typography>
+              {convertToLongDateFromShortDate(deleteEntryDate)}
+            </Typography>
+            <ModalButtonsContainer>
+              <Button variant="contained" onClick={() => handleModalClose()}>
+                No, take me back
+              </Button>
+              <Button
+                color="error"
+                onClick={() => handleDeleteEntry(deleteEntryDate)}
+              >
+                Yes, Delete
+              </Button>
+            </ModalButtonsContainer>
+          </Box>
+        </Modal>
+        <Snackbar
+          open={snackbarOpen}
+          autoHideDuration={6000}
+          onClose={handleSnackbarClose}
+        >
+          <Alert onClose={handleSnackbarClose} severity="success">
+            {snackbarMessage}
+          </Alert>
+        </Snackbar>
+        {isLoading && <LoadingComponent />}
+      </EntriesContainer>
+    </PageContentContainer>
   )
 }
 

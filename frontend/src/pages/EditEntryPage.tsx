@@ -1,9 +1,5 @@
 import React from "react"
-import SideBarComponent from "../components/shared-components/SideBar"
-import {
-  PageContainer,
-  PageContentContainer,
-} from "../components/shared-components/styled-components"
+import { PageContentContainer } from "../components/shared-components/styled-components"
 import styled from "@emotion/styled"
 import { withAuthenticationRequired } from "@auth0/auth0-react"
 import EntryForm from "../components/shared-components/EntryForm"
@@ -17,15 +13,12 @@ export const SectionHeader = styled.h3`
 const EditEntryPage: React.FunctionComponent = () => {
   const { date } = useParams()
   return (
-    <PageContainer>
-      <SideBarComponent defaultOpen={false} />
-      <PageContentContainer>
-        <Typography variant="h4" sx={{ my: "20px" }} align="center">
-          Edit Entry
-        </Typography>
-        <EntryForm date={date!} />
-      </PageContentContainer>
-    </PageContainer>
+    <PageContentContainer>
+      <Typography variant="h4" sx={{ my: "20px" }} align="center">
+        Edit Entry
+      </Typography>
+      <EntryForm date={date!} />
+    </PageContentContainer>
   )
 }
 

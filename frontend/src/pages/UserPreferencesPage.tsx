@@ -1,10 +1,6 @@
 import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react"
 import styled from "@emotion/styled"
-import {
-  PageContainer,
-  PageContentContainer,
-} from "../components/shared-components/styled-components"
-import SideBarComponent from "../components/shared-components/SideBar"
+import { PageContentContainer } from "../components/shared-components/styled-components"
 import { useDispatch, useSelector } from "react-redux"
 import { State } from "../store"
 import {
@@ -139,108 +135,105 @@ const UserPreferencesPage: React.FunctionComponent = () => {
   }
 
   return (
-    <PageContainer>
-      <SideBarComponent defaultOpen={false} />
-      <PageContentContainer>
-        <Typography variant="h4" align="center">
-          Preferences
-        </Typography>
-        <Container>
-          <SettingSection>
-            <Typography variant="h6">Account Preferences</Typography>
-            <Typography sx={{ mt: "10px", mb: "20px" }}>
-              Options related to your account.
-            </Typography>
-            <TextField
-              label="First Name"
-              InputLabelProps={{
-                shrink: true,
-              }}
-              value={firstName}
-              defaultValue={0}
-              onChange={(e) => dispatch(setFirstName(e.target.value))}
-              sx={{ backgroundColor: "white", width: "200px", mr: "10px" }}
-            />
-            <TextField
-              label="Last Name"
-              InputLabelProps={{
-                shrink: true,
-              }}
-              value={lastName}
-              defaultValue={0}
-              onChange={(e) => dispatch(setLastName(e.target.value))}
-              sx={{ backgroundColor: "white", width: "200px" }}
-            />
-          </SettingSection>
-          <SettingSection>
-            <Typography variant="h6">Journal Options</Typography>
-            <Typography sx={{ mt: "10px", mb: "20px" }}>
-              Options related to your journal.
-            </Typography>
-            <TextField
-              label="Journal Name"
-              InputLabelProps={{
-                shrink: true,
-              }}
-              value={journalName}
-              onChange={(e) => dispatch(setJournalName(e.target.value))}
-              sx={{ backgroundColor: "white", width: "100%" }}
-            />
-            <TextField
-              label="Ideal Hours Sleep"
-              type="number"
-              InputLabelProps={{
-                shrink: true,
-              }}
-              value={idealHoursSleep}
-              onChange={(e) => dispatch(setIdealHoursSleep(e.target.value))}
-              sx={{ backgroundColor: "white", mt: "20px" }}
-            />
-          </SettingSection>
-          <SettingSection>
-            <Typography variant="h6">Journal Sections</Typography>
-            <Typography sx={{ my: "10px" }}>
-              Options related to which sections to show in your journal.
-            </Typography>
-            {sections.map((s) => (
-              <PreferenceContainer key={s.preference}>
-                <Checkbox
-                  // @ts-ignore
-                  checked={preferences[s.preference]}
-                  onChange={() =>
-                    handlePreferenceChange(
-                      s.preference,
-                      // @ts-ignore
-                      !preferences[s.preference],
-                    )
-                  }
-                />
-                <Typography>{s.section}</Typography>
-              </PreferenceContainer>
-            ))}
-          </SettingSection>
-          <SubmitButtonContainer>
-            <Button
-              color="primary"
-              variant="contained"
-              onClick={() => onSubmit()}
-              sx={{ mt: "20px" }}
-            >
-              Save
-            </Button>
-          </SubmitButtonContainer>
-          <Snackbar
-            open={snackbarOpen}
-            autoHideDuration={6000}
-            onClose={handleSnackbarClose}
+    <PageContentContainer>
+      <Typography variant="h4" align="center">
+        Preferences
+      </Typography>
+      <Container>
+        <SettingSection>
+          <Typography variant="h6">Account Preferences</Typography>
+          <Typography sx={{ mt: "10px", mb: "20px" }}>
+            Options related to your account.
+          </Typography>
+          <TextField
+            label="First Name"
+            InputLabelProps={{
+              shrink: true,
+            }}
+            value={firstName}
+            defaultValue={0}
+            onChange={(e) => dispatch(setFirstName(e.target.value))}
+            sx={{ backgroundColor: "white", width: "200px", mr: "10px" }}
+          />
+          <TextField
+            label="Last Name"
+            InputLabelProps={{
+              shrink: true,
+            }}
+            value={lastName}
+            defaultValue={0}
+            onChange={(e) => dispatch(setLastName(e.target.value))}
+            sx={{ backgroundColor: "white", width: "200px" }}
+          />
+        </SettingSection>
+        <SettingSection>
+          <Typography variant="h6">Journal Options</Typography>
+          <Typography sx={{ mt: "10px", mb: "20px" }}>
+            Options related to your journal.
+          </Typography>
+          <TextField
+            label="Journal Name"
+            InputLabelProps={{
+              shrink: true,
+            }}
+            value={journalName}
+            onChange={(e) => dispatch(setJournalName(e.target.value))}
+            sx={{ backgroundColor: "white", width: "100%" }}
+          />
+          <TextField
+            label="Ideal Hours Sleep"
+            type="number"
+            InputLabelProps={{
+              shrink: true,
+            }}
+            value={idealHoursSleep}
+            onChange={(e) => dispatch(setIdealHoursSleep(e.target.value))}
+            sx={{ backgroundColor: "white", mt: "20px" }}
+          />
+        </SettingSection>
+        <SettingSection>
+          <Typography variant="h6">Journal Sections</Typography>
+          <Typography sx={{ my: "10px" }}>
+            Options related to which sections to show in your journal.
+          </Typography>
+          {sections.map((s) => (
+            <PreferenceContainer key={s.preference}>
+              <Checkbox
+                // @ts-ignore
+                checked={preferences[s.preference]}
+                onChange={() =>
+                  handlePreferenceChange(
+                    s.preference,
+                    // @ts-ignore
+                    !preferences[s.preference],
+                  )
+                }
+              />
+              <Typography>{s.section}</Typography>
+            </PreferenceContainer>
+          ))}
+        </SettingSection>
+        <SubmitButtonContainer>
+          <Button
+            color="primary"
+            variant="contained"
+            onClick={() => onSubmit()}
+            sx={{ mt: "20px" }}
           >
-            <Alert onClose={handleSnackbarClose} severity="success">
-              {snackbarMessage}
-            </Alert>
-          </Snackbar>
-        </Container>
-      </PageContentContainer>
-    </PageContainer>
+            Save
+          </Button>
+        </SubmitButtonContainer>
+        <Snackbar
+          open={snackbarOpen}
+          autoHideDuration={6000}
+          onClose={handleSnackbarClose}
+        >
+          <Alert onClose={handleSnackbarClose} severity="success">
+            {snackbarMessage}
+          </Alert>
+        </Snackbar>
+      </Container>
+    </PageContentContainer>
   )
 }
 
