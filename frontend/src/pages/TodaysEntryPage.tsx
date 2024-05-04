@@ -12,7 +12,6 @@ export const SectionHeader = styled.h3`
 
 const TodaysEntryPage: React.FunctionComponent = () => {
   const [date] = useState(convertToShortDate(new Date()))
-  console.log(date)
   return (
     <PageContentContainer>
       <Typography variant="h4" sx={{ my: "20px" }} align="center">

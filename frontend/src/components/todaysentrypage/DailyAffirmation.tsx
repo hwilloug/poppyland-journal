@@ -21,8 +21,8 @@ const DailyAffirmationComponent: React.FunctionComponent<
       <MarkdownComponent
         view="edit"
         value={affirmation}
-        onChange={() => {
-          onChange()
+        onChange={(e: any) => {
+          onChange(e)
           setHasUnsavedChanges(true)
         }}
         height={100}

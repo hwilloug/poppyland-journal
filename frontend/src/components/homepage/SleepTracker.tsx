@@ -34,19 +34,26 @@ export type SleepDataType = {
   hoursSleep: number
 }
 
-interface SleepTrackerProps {
-  sleepData: SleepDataType[]
-}
-
-const SleepTrackerComponent: React.FunctionComponent<SleepTrackerProps> = ({
-  sleepData,
-}) => {
+const SleepTrackerComponent: React.FunctionComponent = () => {
   const theme = useTheme()
 
   const idealHoursSleep = useSelector(
     (state: State) => state.user.idealHoursSleep,
   )
   const today = new Date().valueOf()
+
+  const sleepData = useSelector((state: State) => {
+    let data: SleepDataType[] = []
+    for (let date in state.journal.entries) {
+      if (state.journal.entries[date].hoursSleep !== undefined) {
+        data.push({
+          date: new Date(date.replace(/-/g, "/")).valueOf(),
+          hoursSleep: parseInt(state.journal.entries[date].hoursSleep!),
+        })
+      }
+    }
+    return data
+  })
 
   const [timeFilter, setTimeFilter] = useState(
     new Date(new Date(today).setDate(new Date(today).getDate() - 7)).valueOf(),

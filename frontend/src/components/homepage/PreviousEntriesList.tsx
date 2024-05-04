@@ -15,6 +15,8 @@ import {
   TableRow,
   Typography,
 } from "@mui/material"
+import { useSelector } from "react-redux"
+import { State } from "../../store"
 
 const Container = styled(Paper)`
   background-color: white;
@@ -23,13 +25,14 @@ const Container = styled(Paper)`
   border: 1px solid lightgrey;
 `
 
-interface PreviousEntriesListProps {
-  dates: string[]
-}
-
-const PreviousEntriesListComponent: React.FunctionComponent<
-  PreviousEntriesListProps
-> = ({ dates }) => {
+const PreviousEntriesListComponent: React.FunctionComponent = () => {
+  const dates = useSelector((state: State) => {
+    let dates = []
+    for (let date in state.journal.entries) {
+      dates.push(date)
+    }
+    return dates
+  })
   return (
     <Container>
       <Typography variant="h5" sx={{ p: "20px", textAlign: "center" }}>

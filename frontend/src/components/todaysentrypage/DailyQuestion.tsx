@@ -61,8 +61,8 @@ const DailyQuestionComponent: React.FunctionComponent<DailyQuestionProps> = ({
       <MarkdownComponent
         view="edit"
         value={answer}
-        onChange={() => {
-          onChange()
+        onChange={(e: any) => {
+          onChange(e)
           setHasUnsavedChanges(true)
         }}
         height={100}

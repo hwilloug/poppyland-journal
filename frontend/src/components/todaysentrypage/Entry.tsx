@@ -22,8 +22,8 @@ const EntryComponent: React.FunctionComponent<EntryProps> = ({
       <MarkdownComponent
         view="edit"
         value={content}
-        onChange={() => {
-          onChange()
+        onChange={(e: any) => {
+          onChange(e)
           setHasUnsavedChanges(true)
         }}
         height={500}

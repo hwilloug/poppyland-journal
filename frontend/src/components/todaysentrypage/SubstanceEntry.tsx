@@ -44,8 +44,8 @@ const SubstanceEntryComponent: React.FunctionComponent<SubstanceEntryProps> = ({
             key={s}
             checked={substances.includes(s)}
             label={s}
-            onChange={() => {
-              onChange()
+            onChange={(e: any) => {
+              onChange(e)
               setHasUnsavedChanges(true)
             }}
           />

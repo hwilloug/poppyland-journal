@@ -23,8 +23,8 @@ const DailyGoalComponent: React.FunctionComponent<DailyGoalProps> = ({
       <MarkdownComponent
         view="edit"
         value={goal}
-        onChange={() => {
-          onChange()
+        onChange={(e: any) => {
+          onChange(e)
           setHasUnsavedChanges(true)
         }}
         height={100}

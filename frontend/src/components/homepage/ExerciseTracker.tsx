@@ -10,6 +10,8 @@ import {
 } from "recharts"
 import { convertToMonthDay } from "../../utils/date-utils"
 import { Button, Paper, Typography, useTheme } from "@mui/material"
+import { useSelector } from "react-redux"
+import { State } from "../../store"
 
 const Container = styled(Paper)`
   background-color: white;
@@ -31,16 +33,24 @@ export type ExerciseDataType = {
   minutesExercise: number
 }
 
-interface ExerciseTrackerProps {
-  data: ExerciseDataType[]
-}
-
-const ExerciseTrackerComponent: React.FunctionComponent<
-  ExerciseTrackerProps
-> = ({ data }) => {
+const ExerciseTrackerComponent: React.FunctionComponent = () => {
   const theme = useTheme()
 
   const today = new Date().valueOf()
+
+  const data = useSelector((state: State) => {
+    let data: ExerciseDataType[] = []
+    for (let date in state.journal.entries) {
+      data.push({
+        date: new Date(date.replace(/-/g, "/")).valueOf(),
+        minutesExercise:
+          state.journal.entries[date].exercise !== undefined
+            ? parseInt(state.journal.entries[date].exercise!)
+            : 0,
+      })
+    }
+    return data
+  })
 
   const [timeFilter, setTimeFilter] = useState(
     new Date(new Date(today).setDate(new Date(today).getDate() - 7)).valueOf(),
@@ -50,6 +60,8 @@ const ExerciseTrackerComponent: React.FunctionComponent<
       return new Date(d.date) > new Date(timeFilter)
     })
   }, [data, timeFilter])
+
+  console.log(filteredData)
   const timeFilters = [
     {
       name: "Last 7 Days",

@@ -5,11 +5,13 @@ import styled from "@emotion/styled"
 import TodaysEntryPage from "./pages/TodaysEntryPage"
 import PreviousEntriesPage from "./pages/PreviousEntriesPage"
 import EditEntryPage from "./pages/EditEntryPage"
-import { withAuthenticationRequired } from "@auth0/auth0-react"
+import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react"
 import UserPreferencesPage from "./pages/UserPreferencesPage"
 import { ThemeProvider } from "@emotion/react"
 import { theme } from "./theme"
 import Layout from "./Layout"
+import { useEffect } from "react"
+import { journalActions } from "./store"
 
 const AppContainer = styled.div`
   min-height: 100vh;
@@ -45,6 +47,14 @@ const router = createBrowserRouter([
 ])
 
 function App() {
+  const { getAccessTokenSilently } = useAuth0()
+  const getEntries = async () => {
+    const token = await getAccessTokenSilently()
+    journalActions.getEntries(token)
+  }
+  useEffect(() => {
+    getEntries()
+  }, [])
   return (
     <AppContainer className="App">
       <ThemeProvider theme={theme}>

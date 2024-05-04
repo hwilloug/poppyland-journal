@@ -9,7 +9,7 @@ const ExerciseContainer = styled.div``
 const InputLabel = styled.div``
 
 interface ExerciseEntryProps {
-  minutesExercise: number
+  minutesExercise?: number
   onChange: Function
   setHasUnsavedChanges: Function
 }

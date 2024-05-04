@@ -4,7 +4,7 @@ import dayjs, { Dayjs } from "dayjs"
 import { ReactNode, useEffect, useMemo, useState } from "react"
 import { apiEndpoints } from "../../api-endpoints"
 import axios from "axios"
-import { ResponseType } from "../../pages/HomePage"
+import { EntryResponseType } from "../../server/get-entries-api"
 import MoodEntryComponent from "../todaysentrypage/MoodEntry"
 import SleepEntryComponent from "../todaysentrypage/SleepEntry"
 import DailyAffirmationComponent from "../todaysentrypage/DailyAffirmation"
@@ -22,10 +22,11 @@ import {
 } from "@mui/material"
 import LoadingComponent from "./Loading"
 import { useDispatch, useSelector } from "react-redux"
-import { State } from "../../store"
+import { State, journalActions } from "../../store"
 import { getProfile } from "../../utils/get-profile"
 import ExerciseEntryComponent from "../todaysentrypage/ExerciseEntry"
 import { FormPrompt } from "./FormPrompt"
+import { JournalEntry } from "../../types/journal-types"
 
 const SubmitContainer = styled.div`
   display: flex;
@@ -53,106 +54,77 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
     getProfile(user!.sub!, dispatch, getAccessTokenSilently)
   }
 
+  const entries = useSelector((state: State) => state.journal.entries)
+  const isLoading = useSelector((state: State) => state.journal.isLoading)
+  const loadedEntry: JournalEntry = useMemo(() => {
+    if (Object.keys(entries).includes(date)) {
+      return entries[date]
+    } else {
+      return {
+        date,
+        mood: undefined,
+        hoursSleep: undefined,
+        bedTime: undefined,
+        wakeUpTime: undefined,
+        sleepQuality: undefined,
+        affirmation: undefined,
+        mentalHealth: [],
+        substances: [],
+        entryContent: undefined,
+        goal: undefined,
+        dailyQuestionQ: undefined,
+        dailyQuestionA: undefined,
+        exercise: "0",
+      }
+    }
+  }, [entries])
+
   const dateFull = new Date(date.replace(/-/g, "/")).toLocaleDateString(
     "en-US",
     { dateStyle: "full" },
   )
 
-  const [isLoading, setIsLoading] = useState<boolean>(true)
   const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false)
   const [snackbarMessage, setSnackbarMessage] = useState<string>("")
-  const [mood, setMood] = useState<number>()
-  const [bedTime, setBedTime] = useState<Dayjs | null>()
-  const [wakeUpTime, setWakeUpTime] = useState<Dayjs | null>()
-  const [hoursSleep, setHoursSleep] = useState<number>()
-  const [sleepQuality, setSleepQuality] = useState<string>()
-  const [affirmation, setAffirmation] = useState<string>()
-  const [goal, setGoal] = useState<string>()
-  const [mentalHealth, setMentalHealth] = useState<string[]>([])
-  const [substances, setSubstances] = useState<string[]>([])
-  const [entryContent, setEntryContent] = useState<string>()
-  const [dailyQuestionQ, setDailyQuestionQ] = useState<string>()
-  const [dailyQuestionA, setDailyQuestionA] = useState<string>()
-  // const [currentMedications, setCurrentMedications] = useState<string[]>([])
-  const [minutesExercise, setMinutesExercise] = useState<number>(0)
+  const [mood, setMood] = useState<number | undefined>(
+    loadedEntry.mood ? parseInt(loadedEntry.mood) : undefined,
+  )
+  const [bedTime, setBedTime] = useState<Dayjs | null>(
+    loadedEntry.bedTime ? dayjs(loadedEntry.bedTime) : null,
+  )
+  const [wakeUpTime, setWakeUpTime] = useState<Dayjs | null>(
+    loadedEntry.wakeUpTime ? dayjs(loadedEntry.wakeUpTime) : null,
+  )
+  const [hoursSleep, setHoursSleep] = useState<number | undefined>(
+    loadedEntry.hoursSleep ? parseInt(loadedEntry.hoursSleep) : undefined,
+  )
+  const [sleepQuality, setSleepQuality] = useState<string | undefined>(
+    loadedEntry.sleepQuality || undefined,
+  )
+  const [affirmation, setAffirmation] = useState<string | undefined>(
+    loadedEntry.affirmation || undefined,
+  )
+  const [goal, setGoal] = useState<string | undefined>(
+    loadedEntry.goal || undefined,
+  )
+  const [mentalHealth, setMentalHealth] = useState<string[]>(
+    loadedEntry.mentalHealth,
+  )
+  const [substances, setSubstances] = useState<string[]>(loadedEntry.substances)
+  const [entryContent, setEntryContent] = useState<string | undefined>(
+    loadedEntry.entryContent || undefined,
+  )
+  const [dailyQuestionQ, setDailyQuestionQ] = useState<string | undefined>(
+    loadedEntry.dailyQuestionQ || undefined,
+  )
+  const [dailyQuestionA, setDailyQuestionA] = useState<string | undefined>(
+    loadedEntry.dailyQuestionA || undefined,
+  )
+  const [minutesExercise, setMinutesExercise] = useState<number | undefined>(
+    loadedEntry.exercise ? parseInt(loadedEntry.exercise) : undefined,
+  )
 
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false)
-
-  const getEntry = async () => {
-    setIsLoading(true)
-    try {
-      const token = await getAccessTokenSilently()
-      const response = await axios.get(
-        apiEndpoints.getEntry.insert({ date: date }),
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      )
-      const data: ResponseType = response.data
-      if (data) {
-        setMood(parseInt(data.mood))
-        setBedTime(data.bed_time ? dayjs(data.bed_time) : undefined)
-        setWakeUpTime(data.wake_up_time ? dayjs(data.wake_up_time) : undefined)
-        setHoursSleep(
-          parseInt(data.hours_sleep) ? parseInt(data.hours_sleep) : undefined,
-        )
-        setSleepQuality(data.sleep_quality)
-        setMentalHealth(data.mental_health || [])
-        setEntryContent(data.entry_content)
-        setSubstances(data.substances || [])
-        setAffirmation(data.affirmation)
-        setGoal(data.goal)
-        setDailyQuestionA(data.daily_question_a)
-        setDailyQuestionQ(data.daily_question_q)
-        setMinutesExercise(data.exercise ? parseInt(data.exercise) : 0)
-      }
-      setHasUnsavedChanges(false)
-      setIsLoading(false)
-    } catch (e) {
-      console.log(e)
-      setIsLoading(false)
-    }
-  }
-
-  // const getCurrentMedications = async () => {
-  //   try {
-  //     const token = await getAccessTokenSilently()
-  //     const response = await axios.get(
-  //       apiEndpoints.getMedications.insert({ date: date }),
-  //       {
-  //         headers: {
-  //           Authorization: `Bearer ${token}`,
-  //         },
-  //       },
-  //     )
-  //     const data = response.data
-  //     let currentMeds = []
-  //     if (data) {
-  //       for (let i = 0; i < data.length; i++) {
-  //         if (
-  //           !data[i].end_date ||
-  //           (dayjs(date).isBefore(dayjs(data[i].end_date)) &&
-  //             dayjs(date).isAfter(dayjs(data[i].start_date)))
-  //         ) {
-  //           currentMeds.push(data[i].medication_name)
-  //         }
-  //       }
-  //       setCurrentMedications([...currentMeds])
-  //     }
-  //     setIsLoading(false)
-  //   } catch (e) {
-  //     console.log(e)
-  //     setIsLoading(false)
-  //   }
-  // }
-
-  useEffect(() => {
-    getEntry()
-    // getCurrentMedications()
-    // eslint-disable-next-line
-  }, [])
 
   useEffect(() => {
     if (bedTime && wakeUpTime) {
@@ -197,31 +169,22 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
   const onSubmit = async () => {
     try {
       const token = await getAccessTokenSilently()
-      await axios.put(
-        apiEndpoints.createEntry.insert(),
-        {
-          user_id: userId,
-          date,
-          mood: mood !== undefined ? mood.toString() : undefined,
-          bed_time: bedTime,
-          wake_up_time: wakeUpTime,
-          hours_sleep: hoursSleep ? hoursSleep.toString() : undefined,
-          sleep_quality: sleepQuality,
-          affirmation: affirmation,
-          goal: goal,
-          mental_health: mentalHealth,
-          substances: substances,
-          entry_content: entryContent,
-          daily_question_q: dailyQuestionQ,
-          daily_question_a: dailyQuestionA,
-          exercise: minutesExercise.toString(),
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      )
+      journalActions.putEntry(token, user!.sub!, date, {
+        date,
+        mood: mood?.toString(),
+        hoursSleep: hoursSleep?.toString(),
+        wakeUpTime: wakeUpTime?.toString(),
+        bedTime: bedTime?.toString(),
+        sleepQuality,
+        affirmation,
+        mentalHealth,
+        substances,
+        entryContent,
+        goal,
+        dailyQuestionA,
+        dailyQuestionQ,
+        exercise: minutesExercise?.toString(),
+      })
       setSnackbarMessage("Successfully saved entry!")
       setSnackbarOpen(true)
       setHasUnsavedChanges(false)

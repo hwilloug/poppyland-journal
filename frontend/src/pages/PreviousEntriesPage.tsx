@@ -13,7 +13,7 @@ import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react"
 import LoadingComponent from "../components/shared-components/Loading"
 import { Link } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux"
-import { State } from "../store"
+import { State, journalActions } from "../store"
 import { getProfile } from "../utils/get-profile"
 import {
   Alert,
@@ -90,23 +90,6 @@ const EntryFooterContainer = styled.div`
   justify-content: flex-end;
 `
 
-interface EntryType {
-  date: string
-  mood: string
-  hours_sleep: string
-  bed_time: string
-  wake_up_time: string
-  sleep_quality: string
-  affirmation: string
-  mental_health: string[]
-  substances: string[]
-  entry_content: string
-  goal: string
-  daily_question_q: string
-  daily_question_a: string
-  exercise: string
-}
-
 const PreviousEntriesPage: React.FunctionComponent = () => {
   const { user, getAccessTokenSilently } = useAuth0()
   const dispatch = useDispatch()
@@ -117,7 +100,15 @@ const PreviousEntriesPage: React.FunctionComponent = () => {
     getProfile(user!.sub!, dispatch, getAccessTokenSilently)
   }
 
-  const [isLoading, setIsLoading] = useState<boolean>(true)
+  const entries = useSelector((state: State) => {
+    let entries = []
+    for (let date in state.journal.entries) {
+      entries.push(state.journal.entries[date])
+    }
+    return entries
+  })
+  const isLoading = useSelector((state: State) => state.journal.isLoading)
+
   const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false)
   const [snackbarMessage, setSnackbarMessage] = useState<string>("")
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
@@ -127,29 +118,6 @@ const PreviousEntriesPage: React.FunctionComponent = () => {
   const [deleteEntryDate, setDeleteEntryDate] = useState<string>(
     convertToShortDate(new Date()),
   )
-  const [entries, setEntries] = useState<EntryType[]>([])
-
-  const getEntries = async () => {
-    setIsLoading(true)
-    try {
-      const token = await getAccessTokenSilently()
-      const response = await axios.get(apiEndpoints.getEntries.insert(), {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      const data: ResponseType[] = response.data
-      setEntries(data as unknown as EntryType[])
-      setIsLoading(false)
-    } catch (e) {
-      console.log(e)
-    }
-  }
-
-  useEffect(() => {
-    getEntries()
-    // eslint-disable-next-line
-  }, [])
 
   const getMoodIcon = (mood: string) => {
     switch (mood) {
@@ -185,13 +153,8 @@ const PreviousEntriesPage: React.FunctionComponent = () => {
   const handleDeleteEntry = async (date: string) => {
     try {
       const token = await getAccessTokenSilently()
-      await axios.delete(apiEndpoints.deleteEntry.insert({ date }), {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
+      journalActions.deleteEntry(token, date)
       setIsModalOpen(false)
-      getEntries()
       setSnackbarMessage(`Successfully deleted entry ${date}!`)
       setSnackbarOpen(true)
     } catch (e) {
@@ -240,14 +203,14 @@ const PreviousEntriesPage: React.FunctionComponent = () => {
                   {getMoodIcon(entry.mood)}
                 </MoodContainer>
               )}
-              {preferences.showSleep && entry.hours_sleep && (
+              {preferences.showSleep && entry.hoursSleep && (
                 <SectionContainer>
-                  <Typography>Hours sleep: {entry.hours_sleep}</Typography>
+                  <Typography>Hours sleep: {entry.hoursSleep}</Typography>
                 </SectionContainer>
               )}
-              {preferences.showSleep && entry.sleep_quality && (
+              {preferences.showSleep && entry.sleepQuality && (
                 <SectionContainer>
-                  <Typography>Sleep Quality: {entry.sleep_quality}</Typography>
+                  <Typography>Sleep Quality: {entry.sleepQuality}</Typography>
                 </SectionContainer>
               )}
               {preferences.showDailyAffirmation && entry.affirmation && (
@@ -262,23 +225,20 @@ const PreviousEntriesPage: React.FunctionComponent = () => {
                   <MarkdownComponent view="view" value={entry.goal} />
                 </SectionContainer>
               )}
-              {preferences.showDailyQuestion && entry.daily_question_a && (
+              {preferences.showDailyQuestion && entry.dailyQuestionA && (
                 <SectionContainer>
                   <Typography>
-                    Daily Question: {entry.daily_question_q}
+                    Daily Question: {entry.dailyQuestionQ}
                   </Typography>
-                  <MarkdownComponent
-                    view="view"
-                    value={entry.daily_question_a}
-                  />
+                  <MarkdownComponent view="view" value={entry.dailyQuestionA} />
                 </SectionContainer>
               )}
               {preferences.showMentalHealth &&
-                entry.mental_health.length > 0 && (
+                entry.mentalHealth.length > 0 && (
                   <SectionContainer>
                     <Typography>
                       Mental Health:{" "}
-                      {entry.mental_health && entry.mental_health.join(", ")}
+                      {entry.mentalHealth && entry.mentalHealth.join(", ")}
                     </Typography>
                   </SectionContainer>
                 )}
@@ -295,8 +255,8 @@ const PreviousEntriesPage: React.FunctionComponent = () => {
                   <Typography>Minutes Exercise: {entry.exercise}</Typography>
                 </SectionContainer>
               )}
-              {entry.entry_content && (
-                <MarkdownComponent view="view" value={entry.entry_content} />
+              {entry.entryContent && (
+                <MarkdownComponent view="view" value={entry.entryContent} />
               )}
               <EntryFooterContainer>
                 <Button

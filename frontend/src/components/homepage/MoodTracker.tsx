@@ -3,6 +3,8 @@ import styled from "@emotion/styled"
 import { Line, LineChart, ResponsiveContainer, XAxis, YAxis } from "recharts"
 import { convertToMonthDay } from "../../utils/date-utils"
 import { Button, Paper, Typography, useTheme } from "@mui/material"
+import { useSelector } from "react-redux"
+import { State } from "../../store"
 
 const Container = styled(Paper)`
   background-color: white;
@@ -24,15 +26,21 @@ export type MoodDataType = {
   mood: number
 }
 
-interface MoodTrackerProps {
-  moodData: MoodDataType[]
-}
-
-const MoodTrackerComponent: React.FunctionComponent<MoodTrackerProps> = ({
-  moodData,
-}) => {
+const MoodTrackerComponent: React.FunctionComponent = () => {
   const theme = useTheme()
   const today = new Date().valueOf()
+  const moodData = useSelector((state: State) => {
+    let data: MoodDataType[] = []
+    for (let date in state.journal.entries) {
+      if (state.journal.entries[date].mood !== undefined) {
+        data.push({
+          date: new Date(date.replace(/-/g, "/")).valueOf(),
+          mood: parseInt(state.journal.entries[date].mood!),
+        })
+      }
+    }
+    return data
+  })
 
   const [timeFilter, setTimeFilter] = useState(
     new Date(new Date(today).setDate(new Date(today).getDate() - 7)).valueOf(),
