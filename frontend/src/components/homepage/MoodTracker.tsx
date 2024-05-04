@@ -29,18 +29,19 @@ export type MoodDataType = {
 const MoodTrackerComponent: React.FunctionComponent = () => {
   const theme = useTheme()
   const today = new Date().valueOf()
-  const moodData = useSelector((state: State) => {
-    let data: MoodDataType[] = []
-    for (let date in state.journal.entries) {
-      if (state.journal.entries[date].mood !== undefined) {
-        data.push({
+  const data = useSelector((state: State) => state.journal.entries)
+  const moodData = useMemo(() => {
+    let moodData: MoodDataType[] = []
+    for (let date in data) {
+      if (data[date].mood !== undefined) {
+        moodData.push({
           date: new Date(date.replace(/-/g, "/")).valueOf(),
-          mood: parseInt(state.journal.entries[date].mood!),
+          mood: parseInt(data[date].mood!),
         })
       }
     }
-    return data
-  })
+    return moodData
+  }, [data])
 
   const [timeFilter, setTimeFilter] = useState(
     new Date(new Date(today).setDate(new Date(today).getDate() - 7)).valueOf(),

@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useMemo } from "react"
 import styled from "@emotion/styled"
 import {
   convertToDayOfWeekMonthDay,
@@ -26,13 +26,14 @@ const Container = styled(Paper)`
 `
 
 const PreviousEntriesListComponent: React.FunctionComponent = () => {
-  const dates = useSelector((state: State) => {
+  const data = useSelector((state: State) => state.journal.entries)
+  const dates = useMemo(() => {
     let dates = []
-    for (let date in state.journal.entries) {
+    for (let date in data) {
       dates.push(date)
     }
     return dates
-  })
+  }, [data])
   return (
     <Container>
       <Typography variant="h5" sx={{ p: "20px", textAlign: "center" }}>

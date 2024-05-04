@@ -38,28 +38,30 @@ const ExerciseTrackerComponent: React.FunctionComponent = () => {
 
   const today = new Date().valueOf()
 
-  const data = useSelector((state: State) => {
-    let data: ExerciseDataType[] = []
-    for (let date in state.journal.entries) {
-      data.push({
+  const data = useSelector((state: State) => state.journal.entries)
+
+  const exerciseData = useMemo(() => {
+    let exerciseData: ExerciseDataType[] = []
+    for (let date in data) {
+      exerciseData.push({
         date: new Date(date.replace(/-/g, "/")).valueOf(),
         minutesExercise:
-          state.journal.entries[date].exercise !== undefined
-            ? parseInt(state.journal.entries[date].exercise!)
+          data[date].exercise !== undefined
+            ? parseInt(data[date].exercise!)
             : 0,
       })
     }
-    return data
-  })
+    return exerciseData
+  }, [data])
 
   const [timeFilter, setTimeFilter] = useState(
     new Date(new Date(today).setDate(new Date(today).getDate() - 7)).valueOf(),
   )
   const filteredData = useMemo(() => {
-    return data.filter((d) => {
+    return exerciseData.filter((d) => {
       return new Date(d.date) > new Date(timeFilter)
     })
-  }, [data, timeFilter])
+  }, [exerciseData, timeFilter])
 
   console.log(filteredData)
   const timeFilters = [

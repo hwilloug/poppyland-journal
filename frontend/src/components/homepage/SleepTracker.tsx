@@ -42,18 +42,19 @@ const SleepTrackerComponent: React.FunctionComponent = () => {
   )
   const today = new Date().valueOf()
 
-  const sleepData = useSelector((state: State) => {
-    let data: SleepDataType[] = []
-    for (let date in state.journal.entries) {
-      if (state.journal.entries[date].hoursSleep !== undefined) {
-        data.push({
+  const data = useSelector((state: State) => state.journal.entries)
+  const sleepData = useMemo(() => {
+    let sleepData: SleepDataType[] = []
+    for (let date in data) {
+      if (data[date].hoursSleep !== undefined) {
+        sleepData.push({
           date: new Date(date.replace(/-/g, "/")).valueOf(),
-          hoursSleep: parseInt(state.journal.entries[date].hoursSleep!),
+          hoursSleep: parseInt(data[date].hoursSleep!),
         })
       }
     }
-    return data
-  })
+    return sleepData
+  }, [data])
 
   const [timeFilter, setTimeFilter] = useState(
     new Date(new Date(today).setDate(new Date(today).getDate() - 7)).valueOf(),
