@@ -1,27 +1,17 @@
-import React, { useEffect, useMemo, useState } from "react"
+import React from "react"
 import styled from "@emotion/styled"
 import SideBarComponent from "../components/shared-components/SideBar"
-import MoodTrackerComponent, {
-  MoodDataType,
-} from "../components/homepage/MoodTracker"
+import MoodTrackerComponent from "../components/homepage/MoodTracker"
 import PreviousEntriesListComponent from "../components/homepage/PreviousEntriesList"
-import SleepTrackerComponent, {
-  SleepDataType,
-} from "../components/homepage/SleepTracker"
-import { apiEndpoints } from "../api-endpoints"
-import axios from "axios"
+
 import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react"
 import LoadingComponent from "../components/shared-components/Loading"
 import { useDispatch, useSelector } from "react-redux"
 import { getProfile } from "../utils/get-profile"
-import ExerciseTrackerComponent, {
-  ExerciseDataType,
-} from "../components/homepage/ExerciseTracker"
 import { Paper, Typography } from "@mui/material"
 import { deepPurple } from "@mui/material/colors"
 import { convertToShortDate } from "../utils/date-utils"
-import { State, journalActions } from "../store"
-import { EntryResponseType } from "../server/get-entries-api"
+import { State } from "../store"
 
 const PageContainer = styled.div`
   margin: 0px;
@@ -74,8 +64,6 @@ const HomePage: React.FunctionComponent = () => {
           </DailyAffiramtionContainer>
         )}
       {preferences.showMood && <MoodTrackerComponent />}
-      {preferences.showSleep && <SleepTrackerComponent />}
-      {preferences.showExercise && <ExerciseTrackerComponent />}
       <PreviousEntriesListComponent />
     </HomePageContainer>
   )
