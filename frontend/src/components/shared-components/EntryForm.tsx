@@ -1,45 +1,25 @@
 import { useAuth0 } from "@auth0/auth0-react"
 import styled from "@emotion/styled"
 import dayjs, { Dayjs } from "dayjs"
-import { ReactNode, useEffect, useMemo, useState } from "react"
-import { apiEndpoints } from "../../api-endpoints"
-import axios from "axios"
-import { EntryResponseType } from "../../server/get-entries-api"
 import MoodEntryComponent from "../todaysentrypage/MoodEntry"
 import SleepEntryComponent from "../todaysentrypage/SleepEntry"
 import DailyAffirmationComponent from "../todaysentrypage/DailyAffirmation"
 import DailyGoalComponent from "../todaysentrypage/DailyGoal"
-import DailyQuestionComponent from "../todaysentrypage/DailyQuestion"
+import DailyQuestionComponent, {
+  getQuestion,
+} from "../todaysentrypage/DailyQuestion"
 import MentalHealthEntryComponent from "../todaysentrypage/MentalHealthEntry"
 import SubstanceEntryComponent from "../todaysentrypage/SubstanceEntry"
 import EntryComponent from "../todaysentrypage/Entry"
-import {
-  Alert,
-  Button,
-  SelectChangeEvent,
-  Snackbar,
-  Typography,
-} from "@mui/material"
+import { SelectChangeEvent, Typography } from "@mui/material"
 import LoadingComponent from "./Loading"
 import { useDispatch, useSelector } from "react-redux"
 import { State, journalActions } from "../../store"
 import { getProfile } from "../../utils/get-profile"
 import ExerciseEntryComponent from "../todaysentrypage/ExerciseEntry"
-import { FormPrompt } from "./FormPrompt"
 import { JournalEntry } from "../../types/journal-types"
-
-const SubmitContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
-  bottom: 50px;
-  right: 50px;
-  position: fixed;
-`
-
-const MedicationsContainer = styled.div`
-  margin: 20px;
-`
+import { ReactNode, useEffect, useMemo, useState } from "react"
+const _ = require("lodash")
 
 interface EntryFormProps {
   date: string
@@ -78,14 +58,28 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
       }
     }
   }, [entries])
+  const prevFormStateLoaded = useMemo(() => {
+    return (
+      loadedEntry.mood ||
+      loadedEntry.hoursSleep ||
+      loadedEntry.wakeUpTime ||
+      loadedEntry.bedTime ||
+      loadedEntry.sleepQuality ||
+      loadedEntry.affirmation ||
+      loadedEntry.mentalHealth.length ||
+      loadedEntry.substances.length ||
+      loadedEntry.entryContent ||
+      loadedEntry.goal ||
+      loadedEntry.dailyQuestionA ||
+      loadedEntry.exercise !== "0"
+    )
+  }, [loadedEntry])
 
   const dateFull = new Date(date.replace(/-/g, "/")).toLocaleDateString(
     "en-US",
     { dateStyle: "full" },
   )
 
-  const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false)
-  const [snackbarMessage, setSnackbarMessage] = useState<string>("")
   const [mood, setMood] = useState<number | undefined>(
     loadedEntry.mood ? parseInt(loadedEntry.mood) : undefined,
   )
@@ -95,8 +89,8 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
   const [wakeUpTime, setWakeUpTime] = useState<Dayjs | null>(
     loadedEntry.wakeUpTime ? dayjs(loadedEntry.wakeUpTime) : null,
   )
-  const [hoursSleep, setHoursSleep] = useState<number | undefined>(
-    loadedEntry.hoursSleep ? parseInt(loadedEntry.hoursSleep) : undefined,
+  const [hoursSleep, setHoursSleep] = useState<string | undefined>(
+    loadedEntry.hoursSleep ? loadedEntry.hoursSleep : undefined,
   )
   const [sleepQuality, setSleepQuality] = useState<string | undefined>(
     loadedEntry.sleepQuality || undefined,
@@ -115,16 +109,37 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
     loadedEntry.entryContent || undefined,
   )
   const [dailyQuestionQ, setDailyQuestionQ] = useState<string | undefined>(
-    loadedEntry.dailyQuestionQ || undefined,
+    loadedEntry.dailyQuestionQ || getQuestion(new Date(date).getDay()),
   )
   const [dailyQuestionA, setDailyQuestionA] = useState<string | undefined>(
     loadedEntry.dailyQuestionA || undefined,
   )
-  const [minutesExercise, setMinutesExercise] = useState<number | undefined>(
-    loadedEntry.exercise ? parseInt(loadedEntry.exercise) : undefined,
+  const [minutesExercise, setMinutesExercise] = useState<number>(
+    loadedEntry.exercise ? parseInt(loadedEntry.exercise) : 0,
   )
 
-  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false)
+  const [stateLoaded, setStateLoaded] = useState(false)
+
+  const loadForm = (entry: JournalEntry) => {
+    setMood(entry.mood ? parseInt(entry.mood) : undefined)
+    setBedTime(entry.bedTime ? dayjs(entry.bedTime) : null)
+    setWakeUpTime(entry.wakeUpTime ? dayjs(entry.wakeUpTime) : null)
+    setHoursSleep(entry.hoursSleep)
+    setAffirmation(entry.affirmation)
+    setGoal(entry.goal)
+    setMentalHealth(entry.mentalHealth)
+    setSubstances(entry.substances)
+    setEntryContent(entry.entryContent)
+    setDailyQuestionA(entry.dailyQuestionA)
+    setDailyQuestionQ(entry.dailyQuestionQ)
+    setSleepQuality(entry.sleepQuality)
+    setMinutesExercise(entry.exercise ? parseInt(entry.exercise) : 0)
+    setStateLoaded(true)
+  }
+
+  useEffect(() => {
+    loadForm(loadedEntry)
+  }, [loadedEntry])
 
   useEffect(() => {
     if (bedTime && wakeUpTime) {
@@ -137,7 +152,7 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
       if (s < 0) {
         s = s + 24
       }
-      setHoursSleep(s)
+      setHoursSleep(s.toFixed(2))
     }
   }, [bedTime, wakeUpTime])
 
@@ -185,17 +200,84 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
         dailyQuestionQ,
         exercise: minutesExercise?.toString(),
       })
-      setSnackbarMessage("Successfully saved entry!")
-      setSnackbarOpen(true)
-      setHasUnsavedChanges(false)
     } catch (e) {
       console.log(e)
     }
   }
 
-  const handleSnackbarClose = () => {
-    setSnackbarOpen(false)
-  }
+  useEffect(() => {
+    if (prevFormStateLoaded && !isLoading) {
+      if (
+        stateLoaded &&
+        (mood ||
+          hoursSleep ||
+          wakeUpTime ||
+          bedTime ||
+          sleepQuality ||
+          affirmation ||
+          mentalHealth.length ||
+          substances.length ||
+          entryContent ||
+          goal ||
+          dailyQuestionA ||
+          minutesExercise !== 0)
+      ) {
+        if (
+          loadedEntry.mood != mood?.toString() ||
+          loadedEntry.hoursSleep != hoursSleep?.toString() ||
+          loadedEntry.wakeUpTime != wakeUpTime?.toString() ||
+          loadedEntry.bedTime != bedTime?.toString() ||
+          loadedEntry.sleepQuality != sleepQuality ||
+          loadedEntry.affirmation != affirmation ||
+          !_.isEqual(loadedEntry.mentalHealth, mentalHealth) ||
+          !_.isEqual(loadedEntry.substances, substances) ||
+          loadedEntry.entryContent != entryContent ||
+          loadedEntry.goal != goal ||
+          loadedEntry.dailyQuestionA != dailyQuestionA ||
+          loadedEntry.dailyQuestionQ != dailyQuestionQ ||
+          loadedEntry.exercise != minutesExercise.toString()
+        ) {
+          onSubmit()
+        }
+      }
+    } else {
+      if (
+        mood ||
+        hoursSleep ||
+        wakeUpTime ||
+        bedTime ||
+        sleepQuality ||
+        affirmation ||
+        mentalHealth.length ||
+        substances.length ||
+        entryContent ||
+        goal ||
+        dailyQuestionA ||
+        minutesExercise !== 0
+      ) {
+        if (!isLoading) {
+          onSubmit()
+        }
+      }
+    }
+  }, [
+    stateLoaded,
+    prevFormStateLoaded,
+    loadedEntry,
+    mood,
+    hoursSleep,
+    wakeUpTime,
+    bedTime,
+    sleepQuality,
+    affirmation,
+    mentalHealth,
+    substances,
+    entryContent,
+    goal,
+    dailyQuestionA,
+    dailyQuestionQ,
+    minutesExercise,
+  ])
 
   if (isLoading) {
     return <LoadingComponent />
@@ -203,7 +285,6 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
 
   return (
     <>
-      <FormPrompt hasUnsavedChanges={hasUnsavedChanges} />
       <Typography variant="h5" align="center">
         {dateFull}
       </Typography>
@@ -217,30 +298,20 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
           wakeUpTime={wakeUpTime}
           sleepQuality={sleepQuality}
           hoursSleep={hoursSleep}
-          setHasUnsavedChanges={setHasUnsavedChanges}
         />
       )}
       {preferences.showDailyAffirmation && (
         <DailyAffirmationComponent
           affirmation={affirmation}
           onChange={setAffirmation}
-          setHasUnsavedChanges={setHasUnsavedChanges}
         />
       )}
       {preferences.showDailyGoal && (
-        <DailyGoalComponent
-          goal={goal}
-          onChange={setGoal}
-          setHasUnsavedChanges={setHasUnsavedChanges}
-        />
+        <DailyGoalComponent goal={goal} onChange={setGoal} />
       )}
       <Typography variant="h5">Evening</Typography>
       {preferences.showMood && (
-        <MoodEntryComponent
-          mood={mood}
-          onChange={setMood}
-          setHasUnsavedChanges={setHasUnsavedChanges}
-        />
+        <MoodEntryComponent mood={mood} onChange={setMood} />
       )}
       {preferences.showDailyQuestion && (
         <DailyQuestionComponent
@@ -249,7 +320,6 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
           onChange={setDailyQuestionA}
           setQuestion={setDailyQuestionQ}
           date={date}
-          setHasUnsavedChanges={setHasUnsavedChanges}
         />
       )}
 
@@ -257,14 +327,12 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
         <MentalHealthEntryComponent
           mentalHealth={[...mentalHealth]}
           onChange={modifyMentalHealth}
-          setHasUnsavedChanges={setHasUnsavedChanges}
         />
       )}
       {preferences.showSubstance && (
         <SubstanceEntryComponent
           substances={[...substances]}
           onChange={modifySubstances}
-          setHasUnsavedChanges={setHasUnsavedChanges}
         />
       )}
 
@@ -272,37 +340,10 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
         <ExerciseEntryComponent
           minutesExercise={minutesExercise}
           onChange={modifyMinutesExercise}
-          setHasUnsavedChanges={setHasUnsavedChanges}
         />
       )}
 
-      <EntryComponent
-        content={entryContent}
-        onChange={setEntryContent}
-        setHasUnsavedChanges={setHasUnsavedChanges}
-      />
-
-      {/* {currentMedications.length && (
-        <MedicationsContainer>
-          Current Medications: {currentMedications.join(", ")}{" "}
-          <Link to="/medications">(Edit)</Link>
-        </MedicationsContainer>
-      )} */}
-
-      <SubmitContainer>
-        <Button color="primary" variant="contained" onClick={onSubmit}>
-          Save
-        </Button>
-      </SubmitContainer>
-      <Snackbar
-        open={snackbarOpen}
-        autoHideDuration={6000}
-        onClose={handleSnackbarClose}
-      >
-        <Alert onClose={handleSnackbarClose} severity="success">
-          {snackbarMessage}
-        </Alert>
-      </Snackbar>
+      <EntryComponent content={entryContent} onChange={setEntryContent} />
     </>
   )
 }

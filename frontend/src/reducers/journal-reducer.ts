@@ -18,6 +18,14 @@ export function journalReducer(
           ...action.payload.entries,
         },
       }
+    case JournalActionTypes.SET_ENTRY:
+      return {
+        ...state,
+        entries: {
+          ...state.entries,
+          [action.payload.date]: action.payload.entry,
+        },
+      }
     case JournalActionTypes.SET_IS_LOADING:
       return {
         ...state,

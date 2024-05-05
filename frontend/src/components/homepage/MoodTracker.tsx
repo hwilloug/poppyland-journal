@@ -158,7 +158,6 @@ const MoodTrackerComponent: React.FunctionComponent = () => {
         visible: false,
       })
     }
-    console.log(substanceSeries)
     return substanceSeries
   }, [filteredSubstanceData])
 

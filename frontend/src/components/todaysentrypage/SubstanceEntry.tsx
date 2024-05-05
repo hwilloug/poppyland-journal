@@ -14,13 +14,11 @@ const SubstancesContainer = styled.div`
 interface SubstanceEntryProps {
   substances: string[]
   onChange: Function
-  setHasUnsavedChanges: Function
 }
 
 const SubstanceEntryComponent: React.FunctionComponent<SubstanceEntryProps> = ({
   substances,
   onChange,
-  setHasUnsavedChanges,
 }) => {
   const substancesList = [
     "Nicotine (Cigarrette)",
@@ -46,7 +44,6 @@ const SubstanceEntryComponent: React.FunctionComponent<SubstanceEntryProps> = ({
             label={s}
             onChange={(e: any) => {
               onChange(e)
-              setHasUnsavedChanges(true)
             }}
           />
         ))}

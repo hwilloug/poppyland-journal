@@ -9,6 +9,7 @@ import styled from "@emotion/styled"
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs"
 import { MenuItem, Select, Typography } from "@mui/material"
 import { EntrySectionContainer } from "../shared-components/styled-components"
+import { useCallback } from "react"
 
 const SleepTimeContainer = styled.div`
   display: flex;
@@ -31,8 +32,7 @@ interface SleepEntryProps {
   bedTime?: Dayjs | null
   wakeUpTime?: Dayjs | null
   sleepQuality?: string | null
-  hoursSleep?: number | null
-  setHasUnsavedChanges: Function
+  hoursSleep?: string | null
 }
 
 const SleepEntryComponent: React.FunctionComponent<SleepEntryProps> = ({
@@ -43,7 +43,6 @@ const SleepEntryComponent: React.FunctionComponent<SleepEntryProps> = ({
   wakeUpTime,
   sleepQuality,
   hoursSleep,
-  setHasUnsavedChanges,
 }) => {
   return (
     <EntrySectionContainer>
@@ -58,7 +57,6 @@ const SleepEntryComponent: React.FunctionComponent<SleepEntryProps> = ({
             value={bedTime}
             onChange={(value: Dayjs | null) => {
               onBedTimeChange(value)
-              setHasUnsavedChanges(true)
             }}
             viewRenderers={{
               hours: renderTimeViewClock,
@@ -72,7 +70,6 @@ const SleepEntryComponent: React.FunctionComponent<SleepEntryProps> = ({
             value={wakeUpTime}
             onChange={(value: Dayjs | null) => {
               onWakeUpTimeChange(value)
-              setHasUnsavedChanges(true)
             }}
             viewRenderers={{
               hours: renderTimeViewClock,
@@ -91,9 +88,9 @@ const SleepEntryComponent: React.FunctionComponent<SleepEntryProps> = ({
           autoWidth={false}
           style={{ width: "200px" }}
           onChange={(e) => {
-            onSleepQualityChange(e.target.value)
-            setHasUnsavedChanges(true)
+            onSleepQualityChange(e.target.value!)
           }}
+          key={sleepQuality ? sleepQuality : "sleep-quality"}
           sx={{ backgroundColor: "white" }}
         >
           <MenuItem value="Good">Good</MenuItem>

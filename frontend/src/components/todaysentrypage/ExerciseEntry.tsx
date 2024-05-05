@@ -1,6 +1,4 @@
 import styled from "@emotion/styled"
-import { SectionHeader } from "../../pages/TodaysEntryPage"
-import { unstable_useNumberInput as useNumberInput } from "@mui/base"
 import { TextField, Typography } from "@mui/material"
 import { EntrySectionContainer } from "../shared-components/styled-components"
 
@@ -11,13 +9,11 @@ const InputLabel = styled.div``
 interface ExerciseEntryProps {
   minutesExercise?: number
   onChange: Function
-  setHasUnsavedChanges: Function
 }
 
 const ExerciseEntryComponent: React.FunctionComponent<ExerciseEntryProps> = ({
   minutesExercise,
   onChange,
-  setHasUnsavedChanges,
 }) => {
   return (
     <EntrySectionContainer>
@@ -35,7 +31,6 @@ const ExerciseEntryComponent: React.FunctionComponent<ExerciseEntryProps> = ({
           defaultValue={0}
           onChange={(e) => {
             onChange(e.target.value)
-            setHasUnsavedChanges(true)
           }}
           sx={{ backgroundColor: "white", width: "150px" }}
         />

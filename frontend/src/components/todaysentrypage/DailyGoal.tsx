@@ -7,13 +7,11 @@ import { Typography } from "@mui/material"
 interface DailyGoalProps {
   goal?: string
   onChange: Function
-  setHasUnsavedChanges: Function
 }
 
 const DailyGoalComponent: React.FunctionComponent<DailyGoalProps> = ({
   goal,
   onChange,
-  setHasUnsavedChanges,
 }) => {
   return (
     <EntrySectionContainer>
@@ -25,7 +23,6 @@ const DailyGoalComponent: React.FunctionComponent<DailyGoalProps> = ({
         value={goal}
         onChange={(e: any) => {
           onChange(e)
-          setHasUnsavedChanges(true)
         }}
         height={100}
         preview="edit"

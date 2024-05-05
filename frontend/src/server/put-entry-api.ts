@@ -40,10 +40,9 @@ export const call = async (
         },
       },
     )
-    if (response.status == 201) {
+    if (response.status == 200) {
       return response.data
     } else {
-      console.log("something went wrong")
       return response.data
     }
   } catch (e: any) {

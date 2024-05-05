@@ -17,13 +17,11 @@ const MoodContainer = styled.div`
 interface MoodEntryProps {
   mood?: number
   onChange: Function
-  setHasUnsavedChanges: Function
 }
 
 const MoodEntryComponent: React.FunctionComponent<MoodEntryProps> = ({
   mood,
   onChange,
-  setHasUnsavedChanges,
 }) => {
   return (
     <EntrySectionContainer>
@@ -37,7 +35,6 @@ const MoodEntryComponent: React.FunctionComponent<MoodEntryProps> = ({
           style={mood === 0 ? { border: "1px solid black" } : {}}
           onClick={() => {
             onChange(0)
-            setHasUnsavedChanges(true)
           }}
         />
         <SentimentDissatisfiedIcon
@@ -46,7 +43,6 @@ const MoodEntryComponent: React.FunctionComponent<MoodEntryProps> = ({
           style={mood === 1 ? { border: "1px solid black" } : {}}
           onClick={() => {
             onChange(1)
-            setHasUnsavedChanges(true)
           }}
         />
         <SentimentNeutralIcon
@@ -55,7 +51,6 @@ const MoodEntryComponent: React.FunctionComponent<MoodEntryProps> = ({
           style={mood === 2 ? { border: "1px solid black" } : {}}
           onClick={() => {
             onChange(2)
-            setHasUnsavedChanges(true)
           }}
         />
         <SentimentSatisfiedIcon
@@ -64,7 +59,6 @@ const MoodEntryComponent: React.FunctionComponent<MoodEntryProps> = ({
           style={mood === 3 ? { border: "1px solid black" } : {}}
           onClick={() => {
             onChange(3)
-            setHasUnsavedChanges(true)
           }}
         />
         <SentimentVerySatisfiedIcon
@@ -76,7 +70,6 @@ const MoodEntryComponent: React.FunctionComponent<MoodEntryProps> = ({
           }
           onClick={() => {
             onChange(4)
-            setHasUnsavedChanges(true)
           }}
         />
       </MoodContainer>

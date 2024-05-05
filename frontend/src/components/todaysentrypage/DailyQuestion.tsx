@@ -2,55 +2,42 @@ import MarkdownComponent from "../shared-components/Markdown"
 import { EntrySectionContainer } from "../shared-components/styled-components"
 import { Typography } from "@mui/material"
 
+export const getQuestion = (day: number) => {
+  switch (day) {
+    case 0: // Sunday
+      return "Say something positive about yourself."
+    case 1: // Monday
+      return "Are you taking care of your basic needs? How can you improve?"
+    case 2: // Tuesday
+      return "Are you avoiding anything right now?"
+    case 3: // Wednesday
+      return "What's something you're looking forward to?"
+    case 4: // Thursday
+      return "Are you taking anything for granted? What are you grateful for?"
+    case 5: // Friday
+      return "What are you doing for self-care?"
+    case 6: // Saturday
+      return "What was hard for you this week?"
+  }
+}
+
 interface DailyQuestionProps {
   date?: string
   question?: string
   answer?: string
   onChange: Function
   setQuestion: Function
-  setHasUnsavedChanges: Function
 }
 
 const DailyQuestionComponent: React.FunctionComponent<DailyQuestionProps> = ({
   question,
   answer,
   onChange,
-  setQuestion,
   date,
-  setHasUnsavedChanges,
 }) => {
   const day = date
     ? new Date(date?.replace(/-/g, "/")).getDay()
     : new Date().getDay()
-  let todaysQuestion
-  switch (day) {
-    case 0: // Sunday
-      todaysQuestion = "Say something positive about yourself."
-      break
-    case 1: // Monday
-      todaysQuestion =
-        "Are you taking care of your basic needs? How can you improve?"
-      break
-    case 2: // Tuesday
-      todaysQuestion = "Are you avoiding anything right now?"
-      break
-    case 3: // Wednesday
-      todaysQuestion = "What's something you're looking forward to?"
-      break
-    case 4: // Thursday
-      todaysQuestion =
-        "Are you taking anything for granted? What are you grateful for?"
-      break
-    case 5: // Friday
-      todaysQuestion = "What are you doing for self-care?"
-      break
-    case 6: // Saturday
-      todaysQuestion = "What was hard for you this week?"
-      break
-  }
-  if (question === undefined || question === null) {
-    setQuestion(todaysQuestion)
-  }
 
   return (
     <EntrySectionContainer>
@@ -63,7 +50,6 @@ const DailyQuestionComponent: React.FunctionComponent<DailyQuestionProps> = ({
         value={answer}
         onChange={(e: any) => {
           onChange(e)
-          setHasUnsavedChanges(true)
         }}
         height={100}
         preview="edit"

@@ -18,7 +18,9 @@ export function* putEntrySaga(action: any) {
       action.payload.date,
       action.payload.entry,
     )
-    yield put(journalActions.getEntries(action.payload.token))
+    yield put(
+      journalActions.setEntry(action.payload.date, action.payload.entry),
+    )
   } catch (e) {
     console.error(e)
   }
