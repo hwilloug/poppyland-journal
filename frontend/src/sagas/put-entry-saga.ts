@@ -1,15 +1,12 @@
-import { call, put } from "redux-saga/effects"
-import { GetEntriesAPI, PutEntryAPI } from "../server"
+import { call, delay, put } from "redux-saga/effects"
+import { PutEntryAPI } from "../server"
 import { journalActions } from "../store"
-import { EntryResponseType } from "../server/get-entries-api"
-import {
-  JournalEntries,
-  JournalEntry,
-  JournalState,
-} from "../types/journal-types"
 import { PutEntryResponseType } from "../server/put-entry-api"
 
 export function* putEntrySaga(action: any) {
+  yield put(journalActions.setIsSaving(true))
+  yield put(journalActions.setEntry(action.payload.date, action.payload.entry))
+  yield delay(500)
   try {
     const response: PutEntryResponseType = yield call(
       PutEntryAPI.call,
@@ -18,10 +15,9 @@ export function* putEntrySaga(action: any) {
       action.payload.date,
       action.payload.entry,
     )
-    yield put(
-      journalActions.setEntry(action.payload.date, action.payload.entry),
-    )
   } catch (e) {
     console.error(e)
+  } finally {
+    yield put(journalActions.setIsSaving(false))
   }
 }

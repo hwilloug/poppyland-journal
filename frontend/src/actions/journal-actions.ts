@@ -8,6 +8,7 @@ export const JournalActionTypes = {
   PUT_ENTRY: "@journal/put-entry",
   DELETE_ENTRY: "@journal/delete-entry",
   SET_IS_LOADING: "@journal/set-is-loading",
+  SET_IS_SAVING: "@journal/set-is-saving",
 }
 
 export const createJournalActions = (dispatch: any) => ({
@@ -33,4 +34,6 @@ export const createJournalActions = (dispatch: any) => ({
     createAction(dispatch, JournalActionTypes.DELETE_ENTRY, { token, date }),
   setIsLoading: (isLoading: boolean) =>
     createAction(dispatch, JournalActionTypes.SET_IS_LOADING, { isLoading }),
+  setIsSaving: (isSaving: boolean) =>
+    createAction(dispatch, JournalActionTypes.SET_IS_SAVING, { isSaving }),
 })

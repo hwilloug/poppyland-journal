@@ -11,15 +11,22 @@ import DailyQuestionComponent, {
 import MentalHealthEntryComponent from "../todaysentrypage/MentalHealthEntry"
 import SubstanceEntryComponent from "../todaysentrypage/SubstanceEntry"
 import EntryComponent from "../todaysentrypage/Entry"
-import { SelectChangeEvent, Typography } from "@mui/material"
+import { CircularProgress, SelectChangeEvent, Typography } from "@mui/material"
 import LoadingComponent from "./Loading"
 import { useDispatch, useSelector } from "react-redux"
 import { State, journalActions } from "../../store"
 import { getProfile } from "../../utils/get-profile"
 import ExerciseEntryComponent from "../todaysentrypage/ExerciseEntry"
 import { JournalEntry } from "../../types/journal-types"
+import CheckCircleIcon from "@mui/icons-material/CheckCircle"
 import { ReactNode, useEffect, useMemo, useState } from "react"
 const _ = require("lodash")
+
+const SavingContainer = styled("div")({
+  position: "fixed",
+  bottom: "20px",
+  right: "20px",
+})
 
 interface EntryFormProps {
   date: string
@@ -33,6 +40,8 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
   if (!userId) {
     getProfile(user!.sub!, dispatch, getAccessTokenSilently)
   }
+
+  const isSaving = useSelector((state: State) => state.journal.isSaving)
 
   const entries = useSelector((state: State) => state.journal.entries)
   const isLoading = useSelector((state: State) => state.journal.isLoading)
@@ -344,6 +353,11 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
       )}
 
       <EntryComponent content={entryContent} onChange={setEntryContent} />
+
+      <SavingContainer>
+        {isSaving && <CircularProgress color="primary" />}
+        {!isSaving && <CheckCircleIcon color="primary" fontSize="large" />}
+      </SavingContainer>
     </>
   )
 }

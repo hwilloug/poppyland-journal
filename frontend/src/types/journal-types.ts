@@ -1,5 +1,6 @@
 export interface JournalState {
   isLoading: boolean
+  isSaving: boolean
   entries: JournalEntries
 }
 

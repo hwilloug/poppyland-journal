@@ -3,6 +3,7 @@ import { JournalState } from "../types/journal-types"
 
 const initialState: JournalState = {
   isLoading: true,
+  isSaving: false,
   entries: {},
 }
 
@@ -30,6 +31,11 @@ export function journalReducer(
       return {
         ...state,
         isLoading: action.payload.isLoading,
+      }
+    case JournalActionTypes.SET_IS_SAVING:
+      return {
+        ...state,
+        isSaving: action.payload.isSaving,
       }
     default:
       return state
