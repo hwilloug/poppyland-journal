@@ -140,7 +140,9 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
     setSubstances(entry.substances)
     setEntryContent(entry.entryContent)
     setDailyQuestionA(entry.dailyQuestionA)
-    setDailyQuestionQ(entry.dailyQuestionQ)
+    setDailyQuestionQ(
+      entry.dailyQuestionQ || getQuestion(new Date(date).getDay()),
+    )
     setSleepQuality(entry.sleepQuality)
     setMinutesExercise(entry.exercise ? parseInt(entry.exercise) : 0)
     setStateLoaded(true)
