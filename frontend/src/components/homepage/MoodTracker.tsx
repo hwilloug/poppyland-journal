@@ -67,7 +67,7 @@ const MoodTrackerComponent: React.FunctionComponent = () => {
       if (data[date].hoursSleep !== undefined) {
         sleepData.push({
           x: new Date(date.replace(/-/g, "/")).valueOf(),
-          y: parseInt(data[date].hoursSleep!),
+          y: parseFloat(data[date].hoursSleep!),
         })
       }
     }
