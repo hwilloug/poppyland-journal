@@ -5,7 +5,7 @@ Parameters:
   Stage:
     Type: String
     Default: dev
-  AppName: 
+  AppName:
     Type: String
     Default: poppyland-journal
   Domain:
@@ -26,9 +26,9 @@ Parameters:
 
 Resources:
   WebAppS3Bucket:
-    Type: 'AWS::S3::Bucket'
+    Type: AWS::S3::Bucket
     Properties:
-      BucketName: !Sub "${AppName}-frontend"
+      BucketName: !Sub ${AppName}-frontend
       PublicAccessBlockConfiguration:
         BlockPublicAcls: true
         BlockPublicPolicy: true
@@ -41,14 +41,14 @@ Resources:
       Bucket: !Ref WebAppS3Bucket
       PolicyDocument:
         Id: PolicyForCloudFrontPrivateContent
-        Version: "2012-10-17"
+        Version: '2012-10-17'
         Statement:
           - Sid: AllowCloudFrontServicePrincipal
             Effect: Allow
             Principal:
               Service: cloudfront.amazonaws.com
             Action: s3:GetObject
-            Resource: !Sub "arn:aws:s3:::${AppName}-frontend/*"
+            Resource: !Sub arn:aws:s3:::${AppName}-frontend/*
             Condition:
               StringEquals:
                 AWS:SourceArn: !Sub arn:aws:cloudfront::${AWS::AccountId}:distribution/${CloudFrontDistribution}
@@ -59,10 +59,10 @@ Resources:
       DistributionConfig:
         Origins:
           - DomainName: !GetAtt WebAppS3Bucket.RegionalDomainName
-            Id: !Sub "${AppName}-web-app-s3-origin"
+            Id: !Sub ${AppName}-web-app-s3-origin
             OriginAccessControlId: !GetAtt WebAppOriginAccessControl.Id
             S3OriginConfig: {}
-        Enabled: "true"
+        Enabled: 'true'
         Aliases:
           - !Ref Domain
         ViewerCertificate:
@@ -75,7 +75,7 @@ Resources:
             - GET
             - HEAD
             - OPTIONS
-          TargetOriginId: !Sub "${AppName}-web-app-s3-origin"
+          TargetOriginId: !Sub ${AppName}-web-app-s3-origin
           CachePolicyId: 658327ea-f89d-4fab-a63d-7e88639e58f6 # CachingOptimized
           OriginRequestPolicyId: 88a5eaf4-2fd4-4709-b370-b4c650ea3fcf # CORS-S3Origin
           ViewerProtocolPolicy: redirect-to-https
@@ -92,49 +92,49 @@ Resources:
     Type: AWS::CloudFront::OriginAccessControl
     Properties:
       OriginAccessControlConfig:
-        Name: !Sub "${AppName}-web-app-origin-access-control"
+        Name: !Sub ${AppName}-web-app-origin-access-control
         OriginAccessControlOriginType: s3
         SigningBehavior: always
         SigningProtocol: sigv4
-  
+
   InvalidationLambdaRole:
     Type: AWS::IAM::Role
     Properties:
       RoleName: invalidation-lambda-role
-      AssumeRolePolicyDocument: 
-        Version: "2012-10-17"
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
         Statement:
           - Effect: Allow
             Principal:
               Service:
                 - lambda.amazonaws.com
             Action:
-              - "sts:AssumeRole"
+              - sts:AssumeRole
       Policies:
         - PolicyName: codepipeline-job-policy
           PolicyDocument:
-            Version: "2012-10-17"
+            Version: '2012-10-17'
             Statement:
               - Effect: Allow
                 Sid: CodePipelinePutJobResult
                 Action:
-                  - "codepipeline:PutJobFailureResult"
-                  - "codepipeline:PutJobSuccessResult"
-                Resource: "*"
+                  - codepipeline:PutJobFailureResult
+                  - codepipeline:PutJobSuccessResult
+                Resource: '*'
         - PolicyName: cloudfront-invalidation-policy
           PolicyDocument:
-            Version: "2012-10-17"
+            Version: '2012-10-17'
             Statement:
               - Effect: Allow
                 Sid: InvalidateCloudfront
                 Action:
-                  - "cloudfront:CreateInvalidation"
-                Resource: "*"
+                  - cloudfront:CreateInvalidation
+                Resource: '*'
 
   InvalidationLambda:
     Type: AWS::Lambda::Function
     Properties:
-      FunctionName: !Sub "${AppName}-cloudfront-invalidation"
+      FunctionName: !Sub ${AppName}-cloudfront-invalidation
       Runtime: python3.7
       Handler: index.lambda_handler
       Role: !GetAtt InvalidationLambdaRole.Arn
@@ -142,10 +142,8 @@ Resources:
         ZipFile: |
           import json
           import boto3
-
           code_pipeline = boto3.client("codepipeline")
           cloud_front = boto3.client("cloudfront")
-
           def lambda_handler(event, context):
               job_id = event["CodePipeline.job"]["id"]
               try:
@@ -198,50 +196,46 @@ Resources:
       SSESpecification:
         SSEEnabled: true
         SSEType: KMS
-      AttributeDefinitions: 
-        - 
-          AttributeName: "UserId"
-          AttributeType: "S"
-        - 
-          AttributeName: "Date"
-          AttributeType: "S"
-      KeySchema: 
-        - 
-          AttributeName: "UserId"
-          KeyType: "HASH"
-        - 
-          AttributeName: "Date"
-          KeyType: "RANGE"
+      AttributeDefinitions:
+        - AttributeName: UserId
+          AttributeType: S
+        - AttributeName: Date
+          AttributeType: S
+      KeySchema:
+        - AttributeName: UserId
+          KeyType: HASH
+        - AttributeName: Date
+          KeyType: RANGE
 
   JournalLambdaRole:
     Type: AWS::IAM::Role
     Properties:
       RoleName: journal-lambda-role
-      AssumeRolePolicyDocument: 
-        Version: "2012-10-17"
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
         Statement:
           - Effect: Allow
             Principal:
               Service:
                 - lambda.amazonaws.com
             Action:
-              - "sts:AssumeRole"
+              - sts:AssumeRole
       Policies:
         - PolicyName: journal-lambda-policy
           PolicyDocument:
-            Version: "2012-10-17"
+            Version: '2012-10-17'
             Statement:
               - Effect: Allow
                 Sid: LambdaDynamoDBAccess
                 Action:
-                  - "dynamodb:BatchGetItem"
-                  - "dynamodb:BatchWriteItem"
-                  - "dynamodb:DeleteItem"
-                  - "dynamodb:GetItem"
-                  - "dynamodb:PutItem"
-                  - "dynamodb:Query"
-                  - "dynamodb:Scan"
-                  - "dynamodb:UpdateItem"
+                  - dynamodb:BatchGetItem
+                  - dynamodb:BatchWriteItem
+                  - dynamodb:DeleteItem
+                  - dynamodb:GetItem
+                  - dynamodb:PutItem
+                  - dynamodb:Query
+                  - dynamodb:Scan
+                  - dynamodb:UpdateItem
                 Resource: !GetAtt EntryTable.Arn
 
   JWTLayer:
@@ -258,7 +252,7 @@ Resources:
   PutEntryLambda:
     Type: AWS::Lambda::Function
     Properties:
-      FunctionName: !Sub "${AppName}-put-entry"
+      FunctionName: !Sub ${AppName}-put-entry
       Runtime: python3.7
       Handler: index.lambda_handler
       Role: !GetAtt JournalLambdaRole.Arn
@@ -269,17 +263,13 @@ Resources:
           import json
           import boto3
           import jwt
-
           dynamodb = boto3.client("dynamodb")
-
           def lambda_handler(event, context):
               payload = event.get("body", {})
               payload = json.loads(payload)
-
               token = event.get('headers', {}).get("authorization").split(' ')[1]
               decoded_token = jwt.decode(token, algorithms=["RS256"], options={"verify_signature": False})
               user_id = decoded_token.get('sub')
-
               item_payload = {
                   'UserId': {'S': user_id},
                   'Date': {'S': payload.get('date')},
@@ -309,9 +299,8 @@ Resources:
                   item_payload['Exercise'] = {'N': payload.get('exercise')}
               if payload.get('entry_content') is not None:
                   item_payload['EntryContent'] = {'S': payload.get('entry_content')}
-
               response = dynamodb.put_item(
-                  TableName='JournalEntry', 
+                  TableName='JournalEntry',
                   Item=item_payload
               )
               status_code = response.get("ResponseMetadata", {}).get("HTTPStatusCode")
@@ -342,7 +331,7 @@ Resources:
   GetEntryLambda:
     Type: AWS::Lambda::Function
     Properties:
-      FunctionName: !Sub "${AppName}-get-entry"
+      FunctionName: !Sub ${AppName}-get-entry
       Runtime: python3.7
       Handler: index.lambda_handler
       Role: !GetAtt JournalLambdaRole.Arn
@@ -353,14 +342,11 @@ Resources:
           import json
           import boto3
           import jwt
-
           dynamodb = boto3.client("dynamodb")
-
           def lambda_handler(event, context):
               token = event.get('headers', {}).get("authorization").split(' ')[1]
               decoded_token = jwt.decode(token, algorithms=["RS256"], options={"verify_signature": False})
               user_id = decoded_token.get('sub')
-
               item = dynamodb.get_item(
                   TableName='JournalEntry',
                   Key={
@@ -372,7 +358,6 @@ Resources:
                       }
                   }
               )
-              
               if item.get('Item') is None:
                   return {
                       "statusCode": 404,
@@ -381,7 +366,6 @@ Resources:
                       },
                       "body": json.dumps("Not found")
                   }
-              
               response_item = {
                   "entry_content": item['Item'].get('EntryContent', {}).get("S"),
                   "user_id": item['Item'].get('UserId', {}).get("S"),
@@ -410,7 +394,7 @@ Resources:
   GetEntriesLambda:
     Type: AWS::Lambda::Function
     Properties:
-      FunctionName: !Sub "${AppName}-get-entries"
+      FunctionName: !Sub ${AppName}-get-entries
       Runtime: python3.7
       Handler: index.lambda_handler
       Role: !GetAtt JournalLambdaRole.Arn
@@ -422,9 +406,7 @@ Resources:
           import boto3
           from boto3.dynamodb.conditions import Key
           import jwt
-
           dynamodb = boto3.client("dynamodb")
-
           def lambda_handler(event, context):
               token = event.get('headers', {}).get("authorization").split(' ')[1]
               decoded_token = jwt.decode(token, algorithms=["RS256"], options={"verify_signature": False})
@@ -469,7 +451,7 @@ Resources:
   DeleteEntryLambda:
     Type: AWS::Lambda::Function
     Properties:
-      FunctionName: !Sub "${AppName}-delete-entry"
+      FunctionName: !Sub ${AppName}-delete-entry
       Runtime: python3.7
       Handler: index.lambda_handler
       Role: !GetAtt JournalLambdaRole.Arn
@@ -480,9 +462,7 @@ Resources:
           import boto3
           import jwt
           import json
-
           dynamodb = boto3.client("dynamodb")
-
           def lambda_handler(event, context):
               token = event.get('headers', {}).get("authorization").split(' ')[1]
               decoded_token = jwt.decode(token, algorithms=["RS256"], options={"verify_signature": False})
@@ -510,37 +490,37 @@ Resources:
     Type: AWS::Lambda::Permission
     Properties:
       FunctionName: !Ref PutEntryLambda
-      Action: "lambda:InvokeFunction"
+      Action: lambda:InvokeFunction
       Principal: apigateway.amazonaws.com
-      SourceArn: !Sub 'arn:${AWS::Partition}:execute-api:${AWS::Region}:${AWS::AccountId}:${JournalApiGatweay}/*/*/entry'
-      SourceAccount: !Ref 'AWS::AccountId'
+      SourceArn: !Sub arn:${AWS::Partition}:execute-api:${AWS::Region}:${AWS::AccountId}:${JournalApiGatweay}/*/*/entry
+      SourceAccount: !Ref AWS::AccountId
 
   LambdaInvokeGetEntry:
     Type: AWS::Lambda::Permission
     Properties:
       FunctionName: !Ref GetEntryLambda
-      Action: "lambda:InvokeFunction"
+      Action: lambda:InvokeFunction
       Principal: apigateway.amazonaws.com
-      SourceArn: !Sub 'arn:${AWS::Partition}:execute-api:${AWS::Region}:${AWS::AccountId}:${JournalApiGatweay}/*/*/entry/{date}'
-      SourceAccount: !Ref 'AWS::AccountId'
+      SourceArn: !Sub arn:${AWS::Partition}:execute-api:${AWS::Region}:${AWS::AccountId}:${JournalApiGatweay}/*/*/entry/{date}
+      SourceAccount: !Ref AWS::AccountId
 
   LambdaInvokeGetEntries:
     Type: AWS::Lambda::Permission
     Properties:
       FunctionName: !Ref GetEntriesLambda
-      Action: "lambda:InvokeFunction"
+      Action: lambda:InvokeFunction
       Principal: apigateway.amazonaws.com
-      SourceArn: !Sub 'arn:${AWS::Partition}:execute-api:${AWS::Region}:${AWS::AccountId}:${JournalApiGatweay}/*/*/entry'
-      SourceAccount: !Ref 'AWS::AccountId'
+      SourceArn: !Sub arn:${AWS::Partition}:execute-api:${AWS::Region}:${AWS::AccountId}:${JournalApiGatweay}/*/*/entry
+      SourceAccount: !Ref AWS::AccountId
 
   LambdaInvokeDeleteEntry:
     Type: AWS::Lambda::Permission
     Properties:
       FunctionName: !Ref DeleteEntryLambda
-      Action: "lambda:InvokeFunction"
+      Action: lambda:InvokeFunction
       Principal: apigateway.amazonaws.com
-      SourceArn: !Sub 'arn:${AWS::Partition}:execute-api:${AWS::Region}:${AWS::AccountId}:${JournalApiGatweay}/*/*/entry/{date}'
-      SourceAccount: !Ref 'AWS::AccountId'
+      SourceArn: !Sub arn:${AWS::Partition}:execute-api:${AWS::Region}:${AWS::AccountId}:${JournalApiGatweay}/*/*/entry/{date}
+      SourceAccount: !Ref AWS::AccountId
 
   CloudWatchApiGatewayLogGroup:
     Type: AWS::Logs::LogGroup
@@ -578,12 +558,12 @@ Resources:
       AutoDeploy: true
       AccessLogSettings:
         DestinationArn: !GetAtt CloudWatchApiGatewayLogGroup.Arn
-        Format: >-
-          {"requestId":"$context.requestId", "ip": "$context.identity.sourceIp",
+        Format: '{"requestId":"$context.requestId", "ip": "$context.identity.sourceIp",
           "caller":"$context.identity.caller",
           "user":"$context.identity.user","requestTime":"$context.requestTime",
-          "routeKey":"$context.routeKey","status":"$context.status",
-          "error": "$context.error.message", "integrationError": "$context.integrationErrorMessage"}
+          "routeKey":"$context.routeKey","status":"$context.status", "error":
+          "$context.error.message", "integrationError":
+          "$context.integrationErrorMessage"}'
 
   JournalApiDomainName:
     Type: AWS::ApiGatewayV2::DomainName
@@ -618,14 +598,14 @@ Resources:
       Description: Lambda proxy integration
       IntegrationType: AWS_PROXY
       IntegrationMethod: POST
-      PayloadFormatVersion: "2.0"
-      IntegrationUri: !Sub 'arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${PutEntryLambda.Arn}/invocations'
+      PayloadFormatVersion: '2.0'
+      IntegrationUri: !Sub arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${PutEntryLambda.Arn}/invocations
 
   PutRoute:
     Type: AWS::ApiGatewayV2::Route
     Properties:
       ApiId: !Ref JournalApiGatweay
-      RouteKey: "PUT /entry"
+      RouteKey: PUT /entry
       AuthorizationType: JWT
       AuthorizerId: !GetAtt ApiAuthorizer.AuthorizerId
       Target: !Join
@@ -640,21 +620,21 @@ Resources:
       Description: Lambda proxy integration
       IntegrationType: AWS_PROXY
       IntegrationMethod: POST
-      PayloadFormatVersion: "2.0"
-      IntegrationUri: !Sub 'arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${GetEntryLambda.Arn}/invocations'
+      PayloadFormatVersion: '2.0'
+      IntegrationUri: !Sub arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${GetEntryLambda.Arn}/invocations
 
   GetEntryRoute:
     Type: AWS::ApiGatewayV2::Route
     Properties:
       ApiId: !Ref JournalApiGatweay
-      RouteKey: "GET /entry/{date}"
+      RouteKey: GET /entry/{date}
       AuthorizationType: JWT
       AuthorizerId: !GetAtt ApiAuthorizer.AuthorizerId
       Target: !Join
         - /
         - - integrations
           - !Ref GetEntryIntegration
-  
+
   GetEntriesIntegration:
     Type: AWS::ApiGatewayV2::Integration
     Properties:
@@ -662,14 +642,14 @@ Resources:
       Description: Lambda proxy integration
       IntegrationType: AWS_PROXY
       IntegrationMethod: POST
-      PayloadFormatVersion: "2.0"
-      IntegrationUri: !Sub 'arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${GetEntriesLambda.Arn}/invocations'
+      PayloadFormatVersion: '2.0'
+      IntegrationUri: !Sub arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${GetEntriesLambda.Arn}/invocations
 
   GetEntriesRoute:
     Type: AWS::ApiGatewayV2::Route
     Properties:
       ApiId: !Ref JournalApiGatweay
-      RouteKey: "GET /entry"
+      RouteKey: GET /entry
       AuthorizationType: JWT
       AuthorizerId: !GetAtt ApiAuthorizer.AuthorizerId
       Target: !Join
@@ -684,14 +664,14 @@ Resources:
       Description: Lambda proxy integration
       IntegrationType: AWS_PROXY
       IntegrationMethod: POST
-      PayloadFormatVersion: "2.0"
-      IntegrationUri: !Sub 'arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${DeleteEntryLambda.Arn}/invocations'
+      PayloadFormatVersion: '2.0'
+      IntegrationUri: !Sub arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${DeleteEntryLambda.Arn}/invocations
 
   DeleteEntryRoute:
     Type: AWS::ApiGatewayV2::Route
     Properties:
       ApiId: !Ref JournalApiGatweay
-      RouteKey: "DELETE /entry/{date}"
+      RouteKey: DELETE /entry/{date}
       AuthorizationType: JWT
       AuthorizerId: !GetAtt ApiAuthorizer.AuthorizerId
       Target: !Join
@@ -702,14 +682,13 @@ Resources:
   OptionsLambda:
     Type: AWS::Lambda::Function
     Properties:
-      FunctionName: !Sub "${AppName}-options"
+      FunctionName: !Sub ${AppName}-options
       Runtime: python3.7
       Handler: index.lambda_handler
       Role: !GetAtt JournalLambdaRole.Arn
       Code:
         ZipFile: |
           import json
-
           def lambda_handler(event, context):
               return {
                   "statusCode": 200,
@@ -727,16 +706,16 @@ Resources:
     Properties:
       ApiId: !Ref JournalApiGatweay
       IntegrationType: AWS_PROXY
-      PassthroughBehavior: 'WHEN_NO_MATCH'
+      PassthroughBehavior: WHEN_NO_MATCH
       IntegrationMethod: POST
-      PayloadFormatVersion: "2.0"
-      IntegrationUri: !Sub 'arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${OptionsLambda.Arn}/invocations'
+      PayloadFormatVersion: '2.0'
+      IntegrationUri: !Sub arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${OptionsLambda.Arn}/invocations
 
   OptionsRoute:
     Type: AWS::ApiGatewayV2::Route
     Properties:
       ApiId: !Ref JournalApiGatweay
-      RouteKey: "OPTIONS /entry"
+      RouteKey: OPTIONS /entry
       AuthorizationType: NONE
       Target: !Join
         - /
@@ -747,7 +726,7 @@ Resources:
     Type: AWS::ApiGatewayV2::Route
     Properties:
       ApiId: !Ref JournalApiGatweay
-      RouteKey: "OPTIONS /entry/{date}"
+      RouteKey: OPTIONS /entry/{date}
       AuthorizationType: NONE
       Target: !Join
         - /
@@ -758,22 +737,22 @@ Resources:
     Type: AWS::Lambda::Permission
     Properties:
       FunctionName: !Ref OptionsLambda
-      Action: "lambda:InvokeFunction"
+      Action: lambda:InvokeFunction
       Principal: apigateway.amazonaws.com
-      SourceArn: !Sub 'arn:${AWS::Partition}:execute-api:${AWS::Region}:${AWS::AccountId}:${JournalApiGatweay}/*/*/entry'
-      SourceAccount: !Ref 'AWS::AccountId'
+      SourceArn: !Sub arn:${AWS::Partition}:execute-api:${AWS::Region}:${AWS::AccountId}:${JournalApiGatweay}/*/*/entry
+      SourceAccount: !Ref AWS::AccountId
 
   LambdaInvokeOptionsDate:
     Type: AWS::Lambda::Permission
     Properties:
       FunctionName: !Ref OptionsLambda
-      Action: "lambda:InvokeFunction"
+      Action: lambda:InvokeFunction
       Principal: apigateway.amazonaws.com
-      SourceArn: !Sub 'arn:${AWS::Partition}:execute-api:${AWS::Region}:${AWS::AccountId}:${JournalApiGatweay}/*/*/entry/{date}'
-      SourceAccount: !Ref 'AWS::AccountId'
+      SourceArn: !Sub arn:${AWS::Partition}:execute-api:${AWS::Region}:${AWS::AccountId}:${JournalApiGatweay}/*/*/entry/{date}
+      SourceAccount: !Ref AWS::AccountId
 
   ApiAuthorizer:
-    Type: 'AWS::ApiGatewayV2::Authorizer'
+    Type: AWS::ApiGatewayV2::Authorizer
     Properties:
       Name: JWTAuthorizer
       ApiId: !Ref JournalApiGatweay
@@ -793,56 +772,52 @@ Resources:
       SSESpecification:
         SSEEnabled: true
         SSEType: KMS
-      AttributeDefinitions: 
-        - 
-          AttributeName: "UserId"
-          AttributeType: "S"
-        - 
-          AttributeName: "MedicationName"
-          AttributeType: "S"
-      KeySchema: 
-        - 
-          AttributeName: "UserId"
-          KeyType: "HASH"
-        - 
-          AttributeName: "MedicationName"
-          KeyType: "RANGE"
+      AttributeDefinitions:
+        - AttributeName: UserId
+          AttributeType: S
+        - AttributeName: MedicationName
+          AttributeType: S
+      KeySchema:
+        - AttributeName: UserId
+          KeyType: HASH
+        - AttributeName: MedicationName
+          KeyType: RANGE
 
   MedicationLambdaRole:
     Type: AWS::IAM::Role
     Properties:
       RoleName: medication-lambda-role
-      AssumeRolePolicyDocument: 
-        Version: "2012-10-17"
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
         Statement:
           - Effect: Allow
             Principal:
               Service:
                 - lambda.amazonaws.com
             Action:
-              - "sts:AssumeRole"
+              - sts:AssumeRole
       Policies:
         - PolicyName: medication-lambda-policy
           PolicyDocument:
-            Version: "2012-10-17"
+            Version: '2012-10-17'
             Statement:
               - Effect: Allow
                 Sid: LambdaDynamoDBAccess
                 Action:
-                  - "dynamodb:BatchGetItem"
-                  - "dynamodb:BatchWriteItem"
-                  - "dynamodb:DeleteItem"
-                  - "dynamodb:GetItem"
-                  - "dynamodb:PutItem"
-                  - "dynamodb:Query"
-                  - "dynamodb:Scan"
-                  - "dynamodb:UpdateItem"
+                  - dynamodb:BatchGetItem
+                  - dynamodb:BatchWriteItem
+                  - dynamodb:DeleteItem
+                  - dynamodb:GetItem
+                  - dynamodb:PutItem
+                  - dynamodb:Query
+                  - dynamodb:Scan
+                  - dynamodb:UpdateItem
                 Resource: !GetAtt MedicationTable.Arn
 
   PutMedicationLambda:
     Type: AWS::Lambda::Function
     Properties:
-      FunctionName: !Sub "${AppName}-put-medication"
+      FunctionName: !Sub ${AppName}-put-medication
       Runtime: python3.7
       Handler: index.lambda_handler
       Role: !GetAtt MedicationLambdaRole.Arn
@@ -853,17 +828,13 @@ Resources:
           import json
           import boto3
           import jwt
-
           dynamodb = boto3.client("dynamodb")
-
           def lambda_handler(event, context):
               payload = event.get("body", {})
               payload = json.loads(payload)
-
               token = event.get('headers', {}).get("authorization").split(' ')[1]
               decoded_token = jwt.decode(token, algorithms=["RS256"], options={"verify_signature": False})
               user_id = decoded_token.get('sub')
-
               item_payload = {
                   'UserId': {'S': user_id},
                   'MedicationName': {'S': payload.get('medication_name')}
@@ -874,9 +845,8 @@ Resources:
                   item_payload['StartDate'] = {'S': payload.get('start_date')}
               if payload.get('end_date') is not None:
                   item_payload['EndDate'] = {'S': payload.get('end_date')}
-
               response = dynamodb.put_item(
-                  TableName='UserMedication', 
+                  TableName='UserMedication',
                   Item=item_payload
               )
               status_code = response.get("ResponseMetadata", {}).get("HTTPStatusCode")
@@ -908,10 +878,10 @@ Resources:
     Type: AWS::Lambda::Permission
     Properties:
       FunctionName: !Ref PutMedicationLambda
-      Action: "lambda:InvokeFunction"
+      Action: lambda:InvokeFunction
       Principal: apigateway.amazonaws.com
-      SourceArn: !Sub 'arn:${AWS::Partition}:execute-api:${AWS::Region}:${AWS::AccountId}:${JournalApiGatweay}/*/*/medication'
-      SourceAccount: !Ref 'AWS::AccountId'
+      SourceArn: !Sub arn:${AWS::Partition}:execute-api:${AWS::Region}:${AWS::AccountId}:${JournalApiGatweay}/*/*/medication
+      SourceAccount: !Ref AWS::AccountId
 
   PutMedicationIntegration:
     Type: AWS::ApiGatewayV2::Integration
@@ -920,14 +890,14 @@ Resources:
       Description: Lambda proxy integration
       IntegrationType: AWS_PROXY
       IntegrationMethod: POST
-      PayloadFormatVersion: "2.0"
-      IntegrationUri: !Sub 'arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${PutMedicationLambda.Arn}/invocations'
+      PayloadFormatVersion: '2.0'
+      IntegrationUri: !Sub arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${PutMedicationLambda.Arn}/invocations
 
   PutMedicationRoute:
     Type: AWS::ApiGatewayV2::Route
     Properties:
       ApiId: !Ref JournalApiGatweay
-      RouteKey: "PUT /medication"
+      RouteKey: PUT /medication
       AuthorizationType: JWT
       AuthorizerId: !GetAtt ApiAuthorizer.AuthorizerId
       Target: !Join
@@ -938,7 +908,7 @@ Resources:
   GetMedicationsLambda:
     Type: AWS::Lambda::Function
     Properties:
-      FunctionName: !Sub "${AppName}-get-medications"
+      FunctionName: !Sub ${AppName}-get-medications
       Runtime: python3.7
       Handler: index.lambda_handler
       Role: !GetAtt MedicationLambdaRole.Arn
@@ -949,9 +919,7 @@ Resources:
           import json
           import boto3
           import jwt
-
           dynamodb = boto3.client("dynamodb")
-
           def lambda_handler(event, context):
               token = event.get('headers', {}).get("authorization").split(' ')[1]
               decoded_token = jwt.decode(token, algorithms=["RS256"], options={"verify_signature": False})
@@ -986,10 +954,10 @@ Resources:
     Type: AWS::Lambda::Permission
     Properties:
       FunctionName: !Ref GetMedicationsLambda
-      Action: "lambda:InvokeFunction"
+      Action: lambda:InvokeFunction
       Principal: apigateway.amazonaws.com
-      SourceArn: !Sub 'arn:${AWS::Partition}:execute-api:${AWS::Region}:${AWS::AccountId}:${JournalApiGatweay}/*/*/medication'
-      SourceAccount: !Ref 'AWS::AccountId'
+      SourceArn: !Sub arn:${AWS::Partition}:execute-api:${AWS::Region}:${AWS::AccountId}:${JournalApiGatweay}/*/*/medication
+      SourceAccount: !Ref AWS::AccountId
 
   GetMedicationsIntegration:
     Type: AWS::ApiGatewayV2::Integration
@@ -998,14 +966,14 @@ Resources:
       Description: Lambda proxy integration
       IntegrationType: AWS_PROXY
       IntegrationMethod: POST
-      PayloadFormatVersion: "2.0"
-      IntegrationUri: !Sub 'arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${GetMedicationsLambda.Arn}/invocations'
+      PayloadFormatVersion: '2.0'
+      IntegrationUri: !Sub arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${GetMedicationsLambda.Arn}/invocations
 
   GetMedicationsRoute:
     Type: AWS::ApiGatewayV2::Route
     Properties:
       ApiId: !Ref JournalApiGatweay
-      RouteKey: "GET /medication"
+      RouteKey: GET /medication
       AuthorizationType: JWT
       AuthorizerId: !GetAtt ApiAuthorizer.AuthorizerId
       Target: !Join
@@ -1016,7 +984,7 @@ Resources:
   DeleteMedicationLambda:
     Type: AWS::Lambda::Function
     Properties:
-      FunctionName: !Sub "${AppName}-delete-medication"
+      FunctionName: !Sub ${AppName}-delete-medication
       Runtime: python3.7
       Handler: index.lambda_handler
       Role: !GetAtt MedicationLambdaRole.Arn
@@ -1027,14 +995,11 @@ Resources:
           import json
           import boto3
           import jwt
-
           dynamodb = boto3.client("dynamodb")
-
           def lambda_handler(event, context):
               token = event.get('headers', {}).get("authorization").split(' ')[1]
               decoded_token = jwt.decode(token, algorithms=["RS256"], options={"verify_signature": False})
               user_id = decoded_token.get('sub')
-
               response = dynamodb.delete_item(
                   TableName='UserMedication',
                   Key={
@@ -1058,10 +1023,10 @@ Resources:
     Type: AWS::Lambda::Permission
     Properties:
       FunctionName: !Ref DeleteMedicationLambda
-      Action: "lambda:InvokeFunction"
+      Action: lambda:InvokeFunction
       Principal: apigateway.amazonaws.com
-      SourceArn: !Sub 'arn:${AWS::Partition}:execute-api:${AWS::Region}:${AWS::AccountId}:${JournalApiGatweay}/*/*/medication/{name}'
-      SourceAccount: !Ref 'AWS::AccountId'
+      SourceArn: !Sub arn:${AWS::Partition}:execute-api:${AWS::Region}:${AWS::AccountId}:${JournalApiGatweay}/*/*/medication/{name}
+      SourceAccount: !Ref AWS::AccountId
 
   DeleteMedicationIntegration:
     Type: AWS::ApiGatewayV2::Integration
@@ -1070,14 +1035,14 @@ Resources:
       Description: Lambda proxy integration
       IntegrationType: AWS_PROXY
       IntegrationMethod: POST
-      PayloadFormatVersion: "2.0"
-      IntegrationUri: !Sub 'arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${DeleteMedicationLambda.Arn}/invocations'
+      PayloadFormatVersion: '2.0'
+      IntegrationUri: !Sub arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${DeleteMedicationLambda.Arn}/invocations
 
   DeleteMedicationRoute:
     Type: AWS::ApiGatewayV2::Route
     Properties:
       ApiId: !Ref JournalApiGatweay
-      RouteKey: "DELETE /medication/{name}"
+      RouteKey: DELETE /medication/{name}
       AuthorizationType: JWT
       AuthorizerId: !GetAtt ApiAuthorizer.AuthorizerId
       Target: !Join
@@ -1093,50 +1058,48 @@ Resources:
       SSESpecification:
         SSEEnabled: true
         SSEType: KMS
-      AttributeDefinitions: 
-        - 
-          AttributeName: "UserId"
-          AttributeType: "S"
-      KeySchema: 
-        - 
-          AttributeName: "UserId"
-          KeyType: "HASH"
+      AttributeDefinitions:
+        - AttributeName: UserId
+          AttributeType: S
+      KeySchema:
+        - AttributeName: UserId
+          KeyType: HASH
 
   UserPreferencesLambdaRole:
     Type: AWS::IAM::Role
     Properties:
       RoleName: user-preferences-lambda-role
-      AssumeRolePolicyDocument: 
-        Version: "2012-10-17"
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
         Statement:
           - Effect: Allow
             Principal:
               Service:
                 - lambda.amazonaws.com
             Action:
-              - "sts:AssumeRole"
+              - sts:AssumeRole
       Policies:
         - PolicyName: user-preferences-lambda-policy
           PolicyDocument:
-            Version: "2012-10-17"
+            Version: '2012-10-17'
             Statement:
               - Effect: Allow
                 Sid: LambdaDynamoDBAccess
                 Action:
-                  - "dynamodb:BatchGetItem"
-                  - "dynamodb:BatchWriteItem"
-                  - "dynamodb:DeleteItem"
-                  - "dynamodb:GetItem"
-                  - "dynamodb:PutItem"
-                  - "dynamodb:Query"
-                  - "dynamodb:Scan"
-                  - "dynamodb:UpdateItem"
+                  - dynamodb:BatchGetItem
+                  - dynamodb:BatchWriteItem
+                  - dynamodb:DeleteItem
+                  - dynamodb:GetItem
+                  - dynamodb:PutItem
+                  - dynamodb:Query
+                  - dynamodb:Scan
+                  - dynamodb:UpdateItem
                 Resource: !GetAtt UserPreferencesTable.Arn
 
   PutUserPreferencesLambda:
     Type: AWS::Lambda::Function
     Properties:
-      FunctionName: !Sub "${AppName}-put-user-preferences"
+      FunctionName: !Sub ${AppName}-put-user-preferences
       Runtime: python3.7
       Handler: index.lambda_handler
       Role: !GetAtt UserPreferencesLambdaRole.Arn
@@ -1148,18 +1111,14 @@ Resources:
           import boto3
           from boto3.dynamodb.types import TypeSerializer
           import jwt
-
           dynamodb = boto3.client("dynamodb")
           serializer = TypeSerializer()
-
           def lambda_handler(event, context):
               payload = event.get("body", {})
               payload = json.loads(payload)
-
               token = event.get('headers', {}).get("authorization").split(' ')[1]
               decoded_token = jwt.decode(token, algorithms=["RS256"], options={"verify_signature": False})
               user_id = decoded_token.get('sub')
-
               item_payload = {
                   'UserId': {'S': user_id},
                   'Preferences': serializer.serialize(payload.get('preferences')),
@@ -1174,9 +1133,8 @@ Resources:
                   item_payload['IsDarkMode'] = {'BOOL': payload.get('is_dark_mode')}
               if payload.get('ideal_hours_sleep'):
                   item_payload['IdealHoursSleep'] = {'N': payload.get('ideal_hours_sleep')}
-
               response = dynamodb.put_item(
-                  TableName='UserPreferences', 
+                  TableName='UserPreferences',
                   Item=item_payload
               )
               status_code = response.get("ResponseMetadata", {}).get("HTTPStatusCode")
@@ -1205,10 +1163,10 @@ Resources:
     Type: AWS::Lambda::Permission
     Properties:
       FunctionName: !Ref PutUserPreferencesLambda
-      Action: "lambda:InvokeFunction"
+      Action: lambda:InvokeFunction
       Principal: apigateway.amazonaws.com
-      SourceArn: !Sub 'arn:${AWS::Partition}:execute-api:${AWS::Region}:${AWS::AccountId}:${JournalApiGatweay}/*/*/preferences'
-      SourceAccount: !Ref 'AWS::AccountId'
+      SourceArn: !Sub arn:${AWS::Partition}:execute-api:${AWS::Region}:${AWS::AccountId}:${JournalApiGatweay}/*/*/preferences
+      SourceAccount: !Ref AWS::AccountId
 
   PutUserPreferencesIntegration:
     Type: AWS::ApiGatewayV2::Integration
@@ -1217,14 +1175,14 @@ Resources:
       Description: Lambda proxy integration
       IntegrationType: AWS_PROXY
       IntegrationMethod: POST
-      PayloadFormatVersion: "2.0"
-      IntegrationUri: !Sub 'arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${PutUserPreferencesLambda.Arn}/invocations'
+      PayloadFormatVersion: '2.0'
+      IntegrationUri: !Sub arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${PutUserPreferencesLambda.Arn}/invocations
 
   PutUserPreferencesRoute:
     Type: AWS::ApiGatewayV2::Route
     Properties:
       ApiId: !Ref JournalApiGatweay
-      RouteKey: "PUT /preferences"
+      RouteKey: PUT /preferences
       AuthorizationType: JWT
       AuthorizerId: !GetAtt ApiAuthorizer.AuthorizerId
       Target: !Join
@@ -1235,7 +1193,7 @@ Resources:
   GetUserPreferencesLambda:
     Type: AWS::Lambda::Function
     Properties:
-      FunctionName: !Sub "${AppName}-get-user-preferences"
+      FunctionName: !Sub ${AppName}-get-user-preferences
       Runtime: python3.7
       Handler: index.lambda_handler
       Role: !GetAtt UserPreferencesLambdaRole.Arn
@@ -1247,10 +1205,8 @@ Resources:
           import boto3
           from boto3.dynamodb.types import TypeDeserializer
           import jwt
-
           dynamodb = boto3.client("dynamodb")
           deserializer = TypeDeserializer()
-
           def lambda_handler(event, context):
               token = event.get('headers', {}).get("authorization").split(' ')[1]
               decoded_token = jwt.decode(token, algorithms=["RS256"], options={"verify_signature": False})
@@ -1263,7 +1219,6 @@ Resources:
                       }
                   }
               )
-              
               if item.get('Item') is None:
                   return {
                       "statusCode": 404,
@@ -1272,7 +1227,6 @@ Resources:
                       },
                       "body": json.dumps("Not found")
                   }
-              
               response_item = {
                   "user_id": item['Item'].get('UserId', {}).get("S"),
                   "preferences": deserializer.deserialize(item['Item'].get('Preferences', {})),
@@ -1294,10 +1248,10 @@ Resources:
     Type: AWS::Lambda::Permission
     Properties:
       FunctionName: !Ref GetUserPreferencesLambda
-      Action: "lambda:InvokeFunction"
+      Action: lambda:InvokeFunction
       Principal: apigateway.amazonaws.com
-      SourceArn: !Sub 'arn:${AWS::Partition}:execute-api:${AWS::Region}:${AWS::AccountId}:${JournalApiGatweay}/*/*/preferences'
-      SourceAccount: !Ref 'AWS::AccountId'
+      SourceArn: !Sub arn:${AWS::Partition}:execute-api:${AWS::Region}:${AWS::AccountId}:${JournalApiGatweay}/*/*/preferences
+      SourceAccount: !Ref AWS::AccountId
 
   GetUserPreferencesIntegration:
     Type: AWS::ApiGatewayV2::Integration
@@ -1306,14 +1260,14 @@ Resources:
       Description: Lambda proxy integration
       IntegrationType: AWS_PROXY
       IntegrationMethod: POST
-      PayloadFormatVersion: "2.0"
-      IntegrationUri: !Sub 'arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${GetUserPreferencesLambda.Arn}/invocations'
+      PayloadFormatVersion: '2.0'
+      IntegrationUri: !Sub arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${GetUserPreferencesLambda.Arn}/invocations
 
   GetUserPreferencesRoute:
     Type: AWS::ApiGatewayV2::Route
     Properties:
       ApiId: !Ref JournalApiGatweay
-      RouteKey: "GET /preferences"
+      RouteKey: GET /preferences
       AuthorizationType: JWT
       AuthorizerId: !GetAtt ApiAuthorizer.AuthorizerId
       Target: !Join
@@ -1325,18 +1279,17 @@ Resources:
     Type: AWS::Backup::BackupVault
     Properties:
       BackupVaultName: !Sub ${AppName}-backup-vault
-      LockConfiguration: 
+      LockConfiguration:
         MinRetentionDays: 7
         MaxRetentionDays: 30
 
   BackupPlan:
     Type: AWS::Backup::BackupPlan
     Properties:
-      BackupPlan: 
+      BackupPlan:
         BackupPlanName: !Sub ${AppName}-backup-plan
-        BackupPlanRule: 
-          - 
-            RuleName: !Sub ${AppName}-backup-plan-rule
+        BackupPlanRule:
+          - RuleName: !Sub ${AppName}-backup-plan-rule
             ScheduleExpression: cron(0 2 * * ? *)
             TargetBackupVault: !Ref BackupVault
 
@@ -1344,15 +1297,15 @@ Resources:
     Type: AWS::IAM::Role
     Properties:
       AssumeRolePolicyDocument:
-        Version: "2012-10-17"
+        Version: '2012-10-17'
         Statement:
           - Effect: Allow
             Principal:
               Service:
                 - backup.amazonaws.com
             Action:
-              - "sts:AssumeRole"
-      ManagedPolicyArns: 
+              - sts:AssumeRole
+      ManagedPolicyArns:
         - arn:aws:iam::aws:policy/service-role/AWSBackupServiceRolePolicyForBackup
       RoleName: backups-role
 
@@ -1360,9 +1313,9 @@ Resources:
     Type: AWS::Backup::BackupSelection
     Properties:
       BackupPlanId: !Ref BackupPlan
-      BackupSelection: 
-        IamRoleArn: !GetAtt  BackupIamRole.Arn
-        Resources: 
+      BackupSelection:
+        IamRoleArn: !GetAtt BackupIamRole.Arn
+        Resources:
           - !GetAtt EntryTable.Arn
           - !GetAtt MedicationTable.Arn
           - !GetAtt UserPreferencesTable.Arn
