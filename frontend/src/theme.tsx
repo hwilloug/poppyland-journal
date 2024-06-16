@@ -28,8 +28,5 @@ export const theme = createTheme({
       dark: deepPurple[700],
       contrastText: "#fff",
     },
-    background: {
-      default: "#fffcf5",
-    },
   },
 })

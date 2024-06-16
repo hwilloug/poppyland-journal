@@ -296,10 +296,25 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
 
   return (
     <>
-      <Typography variant="h5" align="center">
+      <Typography
+        variant="h5"
+        align="center"
+        sx={{
+          textShadow:
+            "1px 1px 0px #fff, -1px 1px 0px #fff, 1px -1px 0px #fff, -1px -1px 0px #fff",
+        }}
+      >
         {dateFull}
       </Typography>
-      <Typography variant="h5">Morning</Typography>
+      <Typography
+        variant="h5"
+        sx={{
+          textShadow:
+            "1px 1px 0px #fff, -1px 1px 0px #fff, 1px -1px 0px #fff, -1px -1px 0px #fff",
+        }}
+      >
+        Morning
+      </Typography>
       {preferences.showSleep && (
         <SleepEntryComponent
           onBedTimeChange={setBedTime}
@@ -320,7 +335,15 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
       {preferences.showDailyGoal && (
         <DailyGoalComponent goal={goal} onChange={setGoal} />
       )}
-      <Typography variant="h5">Evening</Typography>
+      <Typography
+        variant="h5"
+        sx={{
+          textShadow:
+            "1px 1px 0px #fff, -1px 1px 0px #fff, 1px -1px 0px #fff, -1px -1px 0px #fff",
+        }}
+      >
+        Evening
+      </Typography>
       {preferences.showMood && (
         <MoodEntryComponent mood={mood} onChange={setMood} />
       )}

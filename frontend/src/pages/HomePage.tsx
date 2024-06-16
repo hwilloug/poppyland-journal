@@ -22,7 +22,6 @@ const PageContainer = styled.div`
 const HomePageContainer = styled.div`
   padding: 20px;
   flex-grow: 1;
-  background-color: #fffcf5;
   max-width: 100%;
 `
 

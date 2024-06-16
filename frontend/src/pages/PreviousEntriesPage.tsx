@@ -16,6 +16,7 @@ import {
   Alert,
   Box,
   Button,
+  Grid,
   Menu,
   MenuItem,
   Modal,
@@ -50,7 +51,7 @@ const NavigatorContainer = styled.div``
 const EntriesContainer = styled.div`
   display: flex;
   flex-direction: column;
-  width: 80%;
+  min-width: 90%;
   margin-left: 175px;
   gap: 50px;
 `
@@ -71,14 +72,19 @@ const EntryContainer = styled(Paper)`
     top: 0;
     left: 65px;
   }
-  hr {
+  .header-divider {
     border: 1px solid lightblue;
     margin-left: -75px;
     margin-right: -20px;
   }
+  .divider {
+    border: 1px solid lightgrey;
+    margin-left: -10px;
+    margin-right: -20px;
+  }
 `
 
-const MoodContainer = styled.div`
+const MoodContainer = styled(Grid)`
   margin: 10px;
   display: flex;
   flex-direction: row;
@@ -87,7 +93,7 @@ const MoodContainer = styled.div`
 `
 
 const SectionContainer = styled.div`
-  margin: 10px;
+  margin: 20px 10px;
 `
 
 const NoEntriesContainer = styled.div`
@@ -253,7 +259,15 @@ const PreviousEntriesPage: React.FunctionComponent = () => {
 
   return (
     <PageContentContainer>
-      <Typography variant="h4" sx={{ m: "20px 0" }} align="center">
+      <Typography
+        variant="h4"
+        sx={{
+          m: "20px 0",
+          textShadow:
+            "1px 1px 0px #fff, -1px 1px 0px #fff, 1px -1px 0px #fff, -1px -1px 0px #fff",
+        }}
+        align="center"
+      >
         {journalName || "My Journal"}
       </Typography>
       <ContentContainer>
@@ -273,7 +287,11 @@ const PreviousEntriesPage: React.FunctionComponent = () => {
                 <Typography
                   variant="h5"
                   id={m.replace(" ", "-")}
-                  sx={{ mx: "auto" }}
+                  sx={{
+                    mx: "auto",
+                    textShadow:
+                      "1px 1px 0px #fff, -1px 1px 0px #fff, 1px -1px 0px #fff, -1px -1px 0px #fff",
+                  }}
                 >
                   {m}
                 </Typography>
@@ -282,30 +300,39 @@ const PreviousEntriesPage: React.FunctionComponent = () => {
                     <Typography variant="h6">
                       {convertToLongDateFromShortDate(entry.date)}
                     </Typography>
-                    <hr />
-                    {preferences.showMood && entry.mood && (
-                      <MoodContainer>
-                        <Typography>Mood: </Typography>
-                        {getMoodIcon(entry.mood)}
-                      </MoodContainer>
-                    )}
-                    {preferences.showSleep && entry.hoursSleep && (
-                      <SectionContainer>
-                        <Typography>
-                          Hours slept: {parseFloat(entry.hoursSleep).toFixed(2)}
-                        </Typography>
-                      </SectionContainer>
-                    )}
-                    {preferences.showSleep && entry.sleepQuality && (
-                      <SectionContainer>
-                        <Typography>
-                          Sleep Quality: {entry.sleepQuality}
-                        </Typography>
-                      </SectionContainer>
-                    )}
+                    <hr className="header-divider" />
+                    <Grid container alignItems={"center"} gap={"20px"}>
+                      {preferences.showMood && entry.mood && (
+                        <MoodContainer item>
+                          <Typography fontWeight={"bold"}>Mood: </Typography>
+                          {getMoodIcon(entry.mood)}
+                        </MoodContainer>
+                      )}
+                      {preferences.showSleep && entry.hoursSleep && (
+                        <MoodContainer item>
+                          <Typography fontWeight={"bold"}>
+                            Hours slept:
+                          </Typography>
+                          <Typography>
+                            {" "}
+                            {parseFloat(entry.hoursSleep).toFixed(2)}
+                          </Typography>
+                        </MoodContainer>
+                      )}
+                      {preferences.showSleep && entry.sleepQuality && (
+                        <MoodContainer item>
+                          <Typography fontWeight={"bold"}>
+                            Sleep Quality:
+                          </Typography>{" "}
+                          <Typography>{entry.sleepQuality}</Typography>
+                        </MoodContainer>
+                      )}
+                    </Grid>
                     {preferences.showDailyAffirmation && entry.affirmation && (
                       <SectionContainer>
-                        <Typography>Daily Affirmation:</Typography>
+                        <Typography fontWeight={"bold"}>
+                          Daily Affirmation:
+                        </Typography>
                         <MarkdownComponent
                           view="view"
                           value={entry.affirmation}
@@ -314,13 +341,13 @@ const PreviousEntriesPage: React.FunctionComponent = () => {
                     )}
                     {preferences.showDailyGoal && entry.goal && (
                       <SectionContainer>
-                        <Typography>Daily Goal:</Typography>
+                        <Typography fontWeight={"bold"}>Daily Goal:</Typography>
                         <MarkdownComponent view="view" value={entry.goal} />
                       </SectionContainer>
                     )}
                     {preferences.showDailyQuestion && entry.dailyQuestionA && (
                       <SectionContainer>
-                        <Typography>
+                        <Typography fontWeight={"bold"}>
                           Daily Question: {entry.dailyQuestionQ}
                         </Typography>
                         <MarkdownComponent
@@ -332,8 +359,10 @@ const PreviousEntriesPage: React.FunctionComponent = () => {
                     {preferences.showMentalHealth &&
                       entry.mentalHealth.length > 0 && (
                         <SectionContainer>
+                          <Typography fontWeight={"bold"}>
+                            Mental Health:
+                          </Typography>
                           <Typography>
-                            Mental Health:{" "}
                             {entry.mentalHealth &&
                               entry.mentalHealth.join(", ")}
                           </Typography>
@@ -342,24 +371,31 @@ const PreviousEntriesPage: React.FunctionComponent = () => {
                     {preferences.showSubstance &&
                       entry.substances.length > 0 && (
                         <SectionContainer>
-                          <Typography>
+                          <Typography fontWeight={"bold"}>
                             Substances:{" "}
+                          </Typography>
+                          <Typography>
                             {entry.substances && entry.substances.join(", ")}
                           </Typography>
                         </SectionContainer>
                       )}
                     {preferences.showExercise && (
                       <SectionContainer>
-                        <Typography>
-                          Minutes Exercise: {entry.exercise}
+                        <Typography fontWeight={"bold"}>
+                          Minutes Exercise:
                         </Typography>
+                        <Typography> {entry.exercise}</Typography>
                       </SectionContainer>
                     )}
+                    <hr className="divider" />
                     {entry.entryContent && (
-                      <MarkdownComponent
-                        view="view"
-                        value={entry.entryContent}
-                      />
+                      <>
+                        <MarkdownComponent
+                          view="view"
+                          value={entry.entryContent}
+                        />
+                        <hr className="divider" />
+                      </>
                     )}
                     <EntryFooterContainer>
                       <Button

@@ -14,7 +14,15 @@ const TodaysEntryPage: React.FunctionComponent = () => {
   const [date] = useState(convertToShortDate(new Date()))
   return (
     <PageContentContainer>
-      <Typography variant="h4" sx={{ my: "20px" }} align="center">
+      <Typography
+        variant="h4"
+        sx={{
+          my: "20px",
+          textShadow:
+            "1px 1px 0px #fff, -1px 1px 0px #fff, 1px -1px 0px #fff, -1px -1px 0px #fff",
+        }}
+        align="center"
+      >
         Today's Entry
       </Typography>
       <EntryForm date={date} />
