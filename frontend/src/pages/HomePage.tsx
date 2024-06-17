@@ -60,7 +60,7 @@ const HomePage: React.FunctionComponent = () => {
       {preferences.showDailyAffirmation &&
         Object.keys(journalState.entries).includes(today) &&
         journalState.entries[today].affirmation && (
-          <DailyAffiramtionContainer>
+          <DailyAffiramtionContainer elevation={24}>
             <Typography>
               Daily Affirmation:
               <br />

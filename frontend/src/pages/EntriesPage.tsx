@@ -26,7 +26,7 @@ const EntriesPage: React.FC = () => {
 
   return (
     <PageContentContainer>
-      <Paper sx={{ backgroundColor: "#fffcf5" }}>
+      <Paper sx={{ backgroundColor: "#fffcf5" }} elevation={24}>
         <Typography variant="h5" sx={{ p: "20px", textAlign: "center" }}>
           Entries
         </Typography>
@@ -38,11 +38,17 @@ const EntriesPage: React.FC = () => {
             const dateString = convertToDayOfWeekMonthDay(date)
             return (
               <Grid item container alignItems={"center"} key={dateString}>
-                <Grid item xs={12} md={6}>
+                <Grid item xs={12} sm={6}>
                   <Typography align="center">{dateString}</Typography>
                 </Grid>
                 {!dates.includes(shortDate) && (
-                  <Grid item xs={12} md={6} textAlign="center">
+                  <Grid
+                    item
+                    xs={12}
+                    sm={6}
+                    textAlign="center"
+                    alignItems={"center"}
+                  >
                     <Link to={`/${shortDate}/edit`}>
                       <Button color="primary" variant="contained">
                         <NoteAddIcon sx={{ pr: "5px" }} />
@@ -55,7 +61,7 @@ const EntriesPage: React.FC = () => {
                   <Grid
                     item
                     xs={12}
-                    md={6}
+                    sm={6}
                     textAlign={"center"}
                     padding={"10px"}
                   >

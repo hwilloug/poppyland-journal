@@ -37,7 +37,7 @@ const PreviousEntriesListComponent: React.FunctionComponent = () => {
     return dates
   }, [data])
   return (
-    <Container>
+    <Container elevation={24}>
       <Typography variant="h5" sx={{ p: "20px", textAlign: "center" }}>
         Entries
       </Typography>

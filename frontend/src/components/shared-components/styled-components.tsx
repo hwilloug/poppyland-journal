@@ -1,5 +1,5 @@
 import styled from "@emotion/styled"
-import { Button, Paper } from "@mui/material"
+import { Button, Paper, PaperProps } from "@mui/material"
 
 export const PageContainer = styled.div`
   margin: 0px;
@@ -12,7 +12,11 @@ export const PageContentContainer = styled.div`
   flex-grow: 1;
 `
 
-export const EntrySectionContainer = styled(Paper)`
+export const EntrySectionContainer = styled(
+  ({ className, ...props }: PaperProps) => (
+    <Paper {...props} className={className} elevation={24} />
+  ),
+)`
   background-color: #fffcf5;
   border: 1px solid lightgrey;
   padding: 20px;

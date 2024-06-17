@@ -1,8 +1,16 @@
 import React, { CSSProperties, useState } from "react"
-import styled from "@emotion/styled"
 import { Link } from "react-router-dom"
 import { useAuth0 } from "@auth0/auth0-react"
-import { AppBar, Box, Toolbar, Typography } from "@mui/material"
+import {
+  AppBar,
+  Box,
+  Toolbar,
+  Tooltip,
+  TooltipProps,
+  Typography,
+  styled,
+  tooltipClasses,
+} from "@mui/material"
 import ManageAccountsIcon from "@mui/icons-material/ManageAccounts"
 import LogoutIcon from "@mui/icons-material/Logout"
 import { useSelector } from "react-redux"
@@ -24,13 +32,15 @@ const navItemStyle: CSSProperties = {
   color: "black",
 }
 
-const AccountContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-evenly;
-  align-items: center;
-  flex-wrap: wrap;
-`
+const StyledTooltip = styled(({ className, ...props }: TooltipProps) => (
+  <Tooltip {...props} enterDelay={500} classes={{ popper: className }} />
+))(({ theme }) => ({
+  [`.${tooltipClasses.tooltip}`]: {
+    backgroundColor: theme.palette.secondary.dark,
+    color: "white",
+    fontSize: 18,
+  },
+}))
 
 interface SideBarProps {
   defaultOpen: boolean
@@ -43,11 +53,6 @@ const SideBarComponent: React.FunctionComponent<SideBarProps> = ({
   const firstName = useSelector((state: State) => state.user.firstName)
   const lastName = useSelector((state: State) => state.user.lastName)
   const journalName = useSelector((state: State) => state.user.journalName)
-  const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(defaultOpen)
-
-  const handleDrawerToggle = () => {
-    setIsDrawerOpen(!isDrawerOpen)
-  }
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -56,24 +61,32 @@ const SideBarComponent: React.FunctionComponent<SideBarProps> = ({
           <NavItem>
             <Link to="/" style={navItemStyle}>
               <img src="/logo.png" width={50} style={{}}></img>
-              <Typography variant="h5">Poppyland Journal</Typography>
+              <Typography variant="h5" fontFamily={"DancingScript"}>
+                Poppyland Journal
+              </Typography>
             </Link>
           </NavItem>
           <Box sx={{ flexGrow: 1 }} />
           <NavItem>
-            <Link to="/today" style={navItemStyle}>
-              <TodayIcon />
-            </Link>
+            <StyledTooltip title="Today">
+              <Link to="/today" style={navItemStyle}>
+                <TodayIcon />
+              </Link>
+            </StyledTooltip>
           </NavItem>
           <NavItem>
-            <Link to="/entries" style={navItemStyle}>
-              <FormatListBulletedIcon />
-            </Link>
+            <StyledTooltip title="Entries List">
+              <Link to="/entries" style={navItemStyle}>
+                <FormatListBulletedIcon />
+              </Link>
+            </StyledTooltip>
           </NavItem>
           <NavItem>
-            <Link to="/journal" style={navItemStyle}>
-              <MenuBookIcon />
-            </Link>
+            <StyledTooltip title="Journal">
+              <Link to="/journal" style={navItemStyle}>
+                <MenuBookIcon />
+              </Link>
+            </StyledTooltip>
           </NavItem>
           <Box sx={{ flexGrow: 1 }} />
           <NavItem>
@@ -82,17 +95,21 @@ const SideBarComponent: React.FunctionComponent<SideBarProps> = ({
             </Typography>
           </NavItem>
           <NavItem>
-            <Link to="/preferences" style={navItemStyle}>
-              <ManageAccountsIcon />
-            </Link>
+            <StyledTooltip title="User Preferences">
+              <Link to="/preferences" style={navItemStyle}>
+                <ManageAccountsIcon />
+              </Link>
+            </StyledTooltip>
           </NavItem>
           <NavItem>
-            <LogoutIcon
-              onClick={() =>
-                logout({ logoutParams: { returnTo: window.location.origin } })
-              }
-              style={navItemStyle}
-            />
+            <StyledTooltip title="Logout">
+              <LogoutIcon
+                onClick={() =>
+                  logout({ logoutParams: { returnTo: window.location.origin } })
+                }
+                style={navItemStyle}
+              />
+            </StyledTooltip>
           </NavItem>
         </Toolbar>
       </AppBar>

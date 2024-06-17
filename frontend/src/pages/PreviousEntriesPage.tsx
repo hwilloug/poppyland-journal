@@ -23,6 +23,7 @@ import {
   Paper,
   Snackbar,
   Typography,
+  useMediaQuery,
   useTheme,
 } from "@mui/material"
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz"
@@ -47,14 +48,6 @@ const ContentContainer = styled.div`
 `
 
 const NavigatorContainer = styled.div``
-
-const EntriesContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  min-width: 80%;
-  margin-left: 175px;
-  gap: 50px;
-`
 
 const EntryContainer = styled(Paper)`
   background-color: #fffcf5;
@@ -117,6 +110,7 @@ const PreviousEntriesPage: React.FunctionComponent = () => {
   const { user, getAccessTokenSilently } = useAuth0()
   const dispatch = useDispatch()
   const theme = useTheme()
+  const isLargerThanSm = useMediaQuery(theme.breakpoints.up("sm"))
   const userId = useSelector((state: State) => state.user.userId)
   const preferences = useSelector((state: State) => state.user.preferences)
   const journalName = useSelector((state: State) => state.user.journalName)
@@ -235,20 +229,25 @@ const PreviousEntriesPage: React.FunctionComponent = () => {
   const Navigator: React.FC = () => {
     const monthYears = Object.keys(entriesByMonth)
     return (
-      <Timeline position="left" sx={{ position: "fixed", width: "225px" }}>
+      <Timeline
+        position="right"
+        sx={{ position: "fixed", width: "225px", top: "25%", left: "70%" }}
+      >
         {monthYears.map((m, i) => (
           <HashLink
             to={`#${m.replace(" ", "-")}`}
             style={{
               textDecoration: "none",
-              color: theme.palette.primary.main,
+              color: "black",
               textShadow:
                 "1px 1px 0px #fff, -1px 1px 0px #fff, 1px -1px 0px #fff, -1px -1px 0px #fff",
             }}
           >
             <TimelineItem key={m}>
               <TimelineSeparator>
-                <TimelineDot color="primary" />
+                <TimelineDot
+                  sx={{ backgroundColor: "black", border: "1px solid white" }}
+                />
                 {i !== monthYears.length - 1 && <TimelineConnector />}
               </TimelineSeparator>
               <TimelineContent>{m}</TimelineContent>
@@ -274,9 +273,17 @@ const PreviousEntriesPage: React.FunctionComponent = () => {
       </Typography>
       <ContentContainer>
         <NavigatorContainer>
-          <Navigator />
+          {isLargerThanSm && <Navigator />}
         </NavigatorContainer>
-        <EntriesContainer>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            minWidth: "80%",
+            marginRight: isLargerThanSm ? "150px" : 0,
+            gap: "50px",
+          }}
+        >
           {!isLoading && entries.length === 0 && (
             <NoEntriesContainer>
               No entries yet! Head to{" "}
@@ -298,7 +305,7 @@ const PreviousEntriesPage: React.FunctionComponent = () => {
                   {m}
                 </Typography>
                 {entriesByMonth[m].map((entry) => (
-                  <EntryContainer key={entry.date}>
+                  <EntryContainer key={entry.date} elevation={24}>
                     <Typography variant="h6">
                       {convertToLongDateFromShortDate(entry.date)}
                     </Typography>
@@ -471,7 +478,7 @@ const PreviousEntriesPage: React.FunctionComponent = () => {
             </Alert>
           </Snackbar>
           {isLoading && <LoadingComponent />}
-        </EntriesContainer>
+        </Box>
       </ContentContainer>
     </PageContentContainer>
   )

@@ -364,7 +364,7 @@ const MoodTrackerComponent: React.FunctionComponent = () => {
   }
 
   return (
-    <Container>
+    <Container elevation={24}>
       <Typography variant="h5" sx={{ p: "20px" }} align="center">
         Mood Tracker
       </Typography>
