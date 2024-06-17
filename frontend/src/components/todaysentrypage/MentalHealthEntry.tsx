@@ -51,7 +51,7 @@ const MentalHealthEntryComponent: React.FunctionComponent<
 > = ({ mentalHealth, onChange }) => {
   return (
     <EntrySectionContainer>
-      <Typography variant="h6" sx={{ mb: "20px" }}>
+      <Typography variant="h6" textAlign={"center"} sx={{ mb: "20px" }}>
         Mental Health & Behavior
       </Typography>
       <MentalHealthContainer>

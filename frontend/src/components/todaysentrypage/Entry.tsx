@@ -14,7 +14,7 @@ const EntryComponent: React.FunctionComponent<EntryProps> = ({
 }) => {
   return (
     <EntrySectionContainer>
-      <Typography variant="h6" sx={{ mb: "20px" }}>
+      <Typography variant="h6" textAlign={"center"} sx={{ mb: "20px" }}>
         Entry
       </Typography>
       <MarkdownComponent

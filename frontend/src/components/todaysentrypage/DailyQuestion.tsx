@@ -41,10 +41,10 @@ const DailyQuestionComponent: React.FunctionComponent<DailyQuestionProps> = ({
 
   return (
     <EntrySectionContainer>
-      <Typography variant="h6" sx={{ mb: "20px" }}>
+      <Typography variant="h6" textAlign={"center"} sx={{ mb: "20px" }}>
         Daily Question
       </Typography>
-      <Typography>{question}</Typography>
+      <Typography textAlign={"center"}>{question}</Typography>
       <MarkdownComponent
         view="edit"
         value={answer}

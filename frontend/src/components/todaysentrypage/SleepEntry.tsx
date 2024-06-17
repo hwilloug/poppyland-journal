@@ -15,6 +15,7 @@ const SleepTimeContainer = styled.div`
   display: flex;
   flex-direction: row;
   gap: 20px;
+  justify-content: center;
 `
 
 const SleepQualityContainer = styled.div`
@@ -23,6 +24,7 @@ const SleepQualityContainer = styled.div`
   gap: 20px;
   align-items: center;
   margin-top: 10px;
+  justify-content: center;
 `
 
 interface SleepEntryProps {

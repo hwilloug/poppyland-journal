@@ -18,6 +18,7 @@ export const EntrySectionContainer = styled(Paper)`
   padding: 20px;
   margin-bottom: 50px;
   margin-top: 20px;
+  text-align: center;
 `
 
 export const Divider = styled("hr")({

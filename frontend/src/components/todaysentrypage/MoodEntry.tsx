@@ -12,6 +12,7 @@ const MoodContainer = styled.div`
   display: flex;
   flex-direciton: row;
   gap: 10px;
+  justify-content: center;
 `
 
 interface MoodEntryProps {

@@ -2,7 +2,9 @@ import styled from "@emotion/styled"
 import { TextField, Typography } from "@mui/material"
 import { EntrySectionContainer } from "../shared-components/styled-components"
 
-const ExerciseContainer = styled.div``
+const ExerciseContainer = styled.div`
+  text-align: center;
+`
 
 const InputLabel = styled.div``
 
@@ -17,7 +19,7 @@ const ExerciseEntryComponent: React.FunctionComponent<ExerciseEntryProps> = ({
 }) => {
   return (
     <EntrySectionContainer>
-      <Typography variant="h6" sx={{ mb: "20px" }}>
+      <Typography variant="h6" textAlign={"center"} sx={{ mb: "20px" }}>
         Exercise
       </Typography>
       <ExerciseContainer>
