@@ -118,7 +118,7 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
     loadedEntry.entryContent || undefined,
   )
   const [dailyQuestionQ, setDailyQuestionQ] = useState<string | undefined>(
-    loadedEntry.dailyQuestionQ || getQuestion(new Date(date).getDay()),
+    loadedEntry.dailyQuestionQ || getQuestion(new Date(date).getDate()),
   )
   const [dailyQuestionA, setDailyQuestionA] = useState<string | undefined>(
     loadedEntry.dailyQuestionA || undefined,
@@ -141,7 +141,7 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
     setEntryContent(entry.entryContent)
     setDailyQuestionA(entry.dailyQuestionA)
     setDailyQuestionQ(
-      entry.dailyQuestionQ || getQuestion(new Date(date).getDay()),
+      entry.dailyQuestionQ || getQuestion(new Date(date).getDate()),
     )
     setSleepQuality(entry.sleepQuality)
     setMinutesExercise(entry.exercise ? parseInt(entry.exercise) : 0)
