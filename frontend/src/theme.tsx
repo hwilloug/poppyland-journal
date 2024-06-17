@@ -3,16 +3,19 @@ import { deepPurple } from "@mui/material/colors"
 
 export const theme = createTheme({
   typography: {
+    h3: {
+      fontFamily: "PoetsenOne",
+    },
     h4: {
-      fontFamily: "Caveat-Bold",
+      fontFamily: "PoetsenOne",
     },
     h5: {
-      fontFamily: "DancingScript",
+      fontFamily: "PoetsenOne",
     },
     h6: {
-      fontFamily: "Caveat-Bold",
+      fontFamily: "Ubuntu-Bold",
     },
-    fontFamily: "Caveat",
+    fontFamily: "Ubuntu",
     fontSize: 18,
   },
   palette: {

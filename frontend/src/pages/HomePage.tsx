@@ -1,6 +1,5 @@
 import React from "react"
 import styled from "@emotion/styled"
-import SideBarComponent from "../components/shared-components/SideBar"
 import MoodTrackerComponent from "../components/homepage/MoodTracker"
 import PreviousEntriesListComponent from "../components/homepage/PreviousEntriesList"
 
@@ -8,16 +7,11 @@ import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react"
 import LoadingComponent from "../components/shared-components/Loading"
 import { useDispatch, useSelector } from "react-redux"
 import { getProfile } from "../utils/get-profile"
-import { Paper, Typography } from "@mui/material"
+import { Grid, Paper, Typography } from "@mui/material"
 import { deepPurple } from "@mui/material/colors"
 import { convertToShortDate } from "../utils/date-utils"
 import { State } from "../store"
-
-const PageContainer = styled.div`
-  margin: 0px;
-  display: flex;
-  flex-direction: row;
-`
+import GoalsTrackerComponent from "../components/homepage/GoalsTracker"
 
 const HomePageContainer = styled.div`
   padding: 20px;
@@ -31,6 +25,8 @@ const DailyAffiramtionContainer = styled(Paper)`
   padding: 20px;
   color: white;
   text-align: center;
+  width: 50%;
+  margin: 20px auto;
 `
 
 const HomePage: React.FunctionComponent = () => {
@@ -51,6 +47,16 @@ const HomePage: React.FunctionComponent = () => {
 
   return (
     <HomePageContainer>
+      <Typography
+        variant="h3"
+        sx={{
+          textShadow:
+            "1px 1px 0px #fff, -1px 1px 0px #fff, 1px -1px 0px #fff, -1px -1px 0px #fff",
+        }}
+        align={"center"}
+      >
+        Dashboard
+      </Typography>
       {preferences.showDailyAffirmation &&
         Object.keys(journalState.entries).includes(today) &&
         journalState.entries[today].affirmation && (
@@ -63,7 +69,14 @@ const HomePage: React.FunctionComponent = () => {
           </DailyAffiramtionContainer>
         )}
       {preferences.showMood && <MoodTrackerComponent />}
-      <PreviousEntriesListComponent />
+      <Grid container>
+        <Grid item xs={12} sm={6}>
+          <PreviousEntriesListComponent />
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <GoalsTrackerComponent />
+        </Grid>
+      </Grid>
     </HomePageContainer>
   )
 }

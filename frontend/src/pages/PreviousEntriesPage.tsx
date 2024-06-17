@@ -242,6 +242,8 @@ const PreviousEntriesPage: React.FunctionComponent = () => {
             style={{
               textDecoration: "none",
               color: theme.palette.primary.main,
+              textShadow:
+                "1px 1px 0px #fff, -1px 1px 0px #fff, 1px -1px 0px #fff, -1px -1px 0px #fff",
             }}
           >
             <TimelineItem key={m}>

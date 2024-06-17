@@ -1,25 +1,17 @@
 import React, { useMemo, useRef, useState } from "react"
 import styled from "@emotion/styled"
 import { convertToMonthDay } from "../../utils/date-utils"
-import { Button, Paper, Typography, useTheme } from "@mui/material"
+import { Button, Grid, Paper, Typography, useTheme } from "@mui/material"
 import { useSelector } from "react-redux"
 import { State } from "../../store"
 import HighchartsReact from "highcharts-react-official"
 import Highcharts, { SeriesXrangeOptions } from "highcharts/highstock"
 
 const Container = styled(Paper)`
-  background-color: white;
+  background-color: #fffcf5;
   padding: 20px 20px 50px 20px;
   margin: 50px 20px;
   border: 1px solid lightgrey;
-`
-
-const TimeFiltersContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  gap: 20px;
-  justify-content: center;
-  margin-bottom: 20px;
 `
 
 export type DataType = {
@@ -376,7 +368,7 @@ const MoodTrackerComponent: React.FunctionComponent = () => {
       <Typography variant="h5" sx={{ p: "20px" }} align="center">
         Mood Tracker
       </Typography>
-      <TimeFiltersContainer>
+      <Grid container justifyContent={"center"} gap={"20px"}>
         {timeFilters.map((f) => (
           <Button
             key={f.name}
@@ -391,7 +383,7 @@ const MoodTrackerComponent: React.FunctionComponent = () => {
             {f.name}
           </Button>
         ))}
-      </TimeFiltersContainer>
+      </Grid>
       <HighchartsReact highcharts={Highcharts} options={chartOptions} />
     </Container>
   )

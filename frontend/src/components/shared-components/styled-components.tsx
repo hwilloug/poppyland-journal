@@ -13,9 +13,14 @@ export const PageContentContainer = styled.div`
 `
 
 export const EntrySectionContainer = styled(Paper)`
-  background-color: white;
+  background-color: #fffcf5;
   border: 1px solid lightgrey;
   padding: 20px;
   margin-bottom: 50px;
   margin-top: 20px;
 `
+
+export const Divider = styled("hr")({
+  minWidth: "100%",
+  border: "1px solid lightgrey",
+})

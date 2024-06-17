@@ -18,6 +18,7 @@ import {
 } from "@mui/material"
 import { useSelector } from "react-redux"
 import { State } from "../../store"
+import MarkdownComponent from "../shared-components/Markdown"
 import { Divider } from "../shared-components/styled-components"
 
 const Container = styled(Paper)`
@@ -27,59 +28,53 @@ const Container = styled(Paper)`
   border: 1px solid lightgrey;
 `
 
-const PreviousEntriesListComponent: React.FunctionComponent = () => {
+const GoalsTrackerComponent: React.FunctionComponent = () => {
   const data = useSelector((state: State) => state.journal.entries)
   const dates = useMemo(() => {
-    let dates = []
+    let dates: { [date: string]: string } = {}
     for (let date in data) {
-      dates.push(date)
+      dates[date] = data[date].goal || "None"
     }
     return dates
   }, [data])
   return (
     <Container>
       <Typography variant="h5" sx={{ p: "20px", textAlign: "center" }}>
-        Entries
+        Goals
       </Typography>
       <TableContainer>
         <Grid container>
           <Divider />
-          {[...Array(5).keys()].map((i) => {
+          {[...Array(3).keys()].map((i) => {
             const date = new Date(new Date().setDate(new Date().getDate() - i))
             const shortDate = convertToShortDate(date)
             const dateString = convertToDayOfWeekMonthDay(date)
             return (
               <Grid item container alignItems={"center"} key={dateString}>
-                <Grid item xs={12} md={6}>
+                <Grid item xs={12} md={5} lg={3}>
                   <Typography align="center">{dateString}</Typography>
                 </Grid>
-                <Grid item xs={12} md={6} textAlign={"center"} padding={"10px"}>
-                  <Link to={`/edit/${shortDate}`}>
-                    <Button
-                      color={
-                        dates.includes(shortDate) ? "secondary" : "primary"
-                      }
-                      variant="contained"
-                    >
-                      {dates.includes(shortDate) ? "Edit" : "Create"} Entry
-                    </Button>
-                  </Link>
+                <Grid item xs={12} md={7} lg={9}>
+                  <MarkdownComponent
+                    view="view"
+                    value={dates[shortDate] || "None"}
+                  />
                 </Grid>
                 <Divider />
               </Grid>
             )
           })}
-          <Button
-            variant="outlined"
-            color="secondary"
-            sx={{ minWidth: "100%", padding: "10px" }}
-          >
-            View All Entries
-          </Button>
         </Grid>
+        <Button
+          variant="outlined"
+          color="secondary"
+          sx={{ minWidth: "100%", padding: "10px" }}
+        >
+          View All Goals
+        </Button>
       </TableContainer>
     </Container>
   )
 }
 
-export default PreviousEntriesListComponent
+export default GoalsTrackerComponent
