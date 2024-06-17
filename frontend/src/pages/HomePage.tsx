@@ -20,13 +20,18 @@ const HomePageContainer = styled.div`
 `
 
 const DailyAffiramtionContainer = styled(Paper)`
-  background-color: ${deepPurple[500]};
+  background-image: linear-gradient(
+    to bottom,
+    ${deepPurple[400]},
+    ${deepPurple[700]}
+  );
   margin: 20px;
   padding: 20px;
   color: white;
   text-align: center;
   width: 50%;
   margin: 20px auto;
+  border: 1px outset white;
 `
 
 const HomePage: React.FunctionComponent = () => {
@@ -55,7 +60,12 @@ const HomePage: React.FunctionComponent = () => {
         }}
         align={"center"}
       >
-        Dashboard
+        {new Date().toLocaleDateString("en-US", {
+          weekday: "long",
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        })}
       </Typography>
       {preferences.showDailyAffirmation &&
         Object.keys(journalState.entries).includes(today) &&

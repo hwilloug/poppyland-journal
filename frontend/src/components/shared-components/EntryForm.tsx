@@ -312,6 +312,8 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
           textShadow:
             "1px 1px 0px #fff, -1px 1px 0px #fff, 1px -1px 0px #fff, -1px -1px 0px #fff",
         }}
+        textAlign={"center"}
+        marginTop={"20px"}
       >
         Morning
       </Typography>
@@ -341,6 +343,7 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
           textShadow:
             "1px 1px 0px #fff, -1px 1px 0px #fff, 1px -1px 0px #fff, -1px -1px 0px #fff",
         }}
+        textAlign={"center"}
       >
         Evening
       </Typography>
@@ -381,7 +384,13 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
 
       <SavingContainer>
         {isSaving && <CircularProgress color="primary" />}
-        {!isSaving && <CheckCircleIcon color="primary" fontSize="large" />}
+        {!isSaving && (
+          <CheckCircleIcon
+            color="primary"
+            fontSize="large"
+            sx={{ backgroundColor: "white", borderRadius: "50%" }}
+          />
+        )}
       </SavingContainer>
     </>
   )

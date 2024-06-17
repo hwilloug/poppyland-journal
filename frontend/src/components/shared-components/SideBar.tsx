@@ -68,7 +68,7 @@ const SideBarComponent: React.FunctionComponent<SideBarProps> = ({
           </NavItem>
           <Box sx={{ flexGrow: 1 }} />
           <NavItem>
-            <StyledTooltip title="Today">
+            <StyledTooltip title="Today's Entry">
               <Link to="/today" style={navItemStyle}>
                 <TodayIcon />
               </Link>
