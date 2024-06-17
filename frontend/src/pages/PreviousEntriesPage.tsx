@@ -57,7 +57,7 @@ const EntriesContainer = styled.div`
 `
 
 const EntryContainer = styled(Paper)`
-  background-color: white;
+  background-color: #fffcf5;
   border: 1px solid lightgrey;
   padding: 20px;
   padding-left: 75px;
