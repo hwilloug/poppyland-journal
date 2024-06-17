@@ -51,7 +51,7 @@ const NavigatorContainer = styled.div``
 const EntriesContainer = styled.div`
   display: flex;
   flex-direction: column;
-  min-width: 90%;
+  min-width: 80%;
   margin-left: 175px;
   gap: 50px;
 `
@@ -419,7 +419,7 @@ const PreviousEntriesPage: React.FunctionComponent = () => {
           >
             <MenuItem onClick={handleMoreClose}>
               <Link
-                to={`/edit/${selectedDate}`}
+                to={`/${selectedDate}/edit`}
                 style={{ textDecoration: "None", color: "black" }}
               >
                 Edit Entry

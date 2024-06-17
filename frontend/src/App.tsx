@@ -12,6 +12,7 @@ import { theme } from "./theme"
 import Layout from "./Layout"
 import { useEffect } from "react"
 import { journalActions } from "./store"
+import EntriesPage from "./pages/EntriesPage"
 
 const AppContainer = styled.div`
   min-height: 100vh;
@@ -35,12 +36,16 @@ const router = createBrowserRouter([
         element: <PreviousEntriesPage />,
       },
       {
-        path: "edit/:date",
+        path: ":date/edit",
         element: <EditEntryPage />,
       },
       {
         path: "preferences",
         element: <UserPreferencesPage />,
+      },
+      {
+        path: "entries",
+        element: <EntriesPage />,
       },
     ],
   },

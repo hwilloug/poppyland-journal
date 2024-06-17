@@ -54,7 +54,7 @@ const PreviousEntriesListComponent: React.FunctionComponent = () => {
                   <Typography align="center">{dateString}</Typography>
                 </Grid>
                 <Grid item xs={12} md={6} textAlign={"center"} padding={"10px"}>
-                  <Link to={`/edit/${shortDate}`}>
+                  <Link to={`/${shortDate}/edit`}>
                     <Button
                       color={
                         dates.includes(shortDate) ? "secondary" : "primary"
@@ -69,13 +69,15 @@ const PreviousEntriesListComponent: React.FunctionComponent = () => {
               </Grid>
             )
           })}
-          <Button
-            variant="outlined"
-            color="secondary"
-            sx={{ minWidth: "100%", padding: "10px" }}
-          >
-            View All Entries
-          </Button>
+          <Link to={`/entries`} style={{ minWidth: "100%" }}>
+            <Button
+              variant="outlined"
+              color="secondary"
+              sx={{ minWidth: "100%", padding: "10px" }}
+            >
+              View All Entries
+            </Button>
+          </Link>
         </Grid>
       </TableContainer>
     </Container>

@@ -2,24 +2,14 @@ import React, { CSSProperties, useState } from "react"
 import styled from "@emotion/styled"
 import { Link } from "react-router-dom"
 import { useAuth0 } from "@auth0/auth0-react"
-import {
-  AppBar,
-  Box,
-  Chip,
-  Divider,
-  Drawer,
-  Toolbar,
-  Typography,
-} from "@mui/material"
+import { AppBar, Box, Toolbar, Typography } from "@mui/material"
 import ManageAccountsIcon from "@mui/icons-material/ManageAccounts"
 import LogoutIcon from "@mui/icons-material/Logout"
 import { useSelector } from "react-redux"
 import { State } from "../../store"
-import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft"
-import ArrowCircleRightIcon from "@mui/icons-material/ArrowCircleRight"
 import MenuBookIcon from "@mui/icons-material/MenuBook"
 import TodayIcon from "@mui/icons-material/Today"
-import HomeIcon from "@mui/icons-material/Home"
+import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted"
 
 const NavItem = styled(Box)`
   margin: 10px;
@@ -73,6 +63,11 @@ const SideBarComponent: React.FunctionComponent<SideBarProps> = ({
           <NavItem>
             <Link to="/today" style={navItemStyle}>
               <TodayIcon />
+            </Link>
+          </NavItem>
+          <NavItem>
+            <Link to="/entries" style={navItemStyle}>
+              <FormatListBulletedIcon />
             </Link>
           </NavItem>
           <NavItem>
