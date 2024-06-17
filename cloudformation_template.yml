@@ -297,8 +297,8 @@ Resources:
                   item_payload['SleepQuality'] = {'S': payload.get('sleep_quality')}
               if payload.get('affirmation') is not None:
                   item_payload['Affirmation'] = {'S': payload.get('affirmation')}
-              if payload.get('goal') is not None:
-                  item_payload['Goal'] = {'S': payload.get('goal')}
+              if payload.get('goals') is not None:
+                  item_payload['Goals'] = {'S': payload.get('goals')}
               if payload.get('daily_question_a') is not None:
                   item_payload['DailyQuestionA'] = {'S': payload.get('daily_question_a')}
               if len(payload.get('mental_health', [])):
@@ -394,7 +394,7 @@ Resources:
                   "mental_health": item['Item'].get('MentalHealth', {}).get("SS", []),
                   "substances": item['Item'].get('Substances', {}).get("SS", []),
                   "affirmation": item['Item'].get('Affirmation', {}).get("S"),
-                  "goal": item['Item'].get('Goal', {}).get("S"),
+                  "goals": item['Item'].get('Goals', item['Item'].get('Goal', {})).get("S"),
                   "daily_question_q": item['Item'].get('DailyQuestionQ', {}).get("S"),
                   "daily_question_a": item['Item'].get('DailyQuestionA', {}).get("S"),
                   "exercise": item['Item'].get('Exercise', {}).get("N")
@@ -453,7 +453,7 @@ Resources:
                       "mental_health": item.get('MentalHealth', {}).get("SS", []),
                       "substances": item.get('Substances', {}).get("SS", []),
                       "affirmation": item.get('Affirmation', {}).get("S"),
-                      "goal": item.get('Goal', {}).get("S"),
+                      "goals": item.get('Goals', item.get("Goal", {})).get("S"),
                       "daily_question_q": item.get('DailyQuestionQ', {}).get("S"),
                       "daily_question_a": item.get('DailyQuestionA', {}).get("S"),
                       "exercise": item.get('Exercise', {}).get("N")
