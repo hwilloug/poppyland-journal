@@ -13,6 +13,11 @@ const MoodContainer = styled.div`
   flex-direciton: row;
   gap: 10px;
   justify-content: center;
+  svg {
+    :hover {
+      cursor: pointer;
+    }
+  }
 `
 
 interface MoodEntryProps {
@@ -33,7 +38,11 @@ const MoodEntryComponent: React.FunctionComponent<MoodEntryProps> = ({
         <SentimentVeryDissatisfiedIcon
           fontSize="large"
           color="error"
-          style={mood === 0 ? { border: "1px solid black" } : {}}
+          style={
+            mood === 0
+              ? { outline: "1px solid purple", borderRadius: "50%" }
+              : {}
+          }
           onClick={() => {
             onChange(0)
           }}
@@ -41,7 +50,11 @@ const MoodEntryComponent: React.FunctionComponent<MoodEntryProps> = ({
         <SentimentDissatisfiedIcon
           fontSize="large"
           color="warning"
-          style={mood === 1 ? { border: "1px solid black" } : {}}
+          style={
+            mood === 1
+              ? { outline: "1px solid purple", borderRadius: "50%" }
+              : {}
+          }
           onClick={() => {
             onChange(1)
           }}
@@ -49,7 +62,11 @@ const MoodEntryComponent: React.FunctionComponent<MoodEntryProps> = ({
         <SentimentNeutralIcon
           fontSize="large"
           color="info"
-          style={mood === 2 ? { border: "1px solid black" } : {}}
+          style={
+            mood === 2
+              ? { outline: "1px solid purple", borderRadius: "50%" }
+              : {}
+          }
           onClick={() => {
             onChange(2)
           }}
@@ -57,7 +74,11 @@ const MoodEntryComponent: React.FunctionComponent<MoodEntryProps> = ({
         <SentimentSatisfiedIcon
           fontSize="large"
           color="success"
-          style={mood === 3 ? { border: "1px solid black" } : {}}
+          style={
+            mood === 3
+              ? { outline: "1px solid purple", borderRadius: "50%" }
+              : {}
+          }
           onClick={() => {
             onChange(3)
           }}
@@ -66,7 +87,11 @@ const MoodEntryComponent: React.FunctionComponent<MoodEntryProps> = ({
           fontSize="large"
           style={
             mood === 4
-              ? { color: "purple", border: "1px solid black" }
+              ? {
+                  color: "purple",
+                  outline: "1px solid purple",
+                  borderRadius: "50%",
+                }
               : { color: "purple" }
           }
           onClick={() => {

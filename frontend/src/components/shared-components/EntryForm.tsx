@@ -90,7 +90,7 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
   )
 
   const [mood, setMood] = useState<number | undefined>(
-    loadedEntry.mood ? parseInt(loadedEntry.mood) : undefined,
+    loadedEntry.mood !== undefined ? parseInt(loadedEntry.mood) : undefined,
   )
   const [bedTime, setBedTime] = useState<Dayjs | null>(
     loadedEntry.bedTime ? dayjs(loadedEntry.bedTime) : null,
@@ -130,7 +130,7 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
   const [stateLoaded, setStateLoaded] = useState(false)
 
   const loadForm = (entry: JournalEntry) => {
-    setMood(entry.mood ? parseInt(entry.mood) : undefined)
+    setMood(entry.mood !== undefined ? parseInt(entry.mood) : undefined)
     setBedTime(entry.bedTime ? dayjs(entry.bedTime) : null)
     setWakeUpTime(entry.wakeUpTime ? dayjs(entry.wakeUpTime) : null)
     setHoursSleep(entry.hoursSleep)
@@ -220,7 +220,7 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
     if (prevFormStateLoaded && !isLoading) {
       if (
         stateLoaded &&
-        (mood ||
+        (mood !== undefined ||
           hoursSleep ||
           wakeUpTime ||
           bedTime ||
@@ -253,7 +253,7 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
       }
     } else {
       if (
-        mood ||
+        mood !== undefined ||
         hoursSleep ||
         wakeUpTime ||
         bedTime ||
