@@ -404,14 +404,19 @@ const PreviousEntriesPage: React.FunctionComponent = () => {
                         </SectionContainer>
                       )}
                     {preferences.showSubstance &&
-                      entry.substances.length > 0 && (
+                      entry.substances.filter((s) => s.amount !== 0).length && (
                         <SectionContainer>
                           <Typography fontWeight={"bold"}>
                             Substances:{" "}
                           </Typography>
-                          <Typography>
-                            {entry.substances && entry.substances.join(", ")}
-                          </Typography>
+                          {entry.substances &&
+                            entry.substances
+                              .filter((s) => s.amount !== 0)
+                              .map((s) => (
+                                <Typography>
+                                  {s.substance} - {s.amount}
+                                </Typography>
+                              ))}
                         </SectionContainer>
                       )}
                     {preferences.showExercise && (
