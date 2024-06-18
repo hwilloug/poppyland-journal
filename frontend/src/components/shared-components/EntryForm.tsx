@@ -90,7 +90,9 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
   )
 
   const [mood, setMood] = useState<number | undefined>(
-    loadedEntry.mood !== undefined ? parseInt(loadedEntry.mood) : undefined,
+    loadedEntry.mood !== undefined && loadedEntry.mood !== null
+      ? parseInt(loadedEntry.mood)
+      : undefined,
   )
   const [bedTime, setBedTime] = useState<Dayjs | null>(
     loadedEntry.bedTime ? dayjs(loadedEntry.bedTime) : null,
@@ -130,7 +132,11 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
   const [stateLoaded, setStateLoaded] = useState(false)
 
   const loadForm = (entry: JournalEntry) => {
-    setMood(entry.mood !== undefined ? parseInt(entry.mood) : undefined)
+    setMood(
+      entry.mood !== undefined && entry.mood !== null
+        ? parseInt(entry.mood)
+        : undefined,
+    )
     setBedTime(entry.bedTime ? dayjs(entry.bedTime) : null)
     setWakeUpTime(entry.wakeUpTime ? dayjs(entry.wakeUpTime) : null)
     setHoursSleep(entry.hoursSleep)
@@ -204,10 +210,17 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
           newGoals[index] = { goal, checked }
         }
       }
-      console.log(newGoals)
       setGoals([...newGoals])
     } else {
       setGoals([{ goal, checked }])
+    }
+  }
+
+  const removeGoal = (index: number) => {
+    if (goals !== undefined && goals !== null) {
+      let newGoals = [...goals]
+      newGoals.splice(index, 1)
+      setGoals([...newGoals])
     }
   }
 
@@ -248,7 +261,7 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
           mentalHealth.length ||
           substances.length ||
           entryContent ||
-          goals ||
+          goals !== undefined ||
           dailyQuestionA ||
           minutesExercise !== 0)
       ) {
@@ -281,7 +294,7 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
         mentalHealth.length ||
         substances.length ||
         entryContent ||
-        goals ||
+        goals !== undefined ||
         dailyQuestionA ||
         minutesExercise !== 0
       ) {
@@ -354,7 +367,11 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
         />
       )}
       {preferences.showDailyGoal && (
-        <DailyGoalComponent goals={goals || []} onChange={modifyGoals} />
+        <DailyGoalComponent
+          goals={goals || []}
+          onChange={modifyGoals}
+          onRemove={removeGoal}
+        />
       )}
       <Typography
         variant="h5"

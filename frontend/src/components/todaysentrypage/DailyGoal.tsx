@@ -8,11 +8,13 @@ import { GoalsType } from "../../types/journal-types"
 interface DailyGoalProps {
   goals: GoalsType[] | string
   onChange: Function
+  onRemove: Function
 }
 
 const DailyGoalComponent: React.FunctionComponent<DailyGoalProps> = ({
   goals,
   onChange,
+  onRemove,
 }) => {
   return (
     <EntrySectionContainer>
@@ -42,7 +44,9 @@ const DailyGoalComponent: React.FunctionComponent<DailyGoalProps> = ({
                 />
               </Grid>
               <Grid item>
-                <DeleteIcon />
+                <Button onClick={() => onRemove(index)}>
+                  <DeleteIcon />
+                </Button>
               </Grid>
             </Grid>
           )
@@ -63,7 +67,9 @@ const DailyGoalComponent: React.FunctionComponent<DailyGoalProps> = ({
             />
           </Grid>
           <Grid item>
-            <DeleteIcon />
+            <Button onClick={onRemove()}>
+              <DeleteIcon />
+            </Button>
           </Grid>
         </Grid>
       )}
