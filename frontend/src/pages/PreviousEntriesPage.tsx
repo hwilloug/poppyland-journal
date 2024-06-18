@@ -16,6 +16,7 @@ import {
   Alert,
   Box,
   Button,
+  Checkbox,
   Grid,
   Menu,
   MenuItem,
@@ -348,10 +349,30 @@ const PreviousEntriesPage: React.FunctionComponent = () => {
                         />
                       </SectionContainer>
                     )}
-                    {preferences.showDailyGoal && entry.goal && (
+                    {preferences.showDailyGoal && entry.goals && (
                       <SectionContainer>
                         <Typography fontWeight={"bold"}>Daily Goal:</Typography>
-                        <MarkdownComponent view="view" value={entry.goal} />
+                        {entry.goals.map((goal, idx) => {
+                          if (goal === null) {
+                            return
+                          }
+                          return (
+                            <Grid
+                              container
+                              key={`${goal}-${idx}`}
+                              alignItems={"center"}
+                            >
+                              <Grid item>
+                                <Checkbox checked={goal.checked} />
+                              </Grid>
+                              <Grid item xs={10}>
+                                <Typography display={"inline-block"}>
+                                  {goal.goal}
+                                </Typography>
+                              </Grid>
+                            </Grid>
+                          )
+                        })}
                       </SectionContainer>
                     )}
                     {preferences.showDailyQuestion && entry.dailyQuestionA && (
@@ -390,10 +411,15 @@ const PreviousEntriesPage: React.FunctionComponent = () => {
                       )}
                     {preferences.showExercise && (
                       <SectionContainer>
-                        <Typography fontWeight={"bold"}>
+                        <Typography
+                          display={"inline-block"}
+                          fontWeight={"bold"}
+                        >
                           Minutes Exercise:
                         </Typography>
-                        <Typography> {entry.exercise}</Typography>
+                        <Typography display={"inline-block"} ml={1}>
+                          {entry.exercise}
+                        </Typography>
                       </SectionContainer>
                     )}
                     <hr className="divider" />

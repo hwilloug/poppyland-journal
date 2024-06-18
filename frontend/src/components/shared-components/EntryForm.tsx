@@ -17,7 +17,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { State, journalActions } from "../../store"
 import { getProfile } from "../../utils/get-profile"
 import ExerciseEntryComponent from "../todaysentrypage/ExerciseEntry"
-import { JournalEntry } from "../../types/journal-types"
+import { GoalsType, JournalEntry } from "../../types/journal-types"
 import CheckCircleIcon from "@mui/icons-material/CheckCircle"
 import { ReactNode, useEffect, useMemo, useState } from "react"
 const _ = require("lodash")
@@ -60,7 +60,7 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
         mentalHealth: [],
         substances: [],
         entryContent: undefined,
-        goal: undefined,
+        goals: undefined,
         dailyQuestionQ: undefined,
         dailyQuestionA: undefined,
         exercise: "0",
@@ -78,7 +78,7 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
       loadedEntry.mentalHealth.length ||
       loadedEntry.substances.length ||
       loadedEntry.entryContent ||
-      loadedEntry.goal ||
+      loadedEntry.goals ||
       loadedEntry.dailyQuestionA ||
       loadedEntry.exercise !== "0"
     )
@@ -107,8 +107,8 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
   const [affirmation, setAffirmation] = useState<string | undefined>(
     loadedEntry.affirmation || undefined,
   )
-  const [goal, setGoal] = useState<string | undefined>(
-    loadedEntry.goal || undefined,
+  const [goals, setGoals] = useState<GoalsType[] | undefined>(
+    loadedEntry.goals || undefined,
   )
   const [mentalHealth, setMentalHealth] = useState<string[]>(
     loadedEntry.mentalHealth,
@@ -135,7 +135,7 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
     setWakeUpTime(entry.wakeUpTime ? dayjs(entry.wakeUpTime) : null)
     setHoursSleep(entry.hoursSleep)
     setAffirmation(entry.affirmation)
-    setGoal(entry.goal)
+    setGoals(entry.goals)
     setMentalHealth(entry.mentalHealth)
     setSubstances(entry.substances)
     setEntryContent(entry.entryContent)
@@ -192,6 +192,19 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
     }
   }
 
+  const modifyGoals = (index: number, goal: string, checked: boolean) => {
+    if (goals !== undefined) {
+      let newGoals = [...goals]
+      if (typeof newGoals === "string") {
+        newGoals = [{ goal: newGoals, checked }]
+      } else {
+        newGoals[index] = { goal, checked }
+      }
+      console.log(newGoals)
+      setGoals([...newGoals])
+    }
+  }
+
   const onSubmit = async () => {
     try {
       const token = await getAccessTokenSilently()
@@ -206,7 +219,7 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
         mentalHealth,
         substances,
         entryContent,
-        goal,
+        goals,
         dailyQuestionA,
         dailyQuestionQ,
         exercise: minutesExercise?.toString(),
@@ -229,7 +242,7 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
           mentalHealth.length ||
           substances.length ||
           entryContent ||
-          goal ||
+          goals ||
           dailyQuestionA ||
           minutesExercise !== 0)
       ) {
@@ -243,7 +256,7 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
           !_.isEqual(loadedEntry.mentalHealth, mentalHealth) ||
           !_.isEqual(loadedEntry.substances, substances) ||
           loadedEntry.entryContent != entryContent ||
-          loadedEntry.goal != goal ||
+          !_.isEqual(loadedEntry.goals, goals) ||
           loadedEntry.dailyQuestionA != dailyQuestionA ||
           loadedEntry.dailyQuestionQ != dailyQuestionQ ||
           loadedEntry.exercise != minutesExercise.toString()
@@ -262,7 +275,7 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
         mentalHealth.length ||
         substances.length ||
         entryContent ||
-        goal ||
+        goals ||
         dailyQuestionA ||
         minutesExercise !== 0
       ) {
@@ -284,7 +297,7 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
     mentalHealth,
     substances,
     entryContent,
-    goal,
+    goals,
     dailyQuestionA,
     dailyQuestionQ,
     minutesExercise,
@@ -335,7 +348,7 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
         />
       )}
       {preferences.showDailyGoal && (
-        <DailyGoalComponent goal={goal} onChange={setGoal} />
+        <DailyGoalComponent goals={goals || []} onChange={modifyGoals} />
       )}
       <Typography
         variant="h5"

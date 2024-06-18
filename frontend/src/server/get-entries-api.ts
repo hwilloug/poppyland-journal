@@ -13,6 +13,7 @@ export interface EntryResponseType {
   substances: string[]
   entry_content: string
   goal: string
+  goals: string
   daily_question_q: string
   daily_question_a: string
   exercise: string

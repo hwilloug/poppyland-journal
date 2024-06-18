@@ -18,6 +18,7 @@ export function* getEntriesSaga(action: any) {
 
     const mappedEntries: JournalEntries = response.reduce(
       (previousValue, currentValue: EntryResponseType) => {
+        console.log(currentValue.goals)
         return {
           ...previousValue,
           [currentValue.date]: {
@@ -31,7 +32,11 @@ export function* getEntriesSaga(action: any) {
             mentalHealth: currentValue.mental_health,
             substances: currentValue.substances,
             entryContent: currentValue.entry_content,
-            goal: currentValue.goal,
+            goals:
+              typeof currentValue.goals === "string" &&
+              currentValue.goals[0] === "["
+                ? JSON.parse(currentValue.goals)
+                : undefined,
             dailyQuestionQ: currentValue.daily_question_q,
             dailyQuestionA: currentValue.daily_question_a,
             exercise: currentValue.exercise,
@@ -40,6 +45,7 @@ export function* getEntriesSaga(action: any) {
       },
       {},
     )
+    console.log(mappedEntries)
     yield put(journalActions.setEntries(mappedEntries))
   } catch (e) {
     console.error(e)
