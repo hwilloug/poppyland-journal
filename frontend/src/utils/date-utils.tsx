@@ -31,3 +31,11 @@ export const convertToLongDateFromShortDate = (date: string) => {
     dateStyle: "full",
   })
 }
+
+export const getPreviousMonday = (date: Date) => {
+  const last7Days = [...Array(7).keys()].map((i) => {
+    return new Date(date.setDate(date.getDate() - i))
+  })
+  const monday = last7Days.filter((d) => d.getDay() === 1)[0]
+  return convertToShortDate(monday)
+}

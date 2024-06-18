@@ -30,6 +30,7 @@ export interface JournalEntry {
   substances: SubstancesType[]
   entryContent?: string
   goals?: GoalsType[]
+  weeklyGoals?: GoalsType[]
   dailyQuestionQ?: string
   dailyQuestionA?: string
   exercise?: string

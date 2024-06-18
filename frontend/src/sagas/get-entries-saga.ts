@@ -63,6 +63,7 @@ export function* getEntriesSaga(action: any) {
               currentValue.goals[0] === "["
                 ? JSON.parse(currentValue.goals)
                 : currentValue.goals,
+            weeklyGoals: currentValue.weekly_goals || [],
             dailyQuestionQ: currentValue.daily_question_q,
             dailyQuestionA: currentValue.daily_question_a,
             exercise: currentValue.exercise,

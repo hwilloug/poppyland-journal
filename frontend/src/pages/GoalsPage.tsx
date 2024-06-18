@@ -1,4 +1,4 @@
-import { Checkbox, Grid, Paper, Typography } from "@mui/material"
+import { Button, Checkbox, Grid, Input, Paper, Typography } from "@mui/material"
 import {
   HeaderText,
   PageContentContainer,
@@ -9,126 +9,231 @@ import React, { useEffect, useMemo, useState } from "react"
 import {
   convertToDayOfWeekMonthDay,
   convertToShortDate,
+  getPreviousMonday,
 } from "../utils/date-utils"
 import { useAuth0 } from "@auth0/auth0-react"
 import { GoalsType } from "../types/journal-types"
+import DeleteIcon from "@mui/icons-material/Delete"
+import LibraryAddIcon from "@mui/icons-material/LibraryAdd"
+const _ = require("lodash")
 
 const GoalsPage: React.FC = () => {
   const { getAccessTokenSilently, user } = useAuth0()
   const data = useSelector((state: State) => state.journal.entries)
-  const dates = useMemo(() => {
-    let dates: { [date: string]: GoalsType[] | string } = {}
-    for (let date in data) {
-      dates[date] = data[date].goals || "None"
-    }
-    return dates
-  }, [data])
 
-  const [goals, setGoals] = useState<{ [date: string]: GoalsType[] | string }>()
+  const DailyGoals: React.FC = () => {
+    const dates = useMemo(() => {
+      let dates: { [date: string]: GoalsType[] | string } = {}
+      for (let date in data) {
+        dates[date] = data[date].goals || "None"
+      }
+      return dates
+    }, [data])
 
-  useEffect(() => {
-    setGoals(dates)
-  }, [dates])
+    const [goals, setGoals] = useState<{
+      [date: string]: GoalsType[] | string
+    }>()
 
-  const onSubmit = async (date: string, newGoals: GoalsType[]) => {
-    try {
-      const token = await getAccessTokenSilently()
-      journalActions.putEntry(token, user!.sub!, date, {
-        ...data[date],
-        date,
-        goals: newGoals,
-      })
-    } catch (e) {
-      console.log(e)
-    }
-  }
+    useEffect(() => {
+      setGoals(dates)
+    }, [dates])
 
-  const toggleGoals = (date: string, index: number) => {
-    if (goals !== undefined) {
-      if (typeof goals[date] === "object" && Array.isArray(goals[date])) {
-        const newGoals = [...(goals[date] as GoalsType[])]
-        newGoals[index] = {
-          ...newGoals[index],
-          checked: !newGoals[index].checked,
-        }
-        setGoals({ ...goals, [date]: newGoals })
-        onSubmit(date, newGoals)
+    const onSubmit = async (date: string, newGoals: GoalsType[]) => {
+      try {
+        const token = await getAccessTokenSilently()
+        journalActions.putEntry(token, user!.sub!, date, {
+          ...data[date],
+          date,
+          goals: newGoals,
+        })
+      } catch (e) {
+        console.log(e)
       }
     }
-  }
 
-  const DailyGoals: React.FC = () => (
-    <>
-      <HeaderText>Daily Goals</HeaderText>
-      <Paper sx={{ backgroundColor: "#fffcf5", p: 4 }} elevation={24}>
-        {[...Array(7).keys()].map((i) => {
-          const date = new Date(new Date().setDate(new Date().getDate() - i))
-          const shortDate = convertToShortDate(date)
-          const dateString = convertToDayOfWeekMonthDay(date)
-          return (
-            <Grid item container key={`${dateString}-${i}`}>
-              <Grid item xs={12}>
-                <Typography variant="h6">{dateString}</Typography>
-              </Grid>
-              <Grid item xs={12}>
-                <Grid container flexDirection={"column"} mb={4}>
-                  {![shortDate] || dates[shortDate] === "None" ? (
-                    <Grid item xs={12}>
-                      <Typography>None</Typography>
-                    </Grid>
-                  ) : Array.isArray(dates[shortDate]) ? (
-                    // @ts-ignore
-                    dates[shortDate].map((goal, idx) => {
-                      if (goal === null) {
-                        return null
-                      }
-                      return (
-                        <Grid
-                          item
-                          xs={12}
-                          key={`${dateString}-${idx}`}
-                          container
-                          wrap="nowrap"
-                          alignItems={"center"}
-                        >
-                          <Grid item xs={2}>
-                            <Checkbox
-                              key={`${dateString}-${idx}-checkbox`}
-                              checked={goal.checked}
-                              onChange={() => toggleGoals(shortDate, idx)}
-                            />
+    const toggleGoals = (date: string, index: number) => {
+      if (goals !== undefined) {
+        if (typeof goals[date] === "object" && Array.isArray(goals[date])) {
+          const newGoals = [...(goals[date] as GoalsType[])]
+          newGoals[index] = {
+            ...newGoals[index],
+            checked: !newGoals[index].checked,
+          }
+          setGoals({ ...goals, [date]: newGoals })
+          onSubmit(date, newGoals)
+        }
+      }
+    }
+
+    return (
+      <>
+        <HeaderText>Daily Goals</HeaderText>
+        <Paper sx={{ backgroundColor: "#fffcf5", p: 4 }} elevation={24}>
+          {[...Array(7).keys()].map((i) => {
+            const date = new Date(new Date().setDate(new Date().getDate() - i))
+            const shortDate = convertToShortDate(date)
+            const dateString = convertToDayOfWeekMonthDay(date)
+            return (
+              <Grid item container key={`${dateString}-${i}`}>
+                <Grid item xs={12}>
+                  <Typography variant="h6">{dateString}</Typography>
+                </Grid>
+                <Grid item xs={12}>
+                  <Grid container flexDirection={"column"} mb={4}>
+                    {![shortDate] || dates[shortDate] === "None" ? (
+                      <Grid item xs={12}>
+                        <Typography>None</Typography>
+                      </Grid>
+                    ) : Array.isArray(dates[shortDate]) ? (
+                      // @ts-ignore
+                      dates[shortDate].map((goal, idx) => {
+                        if (goal === null) {
+                          return null
+                        }
+                        return (
+                          <Grid
+                            item
+                            xs={12}
+                            key={`${dateString}-${idx}`}
+                            container
+                            wrap="nowrap"
+                            alignItems={"center"}
+                          >
+                            <Grid item xs={2}>
+                              <Checkbox
+                                key={`${dateString}-${idx}-checkbox`}
+                                checked={goal.checked}
+                                onChange={() => toggleGoals(shortDate, idx)}
+                              />
+                            </Grid>
+                            <Grid item xs={10}>
+                              <Typography display="inline-block">
+                                {goal.goal}
+                              </Typography>
+                            </Grid>
                           </Grid>
-                          <Grid item xs={10}>
-                            <Typography display="inline-block">
-                              {goal.goal}
-                            </Typography>
-                          </Grid>
+                        )
+                      })
+                    ) : (
+                      typeof dates[shortDate] === "string" && (
+                        <Grid item xs={12}>
+                          {/* @ts-ignore */}
+                          <Typography>{dates[shortDate]}</Typography>
                         </Grid>
                       )
-                    })
-                  ) : (
-                    typeof dates[shortDate] === "string" && (
-                      <Grid item xs={12}>
-                        {/* @ts-ignore */}
-                        <Typography>{dates[shortDate]}</Typography>
-                      </Grid>
-                    )
-                  )}
+                    )}
+                  </Grid>
                 </Grid>
               </Grid>
-            </Grid>
-          )
-        })}
-      </Paper>
-    </>
-  )
+            )
+          })}
+        </Paper>
+      </>
+    )
+  }
 
-  const WeeklyGoals: React.FC = () => (
-    <>
-      <HeaderText>Weekly Goals</HeaderText>
-      <Paper sx={{ backgroundColor: "#fffcf5", p: 4 }} elevation={24}></Paper>
-    </>
-  )
+  const WeeklyGoals: React.FC = () => {
+    const [weeklyGoals, setWeeklyGoals] = useState<GoalsType[]>([])
+
+    const lastMonday = getPreviousMonday(new Date())
+
+    const loadedWeeklyGoals = useMemo(() => {
+      if (Object.keys(data).includes(lastMonday)) {
+        return data[lastMonday].weeklyGoals
+      } else return []
+    }, [data])
+
+    const submitWeeklyGoals = async () => {
+      const token = await getAccessTokenSilently()
+      journalActions.putEntry(token, user?.sub || "", lastMonday, {
+        ...data[lastMonday],
+        weeklyGoals: weeklyGoals,
+      })
+    }
+
+    useEffect(() => {
+      if (
+        weeklyGoals !== undefined &&
+        !_.isEqual(weeklyGoals, loadedWeeklyGoals)
+      ) {
+        submitWeeklyGoals()
+      }
+    }, [weeklyGoals])
+
+    useEffect(() => {
+      if (loadedWeeklyGoals !== undefined) {
+        setWeeklyGoals(loadedWeeklyGoals)
+      }
+    }, [loadedWeeklyGoals])
+
+    const onGoalChange = (index: number, goal: string, checked: boolean) => {
+      if (weeklyGoals !== undefined && weeklyGoals !== null) {
+        let newGoals = [...weeklyGoals]
+        if (goal === "") {
+          newGoals.push({ goal, checked })
+        } else {
+          newGoals[index] = { goal, checked }
+        }
+        setWeeklyGoals([...newGoals])
+      } else {
+        setWeeklyGoals([{ goal, checked }])
+      }
+    }
+
+    const onGoalRemove = (index: number) => {
+      if (weeklyGoals !== undefined && weeklyGoals !== null) {
+        let newGoals = [...weeklyGoals]
+        newGoals.splice(index, 1)
+        setWeeklyGoals([...newGoals])
+      }
+    }
+
+    return (
+      <>
+        <HeaderText>Weekly Goals</HeaderText>
+        <Paper sx={{ backgroundColor: "#fffcf5", p: 4 }} elevation={24}>
+          {weeklyGoals.map((goal, index) => {
+            if (goal === null) {
+              return
+            }
+            return (
+              <Grid container key={`${goal}-${index}`} textAlign={"center"}>
+                <Grid item xs={2}>
+                  <Checkbox
+                    checked={goal.checked}
+                    onChange={() =>
+                      onGoalChange(index, goal.goal, !goal.checked)
+                    }
+                  />
+                </Grid>
+                <Grid item xs={8}>
+                  <Input
+                    fullWidth
+                    value={goal.goal}
+                    onChange={(e) =>
+                      onGoalChange(index, e.target.value, goal.checked)
+                    }
+                  />
+                </Grid>
+                <Grid item xs={2}>
+                  <Button onClick={() => onGoalRemove(index)}>
+                    <DeleteIcon />
+                  </Button>
+                </Grid>
+              </Grid>
+            )
+          })}
+          <Button
+            onClick={() => {
+              onGoalChange(weeklyGoals.length, "", false)
+            }}
+          >
+            <LibraryAddIcon sx={{ mr: 1 }} /> Add Goal
+          </Button>
+        </Paper>
+      </>
+    )
+  }
 
   const MonthlyGoals: React.FC = () => (
     <>

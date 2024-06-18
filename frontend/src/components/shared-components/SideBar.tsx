@@ -84,16 +84,16 @@ const SideBarComponent: React.FunctionComponent<SideBarProps> = ({
             </StyledTooltip>
           </NavItem>
           <NavItem>
-            <StyledTooltip title="Entries List">
-              <Link to="/entries" style={navItemStyle}>
-                <FormatListBulletedIcon />
+            <StyledTooltip title="Goals">
+              <Link to="/goals" style={navItemStyle}>
+                <FlagIcon />
               </Link>
             </StyledTooltip>
           </NavItem>
           <NavItem>
-            <StyledTooltip title="Goals">
-              <Link to="/goals" style={navItemStyle}>
-                <FlagIcon />
+            <StyledTooltip title="Entries List">
+              <Link to="/entries" style={navItemStyle}>
+                <FormatListBulletedIcon />
               </Link>
             </StyledTooltip>
           </NavItem>
