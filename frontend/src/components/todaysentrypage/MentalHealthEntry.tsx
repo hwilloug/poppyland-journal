@@ -20,6 +20,7 @@ const MentalHealthContainer = styled.div`
 
 export const mentalHealthSymptoms = [
   "Anxiety",
+  "Avoidance",
   "Depression",
   "Hypomania",
   "No Focus",

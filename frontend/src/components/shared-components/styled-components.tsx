@@ -1,5 +1,11 @@
 import styled from "@emotion/styled"
-import { Button, Paper, PaperProps } from "@mui/material"
+import {
+  Button,
+  Paper,
+  PaperProps,
+  Typography,
+  TypographyProps,
+} from "@mui/material"
 
 export const PageContainer = styled.div`
   margin: 0px;
@@ -24,6 +30,19 @@ export const EntrySectionContainer = styled(
   margin-top: 20px;
   text-align: center;
 `
+
+export const HeaderText = styled(({ className, ...props }: TypographyProps) => (
+  <Typography
+    className={className}
+    variant="h4"
+    textAlign={"center"}
+    sx={{
+      textShadow:
+        "1px 1px 0px #fff, -1px 1px 0px #fff, 1px -1px 0px #fff, -1px -1px 0px #fff",
+    }}
+    {...props}
+  />
+))``
 
 export const Divider = styled("hr")({
   minWidth: "100%",

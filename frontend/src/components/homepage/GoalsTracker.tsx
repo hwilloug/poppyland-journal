@@ -17,6 +17,7 @@ import { State, journalActions } from "../../store"
 import { Divider } from "../shared-components/styled-components"
 import { GoalsType } from "../../types/journal-types"
 import { useAuth0 } from "@auth0/auth0-react"
+import { Link } from "react-router-dom"
 
 const Container = styled(Paper)`
   background-color: #fffcf5;
@@ -129,13 +130,15 @@ const GoalsTrackerComponent: React.FunctionComponent = () => {
             )
           })}
         </Grid>
-        <Button
-          variant="outlined"
-          color="secondary"
-          sx={{ minWidth: "100%", padding: "10px" }}
-        >
-          View All Goals
-        </Button>
+        <Link to="/goals">
+          <Button
+            variant="outlined"
+            color="secondary"
+            sx={{ minWidth: "100%", padding: "10px" }}
+          >
+            View All Goals
+          </Button>
+        </Link>
       </TableContainer>
     </Container>
   )

@@ -18,6 +18,8 @@ import { State } from "../../store"
 import MenuBookIcon from "@mui/icons-material/MenuBook"
 import TodayIcon from "@mui/icons-material/Today"
 import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted"
+import FlagIcon from "@mui/icons-material/Flag"
+import DashboardIcon from "@mui/icons-material/Dashboard"
 
 const NavItem = styled(Box)`
   margin: 10px;
@@ -68,6 +70,13 @@ const SideBarComponent: React.FunctionComponent<SideBarProps> = ({
           </NavItem>
           <Box sx={{ flexGrow: 1 }} />
           <NavItem>
+            <StyledTooltip title="Dashboard">
+              <Link to="/" style={navItemStyle}>
+                <DashboardIcon />
+              </Link>
+            </StyledTooltip>
+          </NavItem>
+          <NavItem>
             <StyledTooltip title="Today's Entry">
               <Link to="/today" style={navItemStyle}>
                 <TodayIcon />
@@ -78,6 +87,13 @@ const SideBarComponent: React.FunctionComponent<SideBarProps> = ({
             <StyledTooltip title="Entries List">
               <Link to="/entries" style={navItemStyle}>
                 <FormatListBulletedIcon />
+              </Link>
+            </StyledTooltip>
+          </NavItem>
+          <NavItem>
+            <StyledTooltip title="Goals">
+              <Link to="/goals" style={navItemStyle}>
+                <FlagIcon />
               </Link>
             </StyledTooltip>
           </NavItem>

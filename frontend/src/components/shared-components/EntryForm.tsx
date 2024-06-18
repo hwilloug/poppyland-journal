@@ -24,6 +24,7 @@ import {
 } from "../../types/journal-types"
 import CheckCircleIcon from "@mui/icons-material/CheckCircle"
 import { ReactNode, useEffect, useMemo, useState } from "react"
+import { HeaderText } from "./styled-components"
 const _ = require("lodash")
 
 const SavingContainer = styled("div")({
@@ -336,27 +337,8 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
 
   return (
     <>
-      <Typography
-        variant="h5"
-        align="center"
-        sx={{
-          textShadow:
-            "1px 1px 0px #fff, -1px 1px 0px #fff, 1px -1px 0px #fff, -1px -1px 0px #fff",
-        }}
-      >
-        {dateFull}
-      </Typography>
-      <Typography
-        variant="h5"
-        sx={{
-          textShadow:
-            "1px 1px 0px #fff, -1px 1px 0px #fff, 1px -1px 0px #fff, -1px -1px 0px #fff",
-        }}
-        textAlign={"center"}
-        marginTop={"20px"}
-      >
-        Morning
-      </Typography>
+      <HeaderText>{dateFull}</HeaderText>
+      <HeaderText variant="h5">Morning</HeaderText>
       {preferences.showSleep && (
         <SleepEntryComponent
           onBedTimeChange={setBedTime}
@@ -381,16 +363,7 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
           onRemove={removeGoal}
         />
       )}
-      <Typography
-        variant="h5"
-        sx={{
-          textShadow:
-            "1px 1px 0px #fff, -1px 1px 0px #fff, 1px -1px 0px #fff, -1px -1px 0px #fff",
-        }}
-        textAlign={"center"}
-      >
-        Evening
-      </Typography>
+      <HeaderText variant="h5">Evening</HeaderText>
       {preferences.showMood && (
         <MoodEntryComponent mood={mood} onChange={setMood} />
       )}
