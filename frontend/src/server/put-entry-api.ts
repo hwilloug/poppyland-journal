@@ -25,8 +25,12 @@ export const call = async (
         hours_sleep: entry.hoursSleep ? entry.hoursSleep.toString() : undefined,
         sleep_quality: entry.sleepQuality,
         affirmation: entry.affirmation,
-        goals: JSON.stringify(entry.goals),
-        weekly_goals: JSON.stringify(entry.weeklyGoals),
+        goals: Array.isArray(entry.goals)
+          ? JSON.stringify(entry.goals)
+          : entry.goals,
+        weekly_goals: entry.weeklyGoals
+          ? JSON.stringify(entry.weeklyGoals)
+          : undefined,
         mental_health: entry.mentalHealth,
         substances: JSON.stringify(entry.substances),
         entry_content: entry.entryContent,

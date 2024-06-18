@@ -2,12 +2,7 @@ import { call, put } from "redux-saga/effects"
 import { GetEntriesAPI } from "../server"
 import { journalActions } from "../store"
 import { EntryResponseType } from "../server/get-entries-api"
-import {
-  JournalEntries,
-  JournalEntry,
-  JournalState,
-  SubstancesType,
-} from "../types/journal-types"
+import { JournalEntries, SubstancesType } from "../types/journal-types"
 import { substancesList } from "../components/todaysentrypage/SubstanceEntry"
 
 export function* getEntriesSaga(action: any) {
@@ -63,7 +58,7 @@ export function* getEntriesSaga(action: any) {
               currentValue.goals[0] === "["
                 ? JSON.parse(currentValue.goals)
                 : currentValue.goals,
-            weeklyGoals: currentValue.weekly_goals || [],
+            weeklyGoals: JSON.parse(currentValue.weekly_goals) || [],
             dailyQuestionQ: currentValue.daily_question_q,
             dailyQuestionA: currentValue.daily_question_a,
             exercise: currentValue.exercise,

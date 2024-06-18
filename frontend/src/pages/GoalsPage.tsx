@@ -5,7 +5,7 @@ import {
 } from "../components/shared-components/styled-components"
 import { useSelector } from "react-redux"
 import { State, journalActions } from "../store"
-import React, { useEffect, useMemo, useState } from "react"
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import {
   convertToDayOfWeekMonthDay,
   convertToShortDate,
@@ -133,60 +133,65 @@ const GoalsPage: React.FC = () => {
   }
 
   const WeeklyGoals: React.FC = () => {
-    const [weeklyGoals, setWeeklyGoals] = useState<GoalsType[]>([])
+    const today = convertToShortDate(new Date())
+    const lastMonday = useMemo(() => getPreviousMonday(today), [today])
+    const initialWeeklyGoals = useMemo(
+      () => data[lastMonday]?.weeklyGoals || [],
+      [lastMonday],
+    )
+    const [weeklyGoals, setWeeklyGoals] =
+      useState<GoalsType[]>(initialWeeklyGoals)
 
-    const lastMonday = getPreviousMonday(new Date())
-
-    const loadedWeeklyGoals = useMemo(() => {
-      if (Object.keys(data).includes(lastMonday)) {
-        return data[lastMonday].weeklyGoals
-      } else return []
-    }, [data])
-
-    const submitWeeklyGoals = async () => {
+    const submitWeeklyGoals = useCallback(async () => {
       const token = await getAccessTokenSilently()
       journalActions.putEntry(token, user?.sub || "", lastMonday, {
         ...data[lastMonday],
         weeklyGoals: weeklyGoals,
       })
-    }
+    }, [
+      data,
+      getAccessTokenSilently,
+      journalActions,
+      lastMonday,
+      user?.sub,
+      weeklyGoals,
+    ])
 
     useEffect(() => {
       if (
         weeklyGoals !== undefined &&
-        !_.isEqual(weeklyGoals, loadedWeeklyGoals)
+        !_.isEqual(weeklyGoals, initialWeeklyGoals)
       ) {
         submitWeeklyGoals()
       }
-    }, [weeklyGoals])
+    }, [weeklyGoals, lastMonday])
 
-    useEffect(() => {
-      if (loadedWeeklyGoals !== undefined) {
-        setWeeklyGoals(loadedWeeklyGoals)
-      }
-    }, [loadedWeeklyGoals])
-
-    const onGoalChange = (index: number, goal: string, checked: boolean) => {
-      if (weeklyGoals !== undefined && weeklyGoals !== null) {
-        let newGoals = [...weeklyGoals]
-        if (goal === "") {
-          newGoals.push({ goal, checked })
+    const onGoalChange = useCallback(
+      (index: number, goal: string, checked: boolean) => {
+        if (weeklyGoals !== undefined && weeklyGoals !== null) {
+          let newGoals = [...weeklyGoals]
+          if (!newGoals[index]) {
+            newGoals.push({ goal, checked })
+          } else {
+            newGoals[index] = { goal, checked }
+          }
+          setWeeklyGoals([...newGoals])
         } else {
-          newGoals[index] = { goal, checked }
+          setWeeklyGoals([{ goal, checked }])
         }
-        setWeeklyGoals([...newGoals])
-      } else {
-        setWeeklyGoals([{ goal, checked }])
-      }
-    }
+      },
+      [weeklyGoals],
+    )
 
-    const onGoalRemove = (index: number) => {
-      if (weeklyGoals !== undefined && weeklyGoals !== null) {
-        let newGoals = [...weeklyGoals]
-        newGoals.splice(index, 1)
-        setWeeklyGoals([...newGoals])
-      }
-    }
+    const onGoalRemove = useCallback(
+      (index: number) => {
+        if (weeklyGoals !== undefined && weeklyGoals !== null) {
+          const newGoals = weeklyGoals.filter((_, i) => i !== index)
+          setWeeklyGoals([...newGoals])
+        }
+      },
+      [weeklyGoals],
+    )
 
     return (
       <>
@@ -197,7 +202,7 @@ const GoalsPage: React.FC = () => {
               return
             }
             return (
-              <Grid container key={`${goal}-${index}`} textAlign={"center"}>
+              <Grid container key={`weekly-goal-${index}`} textAlign={"center"}>
                 <Grid item xs={2}>
                   <Checkbox
                     checked={goal.checked}

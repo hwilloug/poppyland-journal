@@ -32,10 +32,18 @@ export const convertToLongDateFromShortDate = (date: string) => {
   })
 }
 
-export const getPreviousMonday = (date: Date) => {
+export const getPreviousMonday = (date: string) => {
   const last7Days = [...Array(7).keys()].map((i) => {
-    return new Date(date.setDate(date.getDate() - i))
+    return new Date(new Date(date).setDate(new Date(date).getDate() - i))
   })
   const monday = last7Days.filter((d) => d.getDay() === 1)[0]
   return convertToShortDate(monday)
+}
+
+export const getFirstDayOfMonth = (date: Date) => {
+  const last31Days = [...Array(31).keys()].map((i) => {
+    return new Date(date.setDate(date.getDate() - i))
+  })
+  const firstDay = last31Days.filter((d) => d.getDate() === 1)[0]
+  return convertToShortDate(firstDay)
 }
