@@ -10,7 +10,7 @@ export interface EntryResponseType {
   sleep_quality: string
   affirmation: string
   mental_health: string[]
-  substances: string[]
+  substances: string[] | string
   entry_content: string
   goal: string
   goals: string

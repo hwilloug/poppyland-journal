@@ -17,7 +17,11 @@ import { useDispatch, useSelector } from "react-redux"
 import { State, journalActions } from "../../store"
 import { getProfile } from "../../utils/get-profile"
 import ExerciseEntryComponent from "../todaysentrypage/ExerciseEntry"
-import { GoalsType, JournalEntry } from "../../types/journal-types"
+import {
+  GoalsType,
+  JournalEntry,
+  SubstancesType,
+} from "../../types/journal-types"
 import CheckCircleIcon from "@mui/icons-material/CheckCircle"
 import { ReactNode, useEffect, useMemo, useState } from "react"
 const _ = require("lodash")
@@ -76,7 +80,7 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
       loadedEntry.sleepQuality ||
       loadedEntry.affirmation ||
       loadedEntry.mentalHealth.length ||
-      loadedEntry.substances.length ||
+      loadedEntry.substances ||
       loadedEntry.entryContent ||
       loadedEntry.goals ||
       loadedEntry.dailyQuestionA ||
@@ -115,7 +119,9 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
   const [mentalHealth, setMentalHealth] = useState<string[]>(
     loadedEntry.mentalHealth,
   )
-  const [substances, setSubstances] = useState<string[]>(loadedEntry.substances)
+  const [substances, setSubstances] = useState<SubstancesType[]>(
+    loadedEntry.substances,
+  )
   const [entryContent, setEntryContent] = useState<string | undefined>(
     loadedEntry.entryContent || undefined,
   )
@@ -181,14 +187,16 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
     setMentalHealth([...symptoms])
   }
 
-  const modifySubstances = (substance: string) => {
-    if (substances.includes(substance)) {
-      let s = substances
-      let index = s.indexOf(substance)
-      s.splice(index, 1)
-      setSubstances([...s])
-    } else {
-      setSubstances([...substances, substance])
+  const modifySubstances = (
+    index: number,
+    substance: string,
+    amount: string,
+  ) => {
+    if (substances !== undefined) {
+      let newSubstances = [...substances]
+      newSubstances[index] = { substance, amount: parseFloat(amount) }
+      setSubstances([...newSubstances])
+      console.log(newSubstances)
     }
   }
 

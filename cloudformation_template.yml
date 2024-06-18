@@ -304,7 +304,7 @@ Resources:
               if len(payload.get('mental_health', [])):
                   item_payload['MentalHealth'] = {'SS': payload.get('mental_health')}
               if len(payload.get('substances', [])):
-                  item_payload['Substances'] = {'SS': payload.get('substances')}
+                  item_payload['Substances'] = {'S': payload.get('substances')}
               if len(payload.get('exercise', [])):
                   item_payload['Exercise'] = {'N': payload.get('exercise')}
               if payload.get('entry_content') is not None:
@@ -392,7 +392,7 @@ Resources:
                   "wake_up_time": item['Item'].get('WakeUpTime', {}).get("S"),
                   "mood": item['Item'].get('Mood', {}).get("N"),
                   "mental_health": item['Item'].get('MentalHealth', {}).get("SS", []),
-                  "substances": item['Item'].get('Substances', {}).get("SS", []),
+                  "substances": item['Item'].get('Substances', {}).get("SS", item['Item'].get('Substances', {}).get("S")),
                   "affirmation": item['Item'].get('Affirmation', {}).get("S"),
                   "goals": item['Item'].get('Goals', item['Item'].get('Goal', {})).get("S"),
                   "daily_question_q": item['Item'].get('DailyQuestionQ', {}).get("S"),
@@ -451,7 +451,7 @@ Resources:
                       "wake_up_time": item.get('WakeUpTime', {}).get("S"),
                       "mood": item.get('Mood', {}).get("N"),
                       "mental_health": item.get('MentalHealth', {}).get("SS", []),
-                      "substances": item.get('Substances', {}).get("SS", []),
+                      "substances": item.get('Substances', {}).get("SS", item.get('Substances', {}).get("S")),
                       "affirmation": item.get('Affirmation', {}).get("S"),
                       "goals": item.get('Goals', item.get("Goal", {})).get("S"),
                       "daily_question_q": item.get('DailyQuestionQ', {}).get("S"),

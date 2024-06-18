@@ -6,7 +6,9 @@ import {
   JournalEntries,
   JournalEntry,
   JournalState,
+  SubstancesType,
 } from "../types/journal-types"
+import { substancesList } from "../components/todaysentrypage/SubstanceEntry"
 
 export function* getEntriesSaga(action: any) {
   yield put(journalActions.setIsLoading(true))
@@ -18,6 +20,31 @@ export function* getEntriesSaga(action: any) {
 
     const mappedEntries: JournalEntries = response.reduce(
       (previousValue, currentValue: EntryResponseType) => {
+        let substancesInitialValue = substancesList.map((s) => ({
+          substance: s,
+          amount: 0,
+        }))
+        let substances: string | string[] | SubstancesType[] =
+          currentValue.substances
+        if (Array.isArray(substances)) {
+          // @ts-ignore
+          substances = substancesInitialValue.map((s) => {
+            // @ts-ignore
+            if (substances.includes(s.substance)) {
+              return { substance: s, amount: 1 }
+            } else {
+              return s
+            }
+          })
+        } else if (
+          substances !== undefined &&
+          substances !== null &&
+          typeof substances === "string"
+        ) {
+          substances = JSON.parse(substances)
+        } else {
+          substances = substancesInitialValue
+        }
         return {
           ...previousValue,
           [currentValue.date]: {
@@ -29,7 +56,7 @@ export function* getEntriesSaga(action: any) {
             sleepQuality: currentValue.sleep_quality,
             affirmation: currentValue.affirmation,
             mentalHealth: currentValue.mental_health,
-            substances: currentValue.substances,
+            substances: substances,
             entryContent: currentValue.entry_content,
             goals:
               typeof currentValue.goals === "string" &&

@@ -6,6 +6,7 @@ import { useSelector } from "react-redux"
 import { State } from "../../store"
 import HighchartsReact from "highcharts-react-official"
 import Highcharts, { SeriesXrangeOptions } from "highcharts/highstock"
+import { SubstancesType } from "../../types/journal-types"
 
 const Container = styled(Paper)`
   background-color: #fffcf5;
@@ -24,7 +25,7 @@ export type DataType = {
 
 export type SubstancesDataType = {
   x: number
-  y: string[]
+  y: SubstancesType[]
 }
 
 const MoodTrackerComponent: React.FunctionComponent = () => {
@@ -87,7 +88,7 @@ const MoodTrackerComponent: React.FunctionComponent = () => {
       if (data[date].substances.length) {
         substancesData.push({
           x: new Date(date.replace(/-/g, "/")).valueOf(),
-          y: data[date].substances!,
+          y: data[date].substances,
         })
       }
     }
@@ -133,12 +134,9 @@ const MoodTrackerComponent: React.FunctionComponent = () => {
     for (let i = 0; i < filteredSubstanceData.length; i++) {
       const substances = filteredSubstanceData[i].y
       for (let j = 0; j < substances.length; j++) {
-        if (!Object.keys(seriesData).includes(substances[j])) {
-          seriesData[substances[j]] = []
-        }
-        seriesData[substances[j]].push({
+        seriesData[substances[j].substance].push({
           x: filteredSubstanceData[i].x,
-          y: 1,
+          y: substances[j].amount,
         })
       }
     }

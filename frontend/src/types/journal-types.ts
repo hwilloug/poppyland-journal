@@ -13,6 +13,11 @@ export interface GoalsType {
   checked: boolean
 }
 
+export interface SubstancesType {
+  substance: string
+  amount: number
+}
+
 export interface JournalEntry {
   date: string
   mood?: string
@@ -22,7 +27,7 @@ export interface JournalEntry {
   sleepQuality?: string
   affirmation?: string
   mentalHealth: string[]
-  substances: string[]
+  substances: SubstancesType[]
   entryContent?: string
   goals?: GoalsType[]
   dailyQuestionQ?: string
