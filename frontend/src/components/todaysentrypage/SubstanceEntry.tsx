@@ -34,16 +34,17 @@ const SubstanceEntryComponent: React.FunctionComponent<SubstanceEntryProps> = ({
         Substance Use
       </Typography>
       <SubstancesContainer container spacing={2}>
-        {substancesList.map((s, idx) => (
-          <Grid item xs={6} container spacing={2} key={s}>
+        {substances.map((s, idx) => (
+          <Grid item xs={6} container spacing={2} key={s.substance}>
             <Grid item xs={3}>
               <Input
                 type="number"
-                onChange={(e) => onChange(idx, s, e.target.value)}
+                value={s.amount}
+                onChange={(e) => onChange(idx, s.substance, e.target.value)}
               />
             </Grid>
             <Grid item>
-              <Typography>{s}</Typography>
+              <Typography>{s.substance}</Typography>
             </Grid>
           </Grid>
         ))}

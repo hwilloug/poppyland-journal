@@ -27,7 +27,7 @@ export const call = async (
         affirmation: entry.affirmation,
         goals: JSON.stringify(entry.goals),
         mental_health: entry.mentalHealth,
-        substances: entry.substances,
+        substances: JSON.stringify(entry.substances),
         entry_content: entry.entryContent,
         daily_question_q: entry.dailyQuestionQ,
         daily_question_a: entry.dailyQuestionA,

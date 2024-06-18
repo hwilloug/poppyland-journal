@@ -134,10 +134,12 @@ const MoodTrackerComponent: React.FunctionComponent = () => {
     for (let i = 0; i < filteredSubstanceData.length; i++) {
       const substances = filteredSubstanceData[i].y
       for (let j = 0; j < substances.length; j++) {
-        seriesData[substances[j].substance].push({
-          x: filteredSubstanceData[i].x,
-          y: substances[j].amount,
-        })
+        seriesData[substances[j].substance] = [
+          {
+            x: filteredSubstanceData[i].x,
+            y: substances[j].amount,
+          },
+        ]
       }
     }
     for (let substance in seriesData) {

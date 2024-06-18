@@ -31,7 +31,7 @@ export function* getEntriesSaga(action: any) {
           substances = substancesInitialValue.map((s) => {
             // @ts-ignore
             if (substances.includes(s.substance)) {
-              return { substance: s, amount: 1 }
+              return { substance: s.substance, amount: 1 }
             } else {
               return s
             }
