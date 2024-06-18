@@ -193,15 +193,21 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
   }
 
   const modifyGoals = (index: number, goal: string, checked: boolean) => {
-    if (goals !== undefined) {
+    if (goals !== undefined && goals !== null) {
       let newGoals = [...goals]
       if (typeof newGoals === "string") {
         newGoals = [{ goal: newGoals, checked }]
       } else {
-        newGoals[index] = { goal, checked }
+        if (goal === "") {
+          newGoals.push({ goal, checked })
+        } else {
+          newGoals[index] = { goal, checked }
+        }
       }
       console.log(newGoals)
       setGoals([...newGoals])
+    } else {
+      setGoals([{ goal, checked }])
     }
   }
 

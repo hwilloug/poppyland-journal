@@ -1,5 +1,5 @@
 import { EntrySectionContainer } from "../shared-components/styled-components"
-import { Box, Checkbox, Grid, Input, Typography } from "@mui/material"
+import { Box, Button, Checkbox, Grid, Input, Typography } from "@mui/material"
 import LibraryAddIcon from "@mui/icons-material/LibraryAdd"
 import DeleteIcon from "@mui/icons-material/Delete"
 import { useMemo } from "react"
@@ -67,6 +67,13 @@ const DailyGoalComponent: React.FunctionComponent<DailyGoalProps> = ({
           </Grid>
         </Grid>
       )}
+      <Button
+        onClick={() => {
+          onChange(goals.length, "", false)
+        }}
+      >
+        <LibraryAddIcon sx={{ mr: 1 }} /> Add Goal
+      </Button>
     </EntrySectionContainer>
   )
 }

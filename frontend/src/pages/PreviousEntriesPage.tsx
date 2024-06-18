@@ -295,6 +295,7 @@ const PreviousEntriesPage: React.FunctionComponent = () => {
             Object.keys(entriesByMonth).map((m) => (
               <>
                 <Typography
+                  key={m}
                   variant="h5"
                   id={m.replace(" ", "-")}
                   sx={{
@@ -352,27 +353,31 @@ const PreviousEntriesPage: React.FunctionComponent = () => {
                     {preferences.showDailyGoal && entry.goals && (
                       <SectionContainer>
                         <Typography fontWeight={"bold"}>Daily Goal:</Typography>
-                        {entry.goals.map((goal, idx) => {
-                          if (goal === null) {
-                            return
-                          }
-                          return (
-                            <Grid
-                              container
-                              key={`${goal}-${idx}`}
-                              alignItems={"center"}
-                            >
-                              <Grid item>
-                                <Checkbox checked={goal.checked} />
+                        {Array.isArray(entry.goals) ? (
+                          entry.goals.map((goal, idx) => {
+                            if (goal === null) {
+                              return
+                            }
+                            return (
+                              <Grid
+                                container
+                                key={`${goal}-${idx}`}
+                                alignItems={"center"}
+                              >
+                                <Grid item>
+                                  <Checkbox checked={goal.checked} />
+                                </Grid>
+                                <Grid item xs={10}>
+                                  <Typography display={"inline-block"}>
+                                    {goal.goal}
+                                  </Typography>
+                                </Grid>
                               </Grid>
-                              <Grid item xs={10}>
-                                <Typography display={"inline-block"}>
-                                  {goal.goal}
-                                </Typography>
-                              </Grid>
-                            </Grid>
-                          )
-                        })}
+                            )
+                          })
+                        ) : (
+                          <Typography>{entry.goals}</Typography>
+                        )}
                       </SectionContainer>
                     )}
                     {preferences.showDailyQuestion && entry.dailyQuestionA && (
