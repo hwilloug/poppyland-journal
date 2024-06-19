@@ -40,6 +40,7 @@ interface EntryFormProps {
 
 const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
   const dateObject = convertToDateObject(date)
+  console.log(dateObject.getDate())
   const { user, getAccessTokenSilently } = useAuth0()
   const dispatch = useDispatch()
   const userId = useSelector((state: State) => state.user.userId)
@@ -69,6 +70,7 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
         entryContent: undefined,
         goals: undefined,
         weeklyGoals: [],
+        monthlyGoals: [],
         dailyQuestionQ: undefined,
         dailyQuestionA: undefined,
         exercise: "0",
@@ -88,6 +90,7 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
       loadedEntry.entryContent ||
       loadedEntry.goals ||
       loadedEntry.weeklyGoals ||
+      loadedEntry.monthlyGoals ||
       loadedEntry.dailyQuestionA ||
       loadedEntry.exercise !== "0"
     )
@@ -124,6 +127,9 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
   const [weeklyGoals, setWeeklyGoals] = useState<GoalsType[] | undefined>(
     loadedEntry.weeklyGoals || undefined,
   )
+  const [monthlyGoals, setMonthlyGoals] = useState<GoalsType[] | undefined>(
+    loadedEntry.monthlyGoals || undefined,
+  )
   const [mentalHealth, setMentalHealth] = useState<string[]>(
     loadedEntry.mentalHealth,
   )
@@ -157,6 +163,7 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
     setAffirmation(entry.affirmation)
     setGoals(entry.goals)
     setWeeklyGoals(entry.weeklyGoals)
+    setMonthlyGoals(entry.monthlyGoals)
     setMentalHealth(entry.mentalHealth)
     setSubstances(entry.substances)
     setEntryContent(entry.entryContent)
@@ -203,7 +210,6 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
       let newSubstances = [...substances]
       newSubstances[index] = { substance, amount: parseFloat(amount) }
       setSubstances([...newSubstances])
-      console.log(newSubstances)
     }
   }
 
@@ -261,6 +267,32 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
     }
   }
 
+  const modifyMonthlyGoals = (
+    index: number,
+    goal: string,
+    checked: boolean,
+  ) => {
+    if (monthlyGoals !== undefined && monthlyGoals !== null) {
+      let newGoals = [...monthlyGoals]
+      if (goal === "") {
+        newGoals.push({ goal, checked })
+      } else {
+        newGoals[index] = { goal, checked }
+      }
+      setMonthlyGoals([...newGoals])
+    } else {
+      setMonthlyGoals([{ goal, checked }])
+    }
+  }
+
+  const removeMonthlyGoal = (index: number) => {
+    if (monthlyGoals !== undefined && monthlyGoals !== null) {
+      let newGoals = [...monthlyGoals]
+      newGoals.splice(index, 1)
+      setWeeklyGoals([...newGoals])
+    }
+  }
+
   const onSubmit = async () => {
     try {
       const token = await getAccessTokenSilently()
@@ -301,6 +333,7 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
           entryContent ||
           goals !== undefined ||
           weeklyGoals !== undefined ||
+          monthlyGoals !== undefined ||
           dailyQuestionA ||
           minutesExercise !== 0)
       ) {
@@ -316,6 +349,7 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
           loadedEntry.entryContent != entryContent ||
           !_.isEqual(loadedEntry.goals, goals) ||
           !_.isEqual(loadedEntry.weeklyGoals, weeklyGoals) ||
+          !_.isEqual(loadedEntry.monthlyGoals, monthlyGoals) ||
           loadedEntry.dailyQuestionA != dailyQuestionA ||
           loadedEntry.dailyQuestionQ != dailyQuestionQ ||
           loadedEntry.exercise != minutesExercise.toString()
@@ -336,6 +370,7 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
         entryContent ||
         goals !== undefined ||
         weeklyGoals !== undefined ||
+        monthlyGoals !== undefined ||
         dailyQuestionA ||
         minutesExercise !== 0
       ) {
@@ -359,6 +394,7 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
     entryContent,
     goals,
     weeklyGoals,
+    monthlyGoals,
     dailyQuestionA,
     dailyQuestionQ,
     minutesExercise,
@@ -403,6 +439,14 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
           cadence={"Weekly"}
           onChange={modifyWeeklyGoals}
           onRemove={removeWeeklyGoal}
+        />
+      )}
+      {preferences.showMonthlyGoal && dateObject.getDate() === 1 && (
+        <DailyGoalComponent
+          goals={monthlyGoals || []}
+          cadence={"Monthly"}
+          onChange={modifyMonthlyGoals}
+          onRemove={removeMonthlyGoal}
         />
       )}
       <HeaderText variant="h5">Evening</HeaderText>

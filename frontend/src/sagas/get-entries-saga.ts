@@ -59,7 +59,6 @@ export function* getEntriesSaga(action: any) {
         } else {
           substances = substancesInitialValue
         }
-        console.log(substances)
         return {
           ...previousValue,
           [currentValue.date]: {
@@ -79,7 +78,7 @@ export function* getEntriesSaga(action: any) {
                 ? JSON.parse(currentValue.goals)
                 : currentValue.goals,
             weeklyGoals: JSON.parse(currentValue.weekly_goals) || [],
-            monthlyGoals: JSON.parse(currentValue.weekly_goals) || [],
+            monthlyGoals: JSON.parse(currentValue.monthly_goals) || [],
             dailyQuestionQ: currentValue.daily_question_q,
             dailyQuestionA: currentValue.daily_question_a,
             exercise: currentValue.exercise,

@@ -92,6 +92,14 @@ const UserPreferencesPage: React.FunctionComponent = () => {
       preference: "showWeeklyGoal",
     },
     {
+      section: "Monthly Goal",
+      preference: "showMonthlyGoal",
+    },
+    {
+      section: "Yearly Goal",
+      preference: "showYearlyGoal",
+    },
+    {
       section: "Daily Question",
       preference: "showDailyQuestion",
     },
