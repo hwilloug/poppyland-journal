@@ -19,7 +19,7 @@ import {
   setIdealHoursSleep,
 } from "../reducers/user_reducer"
 import { getProfile } from "../utils/get-profile"
-import { useState } from "react"
+import { useMemo, useState } from "react"
 import { apiEndpoints } from "../api-endpoints"
 import axios from "axios"
 
@@ -55,8 +55,12 @@ const UserPreferencesPage: React.FunctionComponent = () => {
   const lastName = useSelector((state: State) => state.user.lastName)
   const preferences = useSelector((state: State) => state.user.preferences)
   const journalName = useSelector((state: State) => state.user.journalName)
-  const idealHoursSleep = useSelector(
+  const idealHoursSleepRaw = useSelector(
     (state: State) => state.user.idealHoursSleep,
+  )
+  const idealHoursSleep = useMemo(
+    () => parseFloat(idealHoursSleepRaw),
+    [idealHoursSleepRaw],
   )
   const dispatch = useDispatch()
   if (!userId) {
@@ -82,6 +86,10 @@ const UserPreferencesPage: React.FunctionComponent = () => {
     {
       section: "Daily Goal",
       preference: "showDailyGoal",
+    },
+    {
+      section: "Weekly Goal",
+      preference: "showWeeklyGoal",
     },
     {
       section: "Daily Question",
@@ -115,7 +123,7 @@ const UserPreferencesPage: React.FunctionComponent = () => {
           first_name: firstName,
           last_name: lastName,
           journal_name: journalName,
-          ideal_hours_sleep: idealHoursSleep,
+          ideal_hours_sleep: idealHoursSleep.toString(),
         },
         {
           headers: {

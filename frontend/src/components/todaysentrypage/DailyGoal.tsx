@@ -7,19 +7,21 @@ import { GoalsType } from "../../types/journal-types"
 
 interface DailyGoalProps {
   goals: GoalsType[] | string
+  cadence: string
   onChange: Function
   onRemove: Function
 }
 
 const DailyGoalComponent: React.FunctionComponent<DailyGoalProps> = ({
   goals,
+  cadence,
   onChange,
   onRemove,
 }) => {
   return (
     <EntrySectionContainer>
       <Typography variant="h6" textAlign={"center"} sx={{ mb: "20px" }}>
-        Daily Goal
+        {cadence} Goal
       </Typography>
       {Array.isArray(goals) &&
         goals.map((goal, index) => {

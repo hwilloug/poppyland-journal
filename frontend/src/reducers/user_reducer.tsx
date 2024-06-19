@@ -7,12 +7,15 @@ export type UserType = {
   lastName: string
   journalName: string
   isDarkMode: boolean
-  idealHoursSleep: number
+  idealHoursSleep: string
 }
 
 export type PreferencesType = {
   showDailyAffirmation?: boolean
   showDailyGoal?: boolean
+  showWeeklyGoal?: boolean
+  showMonthlyGoal?: boolean
+  showYearlyGoal?: boolean
   showDailyQuestion?: boolean
   showMood?: boolean
   showMentalHealth?: boolean
@@ -46,7 +49,6 @@ export const userSlice = createSlice({
       state.lastName = action.payload
     },
     setUserPreference: (state, action) => {
-      // @ts-ignore
       state.preferences = {
         ...state.preferences,
         [action.payload.preference]: action.payload.value,

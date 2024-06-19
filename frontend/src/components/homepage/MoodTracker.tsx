@@ -271,13 +271,13 @@ const MoodTrackerComponent: React.FunctionComponent = () => {
         plotLines: [
           {
             color: "lightgrey",
-            value: userPreferences.idealHoursSleep + 0.5,
+            value: parseFloat(userPreferences.idealHoursSleep) + 0.5,
             dashStyle: "Dash",
             width: 2,
           },
           {
             color: "lightgrey",
-            value: userPreferences.idealHoursSleep - 0.5,
+            value: parseFloat(userPreferences.idealHoursSleep) - 0.5,
             dashStyle: "Dash",
             width: 2,
           },
@@ -335,11 +335,11 @@ const MoodTrackerComponent: React.FunctionComponent = () => {
         color: "darkgrey",
         zones: [
           {
-            value: userPreferences.idealHoursSleep - 0.5,
+            value: parseFloat(userPreferences.idealHoursSleep) - 0.5,
             color: theme.palette.warning.main,
           },
           {
-            value: userPreferences.idealHoursSleep + 0.5,
+            value: parseFloat(userPreferences.idealHoursSleep) + 0.5,
             color: "darkgrey",
           },
           {

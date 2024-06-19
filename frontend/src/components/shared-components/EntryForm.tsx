@@ -66,6 +66,7 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
         substances: [],
         entryContent: undefined,
         goals: undefined,
+        weeklyGoals: undefined,
         dailyQuestionQ: undefined,
         dailyQuestionA: undefined,
         exercise: "0",
@@ -84,6 +85,7 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
       loadedEntry.substances ||
       loadedEntry.entryContent ||
       loadedEntry.goals ||
+      loadedEntry.weeklyGoals ||
       loadedEntry.dailyQuestionA ||
       loadedEntry.exercise !== "0"
     )
@@ -117,6 +119,9 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
   const [goals, setGoals] = useState<GoalsType[] | undefined>(
     loadedEntry.goals || undefined,
   )
+  const [weeklyGoals, setWeeklyGoals] = useState<GoalsType[] | undefined>(
+    loadedEntry.weeklyGoals || undefined,
+  )
   const [mentalHealth, setMentalHealth] = useState<string[]>(
     loadedEntry.mentalHealth,
   )
@@ -149,6 +154,7 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
     setHoursSleep(entry.hoursSleep)
     setAffirmation(entry.affirmation)
     setGoals(entry.goals)
+    setWeeklyGoals(entry.weeklyGoals)
     setMentalHealth(entry.mentalHealth)
     setSubstances(entry.substances)
     setEntryContent(entry.entryContent)
@@ -233,6 +239,28 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
     }
   }
 
+  const modifyWeeklyGoals = (index: number, goal: string, checked: boolean) => {
+    if (weeklyGoals !== undefined && weeklyGoals !== null) {
+      let newGoals = [...weeklyGoals]
+      if (goal === "") {
+        newGoals.push({ goal, checked })
+      } else {
+        newGoals[index] = { goal, checked }
+      }
+      setWeeklyGoals([...newGoals])
+    } else {
+      setWeeklyGoals([{ goal, checked }])
+    }
+  }
+
+  const removeWeeklyGoal = (index: number) => {
+    if (weeklyGoals !== undefined && weeklyGoals !== null) {
+      let newGoals = [...weeklyGoals]
+      newGoals.splice(index, 1)
+      setWeeklyGoals([...newGoals])
+    }
+  }
+
   const onSubmit = async () => {
     try {
       const token = await getAccessTokenSilently()
@@ -248,6 +276,7 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
         substances,
         entryContent,
         goals,
+        weeklyGoals,
         dailyQuestionA,
         dailyQuestionQ,
         exercise: minutesExercise?.toString(),
@@ -271,6 +300,7 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
           substances.length ||
           entryContent ||
           goals !== undefined ||
+          weeklyGoals !== undefined ||
           dailyQuestionA ||
           minutesExercise !== 0)
       ) {
@@ -285,6 +315,7 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
           !_.isEqual(loadedEntry.substances, substances) ||
           loadedEntry.entryContent != entryContent ||
           !_.isEqual(loadedEntry.goals, goals) ||
+          !_.isEqual(loadedEntry.weeklyGoals, weeklyGoals) ||
           loadedEntry.dailyQuestionA != dailyQuestionA ||
           loadedEntry.dailyQuestionQ != dailyQuestionQ ||
           loadedEntry.exercise != minutesExercise.toString()
@@ -304,6 +335,7 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
         substances.length ||
         entryContent ||
         goals !== undefined ||
+        weeklyGoals !== undefined ||
         dailyQuestionA ||
         minutesExercise !== 0
       ) {
@@ -326,6 +358,7 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
     substances,
     entryContent,
     goals,
+    weeklyGoals,
     dailyQuestionA,
     dailyQuestionQ,
     minutesExercise,
@@ -359,8 +392,17 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
       {preferences.showDailyGoal && (
         <DailyGoalComponent
           goals={goals || []}
+          cadence={"Daily"}
           onChange={modifyGoals}
           onRemove={removeGoal}
+        />
+      )}
+      {preferences.showWeeklyGoal && (
+        <DailyGoalComponent
+          goals={weeklyGoals || []}
+          cadence={"Weekly"}
+          onChange={modifyWeeklyGoals}
+          onRemove={removeWeeklyGoal}
         />
       )}
       <HeaderText variant="h5">Evening</HeaderText>
