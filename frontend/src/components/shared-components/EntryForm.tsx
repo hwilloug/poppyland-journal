@@ -40,7 +40,6 @@ interface EntryFormProps {
 
 const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
   const dateObject = convertToDateObject(date)
-  console.log(dateObject.getDate())
   const { user, getAccessTokenSilently } = useAuth0()
   const dispatch = useDispatch()
   const userId = useSelector((state: State) => state.user.userId)
@@ -407,7 +406,9 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
   return (
     <>
       <HeaderText>{dateFull}</HeaderText>
-      <HeaderText variant="h5">Morning</HeaderText>
+      <HeaderText variant="h5" mt={4}>
+        Morning
+      </HeaderText>
       {preferences.showSleep && (
         <SleepEntryComponent
           onBedTimeChange={setBedTime}
