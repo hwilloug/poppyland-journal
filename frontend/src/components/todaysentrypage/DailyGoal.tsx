@@ -42,6 +42,7 @@ const DailyGoalComponent: React.FunctionComponent<DailyGoalProps> = ({
                   onChange={(e) =>
                     onChange(index, e.target.value, goal.checked)
                   }
+                  multiline
                 />
               </Grid>
               <Grid item>
@@ -63,6 +64,7 @@ const DailyGoalComponent: React.FunctionComponent<DailyGoalProps> = ({
           <Grid item xs={10}>
             <Input
               fullWidth
+              multiline
               value={goals}
               onChange={(e) => onChange(0, e.target.value, false)}
             />

@@ -80,7 +80,9 @@ const GoalsPage: React.FC = () => {
                 </Grid>
                 <Grid item xs={12}>
                   <Grid container flexDirection={"column"} mb={4}>
-                    {![shortDate] || dates[shortDate] === "None" ? (
+                    {![shortDate] ||
+                    dates[shortDate] === "None" ||
+                    !dates[shortDate]?.length ? (
                       <Grid item xs={12}>
                         <Typography>None</Typography>
                       </Grid>
@@ -218,6 +220,7 @@ const GoalsPage: React.FC = () => {
                     onChange={(e) =>
                       onGoalChange(index, e.target.value, goal.checked)
                     }
+                    multiline
                   />
                 </Grid>
                 <Grid item xs={2}>

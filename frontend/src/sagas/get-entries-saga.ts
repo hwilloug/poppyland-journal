@@ -22,7 +22,25 @@ export function* getEntriesSaga(action: any) {
         let substances: string | string[] | SubstancesType[] =
           currentValue.substances
         if (Array.isArray(substances)) {
-          // @ts-ignore
+          if (!substances.length) {
+            substances = substancesInitialValue
+          } else {
+            // @ts-ignore
+            substances = substancesInitialValue.map((s) => {
+              // @ts-ignore
+              if (substances.includes(s.substance)) {
+                return { substance: s.substance, amount: 1 }
+              } else {
+                return s
+              }
+            })
+          }
+        } else if (
+          substances !== undefined &&
+          substances !== null &&
+          typeof substances === "string"
+        ) {
+          substances = JSON.parse(substances)
           substances = substancesInitialValue.map((s) => {
             // @ts-ignore
             if (substances.includes(s.substance)) {
@@ -31,15 +49,10 @@ export function* getEntriesSaga(action: any) {
               return s
             }
           })
-        } else if (
-          substances !== undefined &&
-          substances !== null &&
-          typeof substances === "string"
-        ) {
-          substances = JSON.parse(substances)
         } else {
           substances = substancesInitialValue
         }
+        console.log(substances)
         return {
           ...previousValue,
           [currentValue.date]: {

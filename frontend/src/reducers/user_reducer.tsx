@@ -24,6 +24,7 @@ export type PreferencesType = {
   showExercise?: boolean
 }
 
+// @ts-ignore
 export const userSlice = createSlice({
   name: "user",
   initialState: {
