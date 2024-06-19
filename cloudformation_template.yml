@@ -301,6 +301,8 @@ Resources:
                   item_payload['Goals'] = {'S': payload.get('goals')}
               if payload.get('weekly_goals') is not None:
                   item_payload['WeeklyGoals'] = {'S': payload.get('weekly_goals')}
+              if payload.get('monthly_goals') is not None:
+                  item_payload['MonthlyGoals'] = {'S': payload.get('monthly_goals')}
               if payload.get('daily_question_a') is not None:
                   item_payload['DailyQuestionA'] = {'S': payload.get('daily_question_a')}
               if len(payload.get('mental_health', [])):
@@ -398,6 +400,7 @@ Resources:
                   "affirmation": item['Item'].get('Affirmation', {}).get("S"),
                   "goals": item['Item'].get('Goals', item['Item'].get('Goal', {})).get("S"),
                   "weekly_goals": item['Item'].get('WeeklyGoals', {}).get("S"),
+                  "weekly_goals": item['Item'].get('MonthlyGoals', {}).get("S"),
                   "daily_question_q": item['Item'].get('DailyQuestionQ', {}).get("S"),
                   "daily_question_a": item['Item'].get('DailyQuestionA', {}).get("S"),
                   "exercise": item['Item'].get('Exercise', {}).get("N")
@@ -458,6 +461,7 @@ Resources:
                       "affirmation": item.get('Affirmation', {}).get("S"),
                       "goals": item.get('Goals', item.get("Goal", {})).get("S"),
                       "weekly_goals": item.get('WeeklyGoals', item.get("WeeklyGoals", {})).get("S"),
+                      "monthly_goals": item.get('WeeklyGoals', item.get("MonthlyGoals", {})).get("S"),
                       "daily_question_q": item.get('DailyQuestionQ', {}).get("S"),
                       "daily_question_a": item.get('DailyQuestionA', {}).get("S"),
                       "exercise": item.get('Exercise', {}).get("N")

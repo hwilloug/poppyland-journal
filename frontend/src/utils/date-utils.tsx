@@ -48,9 +48,9 @@ export const getPreviousMonday = (date: string) => {
   return convertToShortDate(monday)
 }
 
-export const getFirstDayOfMonth = (date: Date) => {
+export const getFirstDayOfMonth = (date: string) => {
   const last31Days = [...Array(31).keys()].map((i) => {
-    return new Date(date.setDate(date.getDate() - i))
+    return new Date(new Date(date).setDate(new Date(date).getDate() - i))
   })
   const firstDay = last31Days.filter((d) => d.getDate() === 1)[0]
   return convertToShortDate(firstDay)
