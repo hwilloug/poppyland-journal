@@ -41,14 +41,21 @@ export function* getEntriesSaga(action: any) {
           typeof substances === "string"
         ) {
           substances = JSON.parse(substances)
-          substances = substancesInitialValue.map((s) => {
+          if (Array.isArray(substances) || substances.length === 0) {
             // @ts-ignore
-            if (substances.includes(s.substance)) {
-              return { substance: s.substance, amount: 1 }
-            } else {
-              return s
-            }
-          })
+            substances = substancesInitialValue.map((s) => {
+              let value = s
+              // @ts-ignore
+              for (let idx in substances) {
+                // @ts-ignore
+                if (substances[idx].substance === s.substance) {
+                  // @ts-ignore
+                  value = substances[idx]
+                }
+              }
+              return value
+            })
+          }
         } else {
           substances = substancesInitialValue
         }
