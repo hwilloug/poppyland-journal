@@ -32,6 +32,7 @@ export interface JournalEntry {
   goals?: GoalsType[]
   weeklyGoals?: GoalsType[]
   monthlyGoals?: GoalsType[]
+  yearlyGoals?: GoalsType[]
   dailyQuestionQ?: string
   dailyQuestionA?: string
   exercise?: string

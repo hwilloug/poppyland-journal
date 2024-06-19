@@ -1,6 +1,7 @@
 import { apiEndpoints } from "../api-endpoints"
 import axios from "axios"
 import { JournalEntry } from "../types/journal-types"
+const _ = require("lodash")
 
 export interface PutEntryResponseType {}
 
@@ -10,6 +11,8 @@ export const call = async (
   date: string,
   entry: JournalEntry,
 ): Promise<any> => {
+  const newEntry = _.cloneDeep(entry)
+
   try {
     const response = await axios.put(
       apiEndpoints.createEntry.insert(),
@@ -17,30 +20,34 @@ export const call = async (
         user_id: userId,
         date,
         mood:
-          entry.mood !== undefined && entry.mood !== null
-            ? entry.mood.toString()
+          newEntry.mood !== undefined && newEntry.mood !== null
+            ? newEntry.mood.toString()
             : undefined,
-        bed_time: entry.bedTime,
-        wake_up_time: entry.wakeUpTime,
-        hours_sleep: entry.hoursSleep ? entry.hoursSleep.toString() : undefined,
-        sleep_quality: entry.sleepQuality,
-        affirmation: entry.affirmation,
-        goals: Array.isArray(entry.goals)
-          ? JSON.stringify(entry.goals)
-          : entry.goals,
-        weekly_goals: entry.weeklyGoals
-          ? JSON.stringify(entry.weeklyGoals)
+        bed_time: newEntry.bedTime,
+        wake_up_time: newEntry.wakeUpTime,
+        hours_sleep: newEntry.hoursSleep
+          ? newEntry.hoursSleep.toString()
           : undefined,
-        monthly_goals: entry.monthlyGoals
-          ? JSON.stringify(entry.monthlyGoals)
+        sleep_quality: newEntry.sleepQuality,
+        affirmation: newEntry.affirmation,
+        goals: Array.isArray(newEntry.goals)
+          ? JSON.stringify(newEntry.goals)
+          : newEntry.goals,
+        weekly_goals: newEntry.weeklyGoals
+          ? JSON.stringify(newEntry.weeklyGoals)
           : undefined,
-        mental_health: entry.mentalHealth,
-        substances: JSON.stringify(entry.substances),
-        entry_content: entry.entryContent,
-        daily_question_q: entry.dailyQuestionQ,
-        daily_question_a: entry.dailyQuestionA,
+        monthly_goals: newEntry.monthlyGoals
+          ? JSON.stringify(newEntry.monthlyGoals)
+          : undefined,
+        mental_health: newEntry.mentalHealth,
+        substances: JSON.stringify(newEntry.substances),
+        entry_content: newEntry.entryContent,
+        daily_question_q: newEntry.dailyQuestionQ,
+        daily_question_a: newEntry.dailyQuestionA,
         exercise:
-          entry.exercise !== undefined ? entry.exercise.toString() : undefined,
+          newEntry.exercise !== undefined
+            ? newEntry.exercise.toString()
+            : undefined,
       },
       {
         headers: {

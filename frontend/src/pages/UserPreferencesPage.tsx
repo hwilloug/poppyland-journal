@@ -167,7 +167,6 @@ const UserPreferencesPage: React.FunctionComponent = () => {
               shrink: true,
             }}
             value={firstName}
-            defaultValue={0}
             onChange={(e) => dispatch(setFirstName(e.target.value))}
             sx={{ backgroundColor: "white", width: "200px", mr: "10px" }}
           />
@@ -177,7 +176,6 @@ const UserPreferencesPage: React.FunctionComponent = () => {
               shrink: true,
             }}
             value={lastName}
-            defaultValue={0}
             onChange={(e) => dispatch(setLastName(e.target.value))}
             sx={{ backgroundColor: "white", width: "200px" }}
           />

@@ -400,7 +400,7 @@ Resources:
                   "affirmation": item['Item'].get('Affirmation', {}).get("S"),
                   "goals": item['Item'].get('Goals', item['Item'].get('Goal', {})).get("S"),
                   "weekly_goals": item['Item'].get('WeeklyGoals', {}).get("S"),
-                  "weekly_goals": item['Item'].get('MonthlyGoals', {}).get("S"),
+                  "monthly_goals": item['Item'].get('MonthlyGoals', {}).get("S"),
                   "daily_question_q": item['Item'].get('DailyQuestionQ', {}).get("S"),
                   "daily_question_a": item['Item'].get('DailyQuestionA', {}).get("S"),
                   "exercise": item['Item'].get('Exercise', {}).get("N")
@@ -460,8 +460,8 @@ Resources:
                       "substances": item.get('Substances', {}).get("SS", item.get('Substances', {}).get("S")),
                       "affirmation": item.get('Affirmation', {}).get("S"),
                       "goals": item.get('Goals', item.get("Goal", {})).get("S"),
-                      "weekly_goals": item.get('WeeklyGoals', item.get("WeeklyGoals", {})).get("S"),
-                      "monthly_goals": item.get('WeeklyGoals', item.get("MonthlyGoals", {})).get("S"),
+                      "weekly_goals": item.get('WeeklyGoals', {}).get("S"),
+                      "monthly_goals": item.get('MonthlyGoals', {})).get("S"),
                       "daily_question_q": item.get('DailyQuestionQ', {}).get("S"),
                       "daily_question_a": item.get('DailyQuestionA', {}).get("S"),
                       "exercise": item.get('Exercise', {}).get("N")

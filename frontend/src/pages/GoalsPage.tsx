@@ -18,6 +18,7 @@ import { GoalsType } from "../types/journal-types"
 import DeleteIcon from "@mui/icons-material/Delete"
 import LibraryAddIcon from "@mui/icons-material/LibraryAdd"
 import { getQuestion } from "../components/todaysentrypage/DailyQuestion"
+import { getInitialEntryState } from "../reducers/journal-reducer"
 const _ = require("lodash")
 
 const GoalsPage: React.FC = () => {
@@ -259,11 +260,7 @@ const GoalsPage: React.FC = () => {
     const submitMonthlyGoals = useCallback(async () => {
       const token = await getAccessTokenSilently()
       journalActions.putEntry(token, user?.sub || "", lastFirst, {
-        ...(data[lastFirst] || {
-          mentalHealth: [],
-          substances: [],
-          dailyQuestionQ: getQuestion(convertToDateObject(lastFirst).getDate()),
-        }),
+        ...(data[lastFirst] || getInitialEntryState(lastFirst)),
         monthlyGoals,
       })
     }, [

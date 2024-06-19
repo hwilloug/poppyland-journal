@@ -1,10 +1,33 @@
 import { JournalActionTypes } from "../actions/journal-actions"
-import { JournalState } from "../types/journal-types"
+import { getQuestion } from "../components/todaysentrypage/DailyQuestion"
+import { JournalEntry, JournalState } from "../types/journal-types"
+import { convertToDateObject } from "../utils/date-utils"
 
 const initialState: JournalState = {
   isLoading: true,
   isSaving: false,
   entries: {},
+}
+
+export const getInitialEntryState = (date: string): JournalEntry => {
+  return {
+    date,
+    mood: undefined,
+    hoursSleep: undefined,
+    bedTime: undefined,
+    wakeUpTime: undefined,
+    sleepQuality: undefined,
+    affirmation: undefined,
+    mentalHealth: [],
+    substances: [],
+    entryContent: undefined,
+    goals: undefined,
+    weeklyGoals: [],
+    monthlyGoals: [],
+    dailyQuestionQ: getQuestion(convertToDateObject(date).getDate()),
+    dailyQuestionA: undefined,
+    exercise: "0",
+  }
 }
 
 export function journalReducer(

@@ -20,6 +20,9 @@ export const getProfile = async (
   const defaultPreferences = {
     showDailyAffirmation: true,
     showDailyGoal: true,
+    showWeeklyGoal: true,
+    showMonthlyGoal: true,
+    showYearlyGoal: true,
     showDailyQuestion: true,
     showMood: true,
     showMentalHealth: true,

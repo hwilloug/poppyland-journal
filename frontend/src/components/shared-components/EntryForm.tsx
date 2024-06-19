@@ -26,6 +26,7 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle"
 import { ReactNode, useEffect, useMemo, useState } from "react"
 import { HeaderText } from "./styled-components"
 import { convertToDateObject } from "../../utils/date-utils"
+import { getInitialEntryState } from "../../reducers/journal-reducer"
 const _ = require("lodash")
 
 const SavingContainer = styled("div")({
@@ -56,24 +57,7 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
     if (Object.keys(entries).includes(date)) {
       return entries[date]
     } else {
-      return {
-        date,
-        mood: undefined,
-        hoursSleep: undefined,
-        bedTime: undefined,
-        wakeUpTime: undefined,
-        sleepQuality: undefined,
-        affirmation: undefined,
-        mentalHealth: [],
-        substances: [],
-        entryContent: undefined,
-        goals: undefined,
-        weeklyGoals: [],
-        monthlyGoals: [],
-        dailyQuestionQ: undefined,
-        dailyQuestionA: undefined,
-        exercise: "0",
-      }
+      return getInitialEntryState(date)
     }
   }, [entries, date])
   const prevFormStateLoaded = useMemo(() => {
@@ -308,6 +292,7 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
         entryContent,
         goals,
         weeklyGoals,
+        monthlyGoals,
         dailyQuestionA,
         dailyQuestionQ,
         exercise: minutesExercise?.toString(),
