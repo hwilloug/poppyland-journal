@@ -461,7 +461,7 @@ Resources:
                       "affirmation": item.get('Affirmation', {}).get("S"),
                       "goals": item.get('Goals', item.get("Goal", {})).get("S"),
                       "weekly_goals": item.get('WeeklyGoals', {}).get("S"),
-                      "monthly_goals": item.get('MonthlyGoals', {})).get("S"),
+                      "monthly_goals": item.get('MonthlyGoals', {}).get("S"),
                       "daily_question_q": item.get('DailyQuestionQ', {}).get("S"),
                       "daily_question_a": item.get('DailyQuestionA', {}).get("S"),
                       "exercise": item.get('Exercise', {}).get("N")
