@@ -11,7 +11,7 @@ import DailyQuestionComponent, {
 import MentalHealthEntryComponent from "../todaysentrypage/MentalHealthEntry"
 import SubstanceEntryComponent from "../todaysentrypage/SubstanceEntry"
 import EntryComponent from "../todaysentrypage/Entry"
-import { CircularProgress, SelectChangeEvent, Typography } from "@mui/material"
+import { CircularProgress, SelectChangeEvent } from "@mui/material"
 import LoadingComponent from "./Loading"
 import { useDispatch, useSelector } from "react-redux"
 import { State, journalActions } from "../../store"
@@ -74,7 +74,7 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
         exercise: "0",
       }
     }
-  }, [entries])
+  }, [entries, date])
   const prevFormStateLoaded = useMemo(() => {
     return (
       loadedEntry.mood ||

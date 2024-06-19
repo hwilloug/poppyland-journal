@@ -1,8 +1,7 @@
 import { EntrySectionContainer } from "../shared-components/styled-components"
-import { Box, Button, Checkbox, Grid, Input, Typography } from "@mui/material"
+import { Button, Checkbox, Grid, Input, Typography } from "@mui/material"
 import LibraryAddIcon from "@mui/icons-material/LibraryAdd"
 import DeleteIcon from "@mui/icons-material/Delete"
-import { useMemo } from "react"
 import { GoalsType } from "../../types/journal-types"
 
 interface DailyGoalProps {

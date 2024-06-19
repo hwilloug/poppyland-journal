@@ -5,7 +5,7 @@ import {
 } from "../components/shared-components/styled-components"
 import { useSelector } from "react-redux"
 import { State, journalActions } from "../store"
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
+import React, { useCallback, useEffect, useMemo, useState } from "react"
 import {
   convertToDayOfWeekMonthDay,
   convertToShortDate,

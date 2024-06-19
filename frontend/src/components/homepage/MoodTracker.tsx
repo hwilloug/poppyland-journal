@@ -1,11 +1,10 @@
-import React, { useMemo, useRef, useState } from "react"
+import React, { useMemo, useState } from "react"
 import styled from "@emotion/styled"
-import { convertToMonthDay } from "../../utils/date-utils"
 import { Button, Grid, Paper, Typography, useTheme } from "@mui/material"
 import { useSelector } from "react-redux"
 import { State } from "../../store"
 import HighchartsReact from "highcharts-react-official"
-import Highcharts, { SeriesXrangeOptions } from "highcharts/highstock"
+import Highcharts from "highcharts/highstock"
 import { SubstancesType } from "../../types/journal-types"
 
 const Container = styled(Paper)`

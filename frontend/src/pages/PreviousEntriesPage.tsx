@@ -1,4 +1,4 @@
-import React, { ReactNode, useMemo, useState } from "react"
+import React, { useMemo, useState } from "react"
 import { PageContentContainer } from "../components/shared-components/styled-components"
 import styled from "@emotion/styled"
 import MarkdownComponent from "../components/shared-components/Markdown"
