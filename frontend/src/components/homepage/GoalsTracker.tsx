@@ -90,7 +90,9 @@ const GoalsTrackerComponent: React.FunctionComponent = () => {
                 key={`${dateString}-${i}`}
               >
                 <Grid item xs={12} md={5} lg={3}>
-                  <Typography align="center">{dateString}</Typography>
+                  <Typography align="center" fontWeight={"bold"}>
+                    {dateString}
+                  </Typography>
                 </Grid>
                 <Grid item xs={12} md={7} lg={9}>
                   <Grid container flexDirection={"column"}>
