@@ -29,6 +29,7 @@ import {
 } from "@mui/material"
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz"
 import {
+  convertToDateObject,
   convertToLongDateFromShortDate,
   convertToShortDate,
 } from "../utils/date-utils"
@@ -130,7 +131,7 @@ const PreviousEntriesPage: React.FunctionComponent = () => {
   const entriesByMonth = useMemo(() => {
     const entriesByMonth: { [monthYear: string]: JournalEntry[] } = {}
     for (let i = 0; i < entries.length; i++) {
-      const date = new Date(entries[i].date)
+      const date = convertToDateObject(entries[i].date)
       const months = [
         "Jan",
         "Feb",

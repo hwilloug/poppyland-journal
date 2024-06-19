@@ -5,6 +5,7 @@ import { withAuthenticationRequired } from "@auth0/auth0-react"
 import EntryForm from "../components/shared-components/EntryForm"
 import { useParams } from "react-router-dom"
 import { Typography } from "@mui/material"
+import { convertToShortDate } from "../utils/date-utils"
 
 export const SectionHeader = styled.h3`
   margin-top: 50px;

@@ -2,6 +2,14 @@ export const convertToShortDate = (date: Date): string => {
   return date.toLocaleDateString("en-CA")
 }
 
+export const convertToDateObject = (date: string): Date => {
+  const parts = date!.split("-")
+  const year = parseInt(parts[0])
+  const month = parseInt(parts[1]) - 1
+  const day = parseInt(parts[2])
+  return new Date(year, month, day)
+}
+
 export const convertToMonthDay = (date: Date): string => {
   const months = [
     "Jan",

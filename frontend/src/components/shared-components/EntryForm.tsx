@@ -25,6 +25,7 @@ import {
 import CheckCircleIcon from "@mui/icons-material/CheckCircle"
 import { ReactNode, useEffect, useMemo, useState } from "react"
 import { HeaderText } from "./styled-components"
+import { convertToDateObject } from "../../utils/date-utils"
 const _ = require("lodash")
 
 const SavingContainer = styled("div")({
@@ -38,6 +39,7 @@ interface EntryFormProps {
 }
 
 const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
+  const dateObject = convertToDateObject(date)
   const { user, getAccessTokenSilently } = useAuth0()
   const dispatch = useDispatch()
   const userId = useSelector((state: State) => state.user.userId)
@@ -66,7 +68,7 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
         substances: [],
         entryContent: undefined,
         goals: undefined,
-        weeklyGoals: undefined,
+        weeklyGoals: [],
         dailyQuestionQ: undefined,
         dailyQuestionA: undefined,
         exercise: "0",
@@ -132,7 +134,7 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
     loadedEntry.entryContent || undefined,
   )
   const [dailyQuestionQ, setDailyQuestionQ] = useState<string | undefined>(
-    loadedEntry.dailyQuestionQ || getQuestion(new Date(date).getDate()),
+    loadedEntry.dailyQuestionQ || getQuestion(dateObject.getDate()),
   )
   const [dailyQuestionA, setDailyQuestionA] = useState<string | undefined>(
     loadedEntry.dailyQuestionA || undefined,
@@ -159,9 +161,7 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
     setSubstances(entry.substances)
     setEntryContent(entry.entryContent)
     setDailyQuestionA(entry.dailyQuestionA)
-    setDailyQuestionQ(
-      entry.dailyQuestionQ || getQuestion(new Date(date).getDate()),
-    )
+    setDailyQuestionQ(entry.dailyQuestionQ || getQuestion(dateObject.getDate()))
     setSleepQuality(entry.sleepQuality)
     setMinutesExercise(entry.exercise ? parseInt(entry.exercise) : 0)
     setStateLoaded(true)
@@ -397,7 +397,7 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
           onRemove={removeGoal}
         />
       )}
-      {preferences.showWeeklyGoal && (
+      {preferences.showWeeklyGoal && dateObject.getDay() === 1 && (
         <DailyGoalComponent
           goals={weeklyGoals || []}
           cadence={"Weekly"}
