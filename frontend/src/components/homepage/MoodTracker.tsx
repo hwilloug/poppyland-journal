@@ -10,8 +10,8 @@ import { SubstancesType } from "../../types/journal-types"
 const Container = styled(Paper)`
   background-color: #fffcf5;
   padding: 20px 20px 50px 20px;
-  margin: 50px 20px;
   border: 1px solid lightgrey;
+  margin-left: 24px;
 `
 
 export type DataType = {

@@ -22,8 +22,8 @@ import { Link } from "react-router-dom"
 const Container = styled(Paper)`
   background-color: #fffcf5;
   padding: 20px;
-  margin: 20px;
   border: 1px solid lightgrey;
+  margin-left: 20px;
 `
 
 const GoalsTrackerComponent: React.FunctionComponent = () => {

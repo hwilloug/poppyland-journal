@@ -23,8 +23,8 @@ import { Divider } from "../shared-components/styled-components"
 const Container = styled(Paper)`
   background-color: #fffcf5;
   padding: 20px;
-  margin: 20px;
   border: 1px solid lightgrey;
+  margin-right: 20px;
 `
 
 const PreviousEntriesListComponent: React.FunctionComponent = () => {
