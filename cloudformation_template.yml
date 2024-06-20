@@ -195,7 +195,7 @@ Resources:
     Type: AWS::Route53::RecordSet
     Properties:
       Name: !Ref Domain
-      HostedZoneId: !GetAtt JournalHostedZone.Id
+      HostedZoneId: !Ref JournalHostedZone
       Type: A
       AliasTarget:
         DNSName: !GetAtt CloudFrontDistribution.DomainName
@@ -617,7 +617,7 @@ Resources:
     Type: AWS::Route53::RecordSet
     Properties:
       Name: !Ref ApiDomain
-      HostedZoneId: !GetAtt JournalHostedZone.Id
+      HostedZoneId: !Ref JournalHostedZone
       Type: A
       AliasTarget:
         DNSName: !GetAtt JournalApiDomainName.RegionalDomainName
