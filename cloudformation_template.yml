@@ -611,7 +611,7 @@ Resources:
       DomainName: !Ref ApiDomain
       DomainNameConfigurations:
         - EndpointType: REGIONAL
-          CertificateArn: arn:aws:acm:us-east-1:132507767948:certificate/6edda0a3-7cf2-4588-a19a-b80feb554c1a
+          CertificateArn: !Ref JournalCertificate
 
   ApiRoute53Record:
     Type: AWS::Route53::RecordSet
