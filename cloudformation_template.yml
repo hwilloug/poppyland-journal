@@ -71,7 +71,7 @@ Resources:
         Aliases:
           - !Ref Domain
         ViewerCertificate:
-          AcmCertificateArn: !GetAtt JournalCertificate.Arn
+          AcmCertificateArn: !Ref JournalCertificate
           MinimumProtocolVersion: TLSv1
           SslSupportMethod: sni-only
         DefaultRootObject: index.html
