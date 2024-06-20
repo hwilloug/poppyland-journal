@@ -131,6 +131,7 @@ const GoalsPage: React.FC = () => {
                       )
                     )}
                   </Grid>
+                  <hr />
                 </Grid>
               </Grid>
             )

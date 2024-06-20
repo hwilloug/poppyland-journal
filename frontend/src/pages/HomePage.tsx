@@ -25,12 +25,11 @@ const DailyAffiramtionContainer = styled(Paper)`
     ${deepPurple[400]},
     ${deepPurple[700]}
   );
-  margin: 20px;
   padding: 20px;
   color: white;
   text-align: center;
   width: 50%;
-  margin: 20px auto;
+  margin: 40px auto;
   border: 1px outset white;
 `
 
@@ -58,6 +57,7 @@ const HomePage: React.FunctionComponent = () => {
           textShadow:
             "1px 1px 0px #fff, -1px 1px 0px #fff, 1px -1px 0px #fff, -1px -1px 0px #fff",
         }}
+        mt={3}
         align={"center"}
       >
         {new Date().toLocaleDateString("en-US", {

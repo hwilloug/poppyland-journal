@@ -10,13 +10,10 @@ Parameters:
     Default: poppyland-journal
   Domain:
     Type: String
-    Default: journal.poppyland.dev
+    Default: whisperingwillowdiary.com
   ApiDomain:
     Type: String
     Default: journal-api.poppyland.dev
-  HostedZoneId:
-    Type: String
-    Default: Z06420282IBWLWB0CK5TG
   Auth0Domain:
     Type: String
     Default: dev-8igvi3e7o3jja6zf.us.auth0.com
@@ -53,6 +50,14 @@ Resources:
               StringEquals:
                 AWS:SourceArn: !Sub arn:aws:cloudfront::${AWS::AccountId}:distribution/${CloudFrontDistribution}
 
+  JournalCertificate:
+    Type: 'AWS::CertificateManager::Certificate'
+    Properties: 
+      DomainName: !Ref Domain
+      ValidationMethod: 'DNS'
+      SubjectAlternativeNames: 
+        - !Sub "www.${Domain}"
+
   CloudFrontDistribution:
     Type: AWS::CloudFront::Distribution
     Properties:
@@ -66,7 +71,7 @@ Resources:
         Aliases:
           - !Ref Domain
         ViewerCertificate:
-          AcmCertificateArn: arn:aws:acm:us-east-1:132507767948:certificate/6edda0a3-7cf2-4588-a19a-b80feb554c1a
+          AcmCertificateArn: !GetAtt JournalCertificate.Arn
           MinimumProtocolVersion: TLSv1
           SslSupportMethod: sni-only
         DefaultRootObject: index.html
@@ -179,11 +184,18 @@ Resources:
                       jobId=job_id,
                   )
 
+  JournalHostedZone:
+    Type: 'AWS::Route53::HostedZone'
+    Properties:
+      Name: !Ref Domain
+      HostedZoneConfig:
+        Comment: !Sub 'Hosted zone for ${Domain}'
+
   Route53Record:
     Type: AWS::Route53::RecordSet
     Properties:
       Name: !Ref Domain
-      HostedZoneId: !Ref HostedZoneId
+      HostedZoneId: !GetAtt JournalHostedZone.Id
       Type: A
       AliasTarget:
         DNSName: !GetAtt CloudFrontDistribution.DomainName
@@ -605,7 +617,7 @@ Resources:
     Type: AWS::Route53::RecordSet
     Properties:
       Name: !Ref ApiDomain
-      HostedZoneId: !Ref HostedZoneId
+      HostedZoneId: !GetAtt JournalHostedZone.Id
       Type: A
       AliasTarget:
         DNSName: !GetAtt JournalApiDomainName.RegionalDomainName
@@ -1378,6 +1390,6 @@ Resources:
 
 Outputs:
   WebAppDomain:
-    Value: journal.poppyland.dev
+    Value: whisperingwillowdiary.com
   WebAppS3BucketName:
     Value: !Ref WebAppS3Bucket

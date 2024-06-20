@@ -1,8 +1,8 @@
-# Poppyland Journal
+# Whispering Willow Diary
 ![PoppylandLogo](frontend/public/logo.png)
 
 Make an account now at: 
-[https://journal.poppyland.dev](https://journal.poppyland.dev)
+[https://whisperingwillowdiary.com](https://whisperingwillowdiary.com)
 
 Features:
 - Daily Journal Entry
@@ -10,10 +10,9 @@ Features:
 - Mood Tracker
 - Daily Affirmations
 - Daily Questions
-- Daily Goal
+- Daily, Weekly, Monthly, and Yearly Goals
 - Mental Health Tracker
 - Substance Use Tracker
-- Medication Tracker
 - Exercise Tracker
 
 ## Tech Specs

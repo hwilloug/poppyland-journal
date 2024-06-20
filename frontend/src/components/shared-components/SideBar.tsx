@@ -64,7 +64,7 @@ const SideBarComponent: React.FunctionComponent<SideBarProps> = ({
             <Link to="/" style={navItemStyle}>
               <img src="/logo.png" width={50} style={{}}></img>
               <Typography variant="h5" fontFamily={"DancingScript"}>
-                Poppyland Journal
+                Whispering Willow Diary
               </Typography>
             </Link>
           </NavItem>

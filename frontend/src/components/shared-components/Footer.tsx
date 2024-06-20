@@ -9,7 +9,7 @@ const Footer: React.FC = () => {
   return (
     <FooterContainer>
       <Typography align="center" fontSize={16}>
-        &copy; {new Date().getFullYear()} Poppyland Journal
+        &copy; {new Date().getFullYear()} Willow Tree Diary
       </Typography>
     </FooterContainer>
   )
