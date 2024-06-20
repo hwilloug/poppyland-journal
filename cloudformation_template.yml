@@ -627,7 +627,7 @@ Resources:
   JournalApiBasePathMapping:
     Type: AWS::ApiGatewayV2::ApiMapping
     Properties:
-      DomainName: !Ref ApiDomain
+      DomainName: !GetAtt JournalApiDomainName.RegionalDomainName
       ApiId: !Ref JournalApiGatweay
       Stage: !Ref JournalApiStage
 
