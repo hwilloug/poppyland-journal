@@ -13,7 +13,7 @@ Parameters:
     Default: whisperingwillowdiary.com
   ApiDomain:
     Type: String
-    Default: journal-api.poppyland.dev
+    Default: api.whisperingwillowdiary.com
   Auth0Domain:
     Type: String
     Default: dev-8igvi3e7o3jja6zf.us.auth0.com
