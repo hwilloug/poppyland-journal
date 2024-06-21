@@ -7,7 +7,7 @@ import LoadingComponent from "../components/shared-components/Loading"
 import { useDispatch, useSelector } from "react-redux"
 import { getProfile } from "../utils/get-profile"
 import { Grid, Paper, Typography, styled, useTheme } from "@mui/material"
-import { deepPurple } from "@mui/material/colors"
+import { deepPurple, green, purple, yellow } from "@mui/material/colors"
 import { convertToShortDate } from "../utils/date-utils"
 import { State } from "../store"
 import GoalsTrackerComponent from "../components/homepage/GoalsTracker"
@@ -25,26 +25,32 @@ const HomePageContainer = styled("div")`
   margin-right: 20px;
 `
 
-const DailyAffiramtionContainer = styled(Paper)`
-  background-image: linear-gradient(
-    to bottom,
-    ${deepPurple[400]},
-    ${deepPurple[700]}
-  );
-  padding: 20px;
-  color: white;
-  text-align: center;
-  width: 50%;
-  margin: 40px auto;
-  border: 1px outset white;
-`
-
-const StatContainer = styled(Grid)(({ theme }) => ({
-  color: "white",
-  padding: "20px 10px",
-  borderRadius: "5px",
+const DailyAffiramtionContainer = styled(Paper)(({ theme }) => ({
+  backgroundImage: "url(/affirmation_background.png)",
+  backgroundSize: "cover",
+  backgroundPosition: "top",
+  padding: "20px",
+  color: "black",
+  textAlign: "center",
+  width: "50%",
+  margin: "40px auto",
+  marginBottom: "40px",
   border: "1px outset white",
-  margin: "20px",
+  textShadow:
+    "1px 1px 0px #fff, -1px 1px 0px #fff, 1px -1px 0px #fff, -1px -1px 0px #fff",
+
+  position: "relative",
+  ":before": {
+    content: '""',
+    position: "absolute",
+    top: 0,
+    left: 0,
+    width: "100%",
+    height: "100%",
+    backgroundImage:
+      "linear-gradient(to bottom, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.4))",
+    zIndex: 1,
+  },
 }))
 
 const HomePage: React.FunctionComponent = () => {
@@ -149,65 +155,49 @@ const HomePage: React.FunctionComponent = () => {
           day: "numeric",
         })}
       </Typography>
+
       {preferences.showDailyAffirmation &&
         Object.keys(journalState.entries).includes(today) &&
         journalState.entries[today].affirmation && (
-          <DailyAffiramtionContainer elevation={24}>
-            <Typography>
-              Daily Affirmation:
-              <br />
-              {journalState.entries[today].affirmation}
-            </Typography>
-          </DailyAffiramtionContainer>
+          <>
+            <DailyAffiramtionContainer elevation={24}>
+              <Typography
+                variant="h5"
+                align="center"
+                position={"relative"}
+                zIndex={2}
+                sx={{
+                  textShadow:
+                    "1px 1px 0px #fff, -1px 1px 0px #fff, 1px -1px 0px #fff, -1px -1px 0px #fff",
+                }}
+              >
+                Daily Affirmation
+              </Typography>
+              <Typography position={"relative"} zIndex={2}>
+                {journalState.entries[today].affirmation}
+              </Typography>
+            </DailyAffiramtionContainer>
+          </>
         )}
+
       {preferences.showMood && <MoodTrackerComponent />}
+
       <Grid container margin={"20px"} justifyContent={"center"}>
-        <StatContainer
-          item
-          xs={12}
-          sm={3}
-          sx={{
-            backgroundImage: `linear-gradient(to bottom, #FFE500, #EFB208)`,
-            color: "black",
-          }}
-        >
-          <Typography align="center">Streak:</Typography>
-          <Typography align="center" fontWeight={"bold"}>
-            {streak}
-          </Typography>
-        </StatContainer>
-        <StatContainer
-          item
-          xs={12}
-          sm={3}
-          sx={{
-            backgroundImage: `linear-gradient(to bottom, ${theme.palette.secondary.main}, ${theme.palette.secondary.dark})`,
-            color: "black",
-          }}
-        >
-          <Typography align="center">
-            Number of Entries:
-            <Typography align="center" fontWeight={"bold"}>
-              {numEntries}
-            </Typography>
-          </Typography>
-        </StatContainer>
-        <StatContainer
-          item
-          xs={12}
-          sm={3}
-          sx={{
-            backgroundImage: `linear-gradient(to bottom,  #FFE500, #EFB208)`,
-            color: "black",
-          }}
-        >
-          <Typography align="center">
-            Average Mood Last 7 Days:
-            <Typography align="center" fontWeight={"bold"}>
-              {avgMoodIcon}
-            </Typography>
-          </Typography>
-        </StatContainer>
+        <StatCard
+          name="Number of Entries"
+          value={numEntries}
+          color={`linear-gradient(to bottom, ${purple[500]}, ${purple[800]})`}
+        />
+        <StatCard
+          name="Streak"
+          value={streak}
+          color={`linear-gradient(to bottom,${yellow[500]}, ${yellow[800]})`}
+        />
+        <StatCard
+          name="Average Mood Last 7 Days"
+          value={avgMoodIcon}
+          color={`linear-gradient(to bottom, ${green[500]}, ${green[800]})`}
+        />
       </Grid>
       <Grid container margin={"20px"}>
         <Grid item xs={12} sm={6}>
@@ -222,3 +212,58 @@ const HomePage: React.FunctionComponent = () => {
 }
 
 export default withAuthenticationRequired(HomePage)
+
+const StatContainer = styled(Grid)(({ theme }) => ({
+  padding: "20px 10px",
+  borderRadius: "5px",
+  border: "1px outset white",
+  margin: "20px",
+  backgroundPosition: "bottom",
+  backgroundSize: "cover",
+  textShadow:
+    "1px 1px 0px #fff, -1px 1px 0px #fff, 1px -1px 0px #fff, -1px -1px 0px #fff",
+}))
+
+const StatCard: React.FC<{ name: string; value: any; color: string }> = ({
+  name,
+  value,
+  color,
+}) => {
+  return (
+    <StatContainer
+      item
+      xs={12}
+      sm={3}
+      sx={{
+        backgroundImage: color,
+      }}
+      container
+      flexDirection={"column"}
+      justifyContent={"space-evenly"}
+    >
+      <Grid item>
+        <Typography
+          align="center"
+          color={"white"}
+          fontWeight={"bold"}
+          position={"relative"}
+          zIndex={2}
+          sx={{ textShadow: "none" }}
+        >
+          {name}
+        </Typography>
+      </Grid>
+      <Grid item>
+        <Typography
+          align="center"
+          fontSize={36}
+          fontWeight={"bold"}
+          position={"relative"}
+          zIndex={2}
+        >
+          {value}
+        </Typography>
+      </Grid>
+    </StatContainer>
+  )
+}

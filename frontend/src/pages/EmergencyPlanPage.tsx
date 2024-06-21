@@ -1,9 +1,11 @@
-import { Button, Grid, Input, Paper, Typography } from "@mui/material"
+import { Button, Grid, Input, Paper, Typography, useTheme } from "@mui/material"
 import { PageContentContainer } from "../components/shared-components/styled-components"
 import { useState } from "react"
 import DeleteIcon from "@mui/icons-material/Delete"
 
 const EmergencyPlanPage: React.FC = () => {
+  const theme = useTheme()
+
   const [emergencyContacts, setEmergencyContacts] = useState<
     { relation: string; phone: string }[]
   >([])
@@ -24,6 +26,8 @@ const EmergencyPlanPage: React.FC = () => {
     setEmergencyContacts([...newEmergencyContacts])
   }
 
+  const [emergencyPlan, setEmergencyPlan] = useState<string>()
+
   return (
     <PageContentContainer>
       <Paper
@@ -32,6 +36,15 @@ const EmergencyPlanPage: React.FC = () => {
       >
         <Typography variant="h5" align="center" mb={4}>
           Emergency Plan
+        </Typography>
+
+        <Typography
+          variant="h6"
+          align="center"
+          sx={{ color: theme.palette.warning.main }}
+          mb={4}
+        >
+          Phone Numbers
         </Typography>
         <Typography align="center" fontWeight={"bold"}>
           Suicide Hotline:{" "}
@@ -81,6 +94,21 @@ const EmergencyPlanPage: React.FC = () => {
         >
           Add Emergency Number
         </Button>
+
+        <Typography
+          variant="h6"
+          align="center"
+          my={4}
+          sx={{ color: theme.palette.warning.main }}
+        >
+          Emergency Plan
+        </Typography>
+        <Input
+          fullWidth
+          multiline
+          value={emergencyPlan}
+          onChange={(e) => setEmergencyPlan(e.target.value)}
+        />
       </Paper>
     </PageContentContainer>
   )
