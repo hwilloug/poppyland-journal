@@ -7,7 +7,6 @@ import { useSelector } from "react-redux"
 import { State, journalActions } from "../store"
 import React, { useCallback, useEffect, useMemo, useState } from "react"
 import {
-  convertToDateObject,
   convertToDayOfWeekMonthDay,
   convertToShortDate,
   getFirstDayOfMonth,
@@ -17,7 +16,6 @@ import { useAuth0 } from "@auth0/auth0-react"
 import { GoalsType } from "../types/journal-types"
 import DeleteIcon from "@mui/icons-material/Delete"
 import LibraryAddIcon from "@mui/icons-material/LibraryAdd"
-import { getQuestion } from "../components/todaysentrypage/DailyQuestion"
 import { getInitialEntryState } from "../reducers/journal-reducer"
 const _ = require("lodash")
 

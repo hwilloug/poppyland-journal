@@ -12,6 +12,7 @@ const Container = styled(Paper)`
   padding: 20px 20px 50px 20px;
   border: 1px solid lightgrey;
   margin-left: 24px;
+  margin-top: 20px;
 `
 
 export type DataType = {

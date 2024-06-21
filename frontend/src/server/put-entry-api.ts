@@ -3,7 +3,11 @@ import axios from "axios"
 import { JournalEntry } from "../types/journal-types"
 const _ = require("lodash")
 
-export interface PutEntryResponseType {}
+export interface PutEntryResponseType {
+  ResponseMetadata: {
+    HTTPStatusCode: number
+  }
+}
 
 export const call = async (
   token: string,

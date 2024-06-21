@@ -15,6 +15,7 @@ import ManageAccountsIcon from "@mui/icons-material/ManageAccounts"
 import LogoutIcon from "@mui/icons-material/Logout"
 import { useSelector } from "react-redux"
 import { State } from "../../store"
+import { ContactEmergency } from "@mui/icons-material"
 
 const NavItem = styled(Box)`
   margin: 10px;
@@ -68,6 +69,13 @@ const AppBarComponent: React.FunctionComponent<SideBarProps> = ({
             <Typography>
               {firstName ? `${firstName} ${lastName}` : user?.email}
             </Typography>
+          </NavItem>
+          <NavItem>
+            <StyledTooltip title="Emergency Plan">
+              <Link to="/emergency-plan" style={navItemStyle}>
+                <ContactEmergency />
+              </Link>
+            </StyledTooltip>
           </NavItem>
           <NavItem>
             <StyledTooltip title="User Preferences">

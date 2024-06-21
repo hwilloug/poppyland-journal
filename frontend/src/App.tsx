@@ -14,6 +14,7 @@ import { useEffect } from "react"
 import { journalActions } from "./store"
 import EntriesPage from "./pages/EntriesPage"
 import GoalsPage from "./pages/GoalsPage"
+import EmergencyPlanPage from "./pages/EmergencyPlanPage"
 
 const AppContainer = styled.div`
   min-height: 100vh;
@@ -51,6 +52,10 @@ const router = createBrowserRouter([
       {
         path: "goals",
         element: <GoalsPage />,
+      },
+      {
+        path: "emergency-plan",
+        element: <EmergencyPlanPage />,
       },
     ],
   },

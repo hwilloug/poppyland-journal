@@ -55,8 +55,6 @@ Resources:
     Properties: 
       DomainName: !Ref Domain
       ValidationMethod: 'DNS'
-      SubjectAlternativeNames: 
-        - !Sub "www.${Domain}"
 
   CloudFrontDistribution:
     Type: AWS::CloudFront::Distribution
