@@ -532,7 +532,7 @@ Resources:
       FunctionName: !Ref PutEntryLambda
       Action: "lambda:InvokeFunction"
       Principal: apigateway.amazonaws.com
-      SourceArn: !Sub 'arn:${AWS::Partition}:execute-api:${AWS::Region}:${AWS::AccountId}:${JournalApiGatweay}/*/*/entry'
+      SourceArn: !Sub 'arn:${AWS::Partition}:execute-api:${AWS::Region}:${AWS::AccountId}:${JournalApiGateway}/*/*/entry'
       SourceAccount: !Ref 'AWS::AccountId'
 
   LambdaInvokeGetEntry:
@@ -541,7 +541,7 @@ Resources:
       FunctionName: !Ref GetEntryLambda
       Action: "lambda:InvokeFunction"
       Principal: apigateway.amazonaws.com
-      SourceArn: !Sub 'arn:${AWS::Partition}:execute-api:${AWS::Region}:${AWS::AccountId}:${JournalApiGatweay}/*/*/entry/{date}'
+      SourceArn: !Sub 'arn:${AWS::Partition}:execute-api:${AWS::Region}:${AWS::AccountId}:${JournalApiGateway}/*/*/entry/{date}'
       SourceAccount: !Ref 'AWS::AccountId'
 
   LambdaInvokeGetEntries:
@@ -550,7 +550,7 @@ Resources:
       FunctionName: !Ref GetEntriesLambda
       Action: "lambda:InvokeFunction"
       Principal: apigateway.amazonaws.com
-      SourceArn: !Sub 'arn:${AWS::Partition}:execute-api:${AWS::Region}:${AWS::AccountId}:${JournalApiGatweay}/*/*/entry'
+      SourceArn: !Sub 'arn:${AWS::Partition}:execute-api:${AWS::Region}:${AWS::AccountId}:${JournalApiGateway}/*/*/entry'
       SourceAccount: !Ref 'AWS::AccountId'
 
   LambdaInvokeDeleteEntry:
@@ -559,7 +559,7 @@ Resources:
       FunctionName: !Ref DeleteEntryLambda
       Action: "lambda:InvokeFunction"
       Principal: apigateway.amazonaws.com
-      SourceArn: !Sub 'arn:${AWS::Partition}:execute-api:${AWS::Region}:${AWS::AccountId}:${JournalApiGatweay}/*/*/entry/{date}'
+      SourceArn: !Sub 'arn:${AWS::Partition}:execute-api:${AWS::Region}:${AWS::AccountId}:${JournalApiGateway}/*/*/entry/{date}'
       SourceAccount: !Ref 'AWS::AccountId'
 
   CloudWatchApiGatewayLogGroup:
@@ -567,7 +567,7 @@ Resources:
     Properties:
       LogGroupName: !Sub ${AppName}-api-logs
 
-  JournalApiGatweay:
+  JournalApiGateway:
     Type: AWS::ApiGatewayV2::Api
     Properties:
       Name: !Sub ${AppName}-api-gateway
@@ -592,7 +592,7 @@ Resources:
   JournalApiStage:
     Type: AWS::ApiGatewayV2::Stage
     Properties:
-      ApiId: !Ref JournalApiGatweay
+      ApiId: !Ref JournalApiGateway
       StageName: api
       Description: Live API Stage
       AutoDeploy: true
@@ -634,7 +634,7 @@ Resources:
   PostIntegration:
     Type: AWS::ApiGatewayV2::Integration
     Properties:
-      ApiId: !Ref JournalApiGatweay
+      ApiId: !Ref JournalApiGateway
       Description: Lambda proxy integration
       IntegrationType: AWS_PROXY
       IntegrationMethod: POST
@@ -644,7 +644,7 @@ Resources:
   PutRoute:
     Type: AWS::ApiGatewayV2::Route
     Properties:
-      ApiId: !Ref JournalApiGatweay
+      ApiId: !Ref JournalApiGateway
       RouteKey: "PUT /entry"
       AuthorizationType: JWT
       AuthorizerId: !GetAtt ApiAuthorizer.AuthorizerId
@@ -656,7 +656,7 @@ Resources:
   GetEntryIntegration:
     Type: AWS::ApiGatewayV2::Integration
     Properties:
-      ApiId: !Ref JournalApiGatweay
+      ApiId: !Ref JournalApiGateway
       Description: Lambda proxy integration
       IntegrationType: AWS_PROXY
       IntegrationMethod: POST
@@ -666,7 +666,7 @@ Resources:
   GetEntryRoute:
     Type: AWS::ApiGatewayV2::Route
     Properties:
-      ApiId: !Ref JournalApiGatweay
+      ApiId: !Ref JournalApiGateway
       RouteKey: "GET /entry/{date}"
       AuthorizationType: JWT
       AuthorizerId: !GetAtt ApiAuthorizer.AuthorizerId
@@ -678,7 +678,7 @@ Resources:
   GetEntriesIntegration:
     Type: AWS::ApiGatewayV2::Integration
     Properties:
-      ApiId: !Ref JournalApiGatweay
+      ApiId: !Ref JournalApiGateway
       Description: Lambda proxy integration
       IntegrationType: AWS_PROXY
       IntegrationMethod: POST
@@ -688,7 +688,7 @@ Resources:
   GetEntriesRoute:
     Type: AWS::ApiGatewayV2::Route
     Properties:
-      ApiId: !Ref JournalApiGatweay
+      ApiId: !Ref JournalApiGateway
       RouteKey: "GET /entry"
       AuthorizationType: JWT
       AuthorizerId: !GetAtt ApiAuthorizer.AuthorizerId
@@ -700,7 +700,7 @@ Resources:
   DeleteEntryIntegration:
     Type: AWS::ApiGatewayV2::Integration
     Properties:
-      ApiId: !Ref JournalApiGatweay
+      ApiId: !Ref JournalApiGateway
       Description: Lambda proxy integration
       IntegrationType: AWS_PROXY
       IntegrationMethod: POST
@@ -710,7 +710,7 @@ Resources:
   DeleteEntryRoute:
     Type: AWS::ApiGatewayV2::Route
     Properties:
-      ApiId: !Ref JournalApiGatweay
+      ApiId: !Ref JournalApiGateway
       RouteKey: "DELETE /entry/{date}"
       AuthorizationType: JWT
       AuthorizerId: !GetAtt ApiAuthorizer.AuthorizerId
@@ -745,7 +745,7 @@ Resources:
   OptionsIntegration:
     Type: AWS::ApiGatewayV2::Integration
     Properties:
-      ApiId: !Ref JournalApiGatweay
+      ApiId: !Ref JournalApiGateway
       IntegrationType: AWS_PROXY
       PassthroughBehavior: 'WHEN_NO_MATCH'
       IntegrationMethod: POST
@@ -755,7 +755,7 @@ Resources:
   OptionsRoute:
     Type: AWS::ApiGatewayV2::Route
     Properties:
-      ApiId: !Ref JournalApiGatweay
+      ApiId: !Ref JournalApiGateway
       RouteKey: "OPTIONS /entry"
       AuthorizationType: NONE
       Target: !Join
@@ -766,7 +766,7 @@ Resources:
   OptionsDateRoute:
     Type: AWS::ApiGatewayV2::Route
     Properties:
-      ApiId: !Ref JournalApiGatweay
+      ApiId: !Ref JournalApiGateway
       RouteKey: "OPTIONS /entry/{date}"
       AuthorizationType: NONE
       Target: !Join
@@ -780,7 +780,7 @@ Resources:
       FunctionName: !Ref OptionsLambda
       Action: "lambda:InvokeFunction"
       Principal: apigateway.amazonaws.com
-      SourceArn: !Sub 'arn:${AWS::Partition}:execute-api:${AWS::Region}:${AWS::AccountId}:${JournalApiGatweay}/*/*/entry'
+      SourceArn: !Sub 'arn:${AWS::Partition}:execute-api:${AWS::Region}:${AWS::AccountId}:${JournalApiGateway}/*/*/entry'
       SourceAccount: !Ref 'AWS::AccountId'
 
   LambdaInvokeOptionsDate:
@@ -789,14 +789,14 @@ Resources:
       FunctionName: !Ref OptionsLambda
       Action: "lambda:InvokeFunction"
       Principal: apigateway.amazonaws.com
-      SourceArn: !Sub 'arn:${AWS::Partition}:execute-api:${AWS::Region}:${AWS::AccountId}:${JournalApiGatweay}/*/*/entry/{date}'
+      SourceArn: !Sub 'arn:${AWS::Partition}:execute-api:${AWS::Region}:${AWS::AccountId}:${JournalApiGateway}/*/*/entry/{date}'
       SourceAccount: !Ref 'AWS::AccountId'
 
   ApiAuthorizer:
     Type: 'AWS::ApiGatewayV2::Authorizer'
     Properties:
       Name: JWTAuthorizer
-      ApiId: !Ref JournalApiGatweay
+      ApiId: !Ref JournalApiGateway
       AuthorizerType: JWT
       IdentitySource:
         - $request.header.Authorization
@@ -930,13 +930,13 @@ Resources:
       FunctionName: !Ref PutMedicationLambda
       Action: "lambda:InvokeFunction"
       Principal: apigateway.amazonaws.com
-      SourceArn: !Sub 'arn:${AWS::Partition}:execute-api:${AWS::Region}:${AWS::AccountId}:${JournalApiGatweay}/*/*/medication'
+      SourceArn: !Sub 'arn:${AWS::Partition}:execute-api:${AWS::Region}:${AWS::AccountId}:${JournalApiGateway}/*/*/medication'
       SourceAccount: !Ref 'AWS::AccountId'
 
   PutMedicationIntegration:
     Type: AWS::ApiGatewayV2::Integration
     Properties:
-      ApiId: !Ref JournalApiGatweay
+      ApiId: !Ref JournalApiGateway
       Description: Lambda proxy integration
       IntegrationType: AWS_PROXY
       IntegrationMethod: POST
@@ -946,7 +946,7 @@ Resources:
   PutMedicationRoute:
     Type: AWS::ApiGatewayV2::Route
     Properties:
-      ApiId: !Ref JournalApiGatweay
+      ApiId: !Ref JournalApiGateway
       RouteKey: "PUT /medication"
       AuthorizationType: JWT
       AuthorizerId: !GetAtt ApiAuthorizer.AuthorizerId
@@ -1008,13 +1008,13 @@ Resources:
       FunctionName: !Ref GetMedicationsLambda
       Action: "lambda:InvokeFunction"
       Principal: apigateway.amazonaws.com
-      SourceArn: !Sub 'arn:${AWS::Partition}:execute-api:${AWS::Region}:${AWS::AccountId}:${JournalApiGatweay}/*/*/medication'
+      SourceArn: !Sub 'arn:${AWS::Partition}:execute-api:${AWS::Region}:${AWS::AccountId}:${JournalApiGateway}/*/*/medication'
       SourceAccount: !Ref 'AWS::AccountId'
 
   GetMedicationsIntegration:
     Type: AWS::ApiGatewayV2::Integration
     Properties:
-      ApiId: !Ref JournalApiGatweay
+      ApiId: !Ref JournalApiGateway
       Description: Lambda proxy integration
       IntegrationType: AWS_PROXY
       IntegrationMethod: POST
@@ -1024,7 +1024,7 @@ Resources:
   GetMedicationsRoute:
     Type: AWS::ApiGatewayV2::Route
     Properties:
-      ApiId: !Ref JournalApiGatweay
+      ApiId: !Ref JournalApiGateway
       RouteKey: "GET /medication"
       AuthorizationType: JWT
       AuthorizerId: !GetAtt ApiAuthorizer.AuthorizerId
@@ -1080,13 +1080,13 @@ Resources:
       FunctionName: !Ref DeleteMedicationLambda
       Action: "lambda:InvokeFunction"
       Principal: apigateway.amazonaws.com
-      SourceArn: !Sub 'arn:${AWS::Partition}:execute-api:${AWS::Region}:${AWS::AccountId}:${JournalApiGatweay}/*/*/medication/{name}'
+      SourceArn: !Sub 'arn:${AWS::Partition}:execute-api:${AWS::Region}:${AWS::AccountId}:${JournalApiGateway}/*/*/medication/{name}'
       SourceAccount: !Ref 'AWS::AccountId'
 
   DeleteMedicationIntegration:
     Type: AWS::ApiGatewayV2::Integration
     Properties:
-      ApiId: !Ref JournalApiGatweay
+      ApiId: !Ref JournalApiGateway
       Description: Lambda proxy integration
       IntegrationType: AWS_PROXY
       IntegrationMethod: POST
@@ -1096,7 +1096,7 @@ Resources:
   DeleteMedicationRoute:
     Type: AWS::ApiGatewayV2::Route
     Properties:
-      ApiId: !Ref JournalApiGatweay
+      ApiId: !Ref JournalApiGateway
       RouteKey: "DELETE /medication/{name}"
       AuthorizationType: JWT
       AuthorizerId: !GetAtt ApiAuthorizer.AuthorizerId
@@ -1227,13 +1227,13 @@ Resources:
       FunctionName: !Ref PutUserPreferencesLambda
       Action: "lambda:InvokeFunction"
       Principal: apigateway.amazonaws.com
-      SourceArn: !Sub 'arn:${AWS::Partition}:execute-api:${AWS::Region}:${AWS::AccountId}:${JournalApiGatweay}/*/*/preferences'
+      SourceArn: !Sub 'arn:${AWS::Partition}:execute-api:${AWS::Region}:${AWS::AccountId}:${JournalApiGateway}/*/*/preferences'
       SourceAccount: !Ref 'AWS::AccountId'
 
   PutUserPreferencesIntegration:
     Type: AWS::ApiGatewayV2::Integration
     Properties:
-      ApiId: !Ref JournalApiGatweay
+      ApiId: !Ref JournalApiGateway
       Description: Lambda proxy integration
       IntegrationType: AWS_PROXY
       IntegrationMethod: POST
@@ -1243,7 +1243,7 @@ Resources:
   PutUserPreferencesRoute:
     Type: AWS::ApiGatewayV2::Route
     Properties:
-      ApiId: !Ref JournalApiGatweay
+      ApiId: !Ref JournalApiGateway
       RouteKey: "PUT /preferences"
       AuthorizationType: JWT
       AuthorizerId: !GetAtt ApiAuthorizer.AuthorizerId
@@ -1316,13 +1316,13 @@ Resources:
       FunctionName: !Ref GetUserPreferencesLambda
       Action: "lambda:InvokeFunction"
       Principal: apigateway.amazonaws.com
-      SourceArn: !Sub 'arn:${AWS::Partition}:execute-api:${AWS::Region}:${AWS::AccountId}:${JournalApiGatweay}/*/*/preferences'
+      SourceArn: !Sub 'arn:${AWS::Partition}:execute-api:${AWS::Region}:${AWS::AccountId}:${JournalApiGateway}/*/*/preferences'
       SourceAccount: !Ref 'AWS::AccountId'
 
   GetUserPreferencesIntegration:
     Type: AWS::ApiGatewayV2::Integration
     Properties:
-      ApiId: !Ref JournalApiGatweay
+      ApiId: !Ref JournalApiGateway
       Description: Lambda proxy integration
       IntegrationType: AWS_PROXY
       IntegrationMethod: POST
@@ -1332,7 +1332,7 @@ Resources:
   GetUserPreferencesRoute:
     Type: AWS::ApiGatewayV2::Route
     Properties:
-      ApiId: !Ref JournalApiGatweay
+      ApiId: !Ref JournalApiGateway
       RouteKey: "GET /preferences"
       AuthorizationType: JWT
       AuthorizerId: !GetAtt ApiAuthorizer.AuthorizerId
