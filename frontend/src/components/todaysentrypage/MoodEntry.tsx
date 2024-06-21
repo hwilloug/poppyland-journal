@@ -1,5 +1,4 @@
 import styled from "@emotion/styled"
-import { SectionHeader } from "../../pages/TodaysEntryPage"
 import SentimentVerySatisfiedIcon from "@mui/icons-material/SentimentVerySatisfied"
 import SentimentSatisfiedIcon from "@mui/icons-material/SentimentSatisfied"
 import SentimentNeutralIcon from "@mui/icons-material/SentimentNeutral"

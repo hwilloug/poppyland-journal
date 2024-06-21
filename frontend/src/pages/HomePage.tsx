@@ -6,12 +6,17 @@ import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react"
 import LoadingComponent from "../components/shared-components/Loading"
 import { useDispatch, useSelector } from "react-redux"
 import { getProfile } from "../utils/get-profile"
-import { Grid, Paper, Typography, styled } from "@mui/material"
+import { Grid, Paper, Typography, styled, useTheme } from "@mui/material"
 import { deepPurple } from "@mui/material/colors"
 import { convertToShortDate } from "../utils/date-utils"
 import { State } from "../store"
 import GoalsTrackerComponent from "../components/homepage/GoalsTracker"
 import dayjs from "dayjs"
+import SentimentVerySatisfiedIcon from "@mui/icons-material/SentimentVerySatisfied"
+import SentimentSatisfiedIcon from "@mui/icons-material/SentimentSatisfied"
+import SentimentNeutralIcon from "@mui/icons-material/SentimentNeutral"
+import SentimentDissatisfiedIcon from "@mui/icons-material/SentimentDissatisfied"
+import SentimentVeryDissatisfiedIcon from "@mui/icons-material/SentimentVeryDissatisfied"
 
 const HomePageContainer = styled("div")`
   padding: 20px;
@@ -35,7 +40,6 @@ const DailyAffiramtionContainer = styled(Paper)`
 `
 
 const StatContainer = styled(Grid)(({ theme }) => ({
-  backgroundImage: `linear-gradient(to bottom, ${theme.palette.secondary.main}, ${theme.palette.secondary.dark})`,
   color: "white",
   padding: "20px 10px",
   borderRadius: "5px",
@@ -44,6 +48,7 @@ const StatContainer = styled(Grid)(({ theme }) => ({
 }))
 
 const HomePage: React.FunctionComponent = () => {
+  const theme = useTheme()
   const { user, getAccessTokenSilently } = useAuth0()
   const dispatch = useDispatch()
   const journalState = useSelector((state: State) => state.journal)
@@ -82,6 +87,46 @@ const HomePage: React.FunctionComponent = () => {
     return streak
   }, [entries])
 
+  const avgMood = useMemo(() => {
+    const last7entries = Object.keys(entries).slice(0, 7)
+    const todayDayjs = dayjs(today)
+
+    let moodTotal = 0
+    let moodCount = 0
+    for (let i = 0; i <= 7; i++) {
+      const date = todayDayjs.subtract(i, "day").toISOString().split("T")[0]
+      if (last7entries.includes(date)) {
+        if (entries[date].mood) {
+          moodTotal += parseInt(entries[date].mood!)
+          moodCount += 1
+        }
+      }
+    }
+    return moodTotal / moodCount
+  }, [entries])
+
+  const avgMoodIcon = useMemo(() => {
+    switch (Math.round(avgMood)) {
+      case 0:
+        return (
+          <SentimentVeryDissatisfiedIcon color={"error"} fontSize="large" />
+        )
+      case 1:
+        return <SentimentDissatisfiedIcon color={"warning"} fontSize="large" />
+      case 2:
+        return <SentimentNeutralIcon color={"info"} fontSize="large" />
+      case 3:
+        return <SentimentSatisfiedIcon color={"success"} fontSize="large" />
+      case 4:
+        return (
+          <SentimentVerySatisfiedIcon
+            sx={{ color: "purple" }}
+            fontSize="large"
+          />
+        )
+    }
+  }, [avgMood])
+
   if (journalState.isLoading) {
     return <LoadingComponent />
   }
@@ -117,13 +162,29 @@ const HomePage: React.FunctionComponent = () => {
         )}
       {preferences.showMood && <MoodTrackerComponent />}
       <Grid container margin={"20px"} justifyContent={"center"}>
-        <StatContainer item xs={12} sm={3}>
+        <StatContainer
+          item
+          xs={12}
+          sm={3}
+          sx={{
+            backgroundImage: `linear-gradient(to bottom, #FFE500, #EFB208)`,
+            color: "black",
+          }}
+        >
           <Typography align="center">Streak:</Typography>
           <Typography align="center" fontWeight={"bold"}>
             {streak}
           </Typography>
         </StatContainer>
-        <StatContainer item xs={12} sm={3}>
+        <StatContainer
+          item
+          xs={12}
+          sm={3}
+          sx={{
+            backgroundImage: `linear-gradient(to bottom, ${theme.palette.secondary.main}, ${theme.palette.secondary.dark})`,
+            color: "black",
+          }}
+        >
           <Typography align="center">
             Number of Entries:
             <Typography align="center" fontWeight={"bold"}>
@@ -131,11 +192,19 @@ const HomePage: React.FunctionComponent = () => {
             </Typography>
           </Typography>
         </StatContainer>
-        <StatContainer item xs={12} sm={3}>
+        <StatContainer
+          item
+          xs={12}
+          sm={3}
+          sx={{
+            backgroundImage: `linear-gradient(to bottom,  #FFE500, #EFB208)`,
+            color: "black",
+          }}
+        >
           <Typography align="center">
-            Something Else:
+            Average Mood Last 7 Days:
             <Typography align="center" fontWeight={"bold"}>
-              {3}
+              {avgMoodIcon}
             </Typography>
           </Typography>
         </StatContainer>

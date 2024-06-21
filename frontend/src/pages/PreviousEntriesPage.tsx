@@ -420,7 +420,7 @@ const PreviousEntriesPage: React.FunctionComponent = () => {
                             ))}
                         </SectionContainer>
                       )}
-                    {preferences.showExercise && (
+                    {preferences.showExercise && entry.exercise !== "0" && (
                       <SectionContainer>
                         <Typography
                           display={"inline-block"}

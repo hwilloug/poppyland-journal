@@ -107,7 +107,7 @@ const GoalsPage: React.FC = () => {
                             wrap="nowrap"
                             alignItems={"center"}
                           >
-                            <Grid item xs={2}>
+                            <Grid item>
                               <Checkbox
                                 key={`${dateString}-${idx}-checkbox`}
                                 checked={goal.checked}

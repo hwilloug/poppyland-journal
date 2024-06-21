@@ -10,10 +10,15 @@ import TodayIcon from "@mui/icons-material/Today"
 import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted"
 import FlagIcon from "@mui/icons-material/Flag"
 import DashboardIcon from "@mui/icons-material/Dashboard"
-import { Link } from "react-router-dom"
+import { Link, useLocation } from "react-router-dom"
+import { useMemo } from "react"
 
-const NavigationTab = styled(Box)(({ theme }) => ({
-  backgroundColor: theme.palette.primary.light,
+const NavigationTab = styled(Box, {
+  shouldForwardProp: (prop) => prop !== "isActive",
+})<{ isActive: boolean }>(({ theme, isActive }) => ({
+  backgroundColor: isActive
+    ? theme.palette.primary.dark
+    : theme.palette.primary.light,
   height: "64px",
   borderRadius: "0 40% 40% 0",
   display: "flex",
@@ -76,6 +81,9 @@ const SideBar: React.FC = () => {
     },
   ]
 
+  const location = useLocation()
+  const { pathname } = location
+
   return (
     <Box
       display={"flex"}
@@ -95,7 +103,7 @@ const SideBar: React.FC = () => {
           key={item.title}
         >
           <NavigationTabBase />
-          <NavigationTab>
+          <NavigationTab isActive={item.link === pathname}>
             <Link
               to={item.link}
               style={{

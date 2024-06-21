@@ -107,15 +107,19 @@ const GoalsTrackerComponent: React.FunctionComponent = () => {
                           return
                         }
                         return (
-                          <Grid item>
-                            <Checkbox
-                              key={`${dateString}-${idx}-checkbox`}
-                              checked={goal.checked}
-                              onChange={() => toggleGoals(shortDate, idx)}
-                            />{" "}
-                            <Typography display="inline-block">
-                              {goal.goal}
-                            </Typography>
+                          <Grid item container alignItems={"center"}>
+                            <Grid item>
+                              <Checkbox
+                                key={`${dateString}-${idx}-checkbox`}
+                                checked={goal.checked}
+                                onChange={() => toggleGoals(shortDate, idx)}
+                              />
+                            </Grid>
+                            <Grid item xs={9}>
+                              <Typography display="inline-block">
+                                {goal.goal}
+                              </Typography>
+                            </Grid>
                           </Grid>
                         )
                       })
