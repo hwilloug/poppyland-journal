@@ -36,8 +36,6 @@ const DailyAffiramtionContainer = styled(Paper)(({ theme }) => ({
   margin: "40px auto",
   marginBottom: "40px",
   border: "1px outset white",
-  textShadow:
-    "1px 1px 0px #fff, -1px 1px 0px #fff, 1px -1px 0px #fff, -1px -1px 0px #fff",
 
   position: "relative",
   ":before": {
@@ -173,7 +171,7 @@ const HomePage: React.FunctionComponent = () => {
               >
                 Daily Affirmation
               </Typography>
-              <Typography position={"relative"} zIndex={2}>
+              <Typography position={"relative"} zIndex={2} color={"white"}>
                 {journalState.entries[today].affirmation}
               </Typography>
             </DailyAffiramtionContainer>

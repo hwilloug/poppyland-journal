@@ -129,17 +129,19 @@ const MoodTrackerComponent: React.FunctionComponent = () => {
       type: string
       visible: boolean
       data: { x: number; y: number }[]
+      yAxis: number
     }[] = []
     let seriesData: { [substance: string]: { x: number; y: number }[] } = {}
     for (let i = 0; i < filteredSubstanceData.length; i++) {
       const substances = filteredSubstanceData[i].y
       for (let j = 0; j < substances.length; j++) {
-        seriesData[substances[j].substance] = [
-          {
-            x: filteredSubstanceData[i].x,
-            y: substances[j].amount,
-          },
-        ]
+        if (!seriesData[substances[j].substance]) {
+          seriesData[substances[j].substance] = []
+        }
+        seriesData[substances[j].substance].push({
+          x: filteredSubstanceData[i].x,
+          y: substances[j].amount,
+        })
       }
     }
     for (let substance in seriesData) {
@@ -148,6 +150,7 @@ const MoodTrackerComponent: React.FunctionComponent = () => {
         data: seriesData[substance],
         type: "column",
         visible: false,
+        yAxis: 3,
       })
     }
     return substanceSeries
@@ -286,6 +289,12 @@ const MoodTrackerComponent: React.FunctionComponent = () => {
       {
         title: {
           text: "Minutes Exercise",
+        },
+        opposite: true,
+      },
+      {
+        title: {
+          text: "Substance Use",
         },
         opposite: true,
       },

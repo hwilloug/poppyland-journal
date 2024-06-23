@@ -4,14 +4,7 @@ import {
   convertToDayOfWeekMonthDay,
   convertToShortDate,
 } from "../../utils/date-utils"
-import {
-  Button,
-  Checkbox,
-  Grid,
-  Paper,
-  TableContainer,
-  Typography,
-} from "@mui/material"
+import { Button, Checkbox, Grid, Paper, Typography } from "@mui/material"
 import { useSelector } from "react-redux"
 import { State, journalActions } from "../../store"
 import { Divider } from "../shared-components/styled-components"
@@ -75,77 +68,75 @@ const GoalsTrackerComponent: React.FunctionComponent = () => {
       <Typography variant="h5" sx={{ p: "20px", textAlign: "center" }}>
         Goals
       </Typography>
-      <TableContainer>
-        <Grid container>
-          <Divider />
-          {[...Array(3).keys()].map((i) => {
-            const date = new Date(new Date().setDate(new Date().getDate() - i))
-            const shortDate = convertToShortDate(date)
-            const dateString = convertToDayOfWeekMonthDay(date)
-            return (
-              <Grid
-                item
-                container
-                alignItems={"center"}
-                key={`${dateString}-${i}`}
-              >
-                <Grid item xs={12} md={5} lg={3}>
-                  <Typography align="center" fontWeight={"bold"}>
-                    {dateString}
-                  </Typography>
-                </Grid>
-                <Grid item xs={12} md={7} lg={9}>
-                  <Grid container flexDirection={"column"}>
-                    {!dates[shortDate] || dates[shortDate] === "None" ? (
-                      <Grid item>
-                        <Typography>None</Typography>
-                      </Grid>
-                    ) : Array.isArray(dates[shortDate]) ? (
-                      // @ts-ignore
-                      dates[shortDate].map((goal, idx) => {
-                        if (goal === null) {
-                          return
-                        }
-                        return (
-                          <Grid item container alignItems={"center"}>
-                            <Grid item>
-                              <Checkbox
-                                key={`${dateString}-${idx}-checkbox`}
-                                checked={goal.checked}
-                                onChange={() => toggleGoals(shortDate, idx)}
-                              />
-                            </Grid>
-                            <Grid item xs={9}>
-                              <Typography display="inline-block">
-                                {goal.goal}
-                              </Typography>
-                            </Grid>
-                          </Grid>
-                        )
-                      })
-                    ) : (
-                      typeof dates[shortDate] === "string" && (
-                        // @ts-ignore
-                        <Typography>{dates[shortDate]}</Typography>
-                      )
-                    )}
-                  </Grid>
-                </Grid>
-                <Divider />
+      <Grid container>
+        <Divider />
+        {[...Array(3).keys()].map((i) => {
+          const date = new Date(new Date().setDate(new Date().getDate() - i))
+          const shortDate = convertToShortDate(date)
+          const dateString = convertToDayOfWeekMonthDay(date)
+          return (
+            <Grid
+              item
+              container
+              alignItems={"center"}
+              key={`${dateString}-${i}`}
+            >
+              <Grid item xs={12} md={5} lg={3}>
+                <Typography align="center" fontWeight={"bold"}>
+                  {dateString}
+                </Typography>
               </Grid>
-            )
-          })}
-        </Grid>
-        <Link to="/goals">
-          <Button
-            variant="outlined"
-            color="secondary"
-            sx={{ minWidth: "100%", padding: "10px" }}
-          >
-            View All Goals
-          </Button>
-        </Link>
-      </TableContainer>
+              <Grid item xs={12} md={7} lg={9}>
+                <Grid container flexDirection={"column"}>
+                  {!dates[shortDate] || dates[shortDate] === "None" ? (
+                    <Grid item>
+                      <Typography>None</Typography>
+                    </Grid>
+                  ) : Array.isArray(dates[shortDate]) ? (
+                    // @ts-ignore
+                    dates[shortDate].map((goal, idx) => {
+                      if (goal === null) {
+                        return
+                      }
+                      return (
+                        <Grid item container alignItems={"center"}>
+                          <Grid item>
+                            <Checkbox
+                              key={`${dateString}-${idx}-checkbox`}
+                              checked={goal.checked}
+                              onChange={() => toggleGoals(shortDate, idx)}
+                            />
+                          </Grid>
+                          <Grid item xs={9}>
+                            <Typography display="inline-block">
+                              {goal.goal}
+                            </Typography>
+                          </Grid>
+                        </Grid>
+                      )
+                    })
+                  ) : (
+                    typeof dates[shortDate] === "string" && (
+                      // @ts-ignore
+                      <Typography>{dates[shortDate]}</Typography>
+                    )
+                  )}
+                </Grid>
+              </Grid>
+              <Divider />
+            </Grid>
+          )
+        })}
+      </Grid>
+      <Link to="/goals">
+        <Button
+          variant="outlined"
+          color="secondary"
+          sx={{ minWidth: "100%", padding: "10px" }}
+        >
+          View All Goals
+        </Button>
+      </Link>
     </Container>
   )
 }

@@ -10,6 +10,7 @@ import {
   Typography,
   styled,
   tooltipClasses,
+  useTheme,
 } from "@mui/material"
 import ManageAccountsIcon from "@mui/icons-material/ManageAccounts"
 import LogoutIcon from "@mui/icons-material/Logout"
@@ -50,7 +51,6 @@ const AppBarComponent: React.FunctionComponent<SideBarProps> = ({
   const { user, logout } = useAuth0()
   const firstName = useSelector((state: State) => state.user.firstName)
   const lastName = useSelector((state: State) => state.user.lastName)
-  const journalName = useSelector((state: State) => state.user.journalName)
 
   return (
     <Box sx={{ flexGrow: 1 }}>
