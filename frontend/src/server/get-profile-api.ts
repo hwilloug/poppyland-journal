@@ -10,7 +10,7 @@ export interface ProfileResponseType {
   journal_name: string
   is_dark_mode: boolean
   ideal_hours_sleep: string
-  emergency: EmergencyType
+  emergency: string
 }
 
 export const call = async (token: string): Promise<ProfileResponseType> => {

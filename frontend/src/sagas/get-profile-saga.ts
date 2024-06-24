@@ -19,7 +19,9 @@ export function* getProfileSaga(action: any) {
         journalName: response.journal_name,
         isDarkMode: response.is_dark_mode,
         idealHoursSleep: response.ideal_hours_sleep,
-        emergency: response.emergency,
+        emergency: response.emergency
+          ? JSON.parse(response.emergency)
+          : undefined,
       }),
     )
   } catch (e) {
