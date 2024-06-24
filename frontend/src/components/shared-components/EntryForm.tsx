@@ -44,7 +44,9 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
     if (Object.keys(entries).includes(date)) {
       return entries[date]
     } else {
-      return getInitialEntryState(date)
+      const state = getInitialEntryState(date)
+      journalActions.setEntry(date, state)
+      return state
     }
   }, [entries, date])
   const prevFormStateLoaded = useMemo(() => {

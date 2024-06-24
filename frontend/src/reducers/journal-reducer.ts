@@ -1,5 +1,6 @@
 import { JournalActionTypes } from "../actions/journal-actions"
 import { getQuestion } from "../components/todaysentrypage/DailyQuestion"
+import { substancesList } from "../components/todaysentrypage/SubstanceEntry"
 import { JournalEntry, JournalState } from "../types/journal-types"
 import { convertToDateObject } from "../utils/date-utils"
 
@@ -19,7 +20,7 @@ export const getInitialEntryState = (date: string): JournalEntry => {
     sleepQuality: undefined,
     affirmation: undefined,
     mentalHealth: [],
-    substances: [],
+    substances: substancesList.map((s) => ({ substance: s, amount: 0 })),
     entryContent: undefined,
     goals: undefined,
     weeklyGoals: [],
