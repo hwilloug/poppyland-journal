@@ -15,7 +15,6 @@ import { CircularProgress, SelectChangeEvent } from "@mui/material"
 import LoadingComponent from "./Loading"
 import { useDispatch, useSelector } from "react-redux"
 import { State, journalActions } from "../../store"
-import { getProfile } from "../../utils/get-profile"
 import ExerciseEntryComponent from "../todaysentrypage/ExerciseEntry"
 import {
   GoalsType,
@@ -43,11 +42,7 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
   const dateObject = convertToDateObject(date)
   const { user, getAccessTokenSilently } = useAuth0()
   const dispatch = useDispatch()
-  const userId = useSelector((state: State) => state.user.userId)
   const preferences = useSelector((state: State) => state.user.preferences)
-  if (!userId) {
-    getProfile(user!.sub!, dispatch, getAccessTokenSilently)
-  }
 
   const isSaving = useSelector((state: State) => state.journal.isSaving)
 

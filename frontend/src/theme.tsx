@@ -21,9 +21,9 @@ export const theme = createTheme({
   palette: {
     mode: "light",
     secondary: {
-      main: "#91c491",
-      light: "#6c9e6c",
-      dark: "#4f804e",
+      main: "#A8BBA0",
+      light: "#84997B",
+      dark: "#5F7656",
     },
     primary: {
       main: deepPurple[500],

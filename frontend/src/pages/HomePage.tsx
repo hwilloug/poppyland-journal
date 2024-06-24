@@ -5,9 +5,8 @@ import PreviousEntriesListComponent from "../components/homepage/PreviousEntries
 import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react"
 import LoadingComponent from "../components/shared-components/Loading"
 import { useDispatch, useSelector } from "react-redux"
-import { getProfile } from "../utils/get-profile"
 import { Grid, Paper, Typography, styled, useTheme } from "@mui/material"
-import { deepPurple, green, purple, yellow } from "@mui/material/colors"
+import { green, purple, yellow } from "@mui/material/colors"
 import { convertToShortDate } from "../utils/date-utils"
 import { State } from "../store"
 import GoalsTrackerComponent from "../components/homepage/GoalsTracker"
@@ -52,17 +51,11 @@ const DailyAffiramtionContainer = styled(Paper)(({ theme }) => ({
 }))
 
 const HomePage: React.FunctionComponent = () => {
-  const theme = useTheme()
   const { user, getAccessTokenSilently } = useAuth0()
   const dispatch = useDispatch()
   const journalState = useSelector((state: State) => state.journal)
-  const userId = useSelector((state: State) => state.user.userId)
   const preferences = useSelector((state: State) => state.user.preferences)
   const entries = useSelector((state: State) => state.journal.entries)
-
-  if (!userId) {
-    getProfile(user!.sub!, dispatch, getAccessTokenSilently)
-  }
 
   const today = convertToShortDate(new Date())
   const todayObject = new Date()

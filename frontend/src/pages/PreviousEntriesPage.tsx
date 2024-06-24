@@ -11,7 +11,6 @@ import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react"
 import LoadingComponent from "../components/shared-components/Loading"
 import { useDispatch, useSelector } from "react-redux"
 import { State, journalActions } from "../store"
-import { getProfile } from "../utils/get-profile"
 import {
   Alert,
   Box,
@@ -113,12 +112,8 @@ const PreviousEntriesPage: React.FunctionComponent = () => {
   const dispatch = useDispatch()
   const theme = useTheme()
   const isLargerThanSm = useMediaQuery(theme.breakpoints.up("sm"))
-  const userId = useSelector((state: State) => state.user.userId)
   const preferences = useSelector((state: State) => state.user.preferences)
   const journalName = useSelector((state: State) => state.user.journalName)
-  if (!userId) {
-    getProfile(user!.sub!, dispatch, getAccessTokenSilently)
-  }
 
   const data = useSelector((state: State) => state.journal.entries)
   const entries = useMemo(() => {

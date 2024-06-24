@@ -1,8 +1,8 @@
 import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react"
 import styled from "@emotion/styled"
 import { PageContentContainer } from "../components/shared-components/styled-components"
-import { useDispatch, useSelector } from "react-redux"
-import { State } from "../store"
+import { useSelector } from "react-redux"
+import { State, userActions } from "../store"
 import {
   Alert,
   Button,
@@ -11,17 +11,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material"
-import {
-  setFirstName,
-  setLastName,
-  setUserPreference,
-  setJournalName,
-  setIdealHoursSleep,
-} from "../reducers/user_reducer"
-import { getProfile } from "../utils/get-profile"
 import { useMemo, useState } from "react"
-import { apiEndpoints } from "../api-endpoints"
-import axios from "axios"
 
 const Container = styled.div`
   margin-top: 20px;
@@ -49,8 +39,8 @@ const SubmitButtonContainer = styled.div`
 `
 
 const UserPreferencesPage: React.FunctionComponent = () => {
-  const { user, getAccessTokenSilently } = useAuth0()
-  const userId = useSelector((state: State) => state.user.userId)
+  const { getAccessTokenSilently } = useAuth0()
+  const userProfile = useSelector((state: State) => state.user)
   const firstName = useSelector((state: State) => state.user.firstName)
   const lastName = useSelector((state: State) => state.user.lastName)
   const preferences = useSelector((state: State) => state.user.preferences)
@@ -62,10 +52,6 @@ const UserPreferencesPage: React.FunctionComponent = () => {
     () => parseFloat(idealHoursSleepRaw),
     [idealHoursSleepRaw],
   )
-  const dispatch = useDispatch()
-  if (!userId) {
-    getProfile(user!.sub!, dispatch, getAccessTokenSilently)
-  }
 
   const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false)
   const [snackbarMessage, setSnackbarMessage] = useState<string>("")
@@ -118,32 +104,12 @@ const UserPreferencesPage: React.FunctionComponent = () => {
   ]
 
   const handlePreferenceChange = (preference: string, value: boolean) => {
-    dispatch(setUserPreference({ preference, value }))
+    userActions.setUserPreference(preference, value)
   }
 
   const onSubmit = async () => {
-    try {
-      const token = await getAccessTokenSilently()
-      await axios.put(
-        apiEndpoints.putUserPreferences.insert(),
-        {
-          preferences,
-          first_name: firstName,
-          last_name: lastName,
-          journal_name: journalName,
-          ideal_hours_sleep: idealHoursSleep.toString(),
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      )
-      setSnackbarMessage("Successfully saved preferences!")
-      setSnackbarOpen(true)
-    } catch (e) {
-      console.log(e)
-    }
+    const token = await getAccessTokenSilently()
+    userActions.putUser(token, userProfile)
   }
 
   const handleSnackbarClose = () => {
@@ -167,7 +133,7 @@ const UserPreferencesPage: React.FunctionComponent = () => {
               shrink: true,
             }}
             value={firstName}
-            onChange={(e) => dispatch(setFirstName(e.target.value))}
+            onChange={(e) => userActions.setFirstName(e.target.value)}
             sx={{ backgroundColor: "white", width: "200px", mr: "10px" }}
           />
           <TextField
@@ -176,7 +142,7 @@ const UserPreferencesPage: React.FunctionComponent = () => {
               shrink: true,
             }}
             value={lastName}
-            onChange={(e) => dispatch(setLastName(e.target.value))}
+            onChange={(e) => userActions.setLastName(e.target.value)}
             sx={{ backgroundColor: "white", width: "200px" }}
           />
         </SettingSection>
@@ -191,7 +157,7 @@ const UserPreferencesPage: React.FunctionComponent = () => {
               shrink: true,
             }}
             value={journalName}
-            onChange={(e) => dispatch(setJournalName(e.target.value))}
+            onChange={(e) => userActions.setJournalName(e.target.value)}
             sx={{ backgroundColor: "white", width: "100%" }}
           />
           <TextField
@@ -201,7 +167,7 @@ const UserPreferencesPage: React.FunctionComponent = () => {
               shrink: true,
             }}
             value={idealHoursSleep}
-            onChange={(e) => dispatch(setIdealHoursSleep(e.target.value))}
+            onChange={(e) => userActions.setIdealHoursSleep(e.target.value)}
             sx={{ backgroundColor: "white", mt: "20px" }}
           />
         </SettingSection>

@@ -11,10 +11,11 @@ import { ThemeProvider } from "@emotion/react"
 import { theme } from "./theme"
 import Layout from "./Layout"
 import { useEffect } from "react"
-import { journalActions } from "./store"
+import { journalActions, State, userActions } from "./store"
 import EntriesPage from "./pages/EntriesPage"
 import GoalsPage from "./pages/GoalsPage"
 import EmergencyPlanPage from "./pages/EmergencyPlanPage"
+import { useSelector } from "react-redux"
 
 const AppContainer = styled.div`
   min-height: 100vh;
@@ -62,7 +63,7 @@ const router = createBrowserRouter([
 ])
 
 function App() {
-  const { getAccessTokenSilently } = useAuth0()
+  const { user, getAccessTokenSilently } = useAuth0()
   const getEntries = async () => {
     const token = await getAccessTokenSilently()
     journalActions.getEntries(token)
@@ -70,6 +71,20 @@ function App() {
   useEffect(() => {
     getEntries()
   }, [])
+
+  const userId = useSelector((state: State) => state.user.userId)
+
+  const getUser = async () => {
+    const token = await getAccessTokenSilently()
+    userActions.getUser(token, user!.sub!)
+  }
+
+  useEffect(() => {
+    if (!userId) {
+      getUser()
+    }
+  }, [userId])
+
   return (
     <AppContainer className="App">
       <ThemeProvider theme={theme}>

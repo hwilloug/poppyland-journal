@@ -1,14 +1,25 @@
 import { Button, Grid, Input, Paper, Typography, useTheme } from "@mui/material"
 import { PageContentContainer } from "../components/shared-components/styled-components"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import DeleteIcon from "@mui/icons-material/Delete"
+import { useDispatch, useSelector } from "react-redux"
+import { State, userActions } from "../store"
+import { useAuth0 } from "@auth0/auth0-react"
 
 const EmergencyPlanPage: React.FC = () => {
   const theme = useTheme()
+  const { getAccessTokenSilently } = useAuth0()
+  const userProfile = useSelector((state: State) => state.user)
+  const previousEmergencyContacts = useSelector(
+    (state: State) => state.user.emergency?.contacts,
+  )
+  const previousEmergencyPlan = useSelector(
+    (state: State) => state.user.emergency?.plan,
+  )
 
   const [emergencyContacts, setEmergencyContacts] = useState<
     { relation: string; phone: string }[]
-  >([])
+  >(previousEmergencyContacts || [])
 
   const modifyEmergencyContact = (
     idx: number,
@@ -26,7 +37,23 @@ const EmergencyPlanPage: React.FC = () => {
     setEmergencyContacts([...newEmergencyContacts])
   }
 
-  const [emergencyPlan, setEmergencyPlan] = useState<string>()
+  const [emergencyPlan, setEmergencyPlan] = useState<string>(
+    previousEmergencyPlan || "",
+  )
+
+  const updateUser = async () => {
+    const token = await getAccessTokenSilently()
+    userActions.putUser(token, {
+      ...userProfile,
+      emergency: { contacts: emergencyContacts, plan: emergencyPlan },
+    })
+  }
+
+  useEffect(() => {
+    if (emergencyContacts !== undefined || emergencyPlan !== undefined) {
+      updateUser()
+    }
+  }, [emergencyContacts, emergencyPlan])
 
   return (
     <PageContentContainer>
