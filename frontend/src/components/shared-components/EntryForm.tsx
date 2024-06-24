@@ -5,28 +5,21 @@ import MoodEntryComponent from "../todaysentrypage/MoodEntry"
 import SleepEntryComponent from "../todaysentrypage/SleepEntry"
 import DailyAffirmationComponent from "../todaysentrypage/DailyAffirmation"
 import DailyGoalComponent from "../todaysentrypage/DailyGoal"
-import DailyQuestionComponent, {
-  getQuestion,
-} from "../todaysentrypage/DailyQuestion"
 import MentalHealthEntryComponent from "../todaysentrypage/MentalHealthEntry"
 import SubstanceEntryComponent from "../todaysentrypage/SubstanceEntry"
 import EntryComponent from "../todaysentrypage/Entry"
-import { CircularProgress, SelectChangeEvent } from "@mui/material"
+import { CircularProgress } from "@mui/material"
 import LoadingComponent from "./Loading"
 import { useDispatch, useSelector } from "react-redux"
 import { State, journalActions } from "../../store"
 import ExerciseEntryComponent from "../todaysentrypage/ExerciseEntry"
-import {
-  GoalsType,
-  JournalEntry,
-  SubstancesType,
-} from "../../types/journal-types"
+import { JournalEntry } from "../../types/journal-types"
 import CheckCircleIcon from "@mui/icons-material/CheckCircle"
-import { ReactNode, useEffect, useMemo, useState } from "react"
+import { useEffect, useMemo } from "react"
 import { HeaderText } from "./styled-components"
 import { convertToDateObject } from "../../utils/date-utils"
 import { getInitialEntryState } from "../../reducers/journal-reducer"
-const _ = require("lodash")
+import DailyQuestionComponent from "../todaysentrypage/DailyQuestion"
 
 const SavingContainer = styled("div")({
   position: "fixed",
@@ -41,7 +34,6 @@ interface EntryFormProps {
 const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
   const dateObject = convertToDateObject(date)
   const { user, getAccessTokenSilently } = useAuth0()
-  const dispatch = useDispatch()
   const preferences = useSelector((state: State) => state.user.preferences)
 
   const isSaving = useSelector((state: State) => state.journal.isSaving)
@@ -74,128 +66,70 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
     )
   }, [loadedEntry])
 
+  const mood = useMemo(() => {
+    return loadedEntry.mood
+  }, [loadedEntry])
+
+  const hoursSleep = useMemo(() => {
+    return loadedEntry.hoursSleep
+  }, [loadedEntry])
+
+  const wakeUpTime = useMemo(() => {
+    return dayjs(loadedEntry.wakeUpTime)
+  }, [loadedEntry])
+
+  const bedTime = useMemo(() => {
+    return dayjs(loadedEntry.bedTime)
+  }, [loadedEntry])
+
+  const sleepQuality = useMemo(() => {
+    return loadedEntry.sleepQuality
+  }, [loadedEntry])
+
+  const affirmation = useMemo(() => {
+    return loadedEntry.affirmation
+  }, [loadedEntry])
+
+  const mentalHealth = useMemo(() => {
+    return loadedEntry.mentalHealth
+  }, [loadedEntry])
+
+  const substances = useMemo(() => {
+    return loadedEntry.substances
+  }, [loadedEntry])
+
+  const entryContent = useMemo(() => {
+    return loadedEntry.entryContent
+  }, [loadedEntry])
+
+  const goals = useMemo(() => {
+    return loadedEntry.goals
+  }, [loadedEntry])
+
+  const weeklyGoals = useMemo(() => {
+    return loadedEntry.weeklyGoals
+  }, [loadedEntry])
+
+  const monthlyGoals = useMemo(() => {
+    return loadedEntry.monthlyGoals
+  }, [loadedEntry])
+
+  const dailyQuestionQ = useMemo(() => {
+    return loadedEntry.dailyQuestionQ
+  }, [loadedEntry])
+
+  const dailyQuestionA = useMemo(() => {
+    return loadedEntry.dailyQuestionA
+  }, [loadedEntry])
+
+  const minutesExercise = useMemo(() => {
+    return loadedEntry.exercise
+  }, [loadedEntry])
+
   const dateFull = new Date(date.replace(/-/g, "/")).toLocaleDateString(
     "en-US",
     { dateStyle: "full" },
   )
-
-  const [mood, setMood] = useState<number | undefined>(
-    loadedEntry.mood !== undefined && loadedEntry.mood !== null
-      ? parseInt(loadedEntry.mood)
-      : undefined,
-  )
-  const [bedTime, setBedTime] = useState<Dayjs | null>(
-    loadedEntry.bedTime ? dayjs(loadedEntry.bedTime) : null,
-  )
-  const [wakeUpTime, setWakeUpTime] = useState<Dayjs | null>(
-    loadedEntry.wakeUpTime ? dayjs(loadedEntry.wakeUpTime) : null,
-  )
-  const [hoursSleep, setHoursSleep] = useState<string | undefined>(
-    loadedEntry.hoursSleep ? loadedEntry.hoursSleep : undefined,
-  )
-  const [sleepQuality, setSleepQuality] = useState<string | undefined>(
-    loadedEntry.sleepQuality || undefined,
-  )
-  const [affirmation, setAffirmation] = useState<string | undefined>(
-    loadedEntry.affirmation || undefined,
-  )
-  const [goals, setGoals] = useState<GoalsType[] | undefined>(
-    loadedEntry.goals || undefined,
-  )
-  const [weeklyGoals, setWeeklyGoals] = useState<GoalsType[] | undefined>(
-    loadedEntry.weeklyGoals || undefined,
-  )
-  const [monthlyGoals, setMonthlyGoals] = useState<GoalsType[] | undefined>(
-    loadedEntry.monthlyGoals || undefined,
-  )
-  const [mentalHealth, setMentalHealth] = useState<string[]>(
-    loadedEntry.mentalHealth,
-  )
-  const [substances, setSubstances] = useState<SubstancesType[]>(
-    loadedEntry.substances,
-  )
-  const [entryContent, setEntryContent] = useState<string | undefined>(
-    loadedEntry.entryContent || undefined,
-  )
-  const [dailyQuestionQ, setDailyQuestionQ] = useState<string | undefined>(
-    loadedEntry.dailyQuestionQ || getQuestion(dateObject.getDate()),
-  )
-  const [dailyQuestionA, setDailyQuestionA] = useState<string | undefined>(
-    loadedEntry.dailyQuestionA || undefined,
-  )
-  const [minutesExercise, setMinutesExercise] = useState<number>(
-    loadedEntry.exercise ? parseInt(loadedEntry.exercise) : 0,
-  )
-
-  const [stateLoaded, setStateLoaded] = useState(false)
-
-  const loadForm = (entry: JournalEntry) => {
-    setMood(
-      entry.mood !== undefined && entry.mood !== null
-        ? parseInt(entry.mood)
-        : undefined,
-    )
-    setBedTime(entry.bedTime ? dayjs(entry.bedTime) : null)
-    setWakeUpTime(entry.wakeUpTime ? dayjs(entry.wakeUpTime) : null)
-    setHoursSleep(entry.hoursSleep)
-    setAffirmation(entry.affirmation)
-    setGoals(entry.goals)
-    setWeeklyGoals(entry.weeklyGoals)
-    setMonthlyGoals(entry.monthlyGoals)
-    setMentalHealth(entry.mentalHealth)
-    setSubstances(entry.substances)
-    setEntryContent(entry.entryContent)
-    setDailyQuestionA(entry.dailyQuestionA)
-    setDailyQuestionQ(entry.dailyQuestionQ || getQuestion(dateObject.getDate()))
-    setSleepQuality(entry.sleepQuality)
-    setMinutesExercise(entry.exercise ? parseInt(entry.exercise) : 0)
-    setStateLoaded(true)
-  }
-
-  useEffect(() => {
-    loadForm(loadedEntry)
-  }, [loadedEntry])
-
-  useEffect(() => {
-    if (bedTime && wakeUpTime) {
-      let fixedBedTime = bedTime
-      if (bedTime.isAfter(new Date().setHours(12))) {
-        fixedBedTime = dayjs(bedTime).subtract(1, "day")
-      }
-      let s = wakeUpTime.diff(fixedBedTime, "minute")
-      s = s / 60 // convert to hours
-      if (s < 0) {
-        s = s + 24
-      }
-      setHoursSleep(s.toFixed(2))
-    }
-  }, [bedTime, wakeUpTime])
-
-  const modifyMentalHealth = (
-    event: SelectChangeEvent<string[]>,
-    child: ReactNode,
-  ) => {
-    const symptoms = event.target.value
-    setMentalHealth([...symptoms])
-  }
-
-  const modifySubstances = (
-    index: number,
-    substance: string,
-    amount: string,
-  ) => {
-    if (substances !== undefined) {
-      let newSubstances = [...substances]
-      newSubstances[index] = { substance, amount: parseFloat(amount) }
-      setSubstances([...newSubstances])
-    }
-  }
-
-  const modifyMinutesExercise = (minutes: number) => {
-    if (minutes >= 0) {
-      setMinutesExercise(minutes)
-    }
-  }
 
   const modifyGoals = (index: number, goal: string, checked: boolean) => {
     if (goals !== undefined && goals !== null) {
@@ -209,9 +143,9 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
           newGoals[index] = { goal, checked }
         }
       }
-      setGoals([...newGoals])
+      journalActions.setGoals(date, [...newGoals])
     } else {
-      setGoals([{ goal, checked }])
+      journalActions.setGoals(date, [{ goal, checked }])
     }
   }
 
@@ -219,7 +153,7 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
     if (goals !== undefined && goals !== null) {
       let newGoals = [...goals]
       newGoals.splice(index, 1)
-      setGoals([...newGoals])
+      journalActions.setGoals(date, [...newGoals])
     }
   }
 
@@ -231,9 +165,9 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
       } else {
         newGoals[index] = { goal, checked }
       }
-      setWeeklyGoals([...newGoals])
+      journalActions.setWeeklyGoals(date, [...newGoals])
     } else {
-      setWeeklyGoals([{ goal, checked }])
+      journalActions.setWeeklyGoals(date, [{ goal, checked }])
     }
   }
 
@@ -241,7 +175,7 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
     if (weeklyGoals !== undefined && weeklyGoals !== null) {
       let newGoals = [...weeklyGoals]
       newGoals.splice(index, 1)
-      setWeeklyGoals([...newGoals])
+      journalActions.setWeeklyGoals(date, [...newGoals])
     }
   }
 
@@ -257,9 +191,9 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
       } else {
         newGoals[index] = { goal, checked }
       }
-      setMonthlyGoals([...newGoals])
+      journalActions.setMonthlyGoals(date, [...newGoals])
     } else {
-      setMonthlyGoals([{ goal, checked }])
+      journalActions.setMonthlyGoals(date, [{ goal, checked }])
     }
   }
 
@@ -267,31 +201,14 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
     if (monthlyGoals !== undefined && monthlyGoals !== null) {
       let newGoals = [...monthlyGoals]
       newGoals.splice(index, 1)
-      setWeeklyGoals([...newGoals])
+      journalActions.setMonthlyGoals(date, [...newGoals])
     }
   }
 
   const onSubmit = async () => {
     try {
       const token = await getAccessTokenSilently()
-      journalActions.putEntry(token, user!.sub!, date, {
-        date,
-        mood: mood?.toString(),
-        hoursSleep: hoursSleep?.toString(),
-        wakeUpTime: wakeUpTime?.toString(),
-        bedTime: bedTime?.toString(),
-        sleepQuality,
-        affirmation,
-        mentalHealth,
-        substances,
-        entryContent,
-        goals,
-        weeklyGoals,
-        monthlyGoals,
-        dailyQuestionA,
-        dailyQuestionQ,
-        exercise: minutesExercise?.toString(),
-      })
+      journalActions.putEntry(token, user!.sub!, date, loadedEntry)
     } catch (e) {
       console.log(e)
     }
@@ -300,41 +217,22 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
   useEffect(() => {
     if (prevFormStateLoaded && !isLoading) {
       if (
-        stateLoaded &&
-        (mood !== undefined ||
-          hoursSleep ||
-          wakeUpTime ||
-          bedTime ||
-          sleepQuality ||
-          affirmation ||
-          mentalHealth.length ||
-          substances.length ||
-          entryContent ||
-          goals !== undefined ||
-          weeklyGoals !== undefined ||
-          monthlyGoals !== undefined ||
-          dailyQuestionA ||
-          minutesExercise !== 0)
+        mood !== undefined ||
+        hoursSleep ||
+        wakeUpTime ||
+        bedTime ||
+        sleepQuality ||
+        affirmation ||
+        mentalHealth.length ||
+        substances.length ||
+        entryContent ||
+        goals !== undefined ||
+        weeklyGoals !== undefined ||
+        monthlyGoals !== undefined ||
+        dailyQuestionA ||
+        minutesExercise !== "0"
       ) {
-        if (
-          loadedEntry.mood != mood?.toString() ||
-          loadedEntry.hoursSleep != hoursSleep?.toString() ||
-          loadedEntry.wakeUpTime != wakeUpTime?.toString() ||
-          loadedEntry.bedTime != bedTime?.toString() ||
-          loadedEntry.sleepQuality != sleepQuality ||
-          loadedEntry.affirmation != affirmation ||
-          !_.isEqual(loadedEntry.mentalHealth, mentalHealth) ||
-          !_.isEqual(loadedEntry.substances, substances) ||
-          loadedEntry.entryContent != entryContent ||
-          !_.isEqual(loadedEntry.goals, goals) ||
-          !_.isEqual(loadedEntry.weeklyGoals, weeklyGoals) ||
-          !_.isEqual(loadedEntry.monthlyGoals, monthlyGoals) ||
-          loadedEntry.dailyQuestionA != dailyQuestionA ||
-          loadedEntry.dailyQuestionQ != dailyQuestionQ ||
-          loadedEntry.exercise != minutesExercise.toString()
-        ) {
-          onSubmit()
-        }
+        onSubmit()
       }
     } else {
       if (
@@ -351,7 +249,7 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
         weeklyGoals !== undefined ||
         monthlyGoals !== undefined ||
         dailyQuestionA ||
-        minutesExercise !== 0
+        minutesExercise !== "0"
       ) {
         if (!isLoading) {
           onSubmit()
@@ -359,7 +257,6 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
       }
     }
   }, [
-    stateLoaded,
     prevFormStateLoaded,
     loadedEntry,
     mood,
@@ -389,29 +286,16 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
       <HeaderText variant="h5" mt={4}>
         Morning
       </HeaderText>
-      {preferences.showSleep && (
-        <SleepEntryComponent
-          onBedTimeChange={setBedTime}
-          onWakeUpTimeChange={setWakeUpTime}
-          onSleepQualityChange={setSleepQuality}
-          bedTime={bedTime}
-          wakeUpTime={wakeUpTime}
-          sleepQuality={sleepQuality}
-          hoursSleep={hoursSleep}
-        />
-      )}
+      {preferences.showSleep && <SleepEntryComponent date={date} />}
       {preferences.showDailyAffirmation && (
-        <DailyAffirmationComponent
-          affirmation={affirmation}
-          onChange={setAffirmation}
-        />
+        <DailyAffirmationComponent date={date} />
       )}
       {preferences.showDailyGoal && (
         <DailyGoalComponent
-          goals={goals || []}
           cadence={"Daily"}
           onChange={modifyGoals}
           onRemove={removeGoal}
+          goals={goals || []}
         />
       )}
       {preferences.showWeeklyGoal && dateObject.getDay() === 1 && (
@@ -431,40 +315,17 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
         />
       )}
       <HeaderText variant="h5">Evening</HeaderText>
-      {preferences.showMood && (
-        <MoodEntryComponent mood={mood} onChange={setMood} />
-      )}
-      {preferences.showDailyQuestion && (
-        <DailyQuestionComponent
-          question={dailyQuestionQ}
-          answer={dailyQuestionA}
-          onChange={setDailyQuestionA}
-          setQuestion={setDailyQuestionQ}
-          date={date}
-        />
-      )}
+      {preferences.showMood && <MoodEntryComponent date={date} />}
+      {preferences.showDailyQuestion && <DailyQuestionComponent date={date} />}
 
       {preferences.showMentalHealth && (
-        <MentalHealthEntryComponent
-          mentalHealth={[...mentalHealth]}
-          onChange={modifyMentalHealth}
-        />
+        <MentalHealthEntryComponent date={date} />
       )}
-      {preferences.showSubstance && (
-        <SubstanceEntryComponent
-          substances={[...substances]}
-          onChange={modifySubstances}
-        />
-      )}
+      {preferences.showSubstance && <SubstanceEntryComponent date={date} />}
 
-      {preferences.showExercise && (
-        <ExerciseEntryComponent
-          minutesExercise={minutesExercise}
-          onChange={modifyMinutesExercise}
-        />
-      )}
+      {preferences.showExercise && <ExerciseEntryComponent date={date} />}
 
-      <EntryComponent content={entryContent} onChange={setEntryContent} />
+      <EntryComponent date={date} />
 
       <SavingContainer>
         {isSaving && <CircularProgress color="primary" />}

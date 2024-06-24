@@ -1,6 +1,9 @@
+import { useSelector } from "react-redux"
+import { convertToDateObject } from "../../utils/date-utils"
 import MarkdownComponent from "../shared-components/Markdown"
 import { EntrySectionContainer } from "../shared-components/styled-components"
 import { Typography } from "@mui/material"
+import { State, journalActions } from "../../store"
 
 export const getQuestion = (day: number) => {
   switch (day) {
@@ -72,23 +75,18 @@ export const getQuestion = (day: number) => {
 }
 
 interface DailyQuestionProps {
-  date?: string
-  question?: string
-  answer?: string
-  onChange: Function
-  setQuestion: Function
+  date: string
 }
 
 const DailyQuestionComponent: React.FunctionComponent<DailyQuestionProps> = ({
-  question,
-  answer,
-  onChange,
   date,
 }) => {
-  const day = date
-    ? new Date(date?.replace(/-/g, "/")).getDate()
-    : new Date().getDate()
-
+  const question = useSelector(
+    (state: State) => state.journal.entries[date]?.dailyQuestionQ,
+  )
+  const answer = useSelector(
+    (state: State) => state.journal.entries[date]?.dailyQuestionA,
+  )
   return (
     <EntrySectionContainer>
       <Typography variant="h6" textAlign={"center"} sx={{ mb: "20px" }}>
@@ -99,7 +97,7 @@ const DailyQuestionComponent: React.FunctionComponent<DailyQuestionProps> = ({
         view="edit"
         value={answer}
         onChange={(e: any) => {
-          onChange(e)
+          journalActions.setDailyQuestionA(date, e)
         }}
         height={100}
         preview="edit"

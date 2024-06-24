@@ -5,7 +5,7 @@ import DeleteIcon from "@mui/icons-material/Delete"
 import { GoalsType } from "../../types/journal-types"
 
 interface DailyGoalProps {
-  goals: GoalsType[] | string
+  goals: GoalsType[]
   cadence: string
   onChange: Function
   onRemove: Function

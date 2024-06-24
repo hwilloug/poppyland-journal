@@ -1,4 +1,4 @@
-import { Dayjs } from "dayjs"
+import dayjs, { Dayjs } from "dayjs"
 import {
   TimePicker,
   renderTimeViewClock,
@@ -9,7 +9,9 @@ import styled from "@emotion/styled"
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs"
 import { MenuItem, Select, Typography } from "@mui/material"
 import { EntrySectionContainer } from "../shared-components/styled-components"
-import { useCallback } from "react"
+import { useCallback, useEffect } from "react"
+import { useSelector } from "react-redux"
+import { State, journalActions } from "../../store"
 
 const SleepTimeContainer = styled.div`
   display: flex;
@@ -28,24 +30,40 @@ const SleepQualityContainer = styled.div`
 `
 
 interface SleepEntryProps {
-  onBedTimeChange: Function
-  onWakeUpTimeChange: Function
-  onSleepQualityChange: Function
-  bedTime?: Dayjs | null
-  wakeUpTime?: Dayjs | null
-  sleepQuality?: string | null
-  hoursSleep?: string | null
+  date: string
 }
 
 const SleepEntryComponent: React.FunctionComponent<SleepEntryProps> = ({
-  onBedTimeChange,
-  onWakeUpTimeChange,
-  onSleepQualityChange,
-  bedTime,
-  wakeUpTime,
-  sleepQuality,
-  hoursSleep,
+  date,
 }) => {
+  const bedTime = useSelector(
+    (state: State) => state.journal.entries[date]?.bedTime,
+  )
+  const wakeUpTime = useSelector(
+    (state: State) => state.journal.entries[date]?.wakeUpTime,
+  )
+  const hoursSleep = useSelector(
+    (state: State) => state.journal.entries[date]?.hoursSleep,
+  )
+  const sleepQuality = useSelector(
+    (state: State) => state.journal.entries[date]?.sleepQuality,
+  )
+
+  useEffect(() => {
+    if (bedTime && wakeUpTime) {
+      let fixedBedTime = dayjs(bedTime)
+      if (dayjs(bedTime).isAfter(new Date().setHours(12))) {
+        fixedBedTime = dayjs(bedTime).subtract(1, "day")
+      }
+      let s = dayjs(wakeUpTime).diff(fixedBedTime, "minute")
+      s = s / 60 // convert to hours
+      if (s < 0) {
+        s = s + 24
+      }
+      journalActions.setHoursSleep(date, s.toFixed(2))
+    }
+  }, [bedTime, wakeUpTime])
+
   return (
     <EntrySectionContainer>
       <Typography variant="h6" sx={{ mb: "20px" }}>
@@ -56,9 +74,13 @@ const SleepEntryComponent: React.FunctionComponent<SleepEntryProps> = ({
           {/* @ts-ignore */}
           <TimePicker
             label="Bedtime the night before"
-            value={bedTime}
+            value={bedTime ? dayjs(bedTime) : undefined}
             onChange={(value: Dayjs | null) => {
-              onBedTimeChange(value)
+              if (value !== null) {
+                journalActions.setBedTime(date, value.toString())
+              } else {
+                journalActions.setBedTime(date, "")
+              }
             }}
             viewRenderers={{
               hours: renderTimeViewClock,
@@ -69,9 +91,13 @@ const SleepEntryComponent: React.FunctionComponent<SleepEntryProps> = ({
           {/* @ts-ignore */}
           <TimePicker
             label="Wake-up time"
-            value={wakeUpTime}
+            value={wakeUpTime ? dayjs(wakeUpTime) : undefined}
             onChange={(value: Dayjs | null) => {
-              onWakeUpTimeChange(value)
+              if (value !== null) {
+                journalActions.setWakeUpTime(date, value.toString())
+              } else {
+                journalActions.setWakeUpTime(date, "")
+              }
             }}
             viewRenderers={{
               hours: renderTimeViewClock,
@@ -90,7 +116,7 @@ const SleepEntryComponent: React.FunctionComponent<SleepEntryProps> = ({
           autoWidth={false}
           style={{ width: "200px" }}
           onChange={(e) => {
-            onSleepQualityChange(e.target.value!)
+            journalActions.setSleepQuality(date, e.target.value!)
           }}
           key={sleepQuality ? sleepQuality : "sleep-quality"}
           sx={{ backgroundColor: "white" }}

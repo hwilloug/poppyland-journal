@@ -6,6 +6,8 @@ import SentimentDissatisfiedIcon from "@mui/icons-material/SentimentDissatisfied
 import SentimentVeryDissatisfiedIcon from "@mui/icons-material/SentimentVeryDissatisfied"
 import { EntrySectionContainer } from "../shared-components/styled-components"
 import { Typography } from "@mui/material"
+import { State, journalActions } from "../../store"
+import { useSelector } from "react-redux"
 
 const MoodContainer = styled.div`
   display: flex;
@@ -20,14 +22,14 @@ const MoodContainer = styled.div`
 `
 
 interface MoodEntryProps {
-  mood?: number
-  onChange: Function
+  date: string
 }
 
 const MoodEntryComponent: React.FunctionComponent<MoodEntryProps> = ({
-  mood,
-  onChange,
+  date,
 }) => {
+  const mood = useSelector((state: State) => state.journal.entries[date]?.mood)
+
   return (
     <EntrySectionContainer>
       <Typography variant="h6" sx={{ mb: "20px" }}>
@@ -38,54 +40,54 @@ const MoodEntryComponent: React.FunctionComponent<MoodEntryProps> = ({
           fontSize="large"
           color="error"
           style={
-            mood === 0
+            mood === "0"
               ? { outline: "1px solid purple", borderRadius: "50%" }
               : {}
           }
           onClick={() => {
-            onChange(0)
+            journalActions.setMood(date, "0")
           }}
         />
         <SentimentDissatisfiedIcon
           fontSize="large"
           color="warning"
           style={
-            mood === 1
+            mood === "1"
               ? { outline: "1px solid purple", borderRadius: "50%" }
               : {}
           }
           onClick={() => {
-            onChange(1)
+            journalActions.setMood(date, "1")
           }}
         />
         <SentimentNeutralIcon
           fontSize="large"
           color="info"
           style={
-            mood === 2
+            mood === "2"
               ? { outline: "1px solid purple", borderRadius: "50%" }
               : {}
           }
           onClick={() => {
-            onChange(2)
+            journalActions.setMood(date, "2")
           }}
         />
         <SentimentSatisfiedIcon
           fontSize="large"
           color="success"
           style={
-            mood === 3
+            mood === "3"
               ? { outline: "1px solid purple", borderRadius: "50%" }
               : {}
           }
           onClick={() => {
-            onChange(3)
+            journalActions.setMood(date, "3")
           }}
         />
         <SentimentVerySatisfiedIcon
           fontSize="large"
           style={
-            mood === 4
+            mood === "4"
               ? {
                   color: "purple",
                   outline: "1px solid purple",
@@ -94,7 +96,7 @@ const MoodEntryComponent: React.FunctionComponent<MoodEntryProps> = ({
               : { color: "purple" }
           }
           onClick={() => {
-            onChange(4)
+            journalActions.setMood(date, "4")
           }}
         />
       </MoodContainer>

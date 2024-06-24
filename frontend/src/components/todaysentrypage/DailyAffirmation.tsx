@@ -3,15 +3,20 @@ import MarkdownComponent from "../shared-components/Markdown"
 import { SectionHeader } from "../../pages/TodaysEntryPage"
 import { Typography } from "@mui/material"
 import { EntrySectionContainer } from "../shared-components/styled-components"
+import { useSelector } from "react-redux"
+import { State, journalActions } from "../../store"
 
 interface DailyAffirmationProps {
-  affirmation?: string
-  onChange: Function
+  date: string
 }
 
 const DailyAffirmationComponent: React.FunctionComponent<
   DailyAffirmationProps
-> = ({ affirmation, onChange }) => {
+> = ({ date }) => {
+  const affirmation = useSelector(
+    (state: State) => state.journal.entries[date]?.affirmation,
+  )
+
   return (
     <EntrySectionContainer>
       <Typography variant="h6" textAlign={"center"} sx={{ mb: "20px" }}>
@@ -21,7 +26,7 @@ const DailyAffirmationComponent: React.FunctionComponent<
         view="edit"
         value={affirmation}
         onChange={(e: any) => {
-          onChange(e)
+          journalActions.setAffirmation(date, e)
         }}
         height={100}
         preview="edit"

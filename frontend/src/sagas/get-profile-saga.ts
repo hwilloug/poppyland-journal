@@ -10,7 +10,6 @@ export function* getProfileSaga(action: any) {
       GetProfileAPI.call,
       action.payload.token,
     )
-    console.log(response)
     yield put(
       userActions.setUser({
         preferences: response.preferences,

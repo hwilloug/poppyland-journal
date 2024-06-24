@@ -1,6 +1,8 @@
 import styled from "@emotion/styled"
 import { TextField, Typography } from "@mui/material"
 import { EntrySectionContainer } from "../shared-components/styled-components"
+import { useSelector } from "react-redux"
+import { State, journalActions } from "../../store"
 
 const ExerciseContainer = styled.div`
   text-align: center;
@@ -9,14 +11,16 @@ const ExerciseContainer = styled.div`
 const InputLabel = styled.div``
 
 interface ExerciseEntryProps {
-  minutesExercise?: number
-  onChange: Function
+  date: string
 }
 
 const ExerciseEntryComponent: React.FunctionComponent<ExerciseEntryProps> = ({
-  minutesExercise,
-  onChange,
+  date,
 }) => {
+  const minutesExercise = useSelector(
+    (state: State) => state.journal.entries[date]?.exercise,
+  )
+
   return (
     <EntrySectionContainer>
       <Typography variant="h6" textAlign={"center"} sx={{ mb: "20px" }}>
@@ -32,7 +36,7 @@ const ExerciseEntryComponent: React.FunctionComponent<ExerciseEntryProps> = ({
           value={minutesExercise}
           defaultValue={0}
           onChange={(e) => {
-            onChange(e.target.value)
+            journalActions.setExercise(date, e.target.value)
           }}
           sx={{ backgroundColor: "white", width: "150px" }}
         />

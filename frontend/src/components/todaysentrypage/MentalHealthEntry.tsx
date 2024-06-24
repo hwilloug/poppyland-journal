@@ -10,6 +10,8 @@ import {
   Typography,
 } from "@mui/material"
 import { ReactNode } from "react"
+import { State, journalActions } from "../../store"
+import { useSelector } from "react-redux"
 
 const MentalHealthContainer = styled.div`
   display: flex;
@@ -43,13 +45,24 @@ export const mentalHealthSymptoms = [
 ]
 
 interface MentalHealthEntryProps {
-  mentalHealth: string[]
-  onChange: (event: SelectChangeEvent<string[]>, child: ReactNode) => void
+  date: string
 }
 
 const MentalHealthEntryComponent: React.FunctionComponent<
   MentalHealthEntryProps
-> = ({ mentalHealth, onChange }) => {
+> = ({ date }) => {
+  const mentalHealth = useSelector(
+    (state: State) => state.journal.entries[date]?.mentalHealth,
+  )
+
+  const modifyMentalHealth = (
+    event: SelectChangeEvent<string[]>,
+    child: ReactNode,
+  ) => {
+    const symptoms = event.target.value
+    journalActions.setMentalHealth(date, [...symptoms])
+  }
+
   return (
     <EntrySectionContainer>
       <Typography variant="h6" textAlign={"center"} sx={{ mb: "20px" }}>
@@ -58,9 +71,9 @@ const MentalHealthEntryComponent: React.FunctionComponent<
       <MentalHealthContainer>
         <Select
           multiple
-          value={mentalHealth}
+          value={mentalHealth || []}
           onChange={(e, child) => {
-            onChange(e, child)
+            modifyMentalHealth(e, child)
           }}
           sx={{ backgroundColor: "white" }}
         >
