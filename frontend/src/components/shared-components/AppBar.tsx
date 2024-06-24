@@ -67,7 +67,7 @@ const AppBarComponent: React.FunctionComponent<SideBarProps> = ({
           <Box sx={{ flexGrow: 1 }} />
           <NavItem>
             <Typography>
-              {firstName ? `${firstName} ${lastName}` : user?.email}
+              {firstName ? `${firstName} ${lastName || ""}` : user?.email}
             </Typography>
           </NavItem>
           <NavItem>

@@ -52,7 +52,7 @@ export const createUserActions = (dispatch: any) => ({
     createAction(dispatch, UserActionTypes.SET_IDEAL_HOURS_SLEEP, {
       idealHoursSleep,
     }),
-  setEmergencyContacts: (contacts: EmergencyContactsType) =>
+  setEmergencyContacts: (contacts: EmergencyContactsType[]) =>
     createAction(dispatch, UserActionTypes.SET_EMERGENCY_CONTACTS, {
       contacts,
     }),

@@ -2,8 +2,10 @@ import { UserActionTypes } from "../actions/user-actions"
 import { UserState } from "../types/user-types"
 
 const initialState: UserState = {
-  isLoading: false,
-  preferences: {},
+  isLoading: true,
+  preferences: {
+    showMood: true,
+  },
   userId: "",
   firstName: "",
   lastName: "",

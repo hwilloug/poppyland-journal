@@ -180,7 +180,7 @@ const UserPreferencesPage: React.FunctionComponent = () => {
             <PreferenceContainer key={s.preference}>
               <Checkbox
                 // @ts-ignore
-                checked={preferences[s.preference]}
+                checked={preferences[s.preference] || false}
                 onChange={() =>
                   handlePreferenceChange(
                     s.preference,

@@ -5,41 +5,38 @@ import DeleteIcon from "@mui/icons-material/Delete"
 import { useDispatch, useSelector } from "react-redux"
 import { State, userActions } from "../store"
 import { useAuth0 } from "@auth0/auth0-react"
+import { EmergencyContactsType } from "../types/user-types"
 
 const EmergencyPlanPage: React.FC = () => {
   const theme = useTheme()
   const { getAccessTokenSilently } = useAuth0()
   const userProfile = useSelector((state: State) => state.user)
-  const previousEmergencyContacts = useSelector(
+  const emergencyContacts = useSelector(
     (state: State) => state.user.emergency?.contacts,
   )
-  const previousEmergencyPlan = useSelector(
+  const emergencyPlan = useSelector(
     (state: State) => state.user.emergency?.plan,
   )
-
-  const [emergencyContacts, setEmergencyContacts] = useState<
-    { relation: string; phone: string }[]
-  >(previousEmergencyContacts || [])
 
   const modifyEmergencyContact = (
     idx: number,
     relation: string,
     phone: string,
   ) => {
-    let newEmergencyContacts = [...emergencyContacts]
+    let newEmergencyContacts: EmergencyContactsType[] = [
+      ...(emergencyContacts || []),
+    ]
     newEmergencyContacts[idx] = { relation, phone }
-    setEmergencyContacts([...newEmergencyContacts])
+    userActions.setEmergencyContacts([...newEmergencyContacts])
   }
 
   const removeEmergencyContact = (idx: number) => {
-    let newEmergencyContacts = [...emergencyContacts]
+    let newEmergencyContacts: EmergencyContactsType[] = [
+      ...(emergencyContacts || []),
+    ]
     newEmergencyContacts.splice(idx, 1)
-    setEmergencyContacts([...newEmergencyContacts])
+    userActions.setEmergencyContacts([...newEmergencyContacts])
   }
-
-  const [emergencyPlan, setEmergencyPlan] = useState<string>(
-    previousEmergencyPlan || "",
-  )
 
   const updateUser = async () => {
     const token = await getAccessTokenSilently()
@@ -83,41 +80,42 @@ const EmergencyPlanPage: React.FC = () => {
           <a href="tel:988">988</a>
         </Typography>
 
-        {emergencyContacts.map((c, idx) => (
-          <Grid container spacing={2} my={2}>
-            <Grid item xs={12} sm={4}>
-              <Input
-                value={c.relation}
-                placeholder="Relationship"
-                onChange={(e) =>
-                  modifyEmergencyContact(idx, e.target.value, c.phone)
-                }
-              />
+        {emergencyContacts &&
+          emergencyContacts.map((c, idx) => (
+            <Grid container spacing={2} my={2}>
+              <Grid item xs={12} sm={4}>
+                <Input
+                  value={c.relation}
+                  placeholder="Relationship"
+                  onChange={(e) =>
+                    modifyEmergencyContact(idx, e.target.value, c.phone)
+                  }
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <Input
+                  value={c.phone}
+                  fullWidth
+                  placeholder="Phone"
+                  onChange={(e) =>
+                    modifyEmergencyContact(idx, c.relation, e.target.value)
+                  }
+                />
+              </Grid>
+              <Grid item>
+                <Button onClick={() => removeEmergencyContact(idx)}>
+                  <DeleteIcon />
+                </Button>
+              </Grid>
             </Grid>
-            <Grid item xs={12} sm={6}>
-              <Input
-                value={c.phone}
-                fullWidth
-                placeholder="Phone"
-                onChange={(e) =>
-                  modifyEmergencyContact(idx, c.relation, e.target.value)
-                }
-              />
-            </Grid>
-            <Grid item>
-              <Button onClick={() => removeEmergencyContact(idx)}>
-                <DeleteIcon />
-              </Button>
-            </Grid>
-          </Grid>
-        ))}
+          ))}
 
         <Button
           fullWidth
           sx={{ mt: "20px" }}
           onClick={() =>
-            setEmergencyContacts([
-              ...emergencyContacts,
+            userActions.setEmergencyContacts([
+              ...(emergencyContacts || []),
               { relation: "", phone: "" },
             ])
           }
@@ -137,7 +135,7 @@ const EmergencyPlanPage: React.FC = () => {
           fullWidth
           multiline
           value={emergencyPlan}
-          onChange={(e) => setEmergencyPlan(e.target.value)}
+          onChange={(e) => userActions.setEmergencyPlan(e.target.value)}
         />
       </Paper>
     </PageContentContainer>
