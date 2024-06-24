@@ -50,7 +50,10 @@ const EmergencyPlanPage: React.FC = () => {
   }
 
   useEffect(() => {
-    if (emergencyContacts !== undefined || emergencyPlan !== undefined) {
+    if (
+      !userProfile.isLoading &&
+      (emergencyContacts !== undefined || emergencyPlan !== undefined)
+    ) {
       updateUser()
     }
   }, [emergencyContacts, emergencyPlan])

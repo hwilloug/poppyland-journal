@@ -1302,7 +1302,7 @@ Resources:
                   "last_name": item['Item'].get('LastName', {}).get("S"),
                   "journal_name": item['Item'].get('JournalName', {}).get("S"),
                   "is_dark_mode": item['Item'].get('IsDarkMode', {}).get("BOOL"),
-                  "ideal_hours_sleep": item['Item'].get('IdealHoursSleep', {}).get("N")
+                  "ideal_hours_sleep": item['Item'].get('IdealHoursSleep', {}).get("N"),
                   "emergency": item['Item'].get('Emergency', {}).get("S")
               }
               return {

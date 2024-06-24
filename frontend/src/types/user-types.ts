@@ -1,4 +1,5 @@
 export interface UserState {
+  isLoading?: boolean
   preferences: PreferencesType
   userId: string
   firstName: string

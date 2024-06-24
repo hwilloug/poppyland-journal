@@ -2,6 +2,7 @@ import { UserActionTypes } from "../actions/user-actions"
 import { UserState } from "../types/user-types"
 
 const initialState: UserState = {
+  isLoading: false,
   preferences: {},
   userId: "",
   firstName: "",
@@ -79,6 +80,11 @@ export function userReducer(
           ...state.emergency,
           plan: action.payload.plan,
         },
+      }
+    case UserActionTypes.SET_IS_LOADING:
+      return {
+        ...state,
+        isLoading: action.payload.isLoading,
       }
     default:
       return state

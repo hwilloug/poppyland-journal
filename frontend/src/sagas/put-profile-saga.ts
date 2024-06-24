@@ -1,6 +1,5 @@
-import { call, delay, put } from "redux-saga/effects"
+import { call, delay } from "redux-saga/effects"
 import { PutProfileAPI } from "../server"
-import { journalActions, userActions } from "../store"
 import { PutProfileResponseType } from "../server/put-profile-api"
 
 export function* putProfileSaga(action: any) {
