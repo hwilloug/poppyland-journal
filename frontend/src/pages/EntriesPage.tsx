@@ -13,6 +13,7 @@ import { useMemo } from "react"
 import { State } from "../store"
 import EditNoteIcon from "@mui/icons-material/EditNote"
 import NoteAddIcon from "@mui/icons-material/NoteAdd"
+import { withAuthenticationRequired } from "@auth0/auth0-react"
 
 const EntriesPage: React.FC = () => {
   const data = useSelector((state: State) => state.journal.entries)
@@ -83,4 +84,4 @@ const EntriesPage: React.FC = () => {
   )
 }
 
-export default EntriesPage
+export default withAuthenticationRequired(EntriesPage)

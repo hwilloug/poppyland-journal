@@ -12,12 +12,19 @@ import {
   getFirstDayOfMonth,
   getPreviousMonday,
 } from "../utils/date-utils"
-import { useAuth0 } from "@auth0/auth0-react"
+import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react"
 import { GoalsType } from "../types/journal-types"
 import DeleteIcon from "@mui/icons-material/Delete"
 import LibraryAddIcon from "@mui/icons-material/LibraryAdd"
+import LoadingComponent from "../components/shared-components/Loading"
 
 const GoalsPage: React.FC = () => {
+  const isLoading = useSelector((state: State) => state.journal.isLoading)
+
+  if (isLoading) {
+    return <LoadingComponent />
+  }
+
   return (
     <PageContentContainer style={{ maxWidth: "none" }}>
       <Grid container spacing={5}>
@@ -47,7 +54,7 @@ const GoalsPage: React.FC = () => {
   )
 }
 
-export default GoalsPage
+export default withAuthenticationRequired(GoalsPage)
 
 const DailyGoals: React.FC = () => {
   const { getAccessTokenSilently, user } = useAuth0()

@@ -30,6 +30,7 @@ export type EmergencyType = {
 }
 
 export type EmergencyContactsType = {
+  name: string
   relation: string
   phone: string
 }

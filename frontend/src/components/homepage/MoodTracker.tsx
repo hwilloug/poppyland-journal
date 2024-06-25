@@ -381,6 +381,7 @@ const MoodTrackerComponent: React.FunctionComponent = () => {
         {timeFilters.map((f) => (
           <Button
             key={f.name}
+            size="small"
             variant={
               new Date(f.firstDate).toDateString() ===
               new Date(timeFilter).toDateString()

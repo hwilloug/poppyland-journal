@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import DeleteIcon from "@mui/icons-material/Delete"
 import { useDispatch, useSelector } from "react-redux"
 import { State, userActions } from "../store"
-import { useAuth0 } from "@auth0/auth0-react"
+import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react"
 import { EmergencyContactsType } from "../types/user-types"
 
 const EmergencyPlanPage: React.FC = () => {
@@ -20,13 +20,14 @@ const EmergencyPlanPage: React.FC = () => {
 
   const modifyEmergencyContact = (
     idx: number,
+    name: string,
     relation: string,
     phone: string,
   ) => {
     let newEmergencyContacts: EmergencyContactsType[] = [
       ...(emergencyContacts || []),
     ]
-    newEmergencyContacts[idx] = { relation, phone }
+    newEmergencyContacts[idx] = { name, relation, phone }
     userActions.setEmergencyContacts([...newEmergencyContacts])
   }
 
@@ -83,22 +84,41 @@ const EmergencyPlanPage: React.FC = () => {
         {emergencyContacts &&
           emergencyContacts.map((c, idx) => (
             <Grid container spacing={2} my={2}>
-              <Grid item xs={12} sm={4}>
+              <Grid item xs={12} sm={3}>
                 <Input
-                  value={c.relation}
-                  placeholder="Relationship"
+                  value={c.name}
+                  placeholder="Name"
                   onChange={(e) =>
-                    modifyEmergencyContact(idx, e.target.value, c.phone)
+                    modifyEmergencyContact(
+                      idx,
+                      e.target.value,
+                      c.relation,
+                      c.phone,
+                    )
                   }
                 />
               </Grid>
-              <Grid item xs={12} sm={6}>
+              <Grid item xs={12} sm={3}>
+                <Input
+                  value={c.relation}
+                  placeholder="Relation"
+                  onChange={(e) =>
+                    modifyEmergencyContact(idx, c.name, e.target.value, c.phone)
+                  }
+                />
+              </Grid>
+              <Grid item xs={12} sm={4}>
                 <Input
                   value={c.phone}
                   fullWidth
                   placeholder="Phone"
                   onChange={(e) =>
-                    modifyEmergencyContact(idx, c.relation, e.target.value)
+                    modifyEmergencyContact(
+                      idx,
+                      c.name,
+                      c.relation,
+                      e.target.value,
+                    )
                   }
                 />
               </Grid>
@@ -116,7 +136,7 @@ const EmergencyPlanPage: React.FC = () => {
           onClick={() =>
             userActions.setEmergencyContacts([
               ...(emergencyContacts || []),
-              { relation: "", phone: "" },
+              { relation: "", phone: "", name: "" },
             ])
           }
         >
@@ -142,4 +162,4 @@ const EmergencyPlanPage: React.FC = () => {
   )
 }
 
-export default EmergencyPlanPage
+export default withAuthenticationRequired(EmergencyPlanPage)

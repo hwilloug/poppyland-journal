@@ -1,14 +1,17 @@
-import styled from "@emotion/styled"
-
-const LoadingDiv = styled.div`
-  background-color: #fffcf5;
-  padding: 20px;
-  flex-grow: 1;
-  min-height: 100vh;
-`
+import { Box } from "@mui/material"
 
 const LoadingComponent: React.FunctionComponent = () => {
-  return <LoadingDiv>Loading...</LoadingDiv>
+  return (
+    <Box
+      sx={{
+        backgroundColor: "rgba(0,0,0,0)",
+        width: "fit-content",
+        margin: "100px auto",
+      }}
+    >
+      <img src="/loading_icon.gif" />
+    </Box>
+  )
 }
 
 export default LoadingComponent

@@ -3,15 +3,8 @@ import styled from "@emotion/styled"
 import { PageContentContainer } from "../components/shared-components/styled-components"
 import { useSelector } from "react-redux"
 import { State, userActions } from "../store"
-import {
-  Alert,
-  Button,
-  Checkbox,
-  Snackbar,
-  TextField,
-  Typography,
-} from "@mui/material"
-import { useMemo, useState } from "react"
+import { Button, Checkbox, TextField, Typography } from "@mui/material"
+import { useMemo } from "react"
 
 const Container = styled.div`
   margin-top: 20px;
@@ -52,9 +45,6 @@ const UserPreferencesPage: React.FunctionComponent = () => {
     () => parseFloat(idealHoursSleepRaw),
     [idealHoursSleepRaw],
   )
-
-  const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false)
-  const [snackbarMessage, setSnackbarMessage] = useState<string>("")
 
   const sections = [
     {
@@ -110,10 +100,6 @@ const UserPreferencesPage: React.FunctionComponent = () => {
   const onSubmit = async () => {
     const token = await getAccessTokenSilently()
     userActions.putUser(token, userProfile)
-  }
-
-  const handleSnackbarClose = () => {
-    setSnackbarOpen(false)
   }
 
   return (
@@ -203,15 +189,6 @@ const UserPreferencesPage: React.FunctionComponent = () => {
             Save
           </Button>
         </SubmitButtonContainer>
-        <Snackbar
-          open={snackbarOpen}
-          autoHideDuration={6000}
-          onClose={handleSnackbarClose}
-        >
-          <Alert onClose={handleSnackbarClose} severity="success">
-            {snackbarMessage}
-          </Alert>
-        </Snackbar>
       </Container>
     </PageContentContainer>
   )

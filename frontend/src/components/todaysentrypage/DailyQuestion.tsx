@@ -99,7 +99,7 @@ const DailyQuestionComponent: React.FunctionComponent<DailyQuestionProps> = ({
         onChange={(e: any) => {
           journalActions.setDailyQuestionA(date, e)
         }}
-        height={100}
+        height={150}
         preview="edit"
       />
     </EntrySectionContainer>

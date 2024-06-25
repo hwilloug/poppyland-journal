@@ -6,7 +6,7 @@ import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react"
 import LoadingComponent from "../components/shared-components/Loading"
 import { useDispatch, useSelector } from "react-redux"
 import { Grid, Paper, Typography, styled, useTheme } from "@mui/material"
-import { green, purple, yellow } from "@mui/material/colors"
+import { blue, green, orange, purple, red, yellow } from "@mui/material/colors"
 import { convertToShortDate } from "../utils/date-utils"
 import { State } from "../store"
 import GoalsTrackerComponent from "../components/homepage/GoalsTracker"
@@ -16,6 +16,8 @@ import SentimentSatisfiedIcon from "@mui/icons-material/SentimentSatisfied"
 import SentimentNeutralIcon from "@mui/icons-material/SentimentNeutral"
 import SentimentDissatisfiedIcon from "@mui/icons-material/SentimentDissatisfied"
 import SentimentVeryDissatisfiedIcon from "@mui/icons-material/SentimentVeryDissatisfied"
+import SleepTracker from "../components/homepage/SleepTracker"
+import SubstancesTracker from "../components/homepage/SubstancesTracker"
 
 const HomePageContainer = styled("div")`
   padding: 20px;
@@ -51,8 +53,6 @@ const DailyAffiramtionContainer = styled(Paper)(({ theme }) => ({
 }))
 
 const HomePage: React.FunctionComponent = () => {
-  const { user, getAccessTokenSilently } = useAuth0()
-  const dispatch = useDispatch()
   const journalState = useSelector((state: State) => state.journal)
   const preferences = useSelector((state: State) => state.user.preferences)
   const entries = useSelector((state: State) => state.journal.entries)
@@ -124,6 +124,23 @@ const HomePage: React.FunctionComponent = () => {
     }
   }, [avgMood])
 
+  const avgMoodBgColor = useMemo(() => {
+    switch (Math.round(avgMood)) {
+      case 0:
+        return `linear-gradient(to bottom, ${red[200]}, ${red[400]})`
+      case 1:
+        return `linear-gradient(to bottom, ${orange[200]}, ${orange[400]})`
+      case 2:
+        return `linear-gradient(to bottom, ${blue[200]}, ${blue[400]})`
+      case 3:
+        return `linear-gradient(to bottom, ${green[200]}, ${green[400]})`
+      case 4:
+        return `linear-gradient(to bottom, ${purple[200]}, ${purple[400]})`
+      default:
+        return `linear-gradient(to bottom, ${green[200]}, ${green[400]})`
+    }
+  }, [avgMood])
+
   if (journalState.isLoading) {
     return <LoadingComponent />
   }
@@ -171,7 +188,17 @@ const HomePage: React.FunctionComponent = () => {
           </>
         )}
 
-      {preferences.showMood && <MoodTrackerComponent />}
+      <Grid container>
+        <Grid item xs={12}>
+          {preferences.showMood && <MoodTrackerComponent />}
+        </Grid>
+        <Grid item xs={12} md={6}>
+          {preferences.showSleep && <SleepTracker />}
+        </Grid>
+        <Grid item xs={12} md={6}>
+          {preferences.showSubstance && <SubstancesTracker />}
+        </Grid>
+      </Grid>
 
       <Grid container margin={"20px"} justifyContent={"center"}>
         <StatCard
@@ -187,7 +214,7 @@ const HomePage: React.FunctionComponent = () => {
         <StatCard
           name="Average Mood Last 7 Days"
           value={avgMoodIcon}
-          color={`linear-gradient(to bottom, ${green[500]}, ${green[800]})`}
+          color={avgMoodBgColor}
         />
       </Grid>
       <Grid container margin={"20px"}>

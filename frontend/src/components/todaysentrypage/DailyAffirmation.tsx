@@ -28,7 +28,7 @@ const DailyAffirmationComponent: React.FunctionComponent<
         onChange={(e: any) => {
           journalActions.setAffirmation(date, e)
         }}
-        height={100}
+        height={150}
         preview="edit"
       />
     </EntrySectionContainer>
