@@ -66,5 +66,5 @@ export const getFirstDayOfMonth = (date: string) => {
 
 export const getFirstOfYear = (date: string) => {
   const year = convertToDateObject(date).getFullYear()
-  return convertToShortDate(new Date(1, 1, year))
+  return convertToShortDate(new Date(year, 0, 1))
 }

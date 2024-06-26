@@ -295,7 +295,6 @@ Resources:
               item_payload = {
                   'UserId': {'S': user_id},
                   'Date': {'S': payload.get('date')},
-                  'DailyQuestionQ': {'S': payload.get('daily_question_q')}
               }
               if payload.get('mood') is not None:
                   item_payload['Mood'] = {'N': payload.get('mood')}
@@ -317,6 +316,8 @@ Resources:
                   item_payload['MonthlyGoals'] = {'S': payload.get('monthly_goals')}
               if payload.get('yearly_goals') is not None:
                   item_payload['YearlyGoals'] = {'S': payload.get('yearly_goals')}
+              if payload.get('daily_question_q') is not None:
+                  item_payload['DailyQuestionQ'] = {'S': payload.get('daily_question_q')}
               if payload.get('daily_question_a') is not None:
                   item_payload['DailyQuestionA'] = {'S': payload.get('daily_question_a')}
               if len(payload.get('mental_health', [])):
