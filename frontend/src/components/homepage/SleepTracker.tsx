@@ -178,9 +178,24 @@ const SleepTracker: React.FunctionComponent = () => {
     },
     tooltip: {
       formatter: function () {
-        return `${convertToDayOfWeekMonthDay(new Date(this.x!))}: <b>${
-          this.y
-        }</b>`
+        switch (this.series.name) {
+          case "Sleep Quality":
+            let value = ""
+            if (this.y === 0) {
+              value = "Bad"
+            } else if (this.y === 1) {
+              value = "Interrupted"
+            } else if (this.y === 2) {
+              value = "Good"
+            }
+            return `${convertToDayOfWeekMonthDay(
+              new Date(this.x!),
+            )}: <b>${value}</b>`
+          default:
+            return `${convertToDayOfWeekMonthDay(new Date(this.x!))}: <b>${
+              this.y
+            } hours</b>`
+        }
       },
     },
     series: [

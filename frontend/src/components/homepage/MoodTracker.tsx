@@ -342,9 +342,24 @@ const MoodTrackerComponent: React.FunctionComponent = () => {
     },
     tooltip: {
       formatter: function () {
-        return `${convertToDayOfWeekMonthDay(new Date(this.x!))}: <b>${
-          this.y
-        }</b>`
+        switch (this.series.name) {
+          case "Mood":
+            return `${convertToDayOfWeekMonthDay(new Date(this.x!))}: <b>${
+              this.y
+            }</b>`
+          case "Sleep":
+            return `${convertToDayOfWeekMonthDay(new Date(this.x!))}: <b>${
+              this.y
+            } hours</b>`
+          case "Exercise":
+            return `${convertToDayOfWeekMonthDay(new Date(this.x!))}: <b>${
+              this.y
+            } minutes</b>`
+          default:
+            return `${convertToDayOfWeekMonthDay(new Date(this.x!))} - ${
+              this.series.name
+            }: <b>${this.y}</b>`
+        }
       },
     },
     series: [
