@@ -6,6 +6,7 @@ import { State } from "../../store"
 import HighchartsReact from "highcharts-react-official"
 import Highcharts from "highcharts/highstock"
 import { SubstancesType } from "../../types/journal-types"
+import { convertToDayOfWeekMonthDay } from "../../utils/date-utils"
 
 const Container = styled(Paper)`
   background-color: #fffcf5;
@@ -48,6 +49,33 @@ const SleepTracker: React.FunctionComponent = () => {
     return sleepData
   }, [data])
 
+  const getSleepQualityInt = (quality: string) => {
+    switch (quality) {
+      case "Bad":
+        return 0
+      case "Interrupted":
+        return 1
+      case "Good":
+        return 2
+      default:
+        return 0
+    }
+  }
+
+  const sleepQualityData = useMemo(() => {
+    let sleepData: DataType[] = []
+    for (let date in data) {
+      if (data[date].sleepQuality !== undefined) {
+        sleepData.push({
+          x: new Date(date.replace(/-/g, "/")).valueOf(),
+          y: getSleepQualityInt(data[date].sleepQuality!),
+        })
+      }
+    }
+    sleepData.sort((a, b) => a.x - b.x)
+    return sleepData
+  }, [data])
+
   const [timeFilter, setTimeFilter] = useState(
     new Date(new Date(today).setDate(new Date(today).getDate() - 7)).valueOf(),
   )
@@ -57,6 +85,12 @@ const SleepTracker: React.FunctionComponent = () => {
       return new Date(d.x) > new Date(timeFilter)
     })
   }, [sleepData, timeFilter])
+
+  const filteredSleepQualityData = useMemo(() => {
+    return sleepQualityData.filter((d) => {
+      return new Date(d.x) > new Date(timeFilter)
+    })
+  }, [sleepQualityData, timeFilter])
 
   const timeFilters = [
     {
@@ -107,35 +141,53 @@ const SleepTracker: React.FunctionComponent = () => {
         },
       },
     },
-    yAxis: {
-      title: {
-        text: "Hours Sleep",
+    yAxis: [
+      {
+        title: {
+          text: "Hours Sleep",
+        },
+        plotLines: [
+          {
+            color: "lightgrey",
+            value: parseFloat(userPreferences.idealHoursSleep) + 0.5,
+            dashStyle: "Dash",
+            width: 2,
+          },
+          {
+            color: "lightgrey",
+            value: parseFloat(userPreferences.idealHoursSleep) - 0.5,
+            dashStyle: "Dash",
+            width: 2,
+          },
+        ],
       },
-      plotLines: [
-        {
-          color: "lightgrey",
-          value: parseFloat(userPreferences.idealHoursSleep) + 0.5,
-          dashStyle: "Dash",
-          width: 2,
+      {
+        title: {
+          text: "Sleep Quality",
         },
-        {
-          color: "lightgrey",
-          value: parseFloat(userPreferences.idealHoursSleep) - 0.5,
-          dashStyle: "Dash",
-          width: 2,
-        },
-      ],
-    },
+        opposite: true,
+        min: 0,
+        max: 3,
+        visible: false,
+      },
+    ],
     plotOptions: {
       column: {
         stacking: "normal",
+      },
+    },
+    tooltip: {
+      formatter: function () {
+        return `${convertToDayOfWeekMonthDay(new Date(this.x!))}: <b>${
+          this.y
+        }</b>`
       },
     },
     series: [
       {
         name: "Sleep",
         data: filteredSleepData,
-        type: "line",
+        type: "spline",
         color: "darkgrey",
         zones: [
           {
@@ -150,10 +202,20 @@ const SleepTracker: React.FunctionComponent = () => {
             color: theme.palette.warning.main,
           },
         ],
+        zIndex: 1,
+      },
+      {
+        name: "Sleep Quality",
+        data: filteredSleepQualityData,
+        type: "column",
+        yAxis: 1,
+        zIndex: 0,
+        color: theme.palette.secondary.dark,
+        visible: false,
       },
     ],
     legend: {
-      enabled: false,
+      enabled: true,
     },
   }
 

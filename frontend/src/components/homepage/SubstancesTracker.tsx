@@ -6,6 +6,7 @@ import { State } from "../../store"
 import HighchartsReact from "highcharts-react-official"
 import Highcharts from "highcharts/highstock"
 import { SubstancesType } from "../../types/journal-types"
+import { convertToDayOfWeekMonthDay } from "../../utils/date-utils"
 
 const Container = styled(Paper)`
   background-color: #fffcf5;
@@ -29,10 +30,8 @@ export type SubstancesDataType = {
 }
 
 const SubstancesTracker: React.FunctionComponent = () => {
-  const theme = useTheme()
   const today = new Date().valueOf()
   const data = useSelector((state: State) => state.journal.entries)
-  const userPreferences = useSelector((state: State) => state.user)
 
   const substancesData = useMemo(() => {
     let substancesData: SubstancesDataType[] = []
@@ -144,6 +143,17 @@ const SubstancesTracker: React.FunctionComponent = () => {
     plotOptions: {
       column: {
         stacking: "normal",
+        pointPadding: 0.05,
+        borderWidth: 0,
+        groupPadding: 0,
+        shadow: false,
+      },
+    },
+    tooltip: {
+      formatter: function () {
+        return `${convertToDayOfWeekMonthDay(new Date(this.x!))} - ${
+          this.series.name
+        }: <b>${this.y}</b>`
       },
     },
     // @ts-ignore

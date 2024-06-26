@@ -6,6 +6,7 @@ import { State } from "../../store"
 import HighchartsReact from "highcharts-react-official"
 import Highcharts from "highcharts/highstock"
 import { SubstancesType } from "../../types/journal-types"
+import { convertToDayOfWeekMonthDay } from "../../utils/date-utils"
 
 const Container = styled(Paper)`
   background-color: #fffcf5;
@@ -304,11 +305,19 @@ const MoodTrackerComponent: React.FunctionComponent = () => {
         stacking: "normal",
       },
     },
+    tooltip: {
+      formatter: function () {
+        return `${convertToDayOfWeekMonthDay(new Date(this.x!))}: <b>${
+          this.y
+        }</b>`
+      },
+    },
     series: [
       // @ts-ignore
       {
         name: "Mood",
         data: filteredMoodData,
+        type: "spline",
         yAxis: 0,
         zIndex: 1,
         color: theme.palette.info.main,

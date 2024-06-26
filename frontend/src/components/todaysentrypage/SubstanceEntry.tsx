@@ -1,17 +1,16 @@
 import styled from "@emotion/styled"
-import { SectionHeader } from "../../pages/TodaysEntryPage"
-import CheckboxItemComponent from "../shared-components/CheckboxItem"
 import { EntrySectionContainer } from "../shared-components/styled-components"
 import { Grid, Input, Typography } from "@mui/material"
-import { SubstancesType } from "../../types/journal-types"
 import { useSelector } from "react-redux"
 import { State, journalActions } from "../../store"
 
 export const substancesList = [
+  "Caffeine",
   "Nicotine (Cigarrette)",
   "Nicotine (Vape)",
   "Alcohol",
   "Marijuana (Flower)",
+  "Marijuana (Concentrate)",
   "Marijuana (Edible)",
   "Cocaine",
   "Mushrooms",
