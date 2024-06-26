@@ -18,6 +18,7 @@ import SentimentDissatisfiedIcon from "@mui/icons-material/SentimentDissatisfied
 import SentimentVeryDissatisfiedIcon from "@mui/icons-material/SentimentVeryDissatisfied"
 import SleepTracker from "../components/homepage/SleepTracker"
 import SubstancesTracker from "../components/homepage/SubstancesTracker"
+import MentalHealthTracker from "../components/homepage/MentalHealthTracker"
 
 const HomePageContainer = styled("div")`
   padding: 20px;
@@ -188,18 +189,6 @@ const HomePage: React.FunctionComponent = () => {
           </>
         )}
 
-      <Grid container>
-        <Grid item xs={12}>
-          {preferences.showMood && <MoodTrackerComponent />}
-        </Grid>
-        <Grid item xs={12} md={6}>
-          {preferences.showSleep && <SleepTracker />}
-        </Grid>
-        <Grid item xs={12} md={6}>
-          {preferences.showSubstance && <SubstancesTracker />}
-        </Grid>
-      </Grid>
-
       <Grid container margin={"20px"} justifyContent={"center"}>
         <StatCard
           name="Number of Entries"
@@ -217,6 +206,22 @@ const HomePage: React.FunctionComponent = () => {
           color={avgMoodBgColor}
         />
       </Grid>
+
+      <Grid container>
+        <Grid item xs={12}>
+          {preferences.showMood && <MoodTrackerComponent />}
+        </Grid>
+        <Grid item xs={12} md={6}>
+          {preferences.showMentalHealth && <MentalHealthTracker />}
+        </Grid>
+        <Grid item xs={12} md={6}>
+          {preferences.showSleep && <SleepTracker />}
+        </Grid>
+        <Grid item xs={12} md={6}>
+          {preferences.showSubstance && <SubstancesTracker />}
+        </Grid>
+      </Grid>
+
       <Grid container margin={"20px"}>
         <Grid item xs={12} sm={6}>
           <PreviousEntriesListComponent />
