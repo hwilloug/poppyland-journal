@@ -7,6 +7,17 @@ import HighchartsReact from "highcharts-react-official"
 import Highcharts from "highcharts/highstock"
 import { SubstancesType } from "../../types/journal-types"
 import { convertToDayOfWeekMonthDay } from "../../utils/date-utils"
+import { substancesList } from "../todaysentrypage/SubstanceEntry"
+import {
+  amber,
+  blue,
+  brown,
+  green,
+  lightBlue,
+  pink,
+  purple,
+  red,
+} from "@mui/material/colors"
 
 const Container = styled(Paper)`
   background-color: #fffcf5;
@@ -124,6 +135,20 @@ const MoodTrackerComponent: React.FunctionComponent = () => {
     })
   }, [substancesData, timeFilter])
 
+  const substancesColors: { [substance: string]: string } = {
+    Caffeine: brown[400],
+    "Nicotine (Vape)": blue[400],
+    "Nicotine (Cigarrette)": blue[700],
+    Alcohol: purple[200],
+    "Marijuana (Flower)": green[200],
+    "Marijuana (Concentrate)": green[800],
+    "Marijuana (Edible)": green[500],
+    Cocaine: red[500],
+    Mushrooms: amber[500],
+    Adderall: pink[100],
+    Other: "black",
+  }
+
   const substancesSeries = useMemo(() => {
     let substanceSeries: {
       name: string
@@ -131,6 +156,9 @@ const MoodTrackerComponent: React.FunctionComponent = () => {
       visible: boolean
       data: { x: number; y: number }[]
       yAxis: number
+      showInLegend: boolean
+      stack: string
+      color: string
     }[] = []
     let seriesData: { [substance: string]: { x: number; y: number }[] } = {}
     for (let i = 0; i < filteredSubstanceData.length; i++) {
@@ -152,6 +180,9 @@ const MoodTrackerComponent: React.FunctionComponent = () => {
         type: "column",
         visible: false,
         yAxis: 3,
+        showInLegend: false,
+        stack: "substances",
+        color: substancesColors[substance],
       })
     }
     return substanceSeries
@@ -213,6 +244,7 @@ const MoodTrackerComponent: React.FunctionComponent = () => {
         },
         max: 4.5,
         min: 0,
+        tickInterval: 1,
         labels: {
           useHTML: true,
           // @ts-ignore
@@ -286,18 +318,21 @@ const MoodTrackerComponent: React.FunctionComponent = () => {
             width: 2,
           },
         ],
+        visible: false,
       },
       {
         title: {
           text: "Minutes Exercise",
         },
         opposite: true,
+        visible: false,
       },
       {
         title: {
           text: "Substance Use",
         },
         opposite: true,
+        visible: false,
       },
     ],
     plotOptions: {
@@ -351,19 +386,7 @@ const MoodTrackerComponent: React.FunctionComponent = () => {
         visible: false,
         yAxis: 1,
         color: "darkgrey",
-        zones: [
-          {
-            value: parseFloat(userPreferences.idealHoursSleep) - 0.5,
-            color: theme.palette.warning.main,
-          },
-          {
-            value: parseFloat(userPreferences.idealHoursSleep) + 0.5,
-            color: "darkgrey",
-          },
-          {
-            color: theme.palette.warning.main,
-          },
-        ],
+        zIndex: 3,
       },
       {
         name: "Exercise",
@@ -372,6 +395,24 @@ const MoodTrackerComponent: React.FunctionComponent = () => {
         yAxis: 2,
         visible: false,
         color: theme.palette.secondary.main,
+      },
+      {
+        name: "Substance Use",
+        data: [],
+        type: "line",
+        events: {
+          legendItemClick() {
+            const chart = this.chart
+            const series = chart.series
+            series.forEach((series) => {
+              if (series.userOptions.stack === "substances") {
+                series.setVisible(!this.visible)
+              }
+            })
+          },
+        },
+        showInLegend: true,
+        visible: false,
       },
       // @ts-ignore
       ...substancesSeries,

@@ -7,6 +7,15 @@ import HighchartsReact from "highcharts-react-official"
 import Highcharts from "highcharts/highstock"
 import { SubstancesType } from "../../types/journal-types"
 import { convertToDayOfWeekMonthDay } from "../../utils/date-utils"
+import {
+  amber,
+  blue,
+  brown,
+  green,
+  pink,
+  purple,
+  red,
+} from "@mui/material/colors"
 
 const Container = styled(Paper)`
   background-color: #fffcf5;
@@ -57,11 +66,27 @@ const SubstancesTracker: React.FunctionComponent = () => {
     })
   }, [substancesData, timeFilter])
 
+  const substancesColors: { [substance: string]: string } = {
+    Caffeine: brown[400],
+    "Nicotine (Vape)": blue[400],
+    "Nicotine (Cigarrette)": blue[700],
+    Alcohol: purple[200],
+    "Marijuana (Flower)": green[200],
+    "Marijuana (Concentrate)": green[800],
+    "Marijuana (Edible)": green[500],
+    Cocaine: red[500],
+    Mushrooms: amber[500],
+    Adderall: pink[100],
+    Other: "black",
+  }
+
   const substancesSeries = useMemo(() => {
     let substanceSeries: {
       name: string
       type: string
       data: { x: number; y: number }[]
+      color: string
+      showInLegend: boolean
     }[] = []
     let seriesData: { [substance: string]: { x: number; y: number }[] } = {}
     for (let i = 0; i < filteredSubstanceData.length; i++) {
@@ -81,6 +106,8 @@ const SubstancesTracker: React.FunctionComponent = () => {
         name: substance,
         data: seriesData[substance],
         type: "column",
+        color: substancesColors[substance],
+        showInLegend: seriesData[substance].filter((s) => s.y !== 0).length > 0,
       })
     }
     return substanceSeries
