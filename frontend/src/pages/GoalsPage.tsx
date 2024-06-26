@@ -10,6 +10,7 @@ import {
   convertToDayOfWeekMonthDay,
   convertToShortDate,
   getFirstDayOfMonth,
+  getFirstOfYear,
   getPreviousMonday,
 } from "../utils/date-utils"
 import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react"
@@ -274,7 +275,7 @@ const MonthlyGoals: React.FC = () => {
     (state: State) => state.journal.entries[lastFirst],
   )
   const monthlyGoals = useSelector(
-    (state: State) => state.journal.entries[lastFirst].monthlyGoals,
+    (state: State) => state.journal.entries[lastFirst]?.monthlyGoals,
   )
 
   const save = async (newGoals: GoalsType[]) => {
@@ -363,9 +364,104 @@ const MonthlyGoals: React.FC = () => {
   )
 }
 
-const YearlyGoals: React.FC = () => (
-  <>
-    <HeaderText>Yearly Goals</HeaderText>
-    <Paper sx={{ backgroundColor: "#fffcf5", p: 4 }} elevation={24}></Paper>
-  </>
-)
+const YearlyGoals: React.FC = () => {
+  const { getAccessTokenSilently, user } = useAuth0()
+
+  const userId = useSelector((state: State) => state.user.userId)
+  const data = useSelector((state: State) => state.journal.entries)
+
+  const today = convertToShortDate(new Date())
+  const lastFirst = useMemo(() => getFirstOfYear(today), [today])
+
+  const lastFirstEntry = useSelector(
+    (state: State) => state.journal.entries[lastFirst],
+  )
+  const yearlyGoals = useSelector(
+    (state: State) => state.journal.entries[lastFirst]?.yearlyGoals,
+  )
+
+  const save = async (newGoals: GoalsType[]) => {
+    const token = await getAccessTokenSilently()
+    journalActions.putEntry(token, userId, lastFirst, {
+      ...lastFirstEntry,
+      yearlyGoals: newGoals,
+    })
+  }
+
+  const onGoalChange = useCallback(
+    (index: number, goal: string, checked: boolean) => {
+      if (yearlyGoals !== undefined && yearlyGoals !== null) {
+        let newGoals = [...yearlyGoals]
+        if (!newGoals[index]) {
+          newGoals.push({ goal, checked })
+        } else {
+          newGoals[index] = { goal, checked }
+        }
+        journalActions.setYearlyGoals(lastFirst, [...newGoals])
+        save(newGoals)
+      } else {
+        journalActions.setYearlyGoals(lastFirst, [{ goal, checked }])
+        save([{ goal, checked }])
+      }
+    },
+    [yearlyGoals],
+  )
+
+  const onGoalRemove = useCallback(
+    (index: number) => {
+      if (yearlyGoals !== undefined && yearlyGoals !== null) {
+        const newGoals = yearlyGoals.filter((_, i) => i !== index)
+        journalActions.setYearlyGoals(lastFirst, [...newGoals])
+      }
+    },
+    [yearlyGoals],
+  )
+
+  return (
+    <>
+      <HeaderText>Yearly Goals</HeaderText>
+      <Paper sx={{ backgroundColor: "#fffcf5", p: 4 }} elevation={24}>
+        {yearlyGoals &&
+          yearlyGoals.map((goal, index) => {
+            if (goal === null) {
+              return
+            }
+            return (
+              <Grid container key={`weekly-goal-${index}`} textAlign={"center"}>
+                <Grid item xs={2}>
+                  <Checkbox
+                    checked={goal.checked}
+                    onChange={() =>
+                      onGoalChange(index, goal.goal, !goal.checked)
+                    }
+                  />
+                </Grid>
+                <Grid item xs={8}>
+                  <Input
+                    fullWidth
+                    value={goal.goal}
+                    onChange={(e) =>
+                      onGoalChange(index, e.target.value, goal.checked)
+                    }
+                    multiline
+                  />
+                </Grid>
+                <Grid item xs={2}>
+                  <Button onClick={() => onGoalRemove(index)}>
+                    <DeleteIcon />
+                  </Button>
+                </Grid>
+              </Grid>
+            )
+          })}
+        <Button
+          onClick={() => {
+            onGoalChange(yearlyGoals ? yearlyGoals.length : 0, "", false)
+          }}
+        >
+          <LibraryAddIcon sx={{ mr: 1 }} /> Add Goal
+        </Button>
+      </Paper>
+    </>
+  )
+}

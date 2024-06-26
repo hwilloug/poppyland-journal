@@ -77,6 +77,7 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
       loadedEntry.goals ||
       loadedEntry.weeklyGoals ||
       loadedEntry.monthlyGoals ||
+      loadedEntry.yearlyGoals ||
       loadedEntry.dailyQuestionA ||
       loadedEntry.exercise !== "0"
     )
@@ -128,6 +129,10 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
 
   const monthlyGoals = useMemo(() => {
     return loadedEntry.monthlyGoals
+  }, [loadedEntry])
+
+  const yearlyGoals = useMemo(() => {
+    return loadedEntry.yearlyGoals
   }, [loadedEntry])
 
   const dailyQuestionQ = useMemo(() => {
@@ -221,6 +226,28 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
     }
   }
 
+  const modifyYearlyGoals = (index: number, goal: string, checked: boolean) => {
+    if (yearlyGoals !== undefined && yearlyGoals !== null) {
+      let newGoals = [...yearlyGoals]
+      if (goal === "") {
+        newGoals.push({ goal, checked })
+      } else {
+        newGoals[index] = { goal, checked }
+      }
+      journalActions.setYearlyGoals(date, [...newGoals])
+    } else {
+      journalActions.setYearlyGoals(date, [{ goal, checked }])
+    }
+  }
+
+  const removeYearlyGoal = (index: number) => {
+    if (yearlyGoals !== undefined && yearlyGoals !== null) {
+      let newGoals = [...yearlyGoals]
+      newGoals.splice(index, 1)
+      journalActions.setYearlyGoals(date, [...newGoals])
+    }
+  }
+
   const onSubmit = async () => {
     try {
       const token = await getAccessTokenSilently()
@@ -245,6 +272,7 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
         goals !== undefined ||
         weeklyGoals !== undefined ||
         monthlyGoals !== undefined ||
+        yearlyGoals !== undefined ||
         dailyQuestionA ||
         minutesExercise !== "0"
       ) {
@@ -264,6 +292,7 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
         goals !== undefined ||
         weeklyGoals !== undefined ||
         monthlyGoals !== undefined ||
+        yearlyGoals !== undefined ||
         dailyQuestionA ||
         minutesExercise !== "0"
       ) {
@@ -287,6 +316,7 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
     goals,
     weeklyGoals,
     monthlyGoals,
+    yearlyGoals,
     dailyQuestionA,
     dailyQuestionQ,
     minutesExercise,
@@ -349,6 +379,16 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
           onRemove={removeMonthlyGoal}
         />
       )}
+      {preferences.showYearlyGoal &&
+        dateObject.getMonth() === 0 &&
+        dateObject.getDate() === 1 && (
+          <DailyGoalComponent
+            goals={yearlyGoals || []}
+            cadence={"Yearly"}
+            onChange={modifyYearlyGoals}
+            onRemove={removeYearlyGoal}
+          />
+        )}
       <HeaderText variant="h5" mt={"50px"}>
         Evening
       </HeaderText>

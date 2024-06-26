@@ -63,3 +63,8 @@ export const getFirstDayOfMonth = (date: string) => {
   const firstDay = last31Days.filter((d) => d.getDate() === 1)[0]
   return convertToShortDate(firstDay)
 }
+
+export const getFirstOfYear = (date: string) => {
+  const year = convertToDateObject(date).getFullYear()
+  return convertToShortDate(new Date(1, 1, year))
+}

@@ -16,6 +16,7 @@ export interface EntryResponseType {
   goals: string
   weekly_goals: string
   monthly_goals: string
+  yearly_goals: string
   daily_question_q: string
   daily_question_a: string
   exercise: string

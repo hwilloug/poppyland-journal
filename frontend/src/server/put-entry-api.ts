@@ -43,6 +43,9 @@ export const call = async (
         monthly_goals: newEntry.monthlyGoals
           ? JSON.stringify(newEntry.monthlyGoals)
           : undefined,
+        yearly_goals: newEntry.yearlyGoals
+          ? JSON.stringify(newEntry.yearlyGoals)
+          : undefined,
         mental_health: newEntry.mentalHealth,
         substances: JSON.stringify(newEntry.substances),
         entry_content: newEntry.entryContent,

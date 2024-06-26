@@ -24,6 +24,7 @@ export const JournalActionTypes = {
   SET_GOALS: "@journal/set-goals",
   SET_WEEKLY_GOALS: "@journal/set-weekly-goals",
   SET_MONTHLY_GOALS: "@journal/set-monthly-goals",
+  SET_YEARLY_GOALS: "@journal/set-yearly-goals",
   SET_DAILY_QUESTION_Q: "@journal/set-daily-question-q",
   SET_DAILY_QUESTION_A: "@journal/set-daily-question-a",
   SET_EXERCISE: "@journal/set-exercise",
@@ -102,6 +103,11 @@ export const createJournalActions = (dispatch: any) => ({
     createAction(dispatch, JournalActionTypes.SET_MONTHLY_GOALS, {
       date,
       monthlyGoals,
+    }),
+  setYearlyGoals: (date: string, yearlyGoals: GoalsType[]) =>
+    createAction(dispatch, JournalActionTypes.SET_YEARLY_GOALS, {
+      date,
+      yearlyGoals,
     }),
   setDailyQuestionQ: (date: string, dailyQuestionQ: string) =>
     createAction(dispatch, JournalActionTypes.SET_DAILY_QUESTION_Q, {

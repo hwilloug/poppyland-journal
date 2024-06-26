@@ -25,6 +25,7 @@ export const getInitialEntryState = (date: string): JournalEntry => {
     goals: undefined,
     weeklyGoals: [],
     monthlyGoals: [],
+    yearlyGoals: [],
     dailyQuestionQ: getQuestion(convertToDateObject(date).getDate()),
     dailyQuestionA: undefined,
     exercise: "0",
@@ -180,6 +181,17 @@ export function journalReducer(
           [action.payload.date]: {
             ...state.entries[action.payload.date],
             monthlyGoals: action.payload.monthlyGoals,
+          },
+        },
+      }
+    case JournalActionTypes.SET_YEARLY_GOALS:
+      return {
+        ...state,
+        entries: {
+          ...state.entries,
+          [action.payload.date]: {
+            ...state.entries[action.payload.date],
+            yearlyGoals: action.payload.yearlyGoals,
           },
         },
       }

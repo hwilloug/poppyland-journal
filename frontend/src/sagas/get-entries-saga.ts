@@ -79,6 +79,7 @@ export function* getEntriesSaga(action: any) {
                 : currentValue.goals,
             weeklyGoals: JSON.parse(currentValue.weekly_goals) || [],
             monthlyGoals: JSON.parse(currentValue.monthly_goals) || [],
+            yearlyGoals: JSON.parse(currentValue.yearly_goals) || [],
             dailyQuestionQ: currentValue.daily_question_q,
             dailyQuestionA: currentValue.daily_question_a,
             exercise: currentValue.exercise,
