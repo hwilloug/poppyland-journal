@@ -26,8 +26,7 @@ export const EntrySectionContainer = styled(
   background-color: #fffcf5;
   border: 1px solid lightgrey;
   padding: 20px;
-  margin-bottom: 50px;
-  margin-top: 20px;
+  margin-top: 30px;
   text-align: center;
 `
 

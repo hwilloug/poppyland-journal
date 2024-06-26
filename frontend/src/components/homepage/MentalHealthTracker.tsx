@@ -132,8 +132,8 @@ const MentalHealthTracker: React.FunctionComponent = () => {
     tooltip: {
       pointFormat: `<b>{point.name}</b>: {point.y}`,
     },
-    // @ts-ignore
     series: [
+      // @ts-ignore
       {
         name: "Mental Health & Behavior",
         data: mentalHealthData,

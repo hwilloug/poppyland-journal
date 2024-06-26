@@ -8,7 +8,13 @@ import DailyGoalComponent from "../todaysentrypage/DailyGoal"
 import MentalHealthEntryComponent from "../todaysentrypage/MentalHealthEntry"
 import SubstanceEntryComponent from "../todaysentrypage/SubstanceEntry"
 import EntryComponent from "../todaysentrypage/Entry"
-import { CircularProgress } from "@mui/material"
+import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  CircularProgress,
+  Typography,
+} from "@mui/material"
 import LoadingComponent from "./Loading"
 import { useDispatch, useSelector } from "react-redux"
 import { State, journalActions } from "../../store"
@@ -20,6 +26,8 @@ import { HeaderText } from "./styled-components"
 import { convertToDateObject } from "../../utils/date-utils"
 import { getInitialEntryState } from "../../reducers/journal-reducer"
 import DailyQuestionComponent from "../todaysentrypage/DailyQuestion"
+import { ArrowDropDownIcon } from "@mui/x-date-pickers"
+import { ArrowDownward } from "@mui/icons-material"
 
 const SavingContainer = styled("div")({
   position: "fixed",
@@ -49,6 +57,12 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
       return state
     }
   }, [entries, date])
+  const yesterdaysEntry: JournalEntry | undefined = useMemo(() => {
+    const yesterday = dayjs(dateObject).subtract(1, "day").format("YYYY-MM-DD")
+    if (Object.keys(entries).includes(yesterday)) {
+      return entries[yesterday]
+    }
+  }, [entries])
   const prevFormStateLoaded = useMemo(() => {
     return (
       loadedEntry.mood ||
@@ -290,7 +304,26 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
       </HeaderText>
       {preferences.showSleep && <SleepEntryComponent date={date} />}
       {preferences.showDailyAffirmation && (
-        <DailyAffirmationComponent date={date} />
+        <>
+          <DailyAffirmationComponent date={date} />
+          {yesterdaysEntry?.affirmation && (
+            <Accordion sx={{ backgroundColor: "#fffcf5" }}>
+              <AccordionSummary
+                expandIcon={<ArrowDownward color="primary" />}
+                sx={{
+                  "& .MuiAccordionSummary-content": {
+                    justifyContent: "center",
+                  },
+                }}
+              >
+                <Typography>Yesterday's Affirmation</Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                <Typography>{yesterdaysEntry?.affirmation}</Typography>
+              </AccordionDetails>
+            </Accordion>
+          )}
+        </>
       )}
       {preferences.showDailyGoal && (
         <DailyGoalComponent
@@ -316,7 +349,9 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
           onRemove={removeMonthlyGoal}
         />
       )}
-      <HeaderText variant="h5">Evening</HeaderText>
+      <HeaderText variant="h5" mt={"50px"}>
+        Evening
+      </HeaderText>
       {preferences.showMood && <MoodEntryComponent date={date} />}
       {preferences.showDailyQuestion && <DailyQuestionComponent date={date} />}
 
