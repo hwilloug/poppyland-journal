@@ -97,7 +97,7 @@ const MoodTrackerComponent: React.FunctionComponent = () => {
   const substancesData = useMemo(() => {
     let substancesData: SubstancesDataType[] = []
     for (let date in data) {
-      if (data[date].substances.length) {
+      if (data[date]?.substances?.length) {
         substancesData.push({
           x: new Date(date.replace(/-/g, "/")).valueOf(),
           y: data[date].substances,

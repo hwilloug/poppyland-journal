@@ -46,9 +46,9 @@ const GoalsPage: React.FC = () => {
           <Grid item>
             <MonthlyGoals />
           </Grid>
-        </Grid>
-        <Grid item xs={12}>
-          <YearlyGoals />
+          <Grid item>
+            <YearlyGoals />
+          </Grid>
         </Grid>
       </Grid>
     </PageContentContainer>
