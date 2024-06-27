@@ -1,6 +1,6 @@
 import { call, put } from "redux-saga/effects"
 import { GetProfileAPI } from "../server"
-import { userActions } from "../store"
+import { snackbarActions, userActions } from "../store"
 import { ProfileResponseType } from "../server/get-profile-api"
 
 export function* getProfileSaga(action: any) {
@@ -26,6 +26,9 @@ export function* getProfileSaga(action: any) {
     )
   } catch (e) {
     console.error(e)
+    yield put(
+      snackbarActions.setSnackbar("Error getting user profile", "error", true),
+    )
   } finally {
     yield put(userActions.setIsLoading(false))
   }

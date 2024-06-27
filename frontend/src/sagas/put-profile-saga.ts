@@ -1,6 +1,7 @@
-import { call, delay } from "redux-saga/effects"
+import { call, delay, put } from "redux-saga/effects"
 import { PutProfileAPI } from "../server"
 import { PutProfileResponseType } from "../server/put-profile-api"
+import { snackbarActions } from "../store"
 
 export function* putProfileSaga(action: any) {
   yield delay(500)
@@ -12,5 +13,6 @@ export function* putProfileSaga(action: any) {
     )
   } catch (e) {
     console.error(e)
+    yield put(snackbarActions.setSnackbar("Error saving entry", "error", true))
   }
 }

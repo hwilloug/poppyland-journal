@@ -1,6 +1,6 @@
 import { call, delay, put } from "redux-saga/effects"
 import { PutEntryAPI } from "../server"
-import { journalActions } from "../store"
+import { journalActions, snackbarActions } from "../store"
 import { PutEntryResponseType } from "../server/put-entry-api"
 
 export function* putEntrySaga(action: any) {
@@ -16,6 +16,7 @@ export function* putEntrySaga(action: any) {
     )
   } catch (e) {
     console.error(e)
+    yield put(snackbarActions.setSnackbar("Error saving entry", "error", true))
   } finally {
     yield put(journalActions.setIsSaving(false))
   }

@@ -7,13 +7,11 @@ import HighchartsReact from "highcharts-react-official"
 import Highcharts from "highcharts/highstock"
 import { SubstancesType } from "../../types/journal-types"
 import { convertToDayOfWeekMonthDay } from "../../utils/date-utils"
-import { substancesList } from "../todaysentrypage/SubstanceEntry"
 import {
   amber,
   blue,
   brown,
   green,
-  lightBlue,
   pink,
   purple,
   red,

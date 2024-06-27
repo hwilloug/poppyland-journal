@@ -37,16 +37,12 @@ const GoalsTrackerComponent: React.FunctionComponent = () => {
   }, [dates])
 
   const onSubmit = async (date: string, newGoals: GoalsType[]) => {
-    try {
-      const token = await getAccessTokenSilently()
-      journalActions.putEntry(token, user!.sub!, date, {
-        ...data[date],
-        date,
-        goals: newGoals,
-      })
-    } catch (e) {
-      console.log(e)
-    }
+    const token = await getAccessTokenSilently()
+    journalActions.putEntry(token, user!.sub!, date, {
+      ...data[date],
+      date,
+      goals: newGoals,
+    })
   }
 
   const toggleGoals = (date: string, index: number) => {

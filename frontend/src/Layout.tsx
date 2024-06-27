@@ -4,9 +4,13 @@ import AppBarComponent from "./components/shared-components/AppBar"
 import { Outlet } from "react-router-dom"
 import Footer from "./components/shared-components/Footer"
 import SideBar from "./components/shared-components/SideBar"
-import { Box } from "@mui/material"
+import { Alert, Box, Snackbar } from "@mui/material"
+import { useSelector } from "react-redux"
+import { State, snackbarActions } from "./store"
 
 const Layout: React.FC = () => {
+  const snackbar = useSelector((state: State) => state.snackbar)
+
   return (
     <PageContainer>
       <AppBarComponent defaultOpen={false} />
@@ -15,6 +19,18 @@ const Layout: React.FC = () => {
         <Outlet />
       </Box>
       <Footer />
+      <Snackbar
+        open={snackbar.isOpen}
+        autoHideDuration={600}
+        onClose={() => snackbarActions.setIsOpen(false)}
+      >
+        <Alert
+          onClose={() => snackbarActions.setIsOpen(false)}
+          severity={snackbar.type}
+        >
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
     </PageContainer>
   )
 }

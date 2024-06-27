@@ -249,12 +249,8 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
   }
 
   const onSubmit = async () => {
-    try {
-      const token = await getAccessTokenSilently()
-      journalActions.putEntry(token, user!.sub!, date, loadedEntry)
-    } catch (e) {
-      console.log(e)
-    }
+    const token = await getAccessTokenSilently()
+    journalActions.putEntry(token, user!.sub!, date, loadedEntry)
   }
 
   useEffect(() => {

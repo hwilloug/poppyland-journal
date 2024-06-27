@@ -1,6 +1,6 @@
 import { call, put } from "redux-saga/effects"
 import { GetEntriesAPI } from "../server"
-import { journalActions } from "../store"
+import { journalActions, snackbarActions } from "../store"
 import { EntryResponseType } from "../server/get-entries-api"
 import { JournalEntries, SubstancesType } from "../types/journal-types"
 import { substancesList } from "../components/todaysentrypage/SubstanceEntry"
@@ -91,6 +91,9 @@ export function* getEntriesSaga(action: any) {
     yield put(journalActions.setEntries(mappedEntries))
   } catch (e) {
     console.error(e)
+    yield put(
+      snackbarActions.setSnackbar("Error getting entries", "error", true),
+    )
   } finally {
     yield put(journalActions.setIsLoading(false))
   }

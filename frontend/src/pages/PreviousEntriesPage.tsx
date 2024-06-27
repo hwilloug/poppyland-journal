@@ -154,8 +154,6 @@ const PreviousEntriesPage: React.FunctionComponent = () => {
   }, [entries])
   const isLoading = useSelector((state: State) => state.journal.isLoading)
 
-  const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false)
-  const [snackbarMessage, setSnackbarMessage] = useState<string>("")
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
   const [selectedDate, setSelectedDate] = useState<string>()
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
@@ -196,19 +194,9 @@ const PreviousEntriesPage: React.FunctionComponent = () => {
   }
 
   const handleDeleteEntry = async (date: string) => {
-    try {
-      const token = await getAccessTokenSilently()
-      journalActions.deleteEntry(token, date)
-      setIsModalOpen(false)
-      setSnackbarMessage(`Successfully deleted entry ${date}!`)
-      setSnackbarOpen(true)
-    } catch (e) {
-      console.log(e)
-    }
-  }
-
-  const handleSnackbarClose = () => {
-    setSnackbarOpen(false)
+    const token = await getAccessTokenSilently()
+    journalActions.deleteEntry(token, date)
+    setIsModalOpen(false)
   }
 
   const handleMoreClick = (
@@ -500,15 +488,6 @@ const PreviousEntriesPage: React.FunctionComponent = () => {
               </ModalButtonsContainer>
             </Box>
           </Modal>
-          <Snackbar
-            open={snackbarOpen}
-            autoHideDuration={6000}
-            onClose={handleSnackbarClose}
-          >
-            <Alert onClose={handleSnackbarClose} severity="success">
-              {snackbarMessage}
-            </Alert>
-          </Snackbar>
           {isLoading && <LoadingComponent />}
         </Box>
       </ContentContainer>
