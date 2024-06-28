@@ -1201,6 +1201,8 @@ Resources:
                   item_payload['IdealHoursSleep'] = {'N': payload.get('ideal_hours_sleep')}
               if payload.get('emergency'):
                   item_payload['Emergency'] = {'S': payload.get('emergency')}
+              if payload.get('substances'):
+                  item_payload['Substances'] = {'SS': payload.get('substances')}
 
               response = dynamodb.put_item(
                   TableName='UserPreferences', 
@@ -1308,7 +1310,8 @@ Resources:
                   "journal_name": item['Item'].get('JournalName', {}).get("S"),
                   "is_dark_mode": item['Item'].get('IsDarkMode', {}).get("BOOL"),
                   "ideal_hours_sleep": item['Item'].get('IdealHoursSleep', {}).get("N"),
-                  "emergency": item['Item'].get('Emergency', {}).get("S")
+                  "emergency": item['Item'].get('Emergency', {}).get("S"),
+                  "substances": item['Item'].get('Substances', {}).get("SS"),
               }
               return {
                   "statusCode": 200,

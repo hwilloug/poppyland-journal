@@ -29,6 +29,11 @@ export function userReducer(
         ...state,
         preferences: { ...action.payload.preferences },
       }
+    case UserActionTypes.SET_SUBSTANCES_PREFERENCE:
+      return {
+        ...state,
+        substances: action.payload.substances,
+      }
     case UserActionTypes.SET_USER_ID:
       return {
         ...state,

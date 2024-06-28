@@ -1,6 +1,7 @@
 import {
   EmergencyContactsType,
   PreferencesType,
+  SubstancesType,
   UserState,
 } from "../types/user-types"
 import { createAction } from "./actions-utils"
@@ -11,6 +12,7 @@ export const UserActionTypes = {
   GET_USER: "@user/get-user",
   SET_USER: "@user/set-user",
   SET_USER_PREFERENCES: "@user/set-user-preferences",
+  SET_SUBSTANCES_PREFERENCE: "@user/set-substances-preference",
   SET_USER_ID: "@user/set-user-id",
   SET_FIRST_NAME: "@user/set-first-name",
   SET_LAST_NAME: "@user/set-last-name",
@@ -43,6 +45,10 @@ export const createUserActions = (dispatch: any) => ({
     createAction(dispatch, UserActionTypes.SET_USER_PREFERENCE, {
       preference,
       value,
+    }),
+  setSubstancesPreference: (substances: SubstancesType[]) =>
+    createAction(dispatch, UserActionTypes.SET_SUBSTANCES_PREFERENCE, {
+      substances,
     }),
   setJournalName: (journalName: string) =>
     createAction(dispatch, UserActionTypes.SET_JOURNAL_NAME, { journalName }),

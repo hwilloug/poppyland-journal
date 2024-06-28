@@ -5,6 +5,9 @@ import { useSelector } from "react-redux"
 import { State, userActions } from "../store"
 import { Button, Checkbox, TextField, Typography } from "@mui/material"
 import { useMemo } from "react"
+import TransferList from "../components/shared-components/TransferList"
+import { substancesList } from "../components/todaysentrypage/SubstanceEntry"
+import { SubstancesType } from "../types/user-types"
 
 const Container = styled.div`
   margin-top: 20px;
@@ -176,6 +179,17 @@ const UserPreferencesPage: React.FunctionComponent = () => {
                 }
               />
               <Typography>{s.section}</Typography>
+              {s.section === "Substance Use" &&
+                // @ts-ignore
+                preferences[s.preference] === true && (
+                  <TransferList
+                    selectedValues={userProfile.substances || []}
+                    allValues={substancesList}
+                    setSelected={(v: SubstancesType[]) =>
+                      userActions.setSubstancesPreference(v)
+                    }
+                  />
+                )}
             </PreferenceContainer>
           ))}
         </SettingSection>

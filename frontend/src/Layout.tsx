@@ -21,7 +21,7 @@ const Layout: React.FC = () => {
       <Footer />
       <Snackbar
         open={snackbar.isOpen}
-        autoHideDuration={600}
+        autoHideDuration={6000}
         onClose={() => snackbarActions.setIsOpen(false)}
       >
         <Alert

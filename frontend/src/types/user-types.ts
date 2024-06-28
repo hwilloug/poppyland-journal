@@ -8,6 +8,7 @@ export interface UserState {
   isDarkMode: boolean
   idealHoursSleep: string
   emergency?: EmergencyType
+  substances?: SubstancesType[]
 }
 
 export type PreferencesType = {
@@ -34,3 +35,16 @@ export type EmergencyContactsType = {
   relation: string
   phone: string
 }
+
+export type SubstancesType =
+  | "Caffeine"
+  | "Nicotine (Cigarrette)"
+  | "Nicotine (Vape)"
+  | "Alcohol"
+  | "Marijuana (Flower)"
+  | "Marijuana (Concentrate)"
+  | "Marijuana (Edible)"
+  | "Cocaine"
+  | "Mushrooms"
+  | "Adderall"
+  | "Other"

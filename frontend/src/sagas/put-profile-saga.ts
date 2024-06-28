@@ -11,6 +11,13 @@ export function* putProfileSaga(action: any) {
       action.payload.token,
       action.payload.user,
     )
+    yield put(
+      snackbarActions.setSnackbar(
+        "Successfully saved preferences",
+        "success",
+        true,
+      ),
+    )
   } catch (e) {
     console.error(e)
     yield put(snackbarActions.setSnackbar("Error saving entry", "error", true))
