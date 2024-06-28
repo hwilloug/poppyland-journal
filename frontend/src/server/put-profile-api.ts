@@ -21,6 +21,7 @@ export const call = async (token: string, user: UserState): Promise<any> => {
     is_dark_mode: user.isDarkMode,
     ideal_hours_sleep: user.idealHoursSleep,
     emergency: JSON.stringify(user.emergency || {}),
+    substances: user.substances || [],
   }
 
   try {

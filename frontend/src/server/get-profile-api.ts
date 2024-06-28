@@ -1,6 +1,10 @@
 import axios from "axios"
 import { apiEndpoints } from "../api-endpoints"
-import { EmergencyType, PreferencesType } from "../types/user-types"
+import {
+  EmergencyType,
+  PreferencesType,
+  SubstancesType,
+} from "../types/user-types"
 
 export interface ProfileResponseType {
   preferences: PreferencesType
@@ -11,6 +15,7 @@ export interface ProfileResponseType {
   is_dark_mode: boolean
   ideal_hours_sleep: string
   emergency: string
+  substances: SubstancesType[]
 }
 
 export const call = async (token: string): Promise<ProfileResponseType> => {

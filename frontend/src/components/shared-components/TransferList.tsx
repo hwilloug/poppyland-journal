@@ -26,10 +26,8 @@ const TransferList: React.FC<{
   const [left, setLeft] = React.useState<readonly string[]>(
     allValues.filter((v) => selectedValues.indexOf(v) === -1),
   )
-  const [right, setRight] = React.useState<readonly string[]>(selectedValues)
-
   const leftChecked = intersection(checked, left)
-  const rightChecked = intersection(checked, right)
+  const rightChecked = intersection(checked, selectedValues)
 
   const handleToggle = (value: string) => () => {
     const currentIndex = checked.indexOf(value)
@@ -45,25 +43,25 @@ const TransferList: React.FC<{
   }
 
   const handleAllRight = () => {
-    setRight(right.concat(left))
+    setSelected([...selectedValues].concat(left))
     setLeft([])
   }
 
   const handleCheckedRight = () => {
-    setRight(right.concat(leftChecked))
+    setSelected([...selectedValues].concat(leftChecked))
     setLeft(not(left, leftChecked))
     setChecked(not(checked, leftChecked))
   }
 
   const handleCheckedLeft = () => {
     setLeft(left.concat(rightChecked))
-    setRight(not(right, rightChecked))
+    setSelected(not([...selectedValues], rightChecked))
     setChecked(not(checked, rightChecked))
   }
 
   const handleAllLeft = () => {
-    setLeft(left.concat(right))
-    setRight([])
+    setLeft(left.concat(selectedValues))
+    setSelected([])
   }
 
   const customList = (items: readonly string[]) => (
@@ -136,14 +134,14 @@ const TransferList: React.FC<{
             variant="outlined"
             size="small"
             onClick={handleAllLeft}
-            disabled={right.length === 0}
+            disabled={selectedValues.length === 0}
             aria-label="move all left"
           >
             ≪
           </Button>
         </Grid>
       </Grid>
-      <Grid item>{customList(right)}</Grid>
+      <Grid item>{customList(selectedValues)}</Grid>
     </Grid>
   )
 }

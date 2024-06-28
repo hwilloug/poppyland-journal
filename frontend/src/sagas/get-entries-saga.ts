@@ -1,6 +1,6 @@
-import { call, put } from "redux-saga/effects"
+import { call, put, select } from "redux-saga/effects"
 import { GetEntriesAPI } from "../server"
-import { journalActions, snackbarActions } from "../store"
+import { State, journalActions, snackbarActions } from "../store"
 import { EntryResponseType } from "../server/get-entries-api"
 import { JournalEntries, SubstancesType } from "../types/journal-types"
 import { substancesList } from "../components/todaysentrypage/SubstanceEntry"
@@ -13,9 +13,12 @@ export function* getEntriesSaga(action: any) {
       action.payload.token,
     )
 
+    const state: State = yield select()
+    const userSubstancesList = state.user.substances || substancesList
+
     const mappedEntries: JournalEntries = response.reduce(
       (previousValue, currentValue: EntryResponseType) => {
-        let substancesInitialValue = substancesList.map((s) => ({
+        let substancesInitialValue = userSubstancesList.map((s) => ({
           substance: s,
           amount: 0,
         }))
