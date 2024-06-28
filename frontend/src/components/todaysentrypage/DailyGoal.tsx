@@ -1,5 +1,8 @@
-import { EntrySectionContainer } from "../shared-components/styled-components"
-import { Button, Checkbox, Grid, Input, Typography } from "@mui/material"
+import {
+  EntrySectionContainer,
+  StyledCheckbox,
+} from "../shared-components/styled-components"
+import { Button, Grid, Input, Typography } from "@mui/material"
 import LibraryAddIcon from "@mui/icons-material/LibraryAdd"
 import DeleteIcon from "@mui/icons-material/Delete"
 import { GoalsType } from "../../types/journal-types"
@@ -30,7 +33,7 @@ const DailyGoalComponent: React.FunctionComponent<DailyGoalProps> = ({
           return (
             <Grid container key={`${goal}-${index}`}>
               <Grid item>
-                <Checkbox
+                <StyledCheckbox
                   checked={goal.checked}
                   onChange={() => onChange(index, goal.goal, !goal.checked)}
                 />
@@ -56,7 +59,7 @@ const DailyGoalComponent: React.FunctionComponent<DailyGoalProps> = ({
       {typeof goals === "string" && (
         <Grid container>
           <Grid item>
-            <Checkbox
+            <StyledCheckbox
               checked={false}
               onChange={(e) => onChange(0, goals, e.target.value)}
             />

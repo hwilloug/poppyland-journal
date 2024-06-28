@@ -1,9 +1,12 @@
 import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react"
 import styled from "@emotion/styled"
-import { PageContentContainer } from "../components/shared-components/styled-components"
+import {
+  PageContentContainer,
+  StyledCheckbox,
+} from "../components/shared-components/styled-components"
 import { useSelector } from "react-redux"
 import { State, userActions } from "../store"
-import { Button, Checkbox, TextField, Typography } from "@mui/material"
+import { Button, TextField, Typography } from "@mui/material"
 import { useMemo } from "react"
 import TransferList from "../components/shared-components/TransferList"
 import { substancesList } from "../components/todaysentrypage/SubstanceEntry"
@@ -167,7 +170,7 @@ const UserPreferencesPage: React.FunctionComponent = () => {
           </Typography>
           {sections.map((s) => (
             <PreferenceContainer key={s.preference}>
-              <Checkbox
+              <StyledCheckbox
                 // @ts-ignore
                 checked={preferences[s.preference] || false}
                 onChange={() =>

@@ -1,5 +1,6 @@
 import styled from "@emotion/styled"
-import { Checkbox, Typography } from "@mui/material"
+import { Typography } from "@mui/material"
+import { StyledCheckbox } from "./styled-components"
 
 const Container = styled.div`
   margin-right: 20px;
@@ -20,7 +21,7 @@ const CheckboxItemComponent: React.FunctionComponent<CheckboxItemProps> = ({
 }) => {
   return (
     <Container>
-      <Checkbox
+      <StyledCheckbox
         checked={checked}
         onChange={() => {
           onChange(label)

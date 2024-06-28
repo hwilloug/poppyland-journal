@@ -4,10 +4,9 @@ import List from "@mui/material/List"
 import ListItemButton from "@mui/material/ListItemButton"
 import ListItemIcon from "@mui/material/ListItemIcon"
 import ListItemText from "@mui/material/ListItemText"
-import Checkbox from "@mui/material/Checkbox"
 import Button from "@mui/material/Button"
 import Paper from "@mui/material/Paper"
-import { SubstancesType } from "../../types/user-types"
+import { StyledCheckbox } from "./styled-components"
 
 function not(a: readonly string[], b: readonly string[]) {
   return a.filter((value) => b.indexOf(value) === -1)
@@ -77,7 +76,7 @@ const TransferList: React.FC<{
               onClick={handleToggle(value)}
             >
               <ListItemIcon>
-                <Checkbox
+                <StyledCheckbox
                   checked={checked.indexOf(value) !== -1}
                   tabIndex={-1}
                   disableRipple

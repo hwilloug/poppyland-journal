@@ -1,5 +1,8 @@
 import React, { useMemo, useState } from "react"
-import { PageContentContainer } from "../components/shared-components/styled-components"
+import {
+  PageContentContainer,
+  StyledCheckbox,
+} from "../components/shared-components/styled-components"
 import styled from "@emotion/styled"
 import MarkdownComponent from "../components/shared-components/Markdown"
 import SentimentVerySatisfiedIcon from "@mui/icons-material/SentimentVerySatisfied"
@@ -349,7 +352,7 @@ const PreviousEntriesPage: React.FunctionComponent = () => {
                                 alignItems={"center"}
                               >
                                 <Grid item>
-                                  <Checkbox checked={goal.checked} />
+                                  <StyledCheckbox checked={goal.checked} />
                                 </Grid>
                                 <Grid item xs={10}>
                                   <Typography display={"inline-block"}>

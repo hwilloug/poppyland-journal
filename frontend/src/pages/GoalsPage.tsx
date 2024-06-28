@@ -1,7 +1,8 @@
-import { Button, Checkbox, Grid, Input, Paper, Typography } from "@mui/material"
+import { Button, Grid, Input, Paper, Typography } from "@mui/material"
 import {
   HeaderText,
   PageContentContainer,
+  StyledCheckbox,
 } from "../components/shared-components/styled-components"
 import { useSelector } from "react-redux"
 import { State, journalActions } from "../store"
@@ -127,7 +128,7 @@ const DailyGoals: React.FC = () => {
                           alignItems={"center"}
                         >
                           <Grid item>
-                            <Checkbox
+                            <StyledCheckbox
                               key={`${dateString}-${idx}-checkbox`}
                               checked={goal.checked}
                               onChange={() => toggleGoals(shortDate, idx)}
@@ -225,7 +226,7 @@ const WeeklyGoals: React.FC = () => {
             return (
               <Grid container key={`weekly-goal-${index}`} textAlign={"center"}>
                 <Grid item xs={2}>
-                  <Checkbox
+                  <StyledCheckbox
                     checked={goal.checked}
                     onChange={() =>
                       onGoalChange(index, goal.goal, !goal.checked)
@@ -327,7 +328,7 @@ const MonthlyGoals: React.FC = () => {
             return (
               <Grid container key={`weekly-goal-${index}`} textAlign={"center"}>
                 <Grid item xs={2}>
-                  <Checkbox
+                  <StyledCheckbox
                     checked={goal.checked}
                     onChange={() =>
                       onGoalChange(index, goal.goal, !goal.checked)
@@ -429,7 +430,7 @@ const YearlyGoals: React.FC = () => {
             return (
               <Grid container key={`weekly-goal-${index}`} textAlign={"center"}>
                 <Grid item xs={2}>
-                  <Checkbox
+                  <StyledCheckbox
                     checked={goal.checked}
                     onChange={() =>
                       onGoalChange(index, goal.goal, !goal.checked)

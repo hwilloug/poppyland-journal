@@ -4,10 +4,10 @@ import {
   convertToDayOfWeekMonthDay,
   convertToShortDate,
 } from "../../utils/date-utils"
-import { Button, Checkbox, Grid, Paper, Typography } from "@mui/material"
+import { Button, Grid, Paper, Typography } from "@mui/material"
 import { useSelector } from "react-redux"
 import { State, journalActions } from "../../store"
-import { Divider } from "../shared-components/styled-components"
+import { Divider, StyledCheckbox } from "../shared-components/styled-components"
 import { GoalsType } from "../../types/journal-types"
 import { useAuth0 } from "@auth0/auth0-react"
 import { Link } from "react-router-dom"
@@ -97,7 +97,7 @@ const GoalsTrackerComponent: React.FunctionComponent = () => {
                       return (
                         <Grid item container alignItems={"center"}>
                           <Grid item>
-                            <Checkbox
+                            <StyledCheckbox
                               key={`${dateString}-${idx}-checkbox`}
                               checked={goal.checked}
                               onChange={() => toggleGoals(shortDate, idx)}

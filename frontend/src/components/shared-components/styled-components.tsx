@@ -1,17 +1,21 @@
-import styled from "@emotion/styled"
 import {
   Button,
+  Checkbox,
+  CheckboxProps,
   Paper,
   PaperProps,
   Typography,
   TypographyProps,
+  styled,
 } from "@mui/material"
+import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked"
+import CheckCircleIcon from "@mui/icons-material/CheckCircle"
 
-export const PageContainer = styled.div`
+export const PageContainer = styled("div")`
   margin: 0px;
 `
 
-export const PageContentContainer = styled.div`
+export const PageContentContainer = styled("div")`
   padding: 20px 50px;
   max-width: 750px;
   margin: 0 auto;
@@ -47,3 +51,14 @@ export const Divider = styled("hr")({
   minWidth: "100%",
   border: "1px solid lightgrey",
 })
+
+export const StyledCheckbox = styled(
+  ({ className, ...props }: CheckboxProps) => (
+    <Checkbox
+      className={className}
+      icon={<RadioButtonUncheckedIcon />}
+      checkedIcon={<CheckCircleIcon />}
+      {...props}
+    />
+  ),
+)({})
