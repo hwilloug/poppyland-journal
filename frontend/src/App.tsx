@@ -17,6 +17,7 @@ import GoalsPage from "./pages/GoalsPage"
 import EmergencyPlanPage from "./pages/EmergencyPlanPage"
 import { useSelector } from "react-redux"
 import ViewEntryPage from "./pages/ViewEntryPage"
+import HabitsPage from "./pages/HabitsPage"
 
 const AppContainer = styled.div`
   min-height: 100vh;
@@ -58,6 +59,10 @@ const router = createBrowserRouter([
       {
         path: "goals",
         element: <GoalsPage />,
+      },
+      {
+        path: "habits",
+        element: <HabitsPage />,
       },
       {
         path: "emergency-plan",

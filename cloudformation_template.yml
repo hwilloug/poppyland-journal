@@ -1201,6 +1201,8 @@ Resources:
                   item_payload['IdealHoursSleep'] = {'N': payload.get('ideal_hours_sleep')}
               if payload.get('emergency'):
                   item_payload['Emergency'] = {'S': payload.get('emergency')}
+              if payload.get('habits'):
+                  item_payload['habits'] = {'SS': payload.get('habits')}
               if payload.get('substances'):
                   item_payload['Substances'] = {'SS': payload.get('substances')}
 
@@ -1311,6 +1313,7 @@ Resources:
                   "is_dark_mode": item['Item'].get('IsDarkMode', {}).get("BOOL"),
                   "ideal_hours_sleep": item['Item'].get('IdealHoursSleep', {}).get("N"),
                   "emergency": item['Item'].get('Emergency', {}).get("S"),
+                  "habits": item['Item'].get('Habits', {}).get("SS"),
                   "substances": item['Item'].get('Substances', {}).get("SS"),
               }
               return {

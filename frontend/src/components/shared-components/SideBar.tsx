@@ -11,7 +11,7 @@ import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted"
 import FlagIcon from "@mui/icons-material/Flag"
 import DashboardIcon from "@mui/icons-material/Dashboard"
 import { Link, useLocation } from "react-router-dom"
-import { useMemo } from "react"
+import EventRepeatIcon from "@mui/icons-material/EventRepeat"
 
 const NavigationTab = styled(Box, {
   shouldForwardProp: (prop) => prop !== "isActive",
@@ -68,6 +68,11 @@ const SideBar: React.FC = () => {
       link: "/goals",
       title: "Goals",
       icon: <FlagIcon />,
+    },
+    {
+      link: "/habits",
+      title: "Habits Builder",
+      icon: <EventRepeatIcon />,
     },
     {
       link: "/entries",

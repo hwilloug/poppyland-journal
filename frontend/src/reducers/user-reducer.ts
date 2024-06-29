@@ -13,6 +13,7 @@ const initialState: UserState = {
   isDarkMode: false,
   idealHoursSleep: "8",
   emergency: {},
+  habits: [],
 }
 
 export function userReducer(
@@ -87,6 +88,11 @@ export function userReducer(
           ...state.emergency,
           plan: action.payload.plan,
         },
+      }
+    case UserActionTypes.SET_HABITS:
+      return {
+        ...state,
+        habits: action.payload.habits,
       }
     case UserActionTypes.SET_IS_LOADING:
       return {

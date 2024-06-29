@@ -22,6 +22,7 @@ export const UserActionTypes = {
   SET_IDEAL_HOURS_SLEEP: "@user/set-ideal-hours-sleep",
   SET_EMERGENCY_CONTACTS: "@user/set-emergency-contacts",
   SET_EMERGENCY_PLAN: "@user/set-emergency-plan",
+  SET_HABITS: "@user/set-habits",
 }
 
 export const createUserActions = (dispatch: any) => ({
@@ -64,6 +65,8 @@ export const createUserActions = (dispatch: any) => ({
     }),
   setEmergencyPlan: (plan: string) =>
     createAction(dispatch, UserActionTypes.SET_EMERGENCY_PLAN, { plan }),
+  setHabits: (habits: string[]) =>
+    createAction(dispatch, UserActionTypes.SET_HABITS, { habits }),
   setIsLoading: (isLoading: boolean) =>
     createAction(dispatch, UserActionTypes.SET_IS_LOADING, { isLoading }),
 })

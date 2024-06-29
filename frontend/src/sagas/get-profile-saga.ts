@@ -23,6 +23,7 @@ export function* getProfileSaga(action: any) {
           ? JSON.parse(response.emergency)
           : undefined,
         substances: response.substances,
+        habits: response.habits || [],
       }),
     )
   } catch (e) {

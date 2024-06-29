@@ -16,6 +16,7 @@ export interface ProfileResponseType {
   ideal_hours_sleep: string
   emergency: string
   substances: SubstancesType[]
+  habits: string[]
 }
 
 export const call = async (token: string): Promise<ProfileResponseType> => {

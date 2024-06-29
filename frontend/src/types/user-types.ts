@@ -9,6 +9,7 @@ export interface UserState {
   idealHoursSleep: string
   emergency?: EmergencyType
   substances?: SubstancesType[]
+  habits: string[]
 }
 
 export type PreferencesType = {
