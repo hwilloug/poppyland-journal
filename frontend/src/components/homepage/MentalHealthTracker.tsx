@@ -151,6 +151,7 @@ const MentalHealthTracker: React.FunctionComponent = () => {
         color: red[400],
         minSize: 50,
         maxSize: 100,
+        draggable: false,
       },
     },
   }

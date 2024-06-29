@@ -14,6 +14,7 @@ import { State } from "../store"
 import EditNoteIcon from "@mui/icons-material/EditNote"
 import NoteAddIcon from "@mui/icons-material/NoteAdd"
 import { withAuthenticationRequired } from "@auth0/auth0-react"
+import VisibilityIcon from "@mui/icons-material/Visibility"
 
 const EntriesPage: React.FC = () => {
   const data = useSelector((state: State) => state.journal.entries)
@@ -66,8 +67,18 @@ const EntriesPage: React.FC = () => {
                     textAlign={"center"}
                     padding={"10px"}
                   >
+                    <Link to={`/${shortDate}/view`}>
+                      <Button
+                        color="secondary"
+                        variant="contained"
+                        sx={{ mr: "5px" }}
+                      >
+                        <VisibilityIcon sx={{ pr: "5px" }} />
+                        <Typography>View</Typography>
+                      </Button>
+                    </Link>
                     <Link to={`/${shortDate}/edit`}>
-                      <Button color="secondary" variant="contained">
+                      <Button color="primary" variant="contained">
                         <EditNoteIcon sx={{ pr: "5px" }} />
                         <Typography>Edit</Typography>
                       </Button>
