@@ -6,7 +6,10 @@ import { State } from "../../store"
 import HighchartsReact from "highcharts-react-official"
 import Highcharts from "highcharts/highstock"
 import { SubstancesType } from "../../types/journal-types"
-import { convertToDayOfWeekMonthDay } from "../../utils/date-utils"
+import {
+  convertToDayOfWeekMonthDay,
+  convertToShortDate,
+} from "../../utils/date-utils"
 import {
   amber,
   blue,
@@ -16,6 +19,7 @@ import {
   purple,
   red,
 } from "@mui/material/colors"
+import { useNavigate } from "react-router-dom"
 
 const Container = styled(Paper)`
   background-color: #fffcf5;
@@ -40,6 +44,8 @@ export type SubstancesDataType = {
 
 const MoodTrackerComponent: React.FunctionComponent = () => {
   const theme = useTheme()
+  const navigate = useNavigate()
+
   const today = new Date().valueOf()
   const data = useSelector((state: State) => state.journal.entries)
   const userPreferences = useSelector((state: State) => state.user)
@@ -342,6 +348,15 @@ const MoodTrackerComponent: React.FunctionComponent = () => {
     plotOptions: {
       column: {
         stacking: "normal",
+      },
+      series: {
+        point: {
+          events: {
+            click: function () {
+              navigate(`/${convertToShortDate(new Date(this.x))}/view`)
+            },
+          },
+        },
       },
     },
     tooltip: {

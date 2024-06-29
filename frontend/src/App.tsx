@@ -16,6 +16,7 @@ import EntriesPage from "./pages/EntriesPage"
 import GoalsPage from "./pages/GoalsPage"
 import EmergencyPlanPage from "./pages/EmergencyPlanPage"
 import { useSelector } from "react-redux"
+import ViewEntryPage from "./pages/ViewEntryPage"
 
 const AppContainer = styled.div`
   min-height: 100vh;
@@ -41,6 +42,10 @@ const router = createBrowserRouter([
       {
         path: ":date/edit",
         element: <EditEntryPage />,
+      },
+      {
+        path: ":date/view",
+        element: <ViewEntryPage />,
       },
       {
         path: "preferences",
