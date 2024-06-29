@@ -9,6 +9,8 @@ import { Button, Grid, Paper, Typography } from "@mui/material"
 import { useSelector } from "react-redux"
 import { State } from "../../store"
 import { Divider } from "../shared-components/styled-components"
+import VisibilityIcon from "@mui/icons-material/Visibility"
+import EditNoteIcon from "@mui/icons-material/EditNote"
 
 const Container = styled(Paper)`
   background-color: #fffcf5;
@@ -43,14 +45,33 @@ const PreviousEntriesListComponent: React.FunctionComponent = () => {
                 <Typography align="center">{dateString}</Typography>
               </Grid>
               <Grid item xs={12} md={6} textAlign={"center"} padding={"10px"}>
-                <Link to={`/${shortDate}/edit`}>
-                  <Button
-                    color={dates.includes(shortDate) ? "secondary" : "primary"}
-                    variant="contained"
-                  >
-                    {dates.includes(shortDate) ? "Edit" : "Create"} Entry
-                  </Button>
-                </Link>
+                {dates.includes(shortDate) && (
+                  <>
+                    <Link to={`/${shortDate}/view`}>
+                      <Button
+                        color={"secondary"}
+                        variant="contained"
+                        sx={{ mr: "5px" }}
+                      >
+                        <VisibilityIcon sx={{ pr: "5px" }} />
+                        View
+                      </Button>
+                    </Link>
+                    <Link to={`/${shortDate}/edit`}>
+                      <Button color={"primary"} variant="contained">
+                        <EditNoteIcon sx={{ pr: "5px" }} />
+                        Edit
+                      </Button>
+                    </Link>
+                  </>
+                )}
+                {!dates.includes(shortDate) && (
+                  <Link to={`/${shortDate}/edit`}>
+                    <Button color={"primary"} variant="contained">
+                      Create
+                    </Button>
+                  </Link>
+                )}
               </Grid>
               <Divider />
             </Grid>
