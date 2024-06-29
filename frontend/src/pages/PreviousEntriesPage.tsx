@@ -154,7 +154,7 @@ const PreviousEntriesPage: React.FunctionComponent = () => {
                   {m}
                 </Typography>
                 {entriesByMonth[m].map((entry, index) => (
-                  <ViewEntry key={index} entry={entry} />
+                  <ViewEntry key={index} date={entry.date} />
                 ))}
               </React.Fragment>
             ))}

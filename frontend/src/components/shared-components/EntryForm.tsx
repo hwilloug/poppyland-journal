@@ -12,7 +12,9 @@ import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
+  Box,
   CircularProgress,
+  Paper,
   Typography,
 } from "@mui/material"
 import LoadingComponent from "./Loading"
@@ -28,6 +30,7 @@ import { getInitialEntryState } from "../../reducers/journal-reducer"
 import DailyQuestionComponent from "../todaysentrypage/DailyQuestion"
 import { ArrowDropDownIcon } from "@mui/x-date-pickers"
 import { ArrowDownward } from "@mui/icons-material"
+import HabitsChecker from "./HabitsChecker"
 
 const SavingContainer = styled("div")({
   position: "fixed",
@@ -389,6 +392,16 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
         Evening
       </HeaderText>
       {preferences.showMood && <MoodEntryComponent date={date} />}
+
+      <Box mt={4}>
+        <Paper sx={{ backgroundColor: "#fffcf5", p: 4 }} elevation={24}>
+          <Typography variant={"h6"} align="center">
+            Daily Habits
+          </Typography>
+          <HabitsChecker date={date} />
+        </Paper>
+      </Box>
+
       {preferences.showDailyQuestion && <DailyQuestionComponent date={date} />}
 
       {preferences.showMentalHealth && (

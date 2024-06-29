@@ -24,6 +24,7 @@ export type PreferencesType = {
   showSleep?: boolean
   showSubstance?: boolean
   showExercise?: boolean
+  showHabits?: boolean
 }
 
 export type EmergencyType = {

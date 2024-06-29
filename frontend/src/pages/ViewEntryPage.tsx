@@ -7,15 +7,9 @@ import DisplayEntry from "../components/shared-components/ViewEntry"
 const ViewEntryPage: React.FC = () => {
   const { date } = useParams()
 
-  const entry = useSelector((state: State) => state.journal.entries[date!])
-
-  if (!entry) {
-    return <>404 not found</>
-  }
-
   return (
     <PageContentContainer>
-      <DisplayEntry entry={entry} />
+      <DisplayEntry date={date!} />
     </PageContentContainer>
   )
 }

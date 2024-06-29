@@ -27,6 +27,7 @@ import { useSelector } from "react-redux"
 import { State, journalActions } from "../../store"
 import { GoalsType, SubstancesType } from "../../types/journal-types"
 import { useAuth0 } from "@auth0/auth0-react"
+import HabitsChecker from "./HabitsChecker"
 
 const EntryContainer = styled(Paper)`
   background-color: #fffcf5;
@@ -85,10 +86,11 @@ const EntryFooterContainer = styled.div`
   justify-content: flex-end;
 `
 
-const DisplayEntry: React.FC<{ entry: any }> = ({ entry }) => {
+const DisplayEntry: React.FC<{ date: string }> = ({ date }) => {
   const { getAccessTokenSilently } = useAuth0()
 
   const preferences = useSelector((state: State) => state.user.preferences)
+  const entry = useSelector((state: State) => state.journal.entries[date])
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
   const [selectedDate, setSelectedDate] = useState<string>()
@@ -183,6 +185,12 @@ const DisplayEntry: React.FC<{ entry: any }> = ({ entry }) => {
             <MarkdownComponent view="view" value={entry.affirmation} />
           </SectionContainer>
         )}
+        {preferences.showHabits && (
+          <SectionContainer>
+            <Typography fontWeight={"bold"}>Daily Habits:</Typography>
+            <HabitsChecker date={date} />
+          </SectionContainer>
+        )}
         {preferences.showDailyGoal && entry.goals && (
           <SectionContainer>
             <Typography fontWeight={"bold"}>Daily Goal:</Typography>
@@ -239,16 +247,18 @@ const DisplayEntry: React.FC<{ entry: any }> = ({ entry }) => {
                 ))}
             </SectionContainer>
           )}
-        {preferences.showExercise && entry.exercise !== "0" && (
-          <SectionContainer>
-            <Typography display={"inline-block"} fontWeight={"bold"}>
-              Minutes Exercise:
-            </Typography>
-            <Typography display={"inline-block"} ml={1}>
-              {entry.exercise}
-            </Typography>
-          </SectionContainer>
-        )}
+        {preferences.showExercise &&
+          entry.exercise &&
+          entry.exercise !== "0" && (
+            <SectionContainer>
+              <Typography display={"inline-block"} fontWeight={"bold"}>
+                Minutes Exercise:
+              </Typography>
+              <Typography display={"inline-block"} ml={1}>
+                {entry.exercise}
+              </Typography>
+            </SectionContainer>
+          )}
         <hr className="divider" />
         {entry.entryContent && (
           <>

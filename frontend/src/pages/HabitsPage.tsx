@@ -57,7 +57,9 @@ const HabitsPage: React.FC = () => {
           >
             Today
           </Typography>
-          <HabitsChecker date={today} />
+          <Paper sx={{ backgroundColor: "#fffcf5", p: 4 }} elevation={24}>
+            <HabitsChecker date={today} />
+          </Paper>
         </Grid>
       </Grid>
     </PageContentContainer>

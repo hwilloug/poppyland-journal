@@ -97,6 +97,10 @@ const UserPreferencesPage: React.FunctionComponent = () => {
       section: "Exercise",
       preference: "showExercise",
     },
+    {
+      section: "Habits",
+      preference: "showHabits",
+    },
   ]
 
   const handlePreferenceChange = (preference: string, value: boolean) => {

@@ -72,7 +72,7 @@ export function* getEntriesSaga(action: any) {
             wakeUpTime: currentValue.wake_up_time,
             sleepQuality: currentValue.sleep_quality,
             affirmation: currentValue.affirmation,
-            mentalHealth: currentValue.mental_health,
+            mentalHealth: currentValue.mental_health || [],
             substances: substances,
             entryContent: currentValue.entry_content,
             goals:
@@ -85,7 +85,7 @@ export function* getEntriesSaga(action: any) {
             yearlyGoals: JSON.parse(currentValue.yearly_goals) || [],
             dailyQuestionQ: currentValue.daily_question_q,
             dailyQuestionA: currentValue.daily_question_a,
-            exercise: currentValue.exercise,
+            exercise: currentValue.exercise || undefined,
             habits: JSON.parse(currentValue.habits) || [],
           },
         }

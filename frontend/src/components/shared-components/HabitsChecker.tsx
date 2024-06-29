@@ -43,18 +43,29 @@ const HabitsChecker: React.FC<{ date: string }> = ({ date }) => {
   }
 
   return (
-    <Paper sx={{ backgroundColor: "#fffcf5", p: 4 }} elevation={24}>
-      {userHabits.map((h) => (
-        <Grid container alignItems={"center"}>
-          <Grid item>
-            <StyledCheckbox onChange={() => toggleHabit(h)} />
+    <>
+      {userHabits.map((h) => {
+        let checked = false
+        const currentHabit = habits?.filter((ha) => ha.habit === h)
+        if (currentHabit?.length) {
+          checked = currentHabit[0].checked
+        }
+
+        return (
+          <Grid container alignItems={"center"}>
+            <Grid item>
+              <StyledCheckbox
+                checked={checked}
+                onChange={() => toggleHabit(h)}
+              />
+            </Grid>
+            <Grid item>
+              <Typography>{h}</Typography>
+            </Grid>
           </Grid>
-          <Grid item>
-            <Typography>{h}</Typography>
-          </Grid>
-        </Grid>
-      ))}
-    </Paper>
+        )
+      })}
+    </>
   )
 }
 
