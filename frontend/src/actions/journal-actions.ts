@@ -1,5 +1,6 @@
 import {
   GoalsType,
+  HabitsType,
   JournalEntries,
   JournalEntry,
   SubstancesType,
@@ -28,6 +29,7 @@ export const JournalActionTypes = {
   SET_DAILY_QUESTION_Q: "@journal/set-daily-question-q",
   SET_DAILY_QUESTION_A: "@journal/set-daily-question-a",
   SET_EXERCISE: "@journal/set-exercise",
+  SET_HABITS: "@journal/set-habits",
   SET_IS_LOADING: "@journal/set-is-loading",
   SET_IS_SAVING: "@journal/set-is-saving",
 }
@@ -121,6 +123,8 @@ export const createJournalActions = (dispatch: any) => ({
     }),
   setExercise: (date: string, exercise: string) =>
     createAction(dispatch, JournalActionTypes.SET_EXERCISE, { date, exercise }),
+  setHabits: (date: string, habits: HabitsType[]) =>
+    createAction(dispatch, JournalActionTypes.SET_HABITS, { date, habits }),
   setIsLoading: (isLoading: boolean) =>
     createAction(dispatch, JournalActionTypes.SET_IS_LOADING, { isLoading }),
   setIsSaving: (isSaving: boolean) =>

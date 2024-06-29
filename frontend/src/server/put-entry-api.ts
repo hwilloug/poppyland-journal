@@ -55,6 +55,7 @@ export const call = async (
           newEntry.exercise !== undefined
             ? newEntry.exercise.toString()
             : undefined,
+        habits: JSON.stringify(newEntry.habits),
       },
       {
         headers: {

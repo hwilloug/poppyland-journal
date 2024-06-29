@@ -29,6 +29,7 @@ export const getInitialEntryState = (date: string): JournalEntry => {
     dailyQuestionQ: getQuestion(convertToDateObject(date).getDate()),
     dailyQuestionA: undefined,
     exercise: "0",
+    habits: [],
   }
 }
 
@@ -225,6 +226,17 @@ export function journalReducer(
           [action.payload.date]: {
             ...state.entries[action.payload.date],
             exercise: action.payload.exercise,
+          },
+        },
+      }
+    case JournalActionTypes.SET_HABITS:
+      return {
+        ...state,
+        entries: {
+          ...state.entries,
+          [action.payload.date]: {
+            ...state.entries[action.payload.date],
+            habits: action.payload.habits,
           },
         },
       }

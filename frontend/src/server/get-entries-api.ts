@@ -20,6 +20,7 @@ export interface EntryResponseType {
   daily_question_q: string
   daily_question_a: string
   exercise: string
+  habits: string
 }
 
 export const call = async (token: string): Promise<EntryResponseType[]> => {

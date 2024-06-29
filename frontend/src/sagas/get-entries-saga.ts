@@ -86,6 +86,7 @@ export function* getEntriesSaga(action: any) {
             dailyQuestionQ: currentValue.daily_question_q,
             dailyQuestionA: currentValue.daily_question_a,
             exercise: currentValue.exercise,
+            habits: JSON.parse(currentValue.habits) || [],
           },
         }
       },

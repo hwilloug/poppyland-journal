@@ -18,6 +18,11 @@ export interface SubstancesType {
   amount: number
 }
 
+export interface HabitsType {
+  habit: string
+  checked: boolean
+}
+
 export interface JournalEntry {
   date: string
   mood?: string
@@ -36,4 +41,5 @@ export interface JournalEntry {
   dailyQuestionQ?: string
   dailyQuestionA?: string
   exercise?: string
+  habits?: HabitsType[]
 }
