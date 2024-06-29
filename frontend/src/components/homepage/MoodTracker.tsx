@@ -194,6 +194,12 @@ const MoodTrackerComponent: React.FunctionComponent = () => {
       ).valueOf(),
     },
     {
+      name: "Last 14 Days",
+      firstDate: new Date(
+        new Date(today).setDate(new Date(today).getDate() - 14),
+      ).valueOf(),
+    },
+    {
       name: "Last 30 Days",
       firstDate: new Date(
         new Date(today).setDate(new Date(today).getDate() - 30),
