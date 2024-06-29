@@ -36,7 +36,7 @@ const HabitsList: React.FC = () => {
 
   const saveHabits = async () => {
     const token = await getAccessTokenSilently()
-    userActions.putUser(token, { ...userObject, habits })
+    userActions.putUser(token, { ...userObject })
   }
 
   useEffect(() => {

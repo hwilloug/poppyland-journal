@@ -1202,7 +1202,7 @@ Resources:
               if payload.get('emergency'):
                   item_payload['Emergency'] = {'S': payload.get('emergency')}
               if payload.get('habits'):
-                  item_payload['habits'] = {'SS': payload.get('habits')}
+                  item_payload['Habits'] = {'SS': payload.get('habits')}
               if payload.get('substances'):
                   item_payload['Substances'] = {'SS': payload.get('substances')}
 
