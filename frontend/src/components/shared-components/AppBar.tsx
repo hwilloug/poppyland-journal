@@ -58,7 +58,11 @@ const AppBarComponent: React.FunctionComponent<SideBarProps> = ({
         <Toolbar>
           <NavItem>
             <Link to="/" style={navItemStyle}>
-              <img src="/logo.png" width={50} style={{}}></img>
+              <img
+                src="/whispering_willow_logo.png"
+                width={50}
+                style={{}}
+              ></img>
               <Typography variant="h5" fontFamily={"DancingScript"}>
                 Whispering Willow Diary
               </Typography>

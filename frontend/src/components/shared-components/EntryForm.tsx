@@ -393,14 +393,16 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
       </HeaderText>
       {preferences.showMood && <MoodEntryComponent date={date} />}
 
-      <Box mt={4}>
-        <Paper sx={{ backgroundColor: "#fffcf5", p: 4 }} elevation={24}>
-          <Typography variant={"h6"} align="center">
-            Daily Habits
-          </Typography>
-          <HabitsChecker date={date} />
-        </Paper>
-      </Box>
+      {preferences.showHabits && (
+        <Box mt={4}>
+          <Paper sx={{ backgroundColor: "#fffcf5", p: 4 }} elevation={24}>
+            <Typography variant={"h6"} align="center">
+              Daily Habits
+            </Typography>
+            <HabitsChecker date={date} />
+          </Paper>
+        </Box>
+      )}
 
       {preferences.showDailyQuestion && <DailyQuestionComponent date={date} />}
 

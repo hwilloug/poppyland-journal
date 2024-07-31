@@ -15,10 +15,11 @@ body {
   margin: 0px;
   min-height: 100vh;
   background-color: #fffcf5;
-  background-image: url("/public/background.jpg");
+  background-image: url("/public/background_2.jpeg");
   background-size: cover;
   background-attachment: fixed;
   background-repeat: repeat;
+  background-position: bottom;
 }
 
 .w-md-editor-show-edit:hover {
