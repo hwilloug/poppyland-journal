@@ -174,7 +174,7 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
       if (typeof newGoals === "string") {
         newGoals = [{ goal: newGoals, checked }]
       } else {
-        if (goal === "") {
+        if (goal === undefined) {
           newGoals.push({ goal, checked })
         } else {
           newGoals[index] = { goal, checked }

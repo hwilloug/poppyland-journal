@@ -217,6 +217,12 @@ const DisplayEntry: React.FC<{ date: string }> = ({ date }) => {
             )}
           </SectionContainer>
         )}
+        {entry.morningEntryContent && (
+          <>
+            <MarkdownComponent view="view" value={entry.morningEntryContent} />
+            <hr className="divider" />
+          </>
+        )}
         {preferences.showDailyQuestion && entry.dailyQuestionA && (
           <SectionContainer>
             <Typography fontWeight={"bold"}>
