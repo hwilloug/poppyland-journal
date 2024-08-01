@@ -73,6 +73,7 @@ export function* getEntriesSaga(action: any) {
             sleepQuality: currentValue.sleep_quality,
             affirmation: currentValue.affirmation,
             mentalHealth: currentValue.mental_health || [],
+            feelings: currentValue.feelings || [],
             substances: substances,
             entryContent: currentValue.entry_content,
             morningEntryContent: currentValue.morning_entry_content,

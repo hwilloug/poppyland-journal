@@ -90,6 +90,10 @@ const UserPreferencesPage: React.FunctionComponent = () => {
       preference: "showMentalHealth",
     },
     {
+      section: "Feelings",
+      preference: "showFeelings",
+    },
+    {
       section: "Substance Use",
       preference: "showSubstance",
     },

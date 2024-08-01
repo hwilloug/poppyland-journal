@@ -34,6 +34,7 @@ import { getInitialEntryState } from "../../reducers/journal-reducer"
 import DailyQuestionComponent from "../todaysentrypage/DailyQuestion"
 import { ArrowDownward } from "@mui/icons-material"
 import HabitsChecker from "./HabitsChecker"
+import FeelingsEntryComponent from "../todaysentrypage/Feelings"
 
 const SavingContainer = styled("div")({
   position: "fixed",
@@ -395,6 +396,9 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
       {timeOfDay === TimeOfDay.Morning && (
         <>
           {preferences.showSleep && <SleepEntryComponent date={date} />}
+
+          {preferences.showMood && <MoodEntryComponent date={date} />}
+
           {preferences.showDailyAffirmation && (
             <>
               <DailyAffirmationComponent date={date} />
@@ -451,13 +455,13 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
                 onRemove={removeYearlyGoal}
               />
             )}
+
           <EntryComponent date={date} timeOfDay={timeOfDay} />
         </>
       )}
+
       {timeOfDay === TimeOfDay.Evening && (
         <>
-          {preferences.showMood && <MoodEntryComponent date={date} />}
-
           {preferences.showHabits && (
             <Box mt={4}>
               <Paper sx={{ backgroundColor: "#fffcf5", p: 4 }} elevation={24}>
@@ -469,16 +473,19 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
             </Box>
           )}
 
-          {preferences.showDailyQuestion && (
-            <DailyQuestionComponent date={date} />
-          )}
-
           {preferences.showMentalHealth && (
             <MentalHealthEntryComponent date={date} />
           )}
+
+          {preferences.showFeelings && <FeelingsEntryComponent date={date} />}
+
           {preferences.showSubstance && <SubstanceEntryComponent date={date} />}
 
           {preferences.showExercise && <ExerciseEntryComponent date={date} />}
+
+          {preferences.showDailyQuestion && (
+            <DailyQuestionComponent date={date} />
+          )}
 
           <EntryComponent date={date} timeOfDay={timeOfDay} />
         </>

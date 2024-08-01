@@ -32,6 +32,7 @@ export interface JournalEntry {
   sleepQuality?: string
   affirmation?: string
   mentalHealth: string[]
+  feelings: string[]
   substances: SubstancesType[]
   entryContent?: string
   morningEntryContent?: string

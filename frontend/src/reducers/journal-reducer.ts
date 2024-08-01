@@ -20,6 +20,7 @@ export const getInitialEntryState = (date: string): JournalEntry => {
     sleepQuality: undefined,
     affirmation: undefined,
     mentalHealth: [],
+    feelings: [],
     substances: substancesList.map((s) => ({ substance: s, amount: 0 })),
     entryContent: undefined,
     goals: undefined,
@@ -127,6 +128,17 @@ export function journalReducer(
           [action.payload.date]: {
             ...state.entries[action.payload.date],
             mentalHealth: action.payload.mentalHealth,
+          },
+        },
+      }
+    case JournalActionTypes.SET_FEELINGS:
+      return {
+        ...state,
+        entries: {
+          ...state.entries,
+          [action.payload.date]: {
+            ...state.entries[action.payload.date],
+            feelings: action.payload.feelings,
           },
         },
       }

@@ -47,6 +47,7 @@ export const call = async (
           ? JSON.stringify(newEntry.yearlyGoals)
           : undefined,
         mental_health: newEntry.mentalHealth,
+        feelings: newEntry.feelings,
         substances: JSON.stringify(newEntry.substances),
         entry_content: newEntry.entryContent,
         morning_entry_content: newEntry.morningEntryContent,

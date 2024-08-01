@@ -21,6 +21,7 @@ export type PreferencesType = {
   showDailyQuestion?: boolean
   showMood?: boolean
   showMentalHealth?: boolean
+  showFeelings?: boolean
   showSleep?: boolean
   showSubstance?: boolean
   showExercise?: boolean
