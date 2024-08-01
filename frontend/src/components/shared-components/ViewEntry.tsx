@@ -239,6 +239,14 @@ const DisplayEntry: React.FC<{ date: string }> = ({ date }) => {
             </Typography>
           </SectionContainer>
         )}
+        {preferences.showFeelings && entry.feelings.length > 0 && (
+          <SectionContainer>
+            <Typography fontWeight={"bold"}>Feelings:</Typography>
+            <Typography>
+              {entry.feelings && entry.feelings.join(", ")}
+            </Typography>
+          </SectionContainer>
+        )}
         {preferences.showSubstance &&
           entry.substances.filter((s: SubstancesType) => s.amount !== 0)
             .length !== 0 && (
