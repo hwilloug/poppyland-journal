@@ -35,7 +35,7 @@ const DailyAffiramtionContainer = styled(Paper)(({ theme }) => ({
   width: "50%",
   margin: "40px auto",
   marginBottom: "40px",
-  border: "1px outset white",
+  border: "1px outset black",
 
   position: "relative",
   ":before": {
@@ -238,7 +238,7 @@ export default withAuthenticationRequired(HomePage)
 const StatContainer = styled(Grid)(({ theme }) => ({
   padding: "20px 10px",
   borderRadius: "5px",
-  border: "1px outset white",
+  border: "1px outset black",
   margin: "20px",
   backgroundPosition: "bottom",
   backgroundSize: "cover",

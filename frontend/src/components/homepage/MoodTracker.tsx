@@ -7,6 +7,7 @@ import HighchartsReact from "highcharts-react-official"
 import Highcharts from "highcharts/highstock"
 import { SubstancesType } from "../../types/journal-types"
 import {
+  convertToDateObject,
   convertToDayOfWeekMonthDay,
   convertToShortDate,
 } from "../../utils/date-utils"
@@ -56,6 +57,15 @@ const MoodTrackerComponent: React.FunctionComponent = () => {
     "3": theme.palette.success.main,
     "4": theme.palette.primary.main,
   }
+
+  const moodText = {
+    "0": "Awful",
+    "1": "Bad",
+    "2": "Ok",
+    "3": "Good",
+    "4": "Ecstatic",
+  }
+
   const moodData = useMemo(() => {
     let moodData: DataType[] = []
     for (let date in data) {
@@ -364,8 +374,22 @@ const MoodTrackerComponent: React.FunctionComponent = () => {
         switch (this.series.name) {
           case "Mood":
             return `${convertToDayOfWeekMonthDay(new Date(this.x!))}: <b>${
-              this.y
-            }</b>`
+              // @ts-ignore
+              moodText[this.y!.toString()]
+            }</b>${
+              data[convertToShortDate(new Date(this.x!))]?.feelings.length > 0
+                ? "<br /><br /><b>Feelings</b><br />"
+                : ""
+            }${data[convertToShortDate(new Date(this.x!))]?.feelings.join(", ")}
+            ${
+              data[convertToShortDate(new Date(this.x!))]?.mentalHealth.length >
+              0
+                ? "<br /><br /><b>Mental Health & Behavior</b><br />"
+                : ""
+            }${data[convertToShortDate(new Date(this.x!))]?.mentalHealth.join(
+              ", ",
+            )}
+            `
           case "Sleep":
             return `${convertToDayOfWeekMonthDay(new Date(this.x!))}: <b>${
               this.y

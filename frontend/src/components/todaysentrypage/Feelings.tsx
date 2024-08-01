@@ -1,10 +1,8 @@
-import styled from "@emotion/styled"
 import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
   Box,
-  TextField,
   Typography,
 } from "@mui/material"
 import { EntrySectionContainer } from "../shared-components/styled-components"
