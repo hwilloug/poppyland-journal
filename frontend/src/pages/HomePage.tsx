@@ -179,7 +179,7 @@ const HomePage: React.FunctionComponent = () => {
                   color: "white",
                 }}
               >
-                Today's Affirmation
+                🌸 Today's Affirmation 🌸
               </Typography>
               <Typography position={"relative"} zIndex={2} color={"white"}>
                 {journalState.entries[today].affirmation}
@@ -196,7 +196,7 @@ const HomePage: React.FunctionComponent = () => {
         />
         <StatCard
           name="Streak"
-          value={streak}
+          value={streak + (streak > 1 ? "🔥" : "")}
           color={`linear-gradient(to bottom,${yellow[500]}, ${yellow[800]})`}
         />
         <StatCard
