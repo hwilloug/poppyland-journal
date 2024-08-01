@@ -12,6 +12,7 @@ export interface EntryResponseType {
   mental_health: string[]
   substances: string[] | string
   entry_content: string
+  morning_entry_content: string
   goal: string
   goals: string
   weekly_goals: string

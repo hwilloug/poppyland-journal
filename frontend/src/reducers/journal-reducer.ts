@@ -152,6 +152,17 @@ export function journalReducer(
           },
         },
       }
+    case JournalActionTypes.SET_MORNING_ENTRY_CONTENT:
+      return {
+        ...state,
+        entries: {
+          ...state.entries,
+          [action.payload.date]: {
+            ...state.entries[action.payload.date],
+            morningEntryContent: action.payload.entryContent,
+          },
+        },
+      }
     case JournalActionTypes.SET_GOALS:
       return {
         ...state,

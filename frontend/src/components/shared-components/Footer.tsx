@@ -8,7 +8,7 @@ const FooterContainer = styled(Box)(({ theme }) => ({
 const Footer: React.FC = () => {
   return (
     <FooterContainer>
-      <Typography align="center" fontSize={16}>
+      <Typography align="center" fontSize={16} color={"white"}>
         &copy; {new Date().getFullYear()} Whispering Willow Diary
       </Typography>
     </FooterContainer>

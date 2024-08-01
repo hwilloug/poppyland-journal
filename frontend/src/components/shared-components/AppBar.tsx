@@ -28,7 +28,7 @@ const navItemStyle: CSSProperties = {
   alignItems: "center",
   textDecoration: "None",
   gap: "10px",
-  color: "black",
+  color: "white",
 }
 
 const StyledTooltip = styled(({ className, ...props }: TooltipProps) => (
@@ -63,7 +63,11 @@ const AppBarComponent: React.FunctionComponent<SideBarProps> = ({
                 width={50}
                 style={{}}
               ></img>
-              <Typography variant="h5" fontFamily={"DancingScript"}>
+              <Typography
+                variant="h5"
+                fontFamily={"DancingScript"}
+                color={"white"}
+              >
                 Whispering Willow Diary
               </Typography>
             </Link>

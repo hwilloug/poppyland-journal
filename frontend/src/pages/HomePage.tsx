@@ -28,11 +28,9 @@ const HomePageContainer = styled("div")`
 `
 
 const DailyAffiramtionContainer = styled(Paper)(({ theme }) => ({
-  backgroundImage: "url(/affirmation_background.png)",
-  backgroundSize: "cover",
-  backgroundPosition: "top",
+  backgroundColor: "saddlebrown",
   padding: "20px",
-  color: "black",
+  color: "white",
   textAlign: "center",
   width: "50%",
   margin: "40px auto",
@@ -177,10 +175,11 @@ const HomePage: React.FunctionComponent = () => {
                 zIndex={2}
                 sx={{
                   textShadow:
-                    "1px 1px 0px #fff, -1px 1px 0px #fff, 1px -1px 0px #fff, -1px -1px 0px #fff",
+                    "1px 1px 0px black, -1px 1px 0px black, 1px -1px 0px black, -1px -1px 0px black",
+                  color: "white",
                 }}
               >
-                Daily Affirmation
+                Today's Affirmation
               </Typography>
               <Typography position={"relative"} zIndex={2} color={"white"}>
                 {journalState.entries[today].affirmation}
@@ -271,7 +270,10 @@ const StatCard: React.FC<{ name: string; value: any; color: string }> = ({
           fontWeight={"bold"}
           position={"relative"}
           zIndex={2}
-          sx={{ textShadow: "none" }}
+          sx={{
+            textShadow:
+              "1px 1px 0px black, -1px 1px 0px black, 1px -1px 0px black, -1px -1px 0px black",
+          }}
         >
           {name}
         </Typography>

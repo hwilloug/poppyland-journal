@@ -34,6 +34,7 @@ export interface JournalEntry {
   mentalHealth: string[]
   substances: SubstancesType[]
   entryContent?: string
+  morningEntryContent?: string
   goals?: GoalsType[]
   weeklyGoals?: GoalsType[]
   monthlyGoals?: GoalsType[]

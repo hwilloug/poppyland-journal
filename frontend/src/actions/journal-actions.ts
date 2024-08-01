@@ -22,6 +22,7 @@ export const JournalActionTypes = {
   SET_MENTAL_HEALTH: "@journal/set-mental-health",
   SET_SUBSTANCES: "@journal/set-substances",
   SET_ENTRY_CONTENT: "@journal/set-entry-content",
+  SET_MORNING_ENTRY_CONTENT: "@journal/set-morning-entry-content",
   SET_GOALS: "@journal/set-goals",
   SET_WEEKLY_GOALS: "@journal/set-weekly-goals",
   SET_MONTHLY_GOALS: "@journal/set-monthly-goals",
@@ -91,6 +92,11 @@ export const createJournalActions = (dispatch: any) => ({
     }),
   setEntryContent: (date: string, entryContent: string) =>
     createAction(dispatch, JournalActionTypes.SET_ENTRY_CONTENT, {
+      date,
+      entryContent,
+    }),
+  setMorningEntryContent: (date: string, entryContent: string) =>
+    createAction(dispatch, JournalActionTypes.SET_MORNING_ENTRY_CONTENT, {
       date,
       entryContent,
     }),

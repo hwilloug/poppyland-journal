@@ -75,6 +75,7 @@ export function* getEntriesSaga(action: any) {
             mentalHealth: currentValue.mental_health || [],
             substances: substances,
             entryContent: currentValue.entry_content,
+            morningEntryContent: currentValue.morning_entry_content,
             goals:
               typeof currentValue.goals === "string" &&
               currentValue.goals[0] === "["

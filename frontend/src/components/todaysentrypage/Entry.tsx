@@ -7,11 +7,19 @@ import { State, journalActions } from "../../store"
 
 interface EntryProps {
   date: string
+  timeOfDay: "Morning" | "Evening"
 }
 
-const EntryComponent: React.FunctionComponent<EntryProps> = ({ date }) => {
+const EntryComponent: React.FunctionComponent<EntryProps> = ({
+  date,
+  timeOfDay,
+}) => {
   const entryContent = useSelector(
     (state: State) => state.journal.entries[date]?.entryContent,
+  )
+
+  const morningEntryContent = useSelector(
+    (state: State) => state.journal.entries[date]?.morningEntryContent,
   )
 
   return (
@@ -21,9 +29,11 @@ const EntryComponent: React.FunctionComponent<EntryProps> = ({ date }) => {
       </Typography>
       <MarkdownComponent
         view="edit"
-        value={entryContent}
+        value={timeOfDay === "Morning" ? morningEntryContent : entryContent}
         onChange={(e: any) => {
-          journalActions.setEntryContent(date, e)
+          timeOfDay === "Evening" && journalActions.setEntryContent(date, e)
+          timeOfDay === "Morning" &&
+            journalActions.setMorningEntryContent(date, e)
         }}
         height={500}
         preview={"edit"}

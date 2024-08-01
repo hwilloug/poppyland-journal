@@ -49,6 +49,7 @@ export const call = async (
         mental_health: newEntry.mentalHealth,
         substances: JSON.stringify(newEntry.substances),
         entry_content: newEntry.entryContent,
+        morning_entry_content: newEntry.morningEntryContent,
         daily_question_q: newEntry.dailyQuestionQ,
         daily_question_a: newEntry.dailyQuestionA,
         exercise:

@@ -330,6 +330,8 @@ Resources:
                   item_payload['Habits'] = {'S': payload.get('habits')}
               if payload.get('entry_content') is not None:
                   item_payload['EntryContent'] = {'S': payload.get('entry_content')}
+              if payload.get('morning_entry_content') is not None:
+                  item_payload['MorningEntryContent'] = {'S': payload.get('morning_entry_content')}
 
               response = dynamodb.put_item(
                   TableName='JournalEntry', 
@@ -405,6 +407,7 @@ Resources:
               
               response_item = {
                   "entry_content": item['Item'].get('EntryContent', {}).get("S"),
+                  "morning_entry_content": item['Item'].get('MorningEntryContent', {}).get("S"),
                   "user_id": item['Item'].get('UserId', {}).get("S"),
                   "date": item['Item'].get('Date', {}).get("S"),
                   "bed_time": item['Item'].get('BedTime', {}).get("S"),
@@ -468,6 +471,7 @@ Resources:
               for item in items['Items']:
                   response_items.append({
                       "entry_content": item.get('EntryContent', {}).get("S"),
+                      "morning_entry_content": item.get('MorningEntryContent', {}).get("S"),
                       "user_id": item.get('UserId', {}).get("S"),
                       "date": item.get('Date', {}).get("S"),
                       "bed_time": item.get('BedTime', {}).get("S"),

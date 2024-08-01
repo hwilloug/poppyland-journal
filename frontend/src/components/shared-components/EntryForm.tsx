@@ -14,21 +14,24 @@ import {
   AccordionSummary,
   Box,
   CircularProgress,
+  FormControl,
+  FormControlLabel,
   Paper,
+  Radio,
+  RadioGroup,
   Typography,
 } from "@mui/material"
 import LoadingComponent from "./Loading"
-import { useDispatch, useSelector } from "react-redux"
+import { useSelector } from "react-redux"
 import { State, journalActions } from "../../store"
 import ExerciseEntryComponent from "../todaysentrypage/ExerciseEntry"
 import { JournalEntry } from "../../types/journal-types"
 import CheckCircleIcon from "@mui/icons-material/CheckCircle"
-import { useEffect, useMemo } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { HeaderText } from "./styled-components"
 import { convertToDateObject } from "../../utils/date-utils"
 import { getInitialEntryState } from "../../reducers/journal-reducer"
 import DailyQuestionComponent from "../todaysentrypage/DailyQuestion"
-import { ArrowDropDownIcon } from "@mui/x-date-pickers"
 import { ArrowDownward } from "@mui/icons-material"
 import HabitsChecker from "./HabitsChecker"
 
@@ -40,6 +43,11 @@ const SavingContainer = styled("div")({
 
 interface EntryFormProps {
   date: string
+}
+
+const enum TimeOfDay {
+  Morning = "Morning",
+  Evening = "Evening",
 }
 
 const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
@@ -77,6 +85,7 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
       loadedEntry.mentalHealth.length ||
       loadedEntry.substances ||
       loadedEntry.entryContent ||
+      loadedEntry.morningEntryContent ||
       loadedEntry.goals ||
       loadedEntry.weeklyGoals ||
       loadedEntry.monthlyGoals ||
@@ -120,6 +129,10 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
 
   const entryContent = useMemo(() => {
     return loadedEntry.entryContent
+  }, [loadedEntry])
+
+  const morningEntryContent = useMemo(() => {
+    return loadedEntry.morningEntryContent
   }, [loadedEntry])
 
   const goals = useMemo(() => {
@@ -268,6 +281,7 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
         mentalHealth.length ||
         substances.length ||
         entryContent ||
+        morningEntryContent ||
         goals !== undefined ||
         weeklyGoals !== undefined ||
         monthlyGoals !== undefined ||
@@ -288,6 +302,7 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
         mentalHealth.length ||
         substances.length ||
         entryContent ||
+        morningEntryContent ||
         goals !== undefined ||
         weeklyGoals !== undefined ||
         monthlyGoals !== undefined ||
@@ -312,6 +327,7 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
     mentalHealth,
     substances,
     entryContent,
+    morningEntryContent,
     goals,
     weeklyGoals,
     monthlyGoals,
@@ -321,6 +337,51 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
     minutesExercise,
   ])
 
+  const [timeOfDay, setTimeOfDay] = useState(TimeOfDay.Morning)
+
+  const SelectTimeOfDay: React.FC = () => (
+    <FormControl>
+      <RadioGroup
+        value={timeOfDay}
+        row
+        onChange={(e) => setTimeOfDay(e.target.value as TimeOfDay)}
+      >
+        <FormControlLabel
+          value={TimeOfDay.Morning}
+          control={<Radio />}
+          label={
+            <Typography
+              fontWeight={"bold"}
+              sx={{
+                textShadow:
+                  "1px 1px 0px #fff, -1px 1px 0px #fff, 1px -1px 0px #fff, -1px -1px 0px #fff",
+              }}
+            >
+              {TimeOfDay.Morning}
+            </Typography>
+          }
+          labelPlacement="bottom"
+        />
+        <FormControlLabel
+          value={TimeOfDay.Evening}
+          control={<Radio />}
+          label={
+            <Typography
+              fontWeight={"bold"}
+              sx={{
+                textShadow:
+                  "1px 1px 0px #fff, -1px 1px 0px #fff, 1px -1px 0px #fff, -1px -1px 0px #fff",
+              }}
+            >
+              {TimeOfDay.Evening}
+            </Typography>
+          }
+          labelPlacement="bottom"
+        />
+      </RadioGroup>
+    </FormControl>
+  )
+
   if (isLoading) {
     return <LoadingComponent />
   }
@@ -328,92 +389,100 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
   return (
     <>
       <HeaderText>{dateFull}</HeaderText>
-      <HeaderText variant="h5" mt={4}>
-        Morning
-      </HeaderText>
-      {preferences.showSleep && <SleepEntryComponent date={date} />}
-      {preferences.showDailyAffirmation && (
+      <Box textAlign={"center"} mt={4}>
+        <SelectTimeOfDay />
+      </Box>
+      {timeOfDay === TimeOfDay.Morning && (
         <>
-          <DailyAffirmationComponent date={date} />
-          {yesterdaysEntry?.affirmation && (
-            <Accordion sx={{ backgroundColor: "#fffcf5" }}>
-              <AccordionSummary
-                expandIcon={<ArrowDownward color="primary" />}
-                sx={{
-                  "& .MuiAccordionSummary-content": {
-                    justifyContent: "center",
-                  },
-                }}
-              >
-                <Typography>Yesterday's Affirmation</Typography>
-              </AccordionSummary>
-              <AccordionDetails>
-                <Typography>{yesterdaysEntry?.affirmation}</Typography>
-              </AccordionDetails>
-            </Accordion>
+          {preferences.showSleep && <SleepEntryComponent date={date} />}
+          {preferences.showDailyAffirmation && (
+            <>
+              <DailyAffirmationComponent date={date} />
+              {yesterdaysEntry?.affirmation && (
+                <Accordion sx={{ backgroundColor: "#fffcf5" }}>
+                  <AccordionSummary
+                    expandIcon={<ArrowDownward color="primary" />}
+                    sx={{
+                      "& .MuiAccordionSummary-content": {
+                        justifyContent: "center",
+                      },
+                    }}
+                  >
+                    <Typography>Yesterday's Affirmation</Typography>
+                  </AccordionSummary>
+                  <AccordionDetails>
+                    <Typography>{yesterdaysEntry?.affirmation}</Typography>
+                  </AccordionDetails>
+                </Accordion>
+              )}
+            </>
           )}
+          {preferences.showDailyGoal && (
+            <DailyGoalComponent
+              cadence={"Daily"}
+              onChange={modifyGoals}
+              onRemove={removeGoal}
+              goals={goals || []}
+            />
+          )}
+          {preferences.showWeeklyGoal && dateObject.getDay() === 1 && (
+            <DailyGoalComponent
+              goals={weeklyGoals || []}
+              cadence={"Weekly"}
+              onChange={modifyWeeklyGoals}
+              onRemove={removeWeeklyGoal}
+            />
+          )}
+          {preferences.showMonthlyGoal && dateObject.getDate() === 1 && (
+            <DailyGoalComponent
+              goals={monthlyGoals || []}
+              cadence={"Monthly"}
+              onChange={modifyMonthlyGoals}
+              onRemove={removeMonthlyGoal}
+            />
+          )}
+          {preferences.showYearlyGoal &&
+            dateObject.getMonth() === 0 &&
+            dateObject.getDate() === 1 && (
+              <DailyGoalComponent
+                goals={yearlyGoals || []}
+                cadence={"Yearly"}
+                onChange={modifyYearlyGoals}
+                onRemove={removeYearlyGoal}
+              />
+            )}
+          <EntryComponent date={date} timeOfDay={timeOfDay} />
         </>
       )}
-      {preferences.showDailyGoal && (
-        <DailyGoalComponent
-          cadence={"Daily"}
-          onChange={modifyGoals}
-          onRemove={removeGoal}
-          goals={goals || []}
-        />
-      )}
-      {preferences.showWeeklyGoal && dateObject.getDay() === 1 && (
-        <DailyGoalComponent
-          goals={weeklyGoals || []}
-          cadence={"Weekly"}
-          onChange={modifyWeeklyGoals}
-          onRemove={removeWeeklyGoal}
-        />
-      )}
-      {preferences.showMonthlyGoal && dateObject.getDate() === 1 && (
-        <DailyGoalComponent
-          goals={monthlyGoals || []}
-          cadence={"Monthly"}
-          onChange={modifyMonthlyGoals}
-          onRemove={removeMonthlyGoal}
-        />
-      )}
-      {preferences.showYearlyGoal &&
-        dateObject.getMonth() === 0 &&
-        dateObject.getDate() === 1 && (
-          <DailyGoalComponent
-            goals={yearlyGoals || []}
-            cadence={"Yearly"}
-            onChange={modifyYearlyGoals}
-            onRemove={removeYearlyGoal}
-          />
-        )}
-      <HeaderText variant="h5" mt={"50px"}>
-        Evening
-      </HeaderText>
-      {preferences.showMood && <MoodEntryComponent date={date} />}
+      {timeOfDay === TimeOfDay.Evening && (
+        <>
+          {preferences.showMood && <MoodEntryComponent date={date} />}
 
-      {preferences.showHabits && (
-        <Box mt={4}>
-          <Paper sx={{ backgroundColor: "#fffcf5", p: 4 }} elevation={24}>
-            <Typography variant={"h6"} align="center">
-              Daily Habits
-            </Typography>
-            <HabitsChecker date={date} />
-          </Paper>
-        </Box>
+          {preferences.showHabits && (
+            <Box mt={4}>
+              <Paper sx={{ backgroundColor: "#fffcf5", p: 4 }} elevation={24}>
+                <Typography variant={"h6"} align="center">
+                  Daily Habits
+                </Typography>
+                <HabitsChecker date={date} />
+              </Paper>
+            </Box>
+          )}
+
+          {preferences.showDailyQuestion && (
+            <DailyQuestionComponent date={date} />
+          )}
+
+          {preferences.showMentalHealth && (
+            <MentalHealthEntryComponent date={date} />
+          )}
+          {preferences.showSubstance && <SubstanceEntryComponent date={date} />}
+
+          {preferences.showExercise && <ExerciseEntryComponent date={date} />}
+
+          <EntryComponent date={date} timeOfDay={timeOfDay} />
+        </>
       )}
-
-      {preferences.showDailyQuestion && <DailyQuestionComponent date={date} />}
-
-      {preferences.showMentalHealth && (
-        <MentalHealthEntryComponent date={date} />
-      )}
-      {preferences.showSubstance && <SubstanceEntryComponent date={date} />}
-
-      {preferences.showExercise && <ExerciseEntryComponent date={date} />}
-
-      <EntryComponent date={date} />
 
       <SavingContainer>
         {isSaving && <CircularProgress color="primary" />}
