@@ -140,6 +140,29 @@ const HomePage: React.FunctionComponent = () => {
     }
   }, [avgMood])
 
+  const stdDeviation = useMemo(() => {
+    const last7entries = Object.keys(entries).slice(0, 7)
+    const todayDayjs = dayjs(today)
+
+    let deviations = []
+    let numEntries = 0
+    for (let i = 0; i <= 7; i++) {
+      const date = todayDayjs.subtract(i, "day").toISOString().split("T")[0]
+      if (last7entries.includes(date)) {
+        if (entries[date].mood) {
+          deviations.push((parseInt(entries[date].mood!) - avgMood) ** 2)
+          numEntries++
+        }
+      }
+    }
+
+    const deviationSum = deviations.reduce((accumulator, currentValue) => {
+      return accumulator + currentValue
+    }, 0)
+
+    return Math.sqrt(deviationSum / numEntries).toFixed(2)
+  }, [entries, avgMood])
+
   if (journalState.isLoading) {
     return <LoadingComponent />
   }
@@ -188,27 +211,51 @@ const HomePage: React.FunctionComponent = () => {
           </>
         )}
 
-      <Grid container margin={"20px"} justifyContent={"center"}>
-        <StatCard
-          name="Number of Entries"
-          value={numEntries}
-          color={`linear-gradient(to bottom, ${purple[500]}, ${purple[800]})`}
-        />
-        <StatCard
-          name="Streak"
-          value={streak + (streak > 1 ? "🔥" : "")}
-          color={`linear-gradient(to bottom,${yellow[500]}, ${yellow[800]})`}
-        />
-        <StatCard
-          name="Average Mood Last 7 Days"
-          value={avgMoodIcon}
-          color={avgMoodBgColor}
-        />
-      </Grid>
-
       <Grid container>
         <Grid item xs={12}>
           {preferences.showMood && <MoodTrackerComponent />}
+        </Grid>
+        <Grid
+          container
+          justifyContent={"stretch"}
+          item
+          xs={12}
+          md={6}
+          padding={4}
+          spacing={4}
+        >
+          {preferences.showMood && (
+            <>
+              <Grid item xs={12} sm={6}>
+                <StatCard
+                  name="Average Mood Last 7 Days"
+                  value={avgMoodIcon}
+                  color={avgMoodBgColor}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <StatCard
+                  name="Mood Stability Last 7 Days"
+                  value={stdDeviation}
+                  color={`linear-gradient(to bottom,${green[500]}, ${green[800]})`}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <StatCard
+                  name="Number of Entries"
+                  value={numEntries}
+                  color={`linear-gradient(to bottom, ${purple[500]}, ${purple[800]})`}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <StatCard
+                  name="Streak"
+                  value={streak + (streak > 1 ? "🔥" : "")}
+                  color={`linear-gradient(to bottom,${yellow[500]}, ${yellow[800]})`}
+                />
+              </Grid>
+            </>
+          )}
         </Grid>
         <Grid item xs={12} md={6}>
           {preferences.showMentalHealth && <MentalHealthTracker />}
@@ -255,7 +302,7 @@ const StatCard: React.FC<{ name: string; value: any; color: string }> = ({
     <StatContainer
       item
       xs={12}
-      sm={3}
+      minHeight={"100%"}
       sx={{
         backgroundImage: color,
       }}

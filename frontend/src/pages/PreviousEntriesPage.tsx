@@ -25,8 +25,6 @@ const ContentContainer = styled.div`
   display: flex;
 `
 
-const NavigatorContainer = styled.div``
-
 const NoEntriesContainer = styled.div`
   padding: 20px;
 `
@@ -75,38 +73,6 @@ const PreviousEntriesPage: React.FunctionComponent = () => {
   }, [entries])
   const isLoading = useSelector((state: State) => state.journal.isLoading)
 
-  const Navigator: React.FC = () => {
-    const monthYears = Object.keys(entriesByMonth)
-    return (
-      <Timeline
-        position="right"
-        sx={{ position: "fixed", width: "225px", top: "25%", left: "70%" }}
-      >
-        {monthYears.map((m, i) => (
-          <HashLink
-            to={`#${m.replace(" ", "-")}`}
-            style={{
-              textDecoration: "none",
-              color: "black",
-              textShadow:
-                "1px 1px 0px #fff, -1px 1px 0px #fff, 1px -1px 0px #fff, -1px -1px 0px #fff",
-            }}
-          >
-            <TimelineItem key={m}>
-              <TimelineSeparator>
-                <TimelineDot
-                  sx={{ backgroundColor: "black", border: "1px solid white" }}
-                />
-                {i !== monthYears.length - 1 && <TimelineConnector />}
-              </TimelineSeparator>
-              <TimelineContent>{m}</TimelineContent>
-            </TimelineItem>
-          </HashLink>
-        ))}
-      </Timeline>
-    )
-  }
-
   return (
     <PageContentContainer>
       <Typography
@@ -121,15 +87,11 @@ const PreviousEntriesPage: React.FunctionComponent = () => {
         {journalName || "My Journal"}
       </Typography>
       <ContentContainer>
-        <NavigatorContainer>
-          {isLargerThanSm && <Navigator />}
-        </NavigatorContainer>
         <Box
           sx={{
             display: "flex",
             flexDirection: "column",
             minWidth: "80%",
-            marginRight: isLargerThanSm ? "150px" : 0,
             gap: "50px",
           }}
         >
