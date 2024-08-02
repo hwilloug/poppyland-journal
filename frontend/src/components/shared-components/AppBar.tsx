@@ -13,7 +13,7 @@ import {
   useTheme,
 } from "@mui/material"
 import ManageAccountsIcon from "@mui/icons-material/ManageAccounts"
-import LogoutIcon from "@mui/icons-material/Logout"
+import LockIcon from "@mui/icons-material/Lock"
 import { useSelector } from "react-redux"
 import { State } from "../../store"
 import { ContactEmergency } from "@mui/icons-material"
@@ -94,7 +94,7 @@ const AppBarComponent: React.FunctionComponent<SideBarProps> = ({
           </NavItem>
           <NavItem>
             <StyledTooltip title="Logout">
-              <LogoutIcon
+              <LockIcon
                 onClick={() =>
                   logout({ logoutParams: { returnTo: window.location.origin } })
                 }
