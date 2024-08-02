@@ -28,7 +28,7 @@ const HomePageContainer = styled("div")`
 `
 
 const DailyAffiramtionContainer = styled(Paper)(({ theme }) => ({
-  backgroundColor: "saddlebrown",
+  backgroundColor: "rgba(139, 69, 19, .80)",
   padding: "20px",
   color: "white",
   textAlign: "center",
@@ -200,7 +200,7 @@ const HomePage: React.FunctionComponent = () => {
                 sx={{
                   textShadow:
                     "1px 1px 0px black, -1px 1px 0px black, 1px -1px 0px black, -1px -1px 0px black",
-                  color: "white",
+                  color: "#e0f0bb",
                 }}
               >
                 🌸 Today's Affirmation 🌸

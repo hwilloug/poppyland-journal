@@ -79,7 +79,11 @@ const GoalsTrackerComponent: React.FunctionComponent = () => {
               key={`${dateString}-${i}`}
             >
               <Grid item xs={12} md={5} lg={3}>
-                <Typography align="center" fontWeight={"bold"}>
+                <Typography
+                  align="center"
+                  fontWeight={"bold"}
+                  sx={{ backgroundColor: "#e0f0bb", borderRadius: "10px" }}
+                >
                   {dateString}
                 </Typography>
               </Grid>
@@ -87,7 +91,7 @@ const GoalsTrackerComponent: React.FunctionComponent = () => {
                 <Grid container flexDirection={"column"}>
                   {!dates[shortDate] || dates[shortDate] === "None" ? (
                     <Grid item>
-                      <Typography>None</Typography>
+                      <Typography ml={2}>None</Typography>
                     </Grid>
                   ) : Array.isArray(dates[shortDate]) ? (
                     // @ts-ignore

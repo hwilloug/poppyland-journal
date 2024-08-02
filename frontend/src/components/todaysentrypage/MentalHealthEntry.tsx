@@ -75,7 +75,7 @@ const MentalHealthEntryComponent: React.FunctionComponent<
           onChange={(e, child) => {
             modifyMentalHealth(e, child)
           }}
-          sx={{ backgroundColor: "white" }}
+          sx={{ backgroundColor: "#e0f0bb" }}
         >
           {mentalHealthSymptoms.map((s) => (
             <MenuItem value={s}>{s}</MenuItem>

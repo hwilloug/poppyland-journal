@@ -341,7 +341,10 @@ const FeelingsAccordion: React.FC<{
 
   return (
     <Accordion>
-      <AccordionSummary expandIcon={<ArrowDownwardRounded />}>
+      <AccordionSummary
+        expandIcon={<ArrowDownwardRounded />}
+        sx={{ backgroundColor: "#e0f0bb" }}
+      >
         <Typography>{title}</Typography>
       </AccordionSummary>
       <AccordionDetails>
