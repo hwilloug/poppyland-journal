@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useMemo, useState } from "react"
 import { PageContentContainer } from "../components/shared-components/styled-components"
 import styled from "@emotion/styled"
 import { withAuthenticationRequired } from "@auth0/auth0-react"
@@ -17,7 +17,9 @@ const TodaysEntryPage: React.FunctionComponent = () => {
 
   const data = useSelector((state: State) => state.journal.entries[date])
 
-  if (!data) {
+  const [isNewEntry, setIsNewEntry] = useState(data === undefined)
+
+  if (isNewEntry) {
     return (
       <PageContentContainer
         sx={{
@@ -27,7 +29,9 @@ const TodaysEntryPage: React.FunctionComponent = () => {
           minHeight: window.innerHeight,
         }}
       >
-        <Button variant="contained">Create Entry</Button>
+        <Button variant="contained" onClick={() => setIsNewEntry(false)}>
+          Create Entry
+        </Button>
       </PageContentContainer>
     )
   }
