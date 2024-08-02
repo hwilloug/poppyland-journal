@@ -13,7 +13,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility"
 import EditNoteIcon from "@mui/icons-material/EditNote"
 
 const Container = styled(Paper)`
-  background-color: #fffcf5;
+  background-color: rgba(224, 240, 187, 0.65);
   padding: 20px;
   border: 1px solid lightgrey;
   margin-left: 24px;
@@ -43,7 +43,16 @@ const PreviousEntriesListComponent: React.FunctionComponent = () => {
           return (
             <Grid item container alignItems={"center"} key={dateString}>
               <Grid item xs={12} md={3}>
-                <Typography align="center">{dateString}</Typography>
+                <Typography
+                  align="center"
+                  sx={{
+                    backgroundColor: "#e0f0bb",
+                    padding: "2px",
+                    borderRadius: "10px",
+                  }}
+                >
+                  {dateString}
+                </Typography>
               </Grid>
               <Grid
                 item

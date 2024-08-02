@@ -18,7 +18,7 @@ import {
 } from "@mui/material/colors"
 
 const Container = styled(Paper)`
-  background-color: #fffcf5;
+  background-color: rgba(224, 240, 187, 0.65);
   padding: 20px 20px 50px 20px;
   border: 1px solid lightgrey;
   margin-left: 24px;
@@ -115,33 +115,21 @@ const SubstancesTracker: React.FunctionComponent = () => {
 
   const timeFilters = [
     {
-      name: "Last 7 Days",
+      name: "Last Week",
       firstDate: new Date(
         new Date(today).setDate(new Date(today).getDate() - 7),
       ).valueOf(),
     },
     {
-      name: "Last 14 Days",
+      name: "Last 2 Weeks",
       firstDate: new Date(
         new Date(today).setDate(new Date(today).getDate() - 14),
       ).valueOf(),
     },
     {
-      name: "Last 30 Days",
+      name: "Last Month",
       firstDate: new Date(
         new Date(today).setDate(new Date(today).getDate() - 30),
-      ).valueOf(),
-    },
-    {
-      name: "Last 90 Days",
-      firstDate: new Date(
-        new Date(today).setDate(new Date(today).getDate() - 90),
-      ).valueOf(),
-    },
-    {
-      name: "Last 180 Days",
-      firstDate: new Date(
-        new Date(today).setDate(new Date(today).getDate() - 180),
       ).valueOf(),
     },
     {
@@ -155,6 +143,10 @@ const SubstancesTracker: React.FunctionComponent = () => {
   const chartOptions: Highcharts.Options = {
     title: {
       text: "",
+    },
+    chart: {
+      backgroundColor: "#e0f0bb",
+      borderRadius: 10,
     },
     xAxis: {
       min: timeFilter,
@@ -172,6 +164,7 @@ const SubstancesTracker: React.FunctionComponent = () => {
       title: {
         text: "Substance Use",
       },
+      gridLineColor: "transparent",
     },
     plotOptions: {
       column: {
@@ -201,18 +194,19 @@ const SubstancesTracker: React.FunctionComponent = () => {
       <Typography variant="h5" sx={{ p: "20px" }} align="center">
         Substance Use Tracker
       </Typography>
-      <Grid container justifyContent={"center"} gap={"20px"}>
+      <Grid container justifyContent={"center"} gap={"20px"} mb={4}>
         {timeFilters.map((f) => (
           <Button
             key={f.name}
             size="small"
-            variant={
+            variant="contained"
+            onClick={() => setTimeFilter(f.firstDate)}
+            color={
               new Date(f.firstDate).toDateString() ===
               new Date(timeFilter).toDateString()
-                ? "contained"
-                : "outlined"
+                ? "primary"
+                : "secondary"
             }
-            onClick={() => setTimeFilter(f.firstDate)}
           >
             {f.name}
           </Button>

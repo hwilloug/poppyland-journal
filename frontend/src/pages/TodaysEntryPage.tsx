@@ -19,7 +19,7 @@ const TodaysEntryPage: React.FunctionComponent = () => {
         sx={{
           my: "20px",
           textShadow:
-            "1px 1px 0px #fff, -1px 1px 0px #fff, 1px -1px 0px #fff, -1px -1px 0px #fff",
+            "1px 1px 0px #e0f0bb, -1px 1px 0px #e0f0bb, 1px -1px 0px #e0f0bb, -1px -1px 0px #e0f0bb",
         }}
         align="center"
       >

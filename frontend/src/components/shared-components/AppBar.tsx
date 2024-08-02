@@ -28,7 +28,7 @@ const navItemStyle: CSSProperties = {
   alignItems: "center",
   textDecoration: "None",
   gap: "10px",
-  color: "white",
+  color: "#e0f0bb",
 }
 
 const StyledTooltip = styled(({ className, ...props }: TooltipProps) => (
@@ -66,7 +66,7 @@ const AppBarComponent: React.FunctionComponent<SideBarProps> = ({
               <Typography
                 variant="h5"
                 fontFamily={"DancingScript"}
-                color={"white"}
+                color={"#e0f0bb"}
               >
                 Whispering Willow Diary
               </Typography>
@@ -74,7 +74,7 @@ const AppBarComponent: React.FunctionComponent<SideBarProps> = ({
           </NavItem>
           <Box sx={{ flexGrow: 1 }} />
           <NavItem>
-            <Typography>
+            <Typography color={"#e0f0bb"}>
               {firstName ? `${firstName} ${lastName || ""}` : user?.email}
             </Typography>
           </NavItem>

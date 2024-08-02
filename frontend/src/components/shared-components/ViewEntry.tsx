@@ -30,7 +30,7 @@ import { useAuth0 } from "@auth0/auth0-react"
 import HabitsChecker from "./HabitsChecker"
 
 const EntryContainer = styled(Paper)`
-  background-color: #fffcf5;
+  background-color: #e0f0bb;
   border: 1px solid lightgrey;
   padding: 20px;
   padding-left: 75px;

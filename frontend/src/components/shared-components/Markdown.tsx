@@ -20,7 +20,7 @@ const MarkdownComponent: React.FunctionComponent<MarkdownComponentProps> = ({
   preview,
 }) => {
   return (
-    <div className="container" data-color-mode="light">
+    <div className="container" data-color-mode="#e0f0bb">
       {view === "edit" && (
         <MDEditor
           value={value}

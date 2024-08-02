@@ -28,7 +28,7 @@ const EntriesPage: React.FC = () => {
 
   return (
     <PageContentContainer>
-      <Paper sx={{ backgroundColor: "#fffcf5" }} elevation={24}>
+      <Paper sx={{ backgroundColor: "#e0f0bb" }} elevation={24}>
         <Typography variant="h5" sx={{ p: "20px", textAlign: "center" }}>
           Entries
         </Typography>

@@ -18,7 +18,7 @@ import {
 require("highcharts/highcharts-more")(Highcharts)
 
 const Container = styled(Paper)`
-  background-color: #fffcf5;
+  background-color: rgba(224, 240, 187, 0.65);
   padding: 20px 20px 50px 20px;
   border: 1px solid lightgrey;
   margin-left: 24px;
@@ -75,20 +75,6 @@ const MentalHealthTracker: React.FunctionComponent = () => {
     return mentalHealthData
   }, [data, timeFilter])
 
-  const substancesColors: { [substance: string]: string } = {
-    Caffeine: brown[400],
-    "Nicotine (Vape)": blue[400],
-    "Nicotine (Cigarrette)": blue[700],
-    Alcohol: purple[200],
-    "Marijuana (Flower)": green[200],
-    "Marijuana (Concentrate)": green[800],
-    "Marijuana (Edible)": green[500],
-    Cocaine: red[500],
-    Mushrooms: amber[500],
-    Adderall: pink[100],
-    Other: "black",
-  }
-
   const timeFilters = [
     {
       name: "Last 7 Days",
@@ -97,13 +83,13 @@ const MentalHealthTracker: React.FunctionComponent = () => {
       ).valueOf(),
     },
     {
-      name: "Last 14 Days",
+      name: "Last 2 Weeks",
       firstDate: new Date(
         new Date(today).setDate(new Date(today).getDate() - 14),
       ).valueOf(),
     },
     {
-      name: "Last 30 Days",
+      name: "Last Month",
       firstDate: new Date(
         new Date(today).setDate(new Date(today).getDate() - 30),
       ).valueOf(),
@@ -113,6 +99,7 @@ const MentalHealthTracker: React.FunctionComponent = () => {
   const chartOptions: Highcharts.Options = {
     chart: {
       type: "packedbubble",
+      backgroundColor: "transparent",
     },
     title: {
       text: "",
@@ -166,13 +153,14 @@ const MentalHealthTracker: React.FunctionComponent = () => {
           <Button
             key={f.name}
             size="small"
-            variant={
+            variant="contained"
+            onClick={() => setTimeFilter(f.firstDate)}
+            color={
               new Date(f.firstDate).toDateString() ===
               new Date(timeFilter).toDateString()
-                ? "contained"
-                : "outlined"
+                ? "primary"
+                : "secondary"
             }
-            onClick={() => setTimeFilter(f.firstDate)}
           >
             {f.name}
           </Button>

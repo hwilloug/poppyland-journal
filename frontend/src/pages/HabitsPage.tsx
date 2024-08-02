@@ -25,30 +25,25 @@ const HabitsPage: React.FC = () => {
         sx={{
           my: "20px",
           textShadow:
-            "1px 1px 0px #fff, -1px 1px 0px #fff, 1px -1px 0px #fff, -1px -1px 0px #fff",
+            "1px 1px 0px #e0f0bb, -1px 1px 0px #e0f0bb, 1px -1px 0px #e0f0bb, -1px -1px 0px #e0f0bb",
         }}
         align="center"
       >
         Habits Builder
       </Typography>
-      <Grid container my={4}>
-        <Grid item xs={12}>
-          <HabitsStreaks />
-        </Grid>
-      </Grid>
-      <Grid container spacing={2}>
+      <Grid container spacing={2} alignItems={"stretch"}>
         <Grid item xs={12} sm={6}>
           <Typography
             variant="h5"
             sx={{
               textShadow:
-                "1px 1px 0px #fff, -1px 1px 0px #fff, 1px -1px 0px #fff, -1px -1px 0px #fff",
+                "1px 1px 0px #e0f0bb, -1px 1px 0px #e0f0bb, 1px -1px 0px #e0f0bb, -1px -1px 0px #e0f0bb",
             }}
             align="center"
           >
             My Habits
           </Typography>
-          <Paper sx={{ backgroundColor: "#fffcf5", p: 4 }} elevation={24}>
+          <Paper sx={{ backgroundColor: "#e0f0bb", p: 4 }} elevation={24}>
             <HabitsList />
           </Paper>
         </Grid>
@@ -57,33 +52,20 @@ const HabitsPage: React.FC = () => {
             variant="h5"
             sx={{
               textShadow:
-                "1px 1px 0px #fff, -1px 1px 0px #fff, 1px -1px 0px #fff, -1px -1px 0px #fff",
+                "1px 1px 0px #e0f0bb, -1px 1px 0px #e0f0bb, 1px -1px 0px #e0f0bb, -1px -1px 0px #e0f0bb",
             }}
             align="center"
           >
             Today
           </Typography>
-          <Paper sx={{ backgroundColor: "#fffcf5", p: 4 }} elevation={24}>
+          <Paper sx={{ backgroundColor: "#e0f0bb", p: 4 }} elevation={24}>
             <HabitsChecker date={today} />
           </Paper>
         </Grid>
-      </Grid>
-      <Grid container mt={4}>
         <Grid item xs={12}>
-          <Typography
-            variant="h5"
-            sx={{
-              textShadow:
-                "1px 1px 0px #fff, -1px 1px 0px #fff, 1px -1px 0px #fff, -1px -1px 0px #fff",
-            }}
-            align="center"
-          >
-            Visualizer
-          </Typography>
-          <Paper
-            sx={{ backgroundColor: "#fffcf5", p: 4 }}
-            elevation={24}
-          ></Paper>
+          <Paper sx={{ backgroundColor: "#e0f0bb", p: 4 }} elevation={24}>
+            <Calendar />
+          </Paper>
         </Grid>
       </Grid>
     </PageContentContainer>
@@ -155,83 +137,16 @@ const HabitsList: React.FC = () => {
   )
 }
 
-const HabitsStreaks: React.FC = () => {
-  const habits = useSelector((state: State) => state.user.habits)
-  const entries = useSelector((state: State) => state.journal.entries)
-
-  const theme = useTheme()
-
-  const today = convertToShortDate(new Date())
-
+const Calendar: React.FC = () => {
   return (
-    <Grid container justifyContent={"space-evenly"}>
-      {habits.map((h) => {
-        let streak = 0
-        const todayDayjs = dayjs(today)
-        const firstEntryDayjs = dayjs(
-          Object.keys(entries)[Object.keys(entries).length - 1],
-        )
-        const numDays = todayDayjs.diff(firstEntryDayjs, "day")
-
-        for (let i = 0; i < numDays - 1; i++) {
-          const date = todayDayjs.subtract(i, "day")
-          const shortDate = date.toISOString().split("T")[0]
-          if (Object.keys(entries).includes(shortDate)) {
-            const habitsEntry = entries[shortDate].habits?.filter(
-              (ha) => ha.habit === h,
-            )
-            if (habitsEntry && habitsEntry.length) {
-              if (habitsEntry[0].checked) {
-                streak++
-              }
-            }
-          } else {
-            if (shortDate !== today) {
-              break
-            }
-          }
-        }
-        return (
-          <Grid item xs={3} m={2}>
-            <Paper
-              elevation={24}
-              sx={{
-                backgroundColor: theme.palette.primary.light,
-                borderRadius: "5px",
-                height: "100%",
-              }}
-            >
-              <Grid
-                container
-                flexDirection={"column"}
-                alignContent={"center"}
-                alignItems={"center"}
-                px={4}
-                py={2}
-              >
-                <Grid item xs={12}>
-                  <Typography textAlign={"center"}>{h}</Typography>
-                </Grid>
-                <Grid item xs={12}>
-                  <Typography
-                    textAlign={"center"}
-                    fontWeight={"bold"}
-                    fontSize={24}
-                    sx={{
-                      border: "1px solid orange",
-                      backgroundColor: "yellow",
-                      borderRadius: "30%",
-                      px: 2,
-                    }}
-                  >
-                    {streak}
-                  </Typography>
-                </Grid>
-              </Grid>
-            </Paper>
+    <Grid container justifyContent={"center"}>
+      {Array(7)
+        .fill(1)
+        .map((value) => (
+          <Grid item padding={2} xs={1.5} border={"1px solid black"}>
+            {value}
           </Grid>
-        )
-      })}
+        ))}
     </Grid>
   )
 }

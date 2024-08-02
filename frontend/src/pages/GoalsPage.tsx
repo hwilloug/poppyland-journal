@@ -96,7 +96,7 @@ const DailyGoals: React.FC = () => {
   return (
     <>
       <HeaderText>Daily Goals</HeaderText>
-      <Paper sx={{ backgroundColor: "#fffcf5", p: 4 }} elevation={24}>
+      <Paper sx={{ backgroundColor: "#e0f0bb", p: 4 }} elevation={24}>
         {[...Array(7).keys()].map((i) => {
           const date = new Date(new Date().setDate(new Date().getDate() - i))
           const shortDate = convertToShortDate(date)
@@ -217,7 +217,7 @@ const WeeklyGoals: React.FC = () => {
   return (
     <>
       <HeaderText>Weekly Goals</HeaderText>
-      <Paper sx={{ backgroundColor: "#fffcf5", p: 4 }} elevation={24}>
+      <Paper sx={{ backgroundColor: "#e0f0bb", p: 4 }} elevation={24}>
         {weeklyGoals &&
           weeklyGoals.map((goal, index) => {
             if (goal === null) {
@@ -319,7 +319,7 @@ const MonthlyGoals: React.FC = () => {
   return (
     <>
       <HeaderText>Monthly Goals</HeaderText>
-      <Paper sx={{ backgroundColor: "#fffcf5", p: 4 }} elevation={24}>
+      <Paper sx={{ backgroundColor: "#e0f0bb", p: 4 }} elevation={24}>
         {monthlyGoals &&
           monthlyGoals.map((goal, index) => {
             if (goal === null) {
@@ -421,7 +421,7 @@ const YearlyGoals: React.FC = () => {
   return (
     <>
       <HeaderText>Yearly Goals</HeaderText>
-      <Paper sx={{ backgroundColor: "#fffcf5", p: 4 }} elevation={24}>
+      <Paper sx={{ backgroundColor: "#e0f0bb", p: 4 }} elevation={24}>
         {yearlyGoals &&
           yearlyGoals.map((goal, index) => {
             if (goal === null) {

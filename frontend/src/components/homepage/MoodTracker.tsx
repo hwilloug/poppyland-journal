@@ -23,9 +23,9 @@ import {
 import { useNavigate } from "react-router-dom"
 
 const Container = styled(Paper)`
-  background-color: #fffcf5;
+  background-color: rgba(224, 240, 187, 0.65);
   padding: 20px 20px 50px 20px;
-  border: 1px solid lightgrey;
+  border: 1px solid black;
   margin-left: 24px;
   margin-top: 20px;
 `
@@ -204,33 +204,21 @@ const MoodTrackerComponent: React.FunctionComponent = () => {
 
   const timeFilters = [
     {
-      name: "Last 7 Days",
+      name: "Last Week",
       firstDate: new Date(
         new Date(today).setDate(new Date(today).getDate() - 7),
       ).valueOf(),
     },
     {
-      name: "Last 14 Days",
+      name: "Last 2 Weeks",
       firstDate: new Date(
         new Date(today).setDate(new Date(today).getDate() - 14),
       ).valueOf(),
     },
     {
-      name: "Last 30 Days",
+      name: "Last Month",
       firstDate: new Date(
         new Date(today).setDate(new Date(today).getDate() - 30),
-      ).valueOf(),
-    },
-    {
-      name: "Last 90 Days",
-      firstDate: new Date(
-        new Date(today).setDate(new Date(today).getDate() - 90),
-      ).valueOf(),
-    },
-    {
-      name: "Last 180 Days",
-      firstDate: new Date(
-        new Date(today).setDate(new Date(today).getDate() - 180),
       ).valueOf(),
     },
     {
@@ -244,6 +232,10 @@ const MoodTrackerComponent: React.FunctionComponent = () => {
   const chartOptions: Highcharts.Options = {
     title: {
       text: "",
+    },
+    chart: {
+      backgroundColor: "rgba(224, 240, 187)",
+      borderRadius: 10,
     },
     xAxis: {
       min: timeFilter,
@@ -265,6 +257,7 @@ const MoodTrackerComponent: React.FunctionComponent = () => {
         max: 4.5,
         min: 0,
         tickInterval: 1,
+        gridLineColor: "transparent",
         labels: {
           useHTML: true,
           // @ts-ignore
@@ -490,11 +483,13 @@ const MoodTrackerComponent: React.FunctionComponent = () => {
           <Button
             key={f.name}
             size="small"
-            variant={
+            sx={{ mb: 2 }}
+            variant={"contained"}
+            color={
               new Date(f.firstDate).toDateString() ===
               new Date(timeFilter).toDateString()
-                ? "contained"
-                : "outlined"
+                ? "primary"
+                : "secondary"
             }
             onClick={() => setTimeFilter(f.firstDate)}
           >

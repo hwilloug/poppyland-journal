@@ -22,7 +22,7 @@ export const theme = createTheme({
     mode: "light",
     secondary: {
       main: "#436228",
-      light: "#80905A",
+      light: "#e0f0bb",
       dark: "#154D0C",
     },
     primary: {

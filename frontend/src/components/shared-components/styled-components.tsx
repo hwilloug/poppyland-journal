@@ -27,7 +27,7 @@ export const EntrySectionContainer = styled(
     <Paper {...props} className={className} elevation={24} />
   ),
 )`
-  background-color: #fffcf5;
+  background-color: rgba(224, 240, 187, 0.65);
   border: 1px solid lightgrey;
   padding: 20px;
   margin-top: 30px;
@@ -41,7 +41,7 @@ export const HeaderText = styled(({ className, ...props }: TypographyProps) => (
     textAlign={"center"}
     sx={{
       textShadow:
-        "1px 1px 0px #fff, -1px 1px 0px #fff, 1px -1px 0px #fff, -1px -1px 0px #fff",
+        "1px 1px 0px #e0f0bb, -1px 1px 0px #e0f0bb, 1px -1px 0px #e0f0bb, -1px -1px 0px #e0f0bb",
     }}
     {...props}
   />
@@ -49,7 +49,7 @@ export const HeaderText = styled(({ className, ...props }: TypographyProps) => (
 
 export const Divider = styled("hr")({
   minWidth: "100%",
-  border: "1px solid lightgrey",
+  border: "1px solid darkgrey",
 })
 
 export const StyledCheckbox = styled(

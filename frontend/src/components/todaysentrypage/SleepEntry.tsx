@@ -17,7 +17,6 @@ const SleepTimeContainer = styled.div`
   display: flex;
   flex-direction: row;
   gap: 20px;
-  justify-content: center;
 `
 
 const SleepQualityContainer = styled.div`
@@ -86,7 +85,7 @@ const SleepEntryComponent: React.FunctionComponent<SleepEntryProps> = ({
               hours: renderTimeViewClock,
               minutes: renderTimeViewClock,
             }}
-            sx={{ backgroundColor: "white" }}
+            sx={{ backgroundColor: "#e0f0bb", pt: 1 }}
           />
           {/* @ts-ignore */}
           <TimePicker
@@ -103,10 +102,12 @@ const SleepEntryComponent: React.FunctionComponent<SleepEntryProps> = ({
               hours: renderTimeViewClock,
               minutes: renderTimeViewClock,
             }}
-            sx={{ backgroundColor: "white" }}
+            sx={{ backgroundColor: "#e0f0bb", pt: 1 }}
           />
         </LocalizationProvider>
-        {bedTime && wakeUpTime && <p>{hoursSleep} hours sleep</p>}
+        <Typography>
+          {bedTime && wakeUpTime && <p>{hoursSleep} hours sleep</p>}
+        </Typography>
       </SleepTimeContainer>
       <SleepQualityContainer>
         <Typography>Sleep Quality:</Typography>
@@ -119,7 +120,7 @@ const SleepEntryComponent: React.FunctionComponent<SleepEntryProps> = ({
             journalActions.setSleepQuality(date, e.target.value!)
           }}
           key={sleepQuality ? sleepQuality : "sleep-quality"}
-          sx={{ backgroundColor: "white" }}
+          sx={{ backgroundColor: "#e0f0bb" }}
         >
           <MenuItem value="Good">Good</MenuItem>
           <MenuItem value="Interrupted">Interrupted</MenuItem>

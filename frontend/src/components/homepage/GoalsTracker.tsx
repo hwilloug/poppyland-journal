@@ -13,7 +13,7 @@ import { useAuth0 } from "@auth0/auth0-react"
 import { Link } from "react-router-dom"
 
 const Container = styled(Paper)`
-  background-color: #fffcf5;
+  background-color: rgba(224, 240, 187, 0.65);
   padding: 20px;
   border: 1px solid lightgrey;
   margin-left: 24px;

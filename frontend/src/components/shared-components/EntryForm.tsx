@@ -355,7 +355,7 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
               fontWeight={"bold"}
               sx={{
                 textShadow:
-                  "1px 1px 0px #fff, -1px 1px 0px #fff, 1px -1px 0px #fff, -1px -1px 0px #fff",
+                  "1px 1px 0px #e0f0bb, -1px 1px 0px #e0f0bb, 1px -1px 0px #e0f0bb, -1px -1px 0px #e0f0bb",
               }}
             >
               {TimeOfDay.Morning}
@@ -371,7 +371,7 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
               fontWeight={"bold"}
               sx={{
                 textShadow:
-                  "1px 1px 0px #fff, -1px 1px 0px #fff, 1px -1px 0px #fff, -1px -1px 0px #fff",
+                  "1px 1px 0px #e0f0bb, -1px 1px 0px #e0f0bb, 1px -1px 0px #e0f0bb, -1px -1px 0px #e0f0bb",
               }}
             >
               {TimeOfDay.Evening}
@@ -403,7 +403,7 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
             <>
               <DailyAffirmationComponent date={date} />
               {yesterdaysEntry?.affirmation && (
-                <Accordion sx={{ backgroundColor: "#fffcf5" }}>
+                <Accordion sx={{ backgroundColor: "#e0f0bb" }}>
                   <AccordionSummary
                     expandIcon={<ArrowDownward color="primary" />}
                     sx={{
@@ -464,7 +464,10 @@ const EntryForm: React.FunctionComponent<EntryFormProps> = ({ date }) => {
         <>
           {preferences.showHabits && (
             <Box mt={4}>
-              <Paper sx={{ backgroundColor: "#fffcf5", p: 4 }} elevation={24}>
+              <Paper
+                sx={{ backgroundColor: "rgba(224, 240, 187, .65)", p: 4 }}
+                elevation={24}
+              >
                 <Typography variant={"h6"} align="center">
                   Daily Habits
                 </Typography>

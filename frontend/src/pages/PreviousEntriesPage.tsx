@@ -80,7 +80,7 @@ const PreviousEntriesPage: React.FunctionComponent = () => {
         sx={{
           m: "20px 0",
           textShadow:
-            "1px 1px 0px #fff, -1px 1px 0px #fff, 1px -1px 0px #fff, -1px -1px 0px #fff",
+            "1px 1px 0px #e0f0bb, -1px 1px 0px #e0f0bb, 1px -1px 0px #e0f0bb, -1px -1px 0px #e0f0bb",
         }}
         align="center"
       >
@@ -110,7 +110,7 @@ const PreviousEntriesPage: React.FunctionComponent = () => {
                   sx={{
                     mx: "auto",
                     textShadow:
-                      "1px 1px 0px #fff, -1px 1px 0px #fff, 1px -1px 0px #fff, -1px -1px 0px #fff",
+                      "1px 1px 0px #e0f0bb, -1px 1px 0px #e0f0bb, 1px -1px 0px #e0f0bb, -1px -1px 0px #e0f0bb",
                   }}
                 >
                   {m}

@@ -31,7 +31,11 @@ const DailyGoalComponent: React.FunctionComponent<DailyGoalProps> = ({
             return
           }
           return (
-            <Grid container key={`${goal}-${index}`}>
+            <Grid
+              container
+              key={`${goal}-${index}`}
+              sx={{ backgroundColor: "#e0f0bb", borderRadius: "10px" }}
+            >
               <Grid item>
                 <StyledCheckbox
                   checked={goal.checked}
@@ -46,6 +50,7 @@ const DailyGoalComponent: React.FunctionComponent<DailyGoalProps> = ({
                     onChange(index, e.target.value, goal.checked)
                   }
                   multiline
+                  disableUnderline
                 />
               </Grid>
               <Grid item>

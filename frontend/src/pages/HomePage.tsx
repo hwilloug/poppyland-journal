@@ -174,7 +174,7 @@ const HomePage: React.FunctionComponent = () => {
         variant="h3"
         sx={{
           textShadow:
-            "1px 1px 0px #fff, -1px 1px 0px #fff, 1px -1px 0px #fff, -1px -1px 0px #fff",
+            "1px 1px 0px #e0f0bb, -1px 1px 0px #e0f0bb, 1px -1px 0px #e0f0bb, -1px -1px 0px #e0f0bb",
         }}
         mt={3}
         align={"center"}
@@ -252,7 +252,7 @@ const HomePage: React.FunctionComponent = () => {
                 <StatCard
                   name="Streak"
                   value={streak + (streak > 1 ? "🔥" : "")}
-                  color={`linear-gradient(to bottom,${yellow[500]}, ${yellow[800]})`}
+                  color={`linear-gradient(to bottom,${purple[200]}, ${purple[500]})`}
                 />
               </Grid>
             </>
@@ -288,7 +288,7 @@ const StatContainer = styled(Grid)(({ theme }) => ({
   backgroundPosition: "bottom",
   backgroundSize: "cover",
   textShadow:
-    "1px 1px 0px #fff, -1px 1px 0px #fff, 1px -1px 0px #fff, -1px -1px 0px #fff",
+    "1px 1px 0px #e0f0bb, -1px 1px 0px #e0f0bb, 1px -1px 0px #e0f0bb, -1px -1px 0px #e0f0bb",
 }))
 
 const StatCard: React.FC<{ name: string; value: any; color: string }> = ({

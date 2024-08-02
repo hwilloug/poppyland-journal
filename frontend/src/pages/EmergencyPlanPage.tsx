@@ -60,7 +60,7 @@ const EmergencyPlanPage: React.FC = () => {
     <PageContentContainer>
       <Paper
         elevation={24}
-        sx={{ backgroundColor: "#fffcf5", padding: "20px" }}
+        sx={{ backgroundColor: "#e0f0bb", padding: "20px" }}
       >
         <Typography variant="h5" align="center" mb={4}>
           Emergency Plan

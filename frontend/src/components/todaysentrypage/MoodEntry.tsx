@@ -19,6 +19,11 @@ const MoodContainer = styled.div`
       cursor: pointer;
     }
   }
+  background-color: #e0f0bb;
+  width: fit-content;
+  margin: auto;
+  padding: 10px;
+  border-radius: 10px;
 `
 
 interface MoodEntryProps {
