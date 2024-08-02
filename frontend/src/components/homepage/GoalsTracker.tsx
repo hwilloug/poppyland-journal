@@ -16,7 +16,8 @@ const Container = styled(Paper)`
   background-color: #fffcf5;
   padding: 20px;
   border: 1px solid lightgrey;
-  margin-left: 20px;
+  margin-left: 24px;
+  margin-top: 20px;
 `
 
 const GoalsTrackerComponent: React.FunctionComponent = () => {

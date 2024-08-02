@@ -16,7 +16,8 @@ const Container = styled(Paper)`
   background-color: #fffcf5;
   padding: 20px;
   border: 1px solid lightgrey;
-  margin-right: 20px;
+  margin-left: 24px;
+  margin-top: 20px;
 `
 
 const PreviousEntriesListComponent: React.FunctionComponent = () => {
@@ -41,10 +42,17 @@ const PreviousEntriesListComponent: React.FunctionComponent = () => {
           const dateString = convertToDayOfWeekMonthDay(date)
           return (
             <Grid item container alignItems={"center"} key={dateString}>
-              <Grid item xs={12} md={6}>
+              <Grid item xs={12} md={3}>
                 <Typography align="center">{dateString}</Typography>
               </Grid>
-              <Grid item xs={12} md={6} textAlign={"center"} padding={"10px"}>
+              <Grid
+                item
+                xs={12}
+                md={9}
+                textAlign={"center"}
+                alignContent={"center"}
+                padding={"10px"}
+              >
                 {dates.includes(shortDate) && (
                   <>
                     <Link to={`/${shortDate}/view`}>

@@ -33,8 +33,9 @@ const DailyAffiramtionContainer = styled(Paper)(({ theme }) => ({
   color: "white",
   textAlign: "center",
   width: "50%",
-  margin: "40px auto",
-  marginBottom: "40px",
+  margin: "auto",
+  marginTop: "40px",
+  marginBottom: "20px",
   border: "1px outset black",
 
   position: "relative",
@@ -266,9 +267,6 @@ const HomePage: React.FunctionComponent = () => {
         <Grid item xs={12} md={6}>
           {preferences.showSubstance && <SubstancesTracker />}
         </Grid>
-      </Grid>
-
-      <Grid container margin={"20px"}>
         <Grid item xs={12} sm={6}>
           <PreviousEntriesListComponent />
         </Grid>
