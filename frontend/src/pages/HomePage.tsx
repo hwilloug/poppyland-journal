@@ -127,17 +127,17 @@ const HomePage: React.FunctionComponent = () => {
   const avgMoodBgColor = useMemo(() => {
     switch (Math.round(avgMood)) {
       case 0:
-        return `linear-gradient(to bottom, ${red[200]}, ${red[400]})`
+        return `linear-gradient(to bottom, #ef9a999, ${red[400]})`
       case 1:
-        return `linear-gradient(to bottom, ${orange[200]}, ${orange[400]})`
+        return `linear-gradient(to bottom, #ffcc8099, ${orange[400]})`
       case 2:
-        return `linear-gradient(to bottom, ${blue[200]}, ${blue[400]})`
+        return `linear-gradient(to bottom, #90caf999, ${blue[400]})`
       case 3:
-        return `linear-gradient(to bottom, ${green[200]}, ${green[400]})`
+        return `linear-gradient(to bottom, #a5d6a799, ${green[400]})`
       case 4:
-        return `linear-gradient(to bottom, ${purple[200]}, ${purple[400]})`
+        return `linear-gradient(to bottom, #ce93d899, ${purple[400]})`
       default:
-        return `linear-gradient(to bottom, ${green[200]}, ${green[400]})`
+        return `linear-gradient(to bottom, #a5d6a799, ${green[400]})`
     }
   }, [avgMood])
 
@@ -238,21 +238,21 @@ const HomePage: React.FunctionComponent = () => {
                 <StatCard
                   name="Mood Stability Last 7 Days"
                   value={stdDeviation}
-                  color={`linear-gradient(to bottom,${green[500]}, ${green[800]})`}
+                  color={`linear-gradient(to bottom,#4caf5099, ${green[800]})`}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
                 <StatCard
                   name="Number of Entries"
                   value={numEntries}
-                  color={`linear-gradient(to bottom, ${purple[500]}, ${purple[800]})`}
+                  color={`linear-gradient(to bottom, #9c27b099, ${purple[800]})`}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
                 <StatCard
                   name="Streak"
                   value={streak + (streak > 1 ? "🔥" : "")}
-                  color={`linear-gradient(to bottom,${purple[200]}, ${purple[500]})`}
+                  color={`linear-gradient(to bottom, #ce93d899, ${purple[500]})`}
                 />
               </Grid>
             </>

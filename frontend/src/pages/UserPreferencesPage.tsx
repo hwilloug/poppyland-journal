@@ -17,7 +17,7 @@ const Container = styled.div`
 `
 
 const SettingSection = styled.div`
-  background-color: white;
+  background-color: #e0f0bb99;
   border: 1px solid lightgrey;
   margin-bottom: 30px;
   padding: 20px;
@@ -134,7 +134,7 @@ const UserPreferencesPage: React.FunctionComponent = () => {
             }}
             value={firstName}
             onChange={(e) => userActions.setFirstName(e.target.value)}
-            sx={{ backgroundColor: "white", width: "200px", mr: "10px" }}
+            sx={{ backgroundColor: "#e0f0bb", width: "200px", mr: "10px" }}
           />
           <TextField
             label="Last Name"
@@ -143,7 +143,7 @@ const UserPreferencesPage: React.FunctionComponent = () => {
             }}
             value={lastName}
             onChange={(e) => userActions.setLastName(e.target.value)}
-            sx={{ backgroundColor: "white", width: "200px" }}
+            sx={{ backgroundColor: "#e0f0bb", width: "200px" }}
           />
         </SettingSection>
         <SettingSection>
@@ -158,7 +158,7 @@ const UserPreferencesPage: React.FunctionComponent = () => {
             }}
             value={journalName}
             onChange={(e) => userActions.setJournalName(e.target.value)}
-            sx={{ backgroundColor: "white", width: "100%" }}
+            sx={{ backgroundColor: "#e0f0bb", width: "100%" }}
           />
           <TextField
             label="Ideal Hours Sleep"
@@ -168,7 +168,7 @@ const UserPreferencesPage: React.FunctionComponent = () => {
             }}
             value={idealHoursSleep}
             onChange={(e) => userActions.setIdealHoursSleep(e.target.value)}
-            sx={{ backgroundColor: "white", mt: "20px" }}
+            sx={{ backgroundColor: "#e0f0bb", mt: "20px" }}
           />
         </SettingSection>
         <SettingSection>
