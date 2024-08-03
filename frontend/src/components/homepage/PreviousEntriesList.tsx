@@ -64,7 +64,7 @@ const PreviousEntriesListComponent: React.FunctionComponent = () => {
               >
                 {dates.includes(shortDate) && (
                   <>
-                    <Link to={`/${shortDate}/view`}>
+                    <Link to={`/diary/${shortDate}/view`}>
                       <Button
                         color={"secondary"}
                         variant="contained"
@@ -74,7 +74,7 @@ const PreviousEntriesListComponent: React.FunctionComponent = () => {
                         View
                       </Button>
                     </Link>
-                    <Link to={`/${shortDate}/edit`}>
+                    <Link to={`/diary/${shortDate}/edit`}>
                       <Button color={"primary"} variant="contained">
                         <EditNoteIcon sx={{ pr: "5px" }} />
                         Edit
@@ -83,7 +83,7 @@ const PreviousEntriesListComponent: React.FunctionComponent = () => {
                   </>
                 )}
                 {!dates.includes(shortDate) && (
-                  <Link to={`/${shortDate}/edit`}>
+                  <Link to={`/diary/${shortDate}/edit`}>
                     <Button color={"primary"} variant="contained">
                       Create
                     </Button>
@@ -94,7 +94,7 @@ const PreviousEntriesListComponent: React.FunctionComponent = () => {
             </Grid>
           )
         })}
-        <Link to={`/entries`} style={{ minWidth: "100%" }}>
+        <Link to={`/diary/entries`} style={{ minWidth: "100%" }}>
           <Button
             variant="outlined"
             color="secondary"

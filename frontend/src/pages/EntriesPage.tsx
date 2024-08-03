@@ -51,7 +51,7 @@ const EntriesPage: React.FC = () => {
                     textAlign="center"
                     alignItems={"center"}
                   >
-                    <Link to={`/${shortDate}/edit`}>
+                    <Link to={`/diary/${shortDate}/edit`}>
                       <Button color="primary" variant="contained">
                         <NoteAddIcon sx={{ pr: "5px" }} />
                         <Typography>Create</Typography>
@@ -67,7 +67,7 @@ const EntriesPage: React.FC = () => {
                     textAlign={"center"}
                     padding={"10px"}
                   >
-                    <Link to={`/${shortDate}/view`}>
+                    <Link to={`/diary/${shortDate}/view`}>
                       <Button
                         color="secondary"
                         variant="contained"
@@ -77,7 +77,7 @@ const EntriesPage: React.FC = () => {
                         <Typography>View</Typography>
                       </Button>
                     </Link>
-                    <Link to={`/${shortDate}/edit`}>
+                    <Link to={`/diary/${shortDate}/edit`}>
                       <Button color="primary" variant="contained">
                         <EditNoteIcon sx={{ pr: "5px" }} />
                         <Typography>Edit</Typography>

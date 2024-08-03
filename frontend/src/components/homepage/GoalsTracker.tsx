@@ -129,7 +129,7 @@ const GoalsTrackerComponent: React.FunctionComponent = () => {
           )
         })}
       </Grid>
-      <Link to="/goals">
+      <Link to="/diary/goals">
         <Button
           variant="outlined"
           color="secondary"

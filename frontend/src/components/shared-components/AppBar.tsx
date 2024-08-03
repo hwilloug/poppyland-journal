@@ -81,14 +81,14 @@ const AppBarComponent: React.FunctionComponent = () => {
               </NavItem>
               <NavItem>
                 <StyledTooltip title="Emergency Plan">
-                  <Link to="/emergency-plan" style={navItemStyle}>
+                  <Link to="/diary/emergency-plan" style={navItemStyle}>
                     <ContactEmergency />
                   </Link>
                 </StyledTooltip>
               </NavItem>
               <NavItem>
                 <StyledTooltip title="User Preferences">
-                  <Link to="/preferences" style={navItemStyle}>
+                  <Link to="/diary/preferences" style={navItemStyle}>
                     <ManageAccountsIcon />
                   </Link>
                 </StyledTooltip>

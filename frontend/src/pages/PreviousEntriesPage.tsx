@@ -100,7 +100,7 @@ const PreviousEntriesPage: React.FunctionComponent = () => {
           {!isLoading && entries.length === 0 && (
             <NoEntriesContainer>
               No entries yet! Head to{" "}
-              <Link to="/today">today's entry page</Link> to get started.
+              <Link to="/diary/today">today's entry page</Link> to get started.
             </NoEntriesContainer>
           )}
           {!isLoading &&

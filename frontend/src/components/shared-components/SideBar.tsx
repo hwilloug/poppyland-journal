@@ -55,32 +55,32 @@ const StyledTooltip = styled(({ className, ...props }: TooltipProps) => (
 const SideBar: React.FC = () => {
   const navItems = [
     {
-      link: "/",
+      link: "/diary/dashboard",
       title: "Dashboard",
       icon: <DashboardIcon sx={{ marginX: "auto" }} />,
     },
     {
-      link: "/today",
+      link: "/diary/today",
       title: "Today's Entry",
       icon: <TodayIcon />,
     },
     {
-      link: "/goals",
+      link: "/diary/goals",
       title: "Goals",
       icon: <FlagIcon />,
     },
     {
-      link: "/habits",
+      link: "/diary/habits",
       title: "Habits Builder",
       icon: <EventRepeatIcon />,
     },
     {
-      link: "/entries",
+      link: "/diary/entries",
       title: "Entries List",
       icon: <FormatListBulletedIcon />,
     },
     {
-      link: "/journal",
+      link: "/diary/journal",
       title: "Journal",
       icon: <MenuBookIcon />,
     },

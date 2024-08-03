@@ -78,23 +78,23 @@ const router = createBrowserRouter([
 ])
 
 function App() {
-  const { user, getAccessTokenSilently } = useAuth0()
+  const { user, isAuthenticated, getAccessTokenSilently } = useAuth0()
   const getEntries = async () => {
     const token = await getAccessTokenSilently()
     journalActions.getEntries(token)
   }
   useEffect(() => {
-    if (user) {
+    if (isAuthenticated) {
       getEntries()
     }
-  }, [user])
+  }, [isAuthenticated])
 
   const userId = useSelector((state: State) => state.user.userId)
 
   const getUser = async () => {
-    if (user) {
+    if (isAuthenticated) {
       const token = await getAccessTokenSilently()
-      userActions.getUser(token, user.sub!)
+      userActions.getUser(token, user!.sub!)
     }
   }
 

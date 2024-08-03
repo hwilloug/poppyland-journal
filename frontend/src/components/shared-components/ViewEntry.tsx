@@ -297,7 +297,7 @@ const DisplayEntry: React.FC<{ date: string }> = ({ date }) => {
       >
         <MenuItem onClick={handleMoreClose}>
           <Link
-            to={`/${selectedDate}/edit`}
+            to={`/diary/${selectedDate}/edit`}
             style={{ textDecoration: "None", color: "black" }}
           >
             Edit Entry
