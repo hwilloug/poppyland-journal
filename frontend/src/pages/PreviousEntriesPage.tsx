@@ -26,6 +26,8 @@ const ContentContainer = styled.div`
 `
 
 const NoEntriesContainer = styled.div`
+  margin: auto;
+  background-color: #e0f0bb;
   padding: 20px;
 `
 

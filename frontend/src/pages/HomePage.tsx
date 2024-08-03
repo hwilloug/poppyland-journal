@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { Grid, Paper, Typography, styled, useTheme } from "@mui/material"
 import { blue, green, orange, purple, red, yellow } from "@mui/material/colors"
 import { convertToShortDate } from "../utils/date-utils"
-import { State } from "../store"
+import { State, journalActions, userActions } from "../store"
 import GoalsTrackerComponent from "../components/homepage/GoalsTracker"
 import dayjs from "dayjs"
 import SentimentVerySatisfiedIcon from "@mui/icons-material/SentimentVerySatisfied"
@@ -19,6 +19,7 @@ import SentimentVeryDissatisfiedIcon from "@mui/icons-material/SentimentVeryDiss
 import SleepTracker from "../components/homepage/SleepTracker"
 import SubstancesTracker from "../components/homepage/SubstancesTracker"
 import MentalHealthTracker from "../components/homepage/MentalHealthTracker"
+import { initialPreferences } from "../reducers/user-reducer"
 
 const HomePageContainer = styled("div")`
   padding: 20px;
@@ -58,7 +59,6 @@ const HomePage: React.FunctionComponent = () => {
   const entries = useSelector((state: State) => state.journal.entries)
 
   const today = convertToShortDate(new Date())
-  const todayObject = new Date()
 
   const numEntries = useMemo(() => Object.keys(entries).length, [entries])
 
@@ -165,6 +165,11 @@ const HomePage: React.FunctionComponent = () => {
   }, [entries, avgMood])
 
   if (journalState.isLoading) {
+    return <LoadingComponent />
+  }
+
+  if (!preferences) {
+    userActions.setUserPreferences(initialPreferences)
     return <LoadingComponent />
   }
 

@@ -1,11 +1,15 @@
 import { UserActionTypes } from "../actions/user-actions"
 import { UserState } from "../types/user-types"
 
+export const initialPreferences = {
+  showMood: true,
+  showMentalHealth: true,
+  showFeelings: true,
+}
+
 const initialState: UserState = {
   isLoading: true,
-  preferences: {
-    showMood: true,
-  },
+  preferences: initialPreferences,
   userId: "",
   firstName: "",
   lastName: "",
