@@ -13,7 +13,7 @@ const Layout: React.FC = () => {
 
   return (
     <PageContainer>
-      <AppBarComponent defaultOpen={false} />
+      <AppBarComponent />
       <SideBar />
       <Box marginLeft={"32px"} minHeight={window.innerHeight - 145}>
         <Outlet />

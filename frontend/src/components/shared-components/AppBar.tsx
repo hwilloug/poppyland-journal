@@ -10,6 +10,7 @@ import {
   Typography,
   styled,
   tooltipClasses,
+  useMediaQuery,
   useTheme,
 } from "@mui/material"
 import ManageAccountsIcon from "@mui/icons-material/ManageAccounts"
@@ -41,14 +42,9 @@ const StyledTooltip = styled(({ className, ...props }: TooltipProps) => (
   },
 }))
 
-interface SideBarProps {
-  defaultOpen: boolean
-}
-
-const AppBarComponent: React.FunctionComponent<SideBarProps> = ({
-  defaultOpen,
-}) => {
+const AppBarComponent: React.FunctionComponent = () => {
   const { user, logout } = useAuth0()
+  const theme = useTheme()
   const firstName = useSelector((state: State) => state.user.firstName)
   const lastName = useSelector((state: State) => state.user.lastName)
 
@@ -72,36 +68,43 @@ const AppBarComponent: React.FunctionComponent<SideBarProps> = ({
               </Typography>
             </Link>
           </NavItem>
-          <Box sx={{ flexGrow: 1 }} />
-          <NavItem>
-            <Typography color={"#e0f0bb"}>
-              {firstName ? `${firstName} ${lastName || ""}` : user?.email}
-            </Typography>
-          </NavItem>
-          <NavItem>
-            <StyledTooltip title="Emergency Plan">
-              <Link to="/emergency-plan" style={navItemStyle}>
-                <ContactEmergency />
-              </Link>
-            </StyledTooltip>
-          </NavItem>
-          <NavItem>
-            <StyledTooltip title="User Preferences">
-              <Link to="/preferences" style={navItemStyle}>
-                <ManageAccountsIcon />
-              </Link>
-            </StyledTooltip>
-          </NavItem>
-          <NavItem>
-            <StyledTooltip title="Logout">
-              <LockIcon
-                onClick={() =>
-                  logout({ logoutParams: { returnTo: window.location.origin } })
-                }
-                style={navItemStyle}
-              />
-            </StyledTooltip>
-          </NavItem>
+          {useMediaQuery(theme.breakpoints.up("sm")) && (
+            <>
+              {" "}
+              <Box sx={{ flexGrow: 1 }} />
+              <NavItem>
+                <Typography color={"#e0f0bb"}>
+                  {firstName ? `${firstName} ${lastName || ""}` : user?.email}
+                </Typography>
+              </NavItem>
+              <NavItem>
+                <StyledTooltip title="Emergency Plan">
+                  <Link to="/emergency-plan" style={navItemStyle}>
+                    <ContactEmergency />
+                  </Link>
+                </StyledTooltip>
+              </NavItem>
+              <NavItem>
+                <StyledTooltip title="User Preferences">
+                  <Link to="/preferences" style={navItemStyle}>
+                    <ManageAccountsIcon />
+                  </Link>
+                </StyledTooltip>
+              </NavItem>
+              <NavItem>
+                <StyledTooltip title="Logout">
+                  <LockIcon
+                    onClick={() =>
+                      logout({
+                        logoutParams: { returnTo: window.location.origin },
+                      })
+                    }
+                    style={navItemStyle}
+                  />
+                </StyledTooltip>
+              </NavItem>
+            </>
+          )}
         </Toolbar>
       </AppBar>
     </Box>
