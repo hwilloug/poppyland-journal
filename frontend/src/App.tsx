@@ -102,7 +102,7 @@ function App() {
     if (!userId) {
       getUser()
     }
-  }, [userId])
+  }, [userId, isAuthenticated])
 
   return (
     <AppContainer className="App">
