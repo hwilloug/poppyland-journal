@@ -10,7 +10,7 @@ import { useSelector } from "react-redux"
 import { State, journalActions } from "../../store"
 import { ArrowDownwardRounded } from "@mui/icons-material"
 import CheckboxItemComponent from "../shared-components/CheckboxItem"
-import React from "react"
+import React, { useMemo } from "react"
 
 interface FeelingsEntryProps {
   date: string
@@ -339,8 +339,16 @@ const FeelingsAccordion: React.FC<{
     (state: State) => state.journal.entries[date]?.feelings,
   )
 
+  const isExpanded = useMemo(() => {
+    const included = userFeelings.map((userFeeling) =>
+      feelings.includes(userFeeling),
+    )
+    const isExpanded = included.indexOf(true)
+    return isExpanded > -1
+  }, [userFeelings])
+
   return (
-    <Accordion>
+    <Accordion defaultExpanded={isExpanded}>
       <AccordionSummary
         expandIcon={<ArrowDownwardRounded />}
         sx={{ backgroundColor: "#e0f0bb" }}
