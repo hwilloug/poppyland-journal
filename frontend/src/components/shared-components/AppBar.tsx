@@ -66,6 +66,7 @@ const AppBarComponent: React.FunctionComponent = () => {
               >
                 Whispering Willow Diary
               </Typography>
+              <Typography color={"teal"}>Beta</Typography>
             </Link>
           </NavItem>
           {useMediaQuery(theme.breakpoints.up("sm")) && (
