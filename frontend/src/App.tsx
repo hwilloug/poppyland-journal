@@ -18,6 +18,7 @@ import EmergencyPlanPage from "./pages/EmergencyPlanPage"
 import { useSelector } from "react-redux"
 import ViewEntryPage from "./pages/ViewEntryPage"
 import HabitsPage from "./pages/HabitsPage"
+import LandingPage from "./pages/LandingPage"
 
 const AppContainer = styled.div`
   min-height: 100vh;
@@ -26,10 +27,14 @@ const AppContainer = styled.div`
 const router = createBrowserRouter([
   {
     path: "/",
+    element: <LandingPage />,
+  },
+  {
+    path: "/diary/",
     element: <Layout />,
     children: [
       {
-        path: "",
+        path: "dashboard",
         element: <HomePage />,
       },
       {
@@ -79,14 +84,18 @@ function App() {
     journalActions.getEntries(token)
   }
   useEffect(() => {
-    getEntries()
-  }, [])
+    if (user) {
+      getEntries()
+    }
+  }, [user])
 
   const userId = useSelector((state: State) => state.user.userId)
 
   const getUser = async () => {
-    const token = await getAccessTokenSilently()
-    userActions.getUser(token, user!.sub!)
+    if (user) {
+      const token = await getAccessTokenSilently()
+      userActions.getUser(token, user.sub!)
+    }
   }
 
   useEffect(() => {
@@ -104,4 +113,4 @@ function App() {
   )
 }
 
-export default withAuthenticationRequired(App)
+export default App

@@ -18,6 +18,7 @@ import LockIcon from "@mui/icons-material/Lock"
 import { useSelector } from "react-redux"
 import { State } from "../../store"
 import { ContactEmergency } from "@mui/icons-material"
+import VpnKeyIcon from "@mui/icons-material/VpnKey"
 
 const NavItem = styled(Box)`
   margin: 10px;
@@ -43,7 +44,7 @@ const StyledTooltip = styled(({ className, ...props }: TooltipProps) => (
 }))
 
 const AppBarComponent: React.FunctionComponent = () => {
-  const { user, logout } = useAuth0()
+  const { user, loginWithRedirect, logout, isAuthenticated } = useAuth0()
   const theme = useTheme()
   const firstName = useSelector((state: State) => state.user.firstName)
   const lastName = useSelector((state: State) => state.user.lastName)
@@ -69,7 +70,7 @@ const AppBarComponent: React.FunctionComponent = () => {
               <Typography color={"teal"}>Beta</Typography>
             </Link>
           </NavItem>
-          {useMediaQuery(theme.breakpoints.up("sm")) && (
+          {useMediaQuery(theme.breakpoints.up("sm")) && isAuthenticated && (
             <>
               {" "}
               <Box sx={{ flexGrow: 1 }} />
@@ -101,6 +102,26 @@ const AppBarComponent: React.FunctionComponent = () => {
                       })
                     }
                     style={navItemStyle}
+                  />
+                </StyledTooltip>
+              </NavItem>
+            </>
+          )}
+          {useMediaQuery(theme.breakpoints.up("sm")) && !isAuthenticated && (
+            <>
+              {" "}
+              <Box sx={{ flexGrow: 1 }} />
+              <NavItem>
+                <StyledTooltip title="Login">
+                  <VpnKeyIcon
+                    style={navItemStyle}
+                    onClick={() =>
+                      loginWithRedirect({
+                        authorizationParams: {
+                          redirect_uri: `${window.location.href}diary/dashboard`,
+                        },
+                      })
+                    }
                   />
                 </StyledTooltip>
               </NavItem>
