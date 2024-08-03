@@ -11,9 +11,6 @@ const FooterContainer = styled(Box)(({ theme }) => ({
 const Footer: React.FC = () => {
   return (
     <FooterContainer>
-      <Typography align="center" flexGrow={2} fontSize={16} color={"#e0f0bb"}>
-        &copy; {new Date().getFullYear()} Whispering Willow Diary
-      </Typography>
       <Button
         href="https://www.buymeacoffee.com/hannahjanew"
         variant="contained"
@@ -21,6 +18,9 @@ const Footer: React.FC = () => {
       >
         Buy me a coffee
       </Button>
+      <Typography align="center" flexGrow={2} fontSize={16} color={"#e0f0bb"}>
+        &copy; {new Date().getFullYear()} Whispering Willow Diary
+      </Typography>
     </FooterContainer>
   )
 }
