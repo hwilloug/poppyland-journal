@@ -253,7 +253,7 @@ Resources:
       DBClusterIdentifier: !Ref EntryPostgresCluster
       DBInstanceClass: db.serverless
       Engine: aurora-postgresql
-      PubliclyAccessible: false
+      PubliclyAccessible: true
 
   JournalLambdaRole:
     Type: AWS::IAM::Role
