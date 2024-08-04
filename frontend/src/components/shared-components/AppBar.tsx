@@ -1,10 +1,16 @@
 import React, { CSSProperties, useState } from "react"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { useAuth0 } from "@auth0/auth0-react"
 import {
   AppBar,
   Box,
   Button,
+  Drawer,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
   Toolbar,
   Tooltip,
   TooltipProps,
@@ -20,8 +26,13 @@ import { useSelector } from "react-redux"
 import { State } from "../../store"
 import { ContactEmergency } from "@mui/icons-material"
 import VpnKeyIcon from "@mui/icons-material/VpnKey"
-import MenuBookIcon from "@mui/icons-material/MenuBook"
 import TableRowsIcon from "@mui/icons-material/TableRows"
+import MenuBookIcon from "@mui/icons-material/MenuBook"
+import TodayIcon from "@mui/icons-material/Today"
+import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted"
+import FlagIcon from "@mui/icons-material/Flag"
+import DashboardIcon from "@mui/icons-material/Dashboard"
+import EventRepeatIcon from "@mui/icons-material/EventRepeat"
 
 const NavItem = styled(Box)`
   margin: 10px;
@@ -49,10 +60,55 @@ const StyledTooltip = styled(({ className, ...props }: TooltipProps) => (
 const AppBarComponent: React.FunctionComponent = () => {
   const { user, loginWithRedirect, logout, isAuthenticated } = useAuth0()
   const theme = useTheme()
+  const navigation = useNavigate()
+
   const firstName = useSelector((state: State) => state.user.firstName)
   const lastName = useSelector((state: State) => state.user.lastName)
 
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
+
+  const authorizedLinks = [
+    {
+      title: "Dashboard",
+      link: "/diary/dashboard",
+      icon: <LockIcon />,
+    },
+    {
+      title: "Today's Entry",
+      link: "/diary/today",
+      icon: <TodayIcon />,
+    },
+    {
+      title: "Goals",
+      link: "/diary/goals",
+      icon: <FlagIcon />,
+    },
+    {
+      title: "Habits",
+      link: "/diary/habits",
+      icon: <EventRepeatIcon />,
+    },
+    {
+      title: "Entries",
+      link: "/diary/entries",
+      icon: <FormatListBulletedIcon />,
+    },
+    {
+      title: "Journal",
+      link: "/diary/journal",
+      icon: <MenuBookIcon />,
+    },
+    {
+      title: "Emergency Plan",
+      link: "/diary/emergency-plan",
+      icon: <ContactEmergency />,
+    },
+    {
+      title: "User Preferences",
+      link: "/diary/preferences",
+      icon: <ManageAccountsIcon />,
+    },
+  ]
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -114,7 +170,7 @@ const AppBarComponent: React.FunctionComponent = () => {
                 </NavItem>
               </>
             )}
-          {useMediaQuery(theme.breakpoints.up("sm")) && !isAuthenticated && (
+          {!isAuthenticated && (
             <>
               {" "}
               <Box sx={{ flexGrow: 1 }} />
@@ -166,11 +222,41 @@ const AppBarComponent: React.FunctionComponent = () => {
                 </NavItem>
               </>
             )}
-          {useMediaQuery(theme.breakpoints.down("xs")) && (
+          {useMediaQuery(theme.breakpoints.down("sm")) && isAuthenticated && (
             <>
-              <Button>
-                <TableRowsIcon />
+              <Button onClick={() => setIsDrawerOpen(true)}>
+                <TableRowsIcon sx={{ color: "rgba(224, 240, 187)" }} />
               </Button>
+              <Drawer
+                open={isDrawerOpen}
+                onClose={() => setIsDrawerOpen(false)}
+              >
+                <Box role="presentation" onClick={() => setIsDrawerOpen(false)}>
+                  <List>
+                    {authorizedLinks.map((link) => (
+                      <ListItem
+                        key={link.title}
+                        onClick={() => navigation(link.link)}
+                      >
+                        <ListItemIcon>{link.icon}</ListItemIcon>
+                        <ListItemText primary={link.title} />
+                      </ListItem>
+                    ))}
+                    <ListItem
+                      onClick={() =>
+                        logout({
+                          logoutParams: { returnTo: window.location.origin },
+                        })
+                      }
+                    >
+                      <ListItemIcon>
+                        <LockIcon />
+                      </ListItemIcon>
+                      <ListItemText primary={"Logout"} />
+                    </ListItem>
+                  </List>
+                </Box>
+              </Drawer>
             </>
           )}
         </Toolbar>

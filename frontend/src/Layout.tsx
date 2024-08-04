@@ -4,18 +4,22 @@ import AppBarComponent from "./components/shared-components/AppBar"
 import { Outlet } from "react-router-dom"
 import Footer from "./components/shared-components/Footer"
 import SideBar from "./components/shared-components/SideBar"
-import { Alert, Box, Snackbar } from "@mui/material"
+import { Alert, Box, Snackbar, useMediaQuery, useTheme } from "@mui/material"
 import { useSelector } from "react-redux"
 import { State, snackbarActions } from "./store"
 
 const Layout: React.FC = () => {
   const snackbar = useSelector((state: State) => state.snackbar)
+  const theme = useTheme()
 
   return (
     <PageContainer>
       <AppBarComponent />
-      <SideBar />
-      <Box marginLeft={"32px"} minHeight={window.innerHeight - 145}>
+      {useMediaQuery(theme.breakpoints.up("sm")) && <SideBar />}
+      <Box
+        marginLeft={useMediaQuery(theme.breakpoints.up("sm")) ? "32px" : "0"}
+        minHeight={window.innerHeight - 145}
+      >
         <Outlet />
       </Box>
       <Footer />
