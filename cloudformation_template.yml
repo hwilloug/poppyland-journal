@@ -225,12 +225,24 @@ Resources:
           AttributeName: "Date"
           KeyType: "RANGE"
 
+  EntryPostgresCredentials:
+    Type: AWS::SecretsManager::Secret
+    Properties:
+      Description: "Username/password for the Whispering Willow Diary postgres db"
+      GenerateSecretString:
+        SecretStringTemplate: '{"username": "postgres"}'
+        GenerateStringKey: "password"
+        PasswordLength: 16
+        ExcludeCharacters: '"@\/'
+
   EntryPostgresTable:
     Type: AWS::RDS::DBCluster
     Properties:
       DatabaseName: WhisperingWillowDiary
       DBClusterIdentifier: WhisperingWillowCluster
       Engine: aurora-postgresql
+      MasterUsername: postgres
+      MasterUserPassword: !Ref EntryPostgresCredentials
 
   JournalLambdaRole:
     Type: AWS::IAM::Role
