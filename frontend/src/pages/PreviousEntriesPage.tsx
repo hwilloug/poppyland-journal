@@ -7,17 +7,8 @@ import { useSelector } from "react-redux"
 import { State } from "../store"
 import { Box, Typography, useMediaQuery, useTheme } from "@mui/material"
 import { convertToDateObject } from "../utils/date-utils"
-import {
-  Timeline,
-  TimelineItem,
-  TimelineSeparator,
-  TimelineDot,
-  TimelineConnector,
-  TimelineContent,
-} from "@mui/lab"
 import { JournalEntry } from "../types/journal-types"
 import { Link } from "react-router-dom"
-import { HashLink } from "react-router-hash-link"
 import ViewEntry from "../components/shared-components/ViewEntry"
 import { withAuthenticationRequired } from "@auth0/auth0-react"
 
@@ -33,7 +24,6 @@ const NoEntriesContainer = styled.div`
 
 const PreviousEntriesPage: React.FunctionComponent = () => {
   const theme = useTheme()
-  const isLargerThanSm = useMediaQuery(theme.breakpoints.up("sm"))
   const journalName = useSelector((state: State) => state.user.journalName)
 
   const data = useSelector((state: State) => state.journal.entries)

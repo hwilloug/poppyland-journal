@@ -1,6 +1,5 @@
 import React, { useState } from "react"
 import { StyledCheckbox } from "./styled-components"
-import styled from "@emotion/styled"
 import {
   Box,
   Button,
@@ -10,6 +9,8 @@ import {
   Modal,
   Paper,
   Typography,
+  useMediaQuery,
+  styled,
 } from "@mui/material"
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz"
 import {
@@ -29,33 +30,35 @@ import { GoalsType, SubstancesType } from "../../types/journal-types"
 import { useAuth0 } from "@auth0/auth0-react"
 import HabitsChecker from "./HabitsChecker"
 
-const EntryContainer = styled(Paper)`
-  background-color: #e0f0bb;
-  border: 1px solid lightgrey;
-  padding: 20px;
-  padding-left: 75px;
-  position: relative;
-  :before {
-    content: "";
-    position: absolute;
-    display: inline-block;
-    background-color: darksalmon;
-    height: 100%;
-    width: 2px;
-    top: 0;
-    left: 65px;
-  }
-  .header-divider {
-    border: 1px solid lightblue;
-    margin-left: -75px;
-    margin-right: -20px;
-  }
-  .divider {
-    border: 1px solid lightgrey;
-    margin-left: -10px;
-    margin-right: -20px;
-  }
-`
+const EntryContainer = styled(Paper)(({ theme }) => ({
+  backgroundColor: "#e0f0bb",
+  border: "1px solid lightgrey",
+  padding: "20px",
+  paddingLeft: useMediaQuery(theme.breakpoints.up("sm")) ? "75px" : "20px",
+  position: "relative",
+  ":before": useMediaQuery(theme.breakpoints.up("sm"))
+    ? {
+        content: '""',
+        position: "absolute",
+        display: "inline-block",
+        "background-color": "darksalmon",
+        height: "100%",
+        width: "2px",
+        top: "0",
+        left: "65px",
+      }
+    : {},
+  ".header-divider": {
+    border: "1px solid lightblue",
+    marginLeft: useMediaQuery(theme.breakpoints.up("sm")) ? "75px" : "-20px",
+    marginRight: "-20px",
+  },
+  ".divider": {
+    border: "1px solid lightgrey",
+    marginLeft: "-10px",
+    marginRight: "-20px",
+  },
+}))
 
 const MoodContainer = styled(Grid)`
   margin: 10px;
@@ -65,22 +68,22 @@ const MoodContainer = styled(Grid)`
   gap: 5px;
 `
 
-const SectionContainer = styled.div`
+const SectionContainer = styled("div")`
   margin: 20px 10px;
 `
 
-const NoEntriesContainer = styled.div`
+const NoEntriesContainer = styled("div")`
   padding: 20px;
 `
 
-const ModalButtonsContainer = styled.div`
+const ModalButtonsContainer = styled("div")`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   margin-top: 20px;
 `
 
-const EntryFooterContainer = styled.div`
+const EntryFooterContainer = styled("div")`
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
@@ -201,7 +204,7 @@ const DisplayEntry: React.FC<{ date: string }> = ({ date }) => {
                 }
                 return (
                   <Grid container key={`${goal}-${idx}`} alignItems={"center"}>
-                    <Grid item>
+                    <Grid item xs={2}>
                       <StyledCheckbox checked={goal.checked} />
                     </Grid>
                     <Grid item xs={10}>
