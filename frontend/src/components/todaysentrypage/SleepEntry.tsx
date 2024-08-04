@@ -7,17 +7,11 @@ import {
 
 import styled from "@emotion/styled"
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs"
-import { MenuItem, Select, Typography } from "@mui/material"
+import { Grid, MenuItem, Select, Typography } from "@mui/material"
 import { EntrySectionContainer } from "../shared-components/styled-components"
 import { useCallback, useEffect } from "react"
 import { useSelector } from "react-redux"
 import { State, journalActions } from "../../store"
-
-const SleepTimeContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  gap: 20px;
-`
 
 const SleepQualityContainer = styled.div`
   display: flex;
@@ -68,47 +62,53 @@ const SleepEntryComponent: React.FunctionComponent<SleepEntryProps> = ({
       <Typography variant="h6" sx={{ mb: "20px" }}>
         Sleep
       </Typography>
-      <SleepTimeContainer>
+      <Grid container>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
-          {/* @ts-ignore */}
-          <TimePicker
-            label="Bedtime the night before"
-            value={bedTime ? dayjs(bedTime) : undefined}
-            onChange={(value: Dayjs | null) => {
-              if (value !== null) {
-                journalActions.setBedTime(date, value.toString())
-              } else {
-                journalActions.setBedTime(date, "")
-              }
-            }}
-            viewRenderers={{
-              hours: renderTimeViewClock,
-              minutes: renderTimeViewClock,
-            }}
-            sx={{ backgroundColor: "#e0f0bb", pt: 1 }}
-          />
-          {/* @ts-ignore */}
-          <TimePicker
-            label="Wake-up time"
-            value={wakeUpTime ? dayjs(wakeUpTime) : undefined}
-            onChange={(value: Dayjs | null) => {
-              if (value !== null) {
-                journalActions.setWakeUpTime(date, value.toString())
-              } else {
-                journalActions.setWakeUpTime(date, "")
-              }
-            }}
-            viewRenderers={{
-              hours: renderTimeViewClock,
-              minutes: renderTimeViewClock,
-            }}
-            sx={{ backgroundColor: "#e0f0bb", pt: 1 }}
-          />
+          <Grid item xs={12} sm={4}>
+            {/* @ts-ignore */}
+            <TimePicker
+              label="Bedtime the night before"
+              value={bedTime ? dayjs(bedTime) : undefined}
+              onChange={(value: Dayjs | null) => {
+                if (value !== null) {
+                  journalActions.setBedTime(date, value.toString())
+                } else {
+                  journalActions.setBedTime(date, "")
+                }
+              }}
+              viewRenderers={{
+                hours: renderTimeViewClock,
+                minutes: renderTimeViewClock,
+              }}
+              sx={{ backgroundColor: "#e0f0bb", pt: 1 }}
+            />
+          </Grid>
+          <Grid item xs={12} sm={4}>
+            {/* @ts-ignore */}
+            <TimePicker
+              label="Wake-up time"
+              value={wakeUpTime ? dayjs(wakeUpTime) : undefined}
+              onChange={(value: Dayjs | null) => {
+                if (value !== null) {
+                  journalActions.setWakeUpTime(date, value.toString())
+                } else {
+                  journalActions.setWakeUpTime(date, "")
+                }
+              }}
+              viewRenderers={{
+                hours: renderTimeViewClock,
+                minutes: renderTimeViewClock,
+              }}
+              sx={{ backgroundColor: "#e0f0bb", pt: 1 }}
+            />
+          </Grid>
         </LocalizationProvider>
-        <Typography>
-          {bedTime && wakeUpTime && <p>{hoursSleep} hours sleep</p>}
-        </Typography>
-      </SleepTimeContainer>
+        <Grid item xs={12} sm={4}>
+          <Typography>
+            {bedTime && wakeUpTime && <p>{hoursSleep} hours sleep</p>}
+          </Typography>
+        </Grid>
+      </Grid>
       <SleepQualityContainer>
         <Typography>Sleep Quality:</Typography>
         <Select

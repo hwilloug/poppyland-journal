@@ -1,6 +1,6 @@
-import { Box, Button, Link, Typography, styled } from "@mui/material"
+import { Box, Button, Grid, Link, Typography, styled } from "@mui/material"
 
-const FooterContainer = styled(Box)(({ theme }) => ({
+const FooterContainer = styled(Grid)(({ theme }) => ({
   backgroundColor: theme.palette.secondary.main,
   padding: "25px",
   display: "flex",
@@ -10,17 +10,22 @@ const FooterContainer = styled(Box)(({ theme }) => ({
 
 const Footer: React.FC = () => {
   return (
-    <FooterContainer>
-      <Button
-        href="https://www.buymeacoffee.com/hannahjanew"
-        variant="contained"
-        color="warning"
-      >
-        Buy me a coffee
-      </Button>
-      <Typography align="center" flexGrow={2} fontSize={16} color={"#e0f0bb"}>
-        &copy; {new Date().getFullYear()} Whispering Willow Diary
-      </Typography>
+    <FooterContainer container alignItems={"center"}>
+      <Grid item xs={12} sm={3}>
+        <Button
+          href="https://www.buymeacoffee.com/hannahjanew"
+          variant="contained"
+          color="warning"
+          sx={{ width: "100%", mx: "auto" }}
+        >
+          Buy me a coffee
+        </Button>
+      </Grid>
+      <Grid item xs={12} sm={9}>
+        <Typography align="center" flexGrow={2} fontSize={16} color={"#e0f0bb"}>
+          &copy; {new Date().getFullYear()} Whispering Willow Diary
+        </Typography>
+      </Grid>
     </FooterContainer>
   )
 }

@@ -34,15 +34,16 @@ const DailyGoalComponent: React.FunctionComponent<DailyGoalProps> = ({
             <Grid
               container
               key={`${goal}-${index}`}
+              alignItems={"center"}
               sx={{ backgroundColor: "#e0f0bb", borderRadius: "10px" }}
             >
-              <Grid item>
+              <Grid item xs={2} sm={1}>
                 <StyledCheckbox
                   checked={goal.checked}
                   onChange={() => onChange(index, goal.goal, !goal.checked)}
                 />
               </Grid>
-              <Grid item xs={10}>
+              <Grid item xs={8} sm={10}>
                 <Input
                   fullWidth
                   value={goal.goal}
@@ -53,7 +54,7 @@ const DailyGoalComponent: React.FunctionComponent<DailyGoalProps> = ({
                   disableUnderline
                 />
               </Grid>
-              <Grid item>
+              <Grid item xs={2} sm={1}>
                 <Button onClick={() => onRemove(index)}>
                   <DeleteIcon />
                 </Button>
