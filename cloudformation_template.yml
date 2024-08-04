@@ -233,7 +233,7 @@ Resources:
         SecretStringTemplate: '{"username": "postgres"}'
         GenerateStringKey: "password"
         PasswordLength: 16
-        ExcludeCharacters: '"@\/'
+        ExcludeCharacters: '"@\/,{}:%'
 
   EntryPostgresCluster:
     Type: AWS::RDS::DBCluster
