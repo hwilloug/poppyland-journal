@@ -16,6 +16,8 @@ root.render(
         redirect_uri: `${window.location.origin}diary/dashboard`,
         audience: process.env.REACT_APP_AUTH0_AUDIENCE,
       }}
+      useRefreshTokens
+      cacheLocation="localstorage"
     >
       <Provider store={store}>
         <App />

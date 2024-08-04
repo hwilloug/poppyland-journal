@@ -1,9 +1,10 @@
-import React, { CSSProperties } from "react"
+import React, { CSSProperties, useState } from "react"
 import { Link } from "react-router-dom"
 import { useAuth0 } from "@auth0/auth0-react"
 import {
   AppBar,
   Box,
+  Button,
   Toolbar,
   Tooltip,
   TooltipProps,
@@ -19,6 +20,8 @@ import { useSelector } from "react-redux"
 import { State } from "../../store"
 import { ContactEmergency } from "@mui/icons-material"
 import VpnKeyIcon from "@mui/icons-material/VpnKey"
+import MenuBookIcon from "@mui/icons-material/MenuBook"
+import TableRowsIcon from "@mui/icons-material/TableRows"
 
 const NavItem = styled(Box)`
   margin: 10px;
@@ -49,6 +52,8 @@ const AppBarComponent: React.FunctionComponent = () => {
   const firstName = useSelector((state: State) => state.user.firstName)
   const lastName = useSelector((state: State) => state.user.lastName)
 
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false)
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static" color="secondary">
@@ -70,43 +75,45 @@ const AppBarComponent: React.FunctionComponent = () => {
               <Typography color={"teal"}>Beta</Typography>
             </Link>
           </NavItem>
-          {useMediaQuery(theme.breakpoints.up("sm")) && isAuthenticated && (
-            <>
-              {" "}
-              <Box sx={{ flexGrow: 1 }} />
-              <NavItem>
-                <Typography color={"#e0f0bb"}>
-                  {firstName ? `${firstName} ${lastName || ""}` : user?.email}
-                </Typography>
-              </NavItem>
-              <NavItem>
-                <StyledTooltip title="Emergency Plan">
-                  <Link to="/diary/emergency-plan" style={navItemStyle}>
-                    <ContactEmergency />
-                  </Link>
-                </StyledTooltip>
-              </NavItem>
-              <NavItem>
-                <StyledTooltip title="User Preferences">
-                  <Link to="/diary/preferences" style={navItemStyle}>
-                    <ManageAccountsIcon />
-                  </Link>
-                </StyledTooltip>
-              </NavItem>
-              <NavItem>
-                <StyledTooltip title="Logout">
-                  <LockIcon
-                    onClick={() =>
-                      logout({
-                        logoutParams: { returnTo: window.location.origin },
-                      })
-                    }
-                    style={navItemStyle}
-                  />
-                </StyledTooltip>
-              </NavItem>
-            </>
-          )}
+          {useMediaQuery(theme.breakpoints.up("sm")) &&
+            isAuthenticated &&
+            window.location.pathname !== "/" && (
+              <>
+                {" "}
+                <Box sx={{ flexGrow: 1 }} />
+                <NavItem>
+                  <Typography color={"#e0f0bb"}>
+                    {firstName ? `${firstName} ${lastName || ""}` : user?.email}
+                  </Typography>
+                </NavItem>
+                <NavItem>
+                  <StyledTooltip title="Emergency Plan">
+                    <Link to="/diary/emergency-plan" style={navItemStyle}>
+                      <ContactEmergency />
+                    </Link>
+                  </StyledTooltip>
+                </NavItem>
+                <NavItem>
+                  <StyledTooltip title="User Preferences">
+                    <Link to="/diary/preferences" style={navItemStyle}>
+                      <ManageAccountsIcon />
+                    </Link>
+                  </StyledTooltip>
+                </NavItem>
+                <NavItem>
+                  <StyledTooltip title="Logout">
+                    <LockIcon
+                      onClick={() =>
+                        logout({
+                          logoutParams: { returnTo: window.location.origin },
+                        })
+                      }
+                      style={navItemStyle}
+                    />
+                  </StyledTooltip>
+                </NavItem>
+              </>
+            )}
           {useMediaQuery(theme.breakpoints.up("sm")) && !isAuthenticated && (
             <>
               {" "}
@@ -125,6 +132,45 @@ const AppBarComponent: React.FunctionComponent = () => {
                   />
                 </StyledTooltip>
               </NavItem>
+            </>
+          )}
+          {useMediaQuery(theme.breakpoints.up("sm")) &&
+            isAuthenticated &&
+            window.location.pathname === "/" && (
+              <>
+                {" "}
+                <Box sx={{ flexGrow: 1 }} />
+                <NavItem>
+                  <Typography color={"#e0f0bb"}>
+                    {firstName ? `${firstName} ${lastName || ""}` : user?.email}
+                  </Typography>
+                </NavItem>
+                <NavItem>
+                  <StyledTooltip title="Journal">
+                    <Link to={"/diary/dashboard"}>
+                      <MenuBookIcon style={navItemStyle} />
+                    </Link>
+                  </StyledTooltip>
+                </NavItem>
+                <NavItem>
+                  <StyledTooltip title="Logout">
+                    <LockIcon
+                      onClick={() =>
+                        logout({
+                          logoutParams: { returnTo: window.location.origin },
+                        })
+                      }
+                      style={navItemStyle}
+                    />
+                  </StyledTooltip>
+                </NavItem>
+              </>
+            )}
+          {useMediaQuery(theme.breakpoints.down("xs")) && (
+            <>
+              <Button>
+                <TableRowsIcon />
+              </Button>
             </>
           )}
         </Toolbar>
