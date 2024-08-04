@@ -233,7 +233,7 @@ const AppBarComponent: React.FunctionComponent = () => {
                 anchor="bottom"
               >
                 <Box role="presentation" onClick={() => setIsDrawerOpen(false)}>
-                  <List>
+                  <List sx={{ backgroundColor: "#e0f0bb" }}>
                     {authorizedLinks.map((link) => (
                       <ListItem
                         key={link.title}
