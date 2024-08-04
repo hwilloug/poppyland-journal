@@ -7,6 +7,7 @@ import {
   Typography,
   TypographyProps,
   styled,
+  useMediaQuery,
 } from "@mui/material"
 import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked"
 import CheckCircleIcon from "@mui/icons-material/CheckCircle"
@@ -15,12 +16,12 @@ export const PageContainer = styled("div")`
   margin: 0px;
 `
 
-export const PageContentContainer = styled("div")`
-  padding: 20px 50px;
-  max-width: 750px;
-  margin: 0 auto;
-  flex-grow: 1;
-`
+export const PageContentContainer = styled("div")(({ theme }) => ({
+  padding: useMediaQuery(theme.breakpoints.down("sm")) ? "20px 50px" : "20px",
+  maxWidth: "750px",
+  margin: "0 auto",
+  flexGrow: 1,
+}))
 
 export const EntrySectionContainer = styled(
   ({ className, ...props }: PaperProps) => (

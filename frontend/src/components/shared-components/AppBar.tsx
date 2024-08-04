@@ -230,6 +230,7 @@ const AppBarComponent: React.FunctionComponent = () => {
               <Drawer
                 open={isDrawerOpen}
                 onClose={() => setIsDrawerOpen(false)}
+                anchor="bottom"
               >
                 <Box role="presentation" onClick={() => setIsDrawerOpen(false)}>
                   <List>

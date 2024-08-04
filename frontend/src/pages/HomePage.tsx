@@ -5,7 +5,14 @@ import PreviousEntriesListComponent from "../components/homepage/PreviousEntries
 import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react"
 import LoadingComponent from "../components/shared-components/Loading"
 import { useDispatch, useSelector } from "react-redux"
-import { Grid, Paper, Typography, styled, useTheme } from "@mui/material"
+import {
+  Grid,
+  Paper,
+  Typography,
+  styled,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material"
 import { blue, green, orange, purple, red, yellow } from "@mui/material/colors"
 import { convertToShortDate } from "../utils/date-utils"
 import { State, journalActions, userActions } from "../store"
@@ -21,22 +28,21 @@ import SubstancesTracker from "../components/homepage/SubstancesTracker"
 import MentalHealthTracker from "../components/homepage/MentalHealthTracker"
 import { initialPreferences } from "../reducers/user-reducer"
 
-const HomePageContainer = styled("div")`
-  padding: 20px;
-  flex-grow: 1;
-  max-width: 100%;
-  margin-right: 20px;
-`
+const HomePageContainer = styled("div")(({ theme }) => ({
+  padding: useMediaQuery(theme.breakpoints.up("sm")) ? "20px" : "20px 0px",
+  flexGrow: 1,
+  maxWidth: "100%",
+}))
 
 const DailyAffiramtionContainer = styled(Paper)(({ theme }) => ({
   backgroundColor: "rgba(139, 69, 19, .80)",
   padding: "20px",
   color: "white",
   textAlign: "center",
-  width: "50%",
-  margin: "auto",
-  marginTop: "40px",
-  marginBottom: "20px",
+  maxWidth: useMediaQuery(theme.breakpoints.up("sm")) ? "50%" : "100%",
+  margin: useMediaQuery(theme.breakpoints.up("sm"))
+    ? "40px auto 20px auto"
+    : "24px",
   border: "1px outset black",
 
   position: "relative",
@@ -289,7 +295,6 @@ const StatContainer = styled(Grid)(({ theme }) => ({
   padding: "20px 10px",
   borderRadius: "5px",
   border: "1px outset black",
-  margin: "20px",
   backgroundPosition: "bottom",
   backgroundSize: "cover",
   textShadow:

@@ -26,8 +26,7 @@ const Container = styled(Paper)`
   background-color: rgba(224, 240, 187, 0.65);
   padding: 20px 20px 50px 20px;
   border: 1px solid black;
-  margin-left: 24px;
-  margin-top: 20px;
+  margin: 24px;
 `
 
 export type DataType = {
