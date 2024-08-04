@@ -244,7 +244,7 @@ Resources:
       MasterUsername: postgres
       MasterUserSecret: !Ref EntryPostgresCredentials
 
-  EntryPostgresTable:
+  EntryTablePostgres:
     Type: AWS::RDS::DBInstance
     Properties:
       DBClusterIdentifier: !Ref EntryPostgresCluster
