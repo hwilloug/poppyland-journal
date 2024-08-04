@@ -248,6 +248,7 @@ Resources:
     Type: AWS::RDS::DBInstance
     Properties:
       DBClusterIdentifier: !Ref EntryPostgresCluster
+      DBInstanceClass: db.serverless
       Engine: aurora-postgresql
       PubliclyAccessible: false
 
