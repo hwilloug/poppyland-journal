@@ -242,7 +242,7 @@ Resources:
       DBClusterIdentifier: WhisperingWillowDiaryCluster
       Engine: aurora-postgresql
       MasterUsername: postgres
-      MasterUserSecret: !Ref EntryPostgresCredentials
+      MasterUserPassword: !Ref EntryPostgresCredentials
 
   EntryTablePostgres:
     Type: AWS::RDS::DBInstance
