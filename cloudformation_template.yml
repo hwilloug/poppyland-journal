@@ -225,6 +225,13 @@ Resources:
           AttributeName: "Date"
           KeyType: "RANGE"
 
+  EntryPostgresTable:
+    Type: AWS::RDS::DBCluster
+    Properties:
+      DatabaseName: WhisperingWillowDiary
+      DBClusterIdentifier: WhisperingWillowCluster
+      Engine: aurora-postgresql
+
   JournalLambdaRole:
     Type: AWS::IAM::Role
     Properties:
