@@ -235,14 +235,21 @@ Resources:
         PasswordLength: 16
         ExcludeCharacters: '"@\/'
 
-  EntryPostgresTable:
+  EntryPostgresCluster:
     Type: AWS::RDS::DBCluster
     Properties:
       DatabaseName: WhisperingWillowDiary
       DBClusterIdentifier: WhisperingWillowCluster
       Engine: aurora-postgresql
       MasterUsername: postgres
-      MasterUserPassword: !Ref EntryPostgresCredentials
+      MasterUserSecret: !Ref EntryPostgresCredentials
+
+  EntryPostgresTable:
+    Type: AWS::RDS::DBInstance
+    Properties:
+      DBClusterIdentifier: !Ref EntryPostgresCluster
+      Engine: aurora-postgresql
+      PubliclyAccessible: false
 
   JournalLambdaRole:
     Type: AWS::IAM::Role
