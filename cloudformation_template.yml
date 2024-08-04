@@ -244,10 +244,8 @@ Resources:
       MasterUsername: postgres
       MasterUserPassword: !Ref EntryPostgresCredentials
       ServerlessV2ScalingConfiguration:
-        AutoPause: true
         MinCapacity: 4
         MaxCapacity: 32
-        SecondsUntilAutoPause: 1000
 
   EntryTablePostgres:
     Type: AWS::RDS::DBInstance
