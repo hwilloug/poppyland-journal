@@ -238,7 +238,7 @@ Resources:
   EntryPostgresCluster:
     Type: AWS::RDS::DBCluster
     Properties:
-      DatabaseName: WhisperingWillowDiary
+      DBName: WhisperingWillowDiary
       DBClusterIdentifier: WhisperingWillowDiaryCluster
       Engine: aurora-postgresql
       MasterUsername: postgres
