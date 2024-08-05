@@ -35,6 +35,7 @@ const DailyGoalComponent: React.FunctionComponent<DailyGoalProps> = ({
               container
               key={`${goal}-${index}`}
               alignItems={"center"}
+              mb={1}
               sx={{ backgroundColor: "#e0f0bb", borderRadius: "10px" }}
             >
               <Grid item xs={2} sm={1}>

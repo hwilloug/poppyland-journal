@@ -1,7 +1,7 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { PageContainer } from "./components/shared-components/styled-components"
 import AppBarComponent from "./components/shared-components/AppBar"
-import { Outlet } from "react-router-dom"
+import { Outlet, ScrollRestoration } from "react-router-dom"
 import Footer from "./components/shared-components/Footer"
 import SideBar from "./components/shared-components/SideBar"
 import { Alert, Box, Snackbar, useMediaQuery, useTheme } from "@mui/material"
@@ -14,6 +14,7 @@ const Layout: React.FC = () => {
 
   return (
     <PageContainer>
+      <ScrollRestoration />
       <AppBarComponent />
       {useMediaQuery(theme.breakpoints.up("sm")) && <SideBar />}
       <Box
