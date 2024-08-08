@@ -355,7 +355,7 @@ const MoodTrackerComponent: React.FunctionComponent = () => {
         point: {
           events: {
             click: function () {
-              navigate(`/${convertToShortDate(new Date(this.x))}/view`)
+              navigate(`/diary/${convertToShortDate(new Date(this.x))}/view`)
             },
           },
         },

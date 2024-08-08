@@ -1,14 +1,24 @@
-import { Button, Grid, Input, Paper, Typography, useTheme } from "@mui/material"
+import {
+  Button,
+  Container,
+  Grid,
+  Input,
+  Paper,
+  Typography,
+  useTheme,
+} from "@mui/material"
 import { PageContentContainer } from "../components/shared-components/styled-components"
 import { useSelector } from "react-redux"
 import { State, userActions } from "../store"
-import { useEffect } from "react"
+import React, { useEffect, useState } from "react"
 import { useAuth0 } from "@auth0/auth0-react"
 import LoadingComponent from "../components/shared-components/Loading"
 import DeleteIcon from "@mui/icons-material/Delete"
 import HabitsChecker from "../components/shared-components/HabitsChecker"
 import { convertToShortDate } from "../utils/date-utils"
-import dayjs from "dayjs"
+import WestIcon from "@mui/icons-material/West"
+import EastIcon from "@mui/icons-material/East"
+import { format, addMonths, subMonths, startOfWeek, addDays } from "date-fns"
 
 const HabitsPage: React.FC = () => {
   const isLoading = useSelector((state: State) => state.user.isLoading)
@@ -138,15 +148,58 @@ const HabitsList: React.FC = () => {
 }
 
 const Calendar: React.FC = () => {
+  const [currentMonth, setCurrentMonth] = useState(new Date())
+  const [selectedDate, setSelectedDate] = useState(new Date())
+
+  const onDateClick = () => {}
+
+  const nextMonth = () => setCurrentMonth(addMonths(currentMonth, 1))
+
+  const prevMonth = () => setCurrentMonth(subMonths(currentMonth, 1))
+
+  const CalendarHeader: React.FC = () => {
+    const dateFormat = "MMMM yyyy"
+
+    return (
+      <Grid container alignItems={"center"}>
+        <Grid item xs={1}>
+          <WestIcon onClick={prevMonth} sx={{ cursor: "pointer" }} />
+        </Grid>
+        <Grid item xs={10} textAlign={"center"}>
+          <Typography>{format(currentMonth, dateFormat)}</Typography>
+        </Grid>
+        <Grid item xs={1}>
+          <EastIcon onClick={nextMonth} sx={{ cursor: "pointer" }} />
+        </Grid>
+      </Grid>
+    )
+  }
+
+  const CalendarDaysOfWeek: React.FC = () => {
+    const dateFormat = "EEE"
+    const startDate = startOfWeek(currentMonth)
+
+    let days = []
+    for (let i = 0; i < 7; i++) {
+      days.push(
+        <Grid item key={i} xs={1.71} textAlign={"center"} pt={2}>
+          <Typography>{format(addDays(startDate, i), dateFormat)}</Typography>
+        </Grid>,
+      )
+    }
+
+    return <Grid container>{days}</Grid>
+  }
+
+  const CalendarDays: React.FC = () => {
+    return <></>
+  }
+
   return (
-    <Grid container justifyContent={"center"}>
-      {Array(7)
-        .fill(1)
-        .map((value) => (
-          <Grid item padding={2} xs={1.5} border={"1px solid black"}>
-            {value}
-          </Grid>
-        ))}
-    </Grid>
+    <Container>
+      <CalendarHeader />
+      <CalendarDaysOfWeek />
+      <CalendarDays />
+    </Container>
   )
 }

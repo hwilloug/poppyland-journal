@@ -19,45 +19,47 @@ const LandingPage: React.FC = () => {
   return (
     <>
       <AppBar />
-      <PreviewPanel
-        imgSrc="/moody.png"
-        title="Track your mood, behavior, and feelings"
-        benefits={[
-          "Have more effective doctor's appointments",
-          "Learn your triggers and warning signs",
-        ]}
-      />
-      <PreviewPanel
-        imgSrc="/sleepy.png"
-        title="Track sleep"
-        benefits={[
-          "Have more effective doctor's appointments",
-          "Compare sleep to mood",
-        ]}
-        alternate
-      />
-      <PreviewPanel
-        imgSrc="/stained_glass.png"
-        title="Set personal goals"
-        benefits={[
-          "Self-improvement",
-          "Yearly, monthly, weekly, and daily goals",
-        ]}
-      />
-      <PreviewPanel
-        imgSrc="/colored_pencil.png"
-        title="Create journal entries"
-        benefits={["Reflect on the day", "Process emotions"]}
-        alternate
-      />
-      <PreviewPanel
-        imgSrc="/psychadelic.png"
-        title="Track drug use"
-        benefits={[
-          "Help to get sober or reduce drug use",
-          "Compare drug use to mood",
-        ]}
-      />
+      <Grid container>
+        <PreviewPanel
+          imgSrc="/moody.png"
+          title="Track your mood, behavior, and feelings"
+          benefits={[
+            "Have more effective doctor's appointments",
+            "Learn your triggers and warning signs",
+          ]}
+        />
+        <PreviewPanel
+          imgSrc="/sleepy.png"
+          title="Track sleep"
+          benefits={[
+            "Have more effective doctor's appointments",
+            "Compare sleep to mood",
+          ]}
+          alternate
+        />
+        <PreviewPanel
+          imgSrc="/stained_glass.png"
+          title="Set personal goals"
+          benefits={[
+            "Self-improvement",
+            "Yearly, monthly, weekly, and daily goals",
+          ]}
+        />
+        <PreviewPanel
+          imgSrc="/colored_pencil.png"
+          title="Create journal entries"
+          benefits={["Reflect on the day", "Process emotions"]}
+          alternate
+        />
+        <PreviewPanel
+          imgSrc="/psychadelic.png"
+          title="Track drug use"
+          benefits={[
+            "Help to get sober or reduce drug use",
+            "Compare drug use to mood",
+          ]}
+        />
+      </Grid>
       <Footer />
     </>
   )
@@ -72,29 +74,31 @@ const PreviewPanel: React.FC<{
   alternate?: boolean
 }> = ({ imgSrc, benefits, title, alternate }) => {
   return (
-    <Container>
-      <Grid container alignItems={"center"} spacing={4}>
-        {!alternate && (
-          <Grid item xs={12} sm={4} md={3}>
-            <PreviewImage src={imgSrc} />
+    <Grid item xs={12} lg={6}>
+      <Container>
+        <Grid container alignItems={"center"} spacing={4}>
+          {!alternate && (
+            <Grid item xs={12} sm={4} md={3}>
+              <PreviewImage src={imgSrc} />
+            </Grid>
+          )}
+          <Grid item xs={12} sm={8} md={9}>
+            <Typography variant="h5">{title}</Typography>
+            <ul>
+              {benefits.map((benefit) => (
+                <li>
+                  <Typography>{benefit}</Typography>
+                </li>
+              ))}
+            </ul>
           </Grid>
-        )}
-        <Grid item xs={12} sm={8} md={9}>
-          <Typography variant="h5">{title}</Typography>
-          <ul>
-            {benefits.map((benefit) => (
-              <li>
-                <Typography>{benefit}</Typography>
-              </li>
-            ))}
-          </ul>
+          {alternate && (
+            <Grid item xs={12} sm={4} md={3}>
+              <PreviewImage src={imgSrc} />
+            </Grid>
+          )}
         </Grid>
-        {alternate && (
-          <Grid item xs={12} sm={4} md={3}>
-            <PreviewImage src={imgSrc} />
-          </Grid>
-        )}
-      </Grid>
-    </Container>
+      </Container>
+    </Grid>
   )
 }
