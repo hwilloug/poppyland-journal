@@ -18,7 +18,16 @@ import HabitsChecker from "../components/shared-components/HabitsChecker"
 import { convertToShortDate } from "../utils/date-utils"
 import WestIcon from "@mui/icons-material/West"
 import EastIcon from "@mui/icons-material/East"
-import { format, addMonths, subMonths, startOfWeek, addDays } from "date-fns"
+import {
+  format,
+  addMonths,
+  subMonths,
+  startOfWeek,
+  addDays,
+  startOfMonth,
+  endOfMonth,
+  endOfWeek,
+} from "date-fns"
 
 const HabitsPage: React.FC = () => {
   const isLoading = useSelector((state: State) => state.user.isLoading)
@@ -192,6 +201,11 @@ const Calendar: React.FC = () => {
   }
 
   const CalendarDays: React.FC = () => {
+    const monthStart = startOfMonth(currentMonth)
+    const monthEnd = endOfMonth(monthStart)
+    const startDate = startOfWeek(monthStart)
+    const endDate = endOfWeek(monthEnd)
+
     return <></>
   }
 
